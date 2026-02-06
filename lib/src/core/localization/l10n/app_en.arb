@@ -66,5 +66,23 @@
   "emptyStateMessage": "No items to show",
   "@emptyStateMessage": {
     "description": "Message displayed when a list has no content."
+  },
+  "startButton": "Start",
+  "stopButton": "Stop",
+  "selectModeTitle": "Select mode",
+  "addModeButton": "Add new mode",
+  "editModeButton": "Edit",
+  "deleteModeButton": "Delete",
+  "deleteModeTitle": "Delete mode?",
+  "deleteModeMessage": "This action cannot be undone.",
+  "comingSoonMessage": "Coming soon",
+  "noModesEmptyState": "No modes yet",
+  "blockedAppsCountLabel": "Blocked apps: {count}",
+  "@blockedAppsCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

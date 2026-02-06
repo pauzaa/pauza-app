@@ -213,6 +213,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No items to show'**
   String get emptyStateMessage;
+
+  /// No description provided for @startButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get startButton;
+
+  /// No description provided for @stopButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stopButton;
+
+  /// No description provided for @selectModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select mode'**
+  String get selectModeTitle;
+
+  /// No description provided for @addModeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new mode'**
+  String get addModeButton;
+
+  /// No description provided for @editModeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get editModeButton;
+
+  /// No description provided for @deleteModeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteModeButton;
+
+  /// No description provided for @deleteModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete mode?'**
+  String get deleteModeTitle;
+
+  /// No description provided for @deleteModeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone.'**
+  String get deleteModeMessage;
+
+  /// No description provided for @comingSoonMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoonMessage;
+
+  /// No description provided for @noModesEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No modes yet'**
+  String get noModesEmptyState;
+
+  /// No description provided for @blockedAppsCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked apps: {count}'**
+  String blockedAppsCountLabel(int count);
 }
 
 class _AppLocalizationsDelegate

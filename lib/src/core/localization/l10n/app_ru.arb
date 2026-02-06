@@ -18,5 +18,23 @@
   "errorTitle": "Что-то пошло не так",
   "successTitle": "Успех",
   "searchPlaceholder": "Поиск",
-  "emptyStateMessage": "Пока нет данных"
+  "emptyStateMessage": "Пока нет данных",
+  "startButton": "Начать",
+  "stopButton": "Остановить",
+  "selectModeTitle": "Выбор режима",
+  "addModeButton": "Добавить режим",
+  "editModeButton": "Изменить",
+  "deleteModeButton": "Удалить",
+  "deleteModeTitle": "Удалить режим?",
+  "deleteModeMessage": "Это действие нельзя отменить.",
+  "comingSoonMessage": "Скоро будет",
+  "noModesEmptyState": "Режимов пока нет",
+  "blockedAppsCountLabel": "Заблокировано приложений: {count}",
+  "@blockedAppsCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

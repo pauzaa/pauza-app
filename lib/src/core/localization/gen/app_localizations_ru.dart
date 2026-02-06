@@ -64,4 +64,39 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get emptyStateMessage => 'Пока нет данных';
+
+  @override
+  String get startButton => 'Начать';
+
+  @override
+  String get stopButton => 'Остановить';
+
+  @override
+  String get selectModeTitle => 'Выбор режима';
+
+  @override
+  String get addModeButton => 'Добавить режим';
+
+  @override
+  String get editModeButton => 'Изменить';
+
+  @override
+  String get deleteModeButton => 'Удалить';
+
+  @override
+  String get deleteModeTitle => 'Удалить режим?';
+
+  @override
+  String get deleteModeMessage => 'Это действие нельзя отменить.';
+
+  @override
+  String get comingSoonMessage => 'Скоро будет';
+
+  @override
+  String get noModesEmptyState => 'Режимов пока нет';
+
+  @override
+  String blockedAppsCountLabel(int count) {
+    return 'Заблокировано приложений: $count';
+  }
 }

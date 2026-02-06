@@ -64,4 +64,39 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get emptyStateMessage => 'Ko\'rsatish uchun elementlar yo\'q';
+
+  @override
+  String get startButton => 'Boshlash';
+
+  @override
+  String get stopButton => 'To\'xtatish';
+
+  @override
+  String get selectModeTitle => 'Rejimni tanlang';
+
+  @override
+  String get addModeButton => 'Yangi rejim qo\'shish';
+
+  @override
+  String get editModeButton => 'Tahrirlash';
+
+  @override
+  String get deleteModeButton => 'O\'chirish';
+
+  @override
+  String get deleteModeTitle => 'Rejim o\'chirilsinmi?';
+
+  @override
+  String get deleteModeMessage => 'Bu amalni ortga qaytarib bo\'lmaydi.';
+
+  @override
+  String get comingSoonMessage => 'Tez orada';
+
+  @override
+  String get noModesEmptyState => 'Hozircha rejimlar yo\'q';
+
+  @override
+  String blockedAppsCountLabel(int count) {
+    return 'Bloklangan ilovalar: $count';
+  }
 }

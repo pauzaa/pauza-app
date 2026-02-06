@@ -64,4 +64,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptyStateMessage => 'No items to show';
+
+  @override
+  String get startButton => 'Start';
+
+  @override
+  String get stopButton => 'Stop';
+
+  @override
+  String get selectModeTitle => 'Select mode';
+
+  @override
+  String get addModeButton => 'Add new mode';
+
+  @override
+  String get editModeButton => 'Edit';
+
+  @override
+  String get deleteModeButton => 'Delete';
+
+  @override
+  String get deleteModeTitle => 'Delete mode?';
+
+  @override
+  String get deleteModeMessage => 'This action cannot be undone.';
+
+  @override
+  String get comingSoonMessage => 'Coming soon';
+
+  @override
+  String get noModesEmptyState => 'No modes yet';
+
+  @override
+  String blockedAppsCountLabel(int count) {
+    return 'Blocked apps: $count';
+  }
 }

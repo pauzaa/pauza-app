@@ -18,5 +18,23 @@
   "errorTitle": "Xatolik yuz berdi",
   "successTitle": "Muvaffaqiyat",
   "searchPlaceholder": "Qidirish",
-  "emptyStateMessage": "Ko'rsatish uchun elementlar yo'q"
+  "emptyStateMessage": "Ko'rsatish uchun elementlar yo'q",
+  "startButton": "Boshlash",
+  "stopButton": "To'xtatish",
+  "selectModeTitle": "Rejimni tanlang",
+  "addModeButton": "Yangi rejim qo'shish",
+  "editModeButton": "Tahrirlash",
+  "deleteModeButton": "O'chirish",
+  "deleteModeTitle": "Rejim o'chirilsinmi?",
+  "deleteModeMessage": "Bu amalni ortga qaytarib bo'lmaydi.",
+  "comingSoonMessage": "Tez orada",
+  "noModesEmptyState": "Hozircha rejimlar yo'q",
+  "blockedAppsCountLabel": "Bloklangan ilovalar: {count}",
+  "@blockedAppsCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

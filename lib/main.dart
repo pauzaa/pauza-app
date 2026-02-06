@@ -1,20 +1,18 @@
+import 'package:appfuse/appfuse.dart';
 import 'package:flutter/material.dart';
+import 'package:pauza/src/app/pauza_app.dart';
+import 'package:pauza/src/core/common/pauza_dependencies.dart';
+import 'package:pauza/src/core/common/pauza_splash_screen.dart';
 
 void main() {
-  runApp(const MainApp());
-}
-
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  runApp(
+    AppFuseScope(
+      themes: PauzaApp.themes,
+      supportedLanguages: PauzaApp.supportedLanguages,
+      localizationsDelegates: PauzaApp.localizationsDelegates,
+      init: PauzaDependencies(),
+      placeholder: const PauzaSplashScreen(),
+      app: const PauzaApp(),
+    ),
+  );
 }

@@ -20,7 +20,6 @@ final class PauzaTonalButton extends PauzaButtonBase {
     super.foregroundColor,
     super.disabled,
     super.selected,
-    super.isLoading,
   });
 
   @override

@@ -274,6 +274,84 @@ abstract class AppLocalizations {
   /// **'No modes yet'**
   String get noModesEmptyState;
 
+  /// No description provided for @permissionUsageAccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Usage Access'**
+  String get permissionUsageAccessTitle;
+
+  /// No description provided for @permissionUsageAccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pauza needs Usage Access to read app activity and apply blocking rules.'**
+  String get permissionUsageAccessBody;
+
+  /// No description provided for @permissionAccessibilityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Accessibility Service'**
+  String get permissionAccessibilityTitle;
+
+  /// No description provided for @permissionAccessibilityBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pauza needs Accessibility Service to detect when blocked apps are opened.'**
+  String get permissionAccessibilityBody;
+
+  /// No description provided for @permissionFamilyControlsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Family Controls'**
+  String get permissionFamilyControlsTitle;
+
+  /// No description provided for @permissionFamilyControlsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pauza needs Family Controls authorization to manage app restrictions on iOS.'**
+  String get permissionFamilyControlsBody;
+
+  /// No description provided for @permissionCurrentStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current status: {status}'**
+  String permissionCurrentStatusLabel(String status);
+
+  /// No description provided for @permissionStatusGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'Granted'**
+  String get permissionStatusGranted;
+
+  /// No description provided for @permissionStatusDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Denied'**
+  String get permissionStatusDenied;
+
+  /// No description provided for @permissionStatusRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted'**
+  String get permissionStatusRestricted;
+
+  /// No description provided for @permissionStatusNotDetermined.
+  ///
+  /// In en, this message translates to:
+  /// **'Not determined'**
+  String get permissionStatusNotDetermined;
+
+  /// No description provided for @permissionOpenSettingsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get permissionOpenSettingsButton;
+
+  /// No description provided for @permissionAllowAccessButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow access'**
+  String get permissionAllowAccessButton;
+
   /// No description provided for @blockedAppsCountLabel.
   ///
   /// In en, this message translates to:

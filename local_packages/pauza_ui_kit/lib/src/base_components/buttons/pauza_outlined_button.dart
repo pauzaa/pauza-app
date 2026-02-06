@@ -20,12 +20,11 @@ final class PauzaOutlinedButton extends PauzaButtonBase {
     super.foregroundColor,
     super.disabled,
     super.selected,
-    super.isLoading,
   });
 
   @override
   BorderSide borderSideToApply(BuildContext context) {
-    return isEffectivelyDisabled
+    return disabled
         ? BorderSide.none
         : BorderSide(color: context.colorScheme.outlineVariant);
   }

@@ -96,6 +96,51 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noModesEmptyState => 'Режимов пока нет';
 
   @override
+  String get permissionUsageAccessTitle => 'Разрешите доступ к статистике';
+
+  @override
+  String get permissionUsageAccessBody =>
+      'Pauza нужен доступ к статистике, чтобы видеть активность приложений и применять блокировки.';
+
+  @override
+  String get permissionAccessibilityTitle =>
+      'Включите службу специальных возможностей';
+
+  @override
+  String get permissionAccessibilityBody =>
+      'Pauza нужна служба специальных возможностей, чтобы определять запуск заблокированных приложений.';
+
+  @override
+  String get permissionFamilyControlsTitle => 'Разрешите Family Controls';
+
+  @override
+  String get permissionFamilyControlsBody =>
+      'Pauza нужна авторизация Family Controls для управления ограничениями приложений на iOS.';
+
+  @override
+  String permissionCurrentStatusLabel(String status) {
+    return 'Текущий статус: $status';
+  }
+
+  @override
+  String get permissionStatusGranted => 'Разрешено';
+
+  @override
+  String get permissionStatusDenied => 'Отклонено';
+
+  @override
+  String get permissionStatusRestricted => 'Ограничено';
+
+  @override
+  String get permissionStatusNotDetermined => 'Не определено';
+
+  @override
+  String get permissionOpenSettingsButton => 'Открыть настройки';
+
+  @override
+  String get permissionAllowAccessButton => 'Разрешить доступ';
+
+  @override
   String blockedAppsCountLabel(int count) {
     return 'Заблокировано приложений: $count';
   }

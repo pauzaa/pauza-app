@@ -3,9 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
-  testWidgets('PauzaFilledButton triggers onPressed', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PauzaFilledButton triggers onPressed', (WidgetTester tester) async {
     var tapped = false;
     await tester.pumpWidget(
       MaterialApp(
@@ -25,9 +23,7 @@ void main() {
     expect(tapped, isTrue);
   });
 
-  testWidgets('PauzaFilledButton disabled/loading does not trigger', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PauzaFilledButton disabled/loading does not trigger', (WidgetTester tester) async {
     var taps = 0;
     await tester.pumpWidget(
       MaterialApp(
@@ -43,11 +39,11 @@ void main() {
                 disabled: true,
               ),
               PauzaFilledButton(
+                disabled: true,
                 title: const Text('Loading'),
                 onPressed: () {
                   taps++;
                 },
-                isLoading: true,
               ),
             ],
           ),

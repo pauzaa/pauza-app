@@ -96,6 +96,51 @@ class AppLocalizationsUz extends AppLocalizations {
   String get noModesEmptyState => 'Hozircha rejimlar yo\'q';
 
   @override
+  String get permissionUsageAccessTitle => 'Foydalanish ruxsatini yoqing';
+
+  @override
+  String get permissionUsageAccessBody =>
+      'Pauza ilova faolligini ko\'rish va bloklash qoidalarini qo\'llash uchun Usage Access ruxsatiga muhtoj.';
+
+  @override
+  String get permissionAccessibilityTitle => 'Accessibility xizmatini yoqing';
+
+  @override
+  String get permissionAccessibilityBody =>
+      'Pauza bloklangan ilovalar ochilganda aniqlash uchun Accessibility xizmatiga muhtoj.';
+
+  @override
+  String get permissionFamilyControlsTitle =>
+      'Family Controls ruxsatini bering';
+
+  @override
+  String get permissionFamilyControlsBody =>
+      'Pauza iOS\'da ilova cheklovlarini boshqarish uchun Family Controls ruxsatiga muhtoj.';
+
+  @override
+  String permissionCurrentStatusLabel(String status) {
+    return 'Joriy holat: $status';
+  }
+
+  @override
+  String get permissionStatusGranted => 'Ruxsat berilgan';
+
+  @override
+  String get permissionStatusDenied => 'Rad etilgan';
+
+  @override
+  String get permissionStatusRestricted => 'Cheklangan';
+
+  @override
+  String get permissionStatusNotDetermined => 'Aniqlanmagan';
+
+  @override
+  String get permissionOpenSettingsButton => 'Sozlamalarni ochish';
+
+  @override
+  String get permissionAllowAccessButton => 'Ruxsat berish';
+
+  @override
   String blockedAppsCountLabel(int count) {
     return 'Bloklangan ilovalar: $count';
   }

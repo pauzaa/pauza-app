@@ -81,16 +81,13 @@ class _IdleStateBody extends StatelessWidget {
           children: <Widget>[
             PauzaFilledButton(
               disabled: !canStart,
-              onPressed: canStart
-                  ? () {
-                      context.read<BlockingBloc>().add(
-                        BlockingStartRequested(
-                          modeId: mode.id,
-                          platform: PauzaPlatform.current,
-                        ),
-                      );
-                    }
-                  : null,
+              onPressed: () {
+                if (canStart) {
+                  context.read<BlockingBloc>().add(
+                    BlockingStartRequested(modeId: mode.id, platform: PauzaPlatform.current),
+                  );
+                }
+              },
               title: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(AppLocalizations.of(context).startButton),
@@ -118,10 +115,7 @@ class _IdleStateBody extends StatelessWidget {
 }
 
 class _ModeCardContent extends StatelessWidget {
-  const _ModeCardContent({
-    required this.modeTitle,
-    required this.blockedAppsCount,
-  });
+  const _ModeCardContent({required this.modeTitle, required this.blockedAppsCount});
 
   final String? modeTitle;
   final int blockedAppsCount;
@@ -133,15 +127,9 @@ class _ModeCardContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          l10n.selectModeTitle,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text(l10n.selectModeTitle, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
-        Text(
-          modeTitle ?? l10n.noModesEmptyState,
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
+        Text(modeTitle ?? l10n.noModesEmptyState, style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 4),
         Text(
           l10n.blockedAppsCountLabel(blockedAppsCount),

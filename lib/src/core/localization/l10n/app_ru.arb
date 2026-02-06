@@ -29,6 +29,26 @@
   "deleteModeMessage": "Это действие нельзя отменить.",
   "comingSoonMessage": "Скоро будет",
   "noModesEmptyState": "Режимов пока нет",
+  "permissionUsageAccessTitle": "Разрешите доступ к статистике",
+  "permissionUsageAccessBody": "Pauza нужен доступ к статистике, чтобы видеть активность приложений и применять блокировки.",
+  "permissionAccessibilityTitle": "Включите службу специальных возможностей",
+  "permissionAccessibilityBody": "Pauza нужна служба специальных возможностей, чтобы определять запуск заблокированных приложений.",
+  "permissionFamilyControlsTitle": "Разрешите Family Controls",
+  "permissionFamilyControlsBody": "Pauza нужна авторизация Family Controls для управления ограничениями приложений на iOS.",
+  "permissionCurrentStatusLabel": "Текущий статус: {status}",
+  "@permissionCurrentStatusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionStatusGranted": "Разрешено",
+  "permissionStatusDenied": "Отклонено",
+  "permissionStatusRestricted": "Ограничено",
+  "permissionStatusNotDetermined": "Не определено",
+  "permissionOpenSettingsButton": "Открыть настройки",
+  "permissionAllowAccessButton": "Разрешить доступ",
   "blockedAppsCountLabel": "Заблокировано приложений: {count}",
   "@blockedAppsCountLabel": {
     "placeholders": {

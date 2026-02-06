@@ -18,26 +18,11 @@ enum PauzaButtonSize {
   };
 
   EdgeInsetsGeometry get padding => switch (this) {
-    PauzaButtonSize.xxSmall => const EdgeInsets.symmetric(
-      horizontal: 12,
-      vertical: 10,
-    ),
-    PauzaButtonSize.xSmall => const EdgeInsets.symmetric(
-      horizontal: 24,
-      vertical: 10,
-    ),
-    PauzaButtonSize.small => const EdgeInsets.symmetric(
-      horizontal: 24,
-      vertical: 10,
-    ),
-    PauzaButtonSize.medium => const EdgeInsets.symmetric(
-      horizontal: 24,
-      vertical: 10,
-    ),
-    PauzaButtonSize.large => const EdgeInsets.symmetric(
-      horizontal: 32,
-      vertical: 10,
-    ),
+    PauzaButtonSize.xxSmall => const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+    PauzaButtonSize.xSmall => const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+    PauzaButtonSize.small => const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+    PauzaButtonSize.medium => const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+    PauzaButtonSize.large => const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
   };
 
   double get iconGap => switch (this) {
@@ -49,8 +34,7 @@ enum PauzaButtonSize {
   };
 
   TextStyle textStyle(BuildContext context) => switch (this) {
-    PauzaButtonSize.xxSmall =>
-      context.textTheme.labelSmall ?? const TextStyle(),
+    PauzaButtonSize.xxSmall => context.textTheme.labelSmall ?? const TextStyle(),
     PauzaButtonSize.xSmall => context.textTheme.labelLarge ?? const TextStyle(),
     PauzaButtonSize.small => context.textTheme.labelLarge ?? const TextStyle(),
     PauzaButtonSize.medium => context.textTheme.labelLarge ?? const TextStyle(),
@@ -76,11 +60,10 @@ abstract base class PauzaButtonBase extends StatelessWidget {
     this.foregroundColor,
     this.disabled = false,
     this.selected = false,
-    this.isLoading = false,
   });
 
   final Widget title;
-  final VoidCallback? onPressed;
+  final VoidCallback onPressed;
   final VoidCallback? onLongPress;
   final PauzaButtonSize size;
   final double? width;
@@ -94,9 +77,6 @@ abstract base class PauzaButtonBase extends StatelessWidget {
   final Color? foregroundColor;
   final bool disabled;
   final bool selected;
-  final bool isLoading;
-
-  bool get isEffectivelyDisabled => disabled || isLoading || onPressed == null;
 
   WidgetStateProperty<Color?> backgroundColorProperty(BuildContext context);
 
@@ -104,8 +84,7 @@ abstract base class PauzaButtonBase extends StatelessWidget {
 
   WidgetStateProperty<Color?> overlayColorProperty(BuildContext context) {
     return WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-      if (states.contains(WidgetState.pressed) ||
-          states.contains(WidgetState.hovered)) {
+      if (states.contains(WidgetState.pressed) || states.contains(WidgetState.hovered)) {
         return context.colorScheme.primary.withValues(alpha: 0.12);
       }
       return Colors.transparent;
@@ -121,8 +100,6 @@ abstract base class PauzaButtonBase extends StatelessWidget {
       icon: icon,
       iconAlignment: iconAlignment,
       iconGap: size.iconGap,
-      isLoading: isLoading,
-      loadingColor: foregroundColor ?? context.colorScheme.onPrimary,
     );
 
     final style =
@@ -139,8 +116,8 @@ abstract base class PauzaButtonBase extends StatelessWidget {
             borderRadius: BorderRadius.circular(radius),
           ),
           padding: padding ?? size.padding,
+          iconSize: PauzaIconSizes.small,
         ).copyWith(
-          iconSize: const WidgetStatePropertyAll(PauzaIconSizes.small),
           iconColor: foregroundColorProperty(context),
           backgroundColor: backgroundColorProperty(context),
           overlayColor: overlayColorProperty(context),
@@ -148,8 +125,8 @@ abstract base class PauzaButtonBase extends StatelessWidget {
         );
 
     return OutlinedButton(
-      onPressed: isEffectivelyDisabled ? null : onPressed,
-      onLongPress: isEffectivelyDisabled ? null : onLongPress,
+      onPressed: disabled ? null : onPressed,
+      onLongPress: disabled ? null : onLongPress,
       style: style,
       child: content,
     );
@@ -162,28 +139,16 @@ class _PauzaButtonContent extends StatelessWidget {
     required this.icon,
     required this.iconAlignment,
     required this.iconGap,
-    required this.isLoading,
-    required this.loadingColor,
   });
 
   final Widget title;
   final Widget? icon;
   final IconAlignment iconAlignment;
   final double iconGap;
-  final bool isLoading;
-  final Color loadingColor;
 
   @override
   Widget build(BuildContext context) {
-    final leading = isLoading
-        ? SizedBox.square(
-            dimension: 18,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(loadingColor),
-            ),
-          )
-        : icon;
+    final leading = icon;
 
     if (leading == null) {
       return title;
@@ -191,9 +156,10 @@ class _PauzaButtonContent extends StatelessWidget {
 
     return Row(
       mainAxisSize: MainAxisSize.min,
+      spacing: iconGap,
       children: iconAlignment == IconAlignment.start
-          ? <Widget>[leading, SizedBox(width: iconGap), Flexible(child: title)]
-          : <Widget>[Flexible(child: title), SizedBox(width: iconGap), leading],
+          ? <Widget>[leading, Flexible(child: title)]
+          : <Widget>[Flexible(child: title), leading],
     );
   }
 }

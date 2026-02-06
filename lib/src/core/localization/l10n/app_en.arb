@@ -77,6 +77,26 @@
   "deleteModeMessage": "This action cannot be undone.",
   "comingSoonMessage": "Coming soon",
   "noModesEmptyState": "No modes yet",
+  "permissionUsageAccessTitle": "Allow Usage Access",
+  "permissionUsageAccessBody": "Pauza needs Usage Access to read app activity and apply blocking rules.",
+  "permissionAccessibilityTitle": "Enable Accessibility Service",
+  "permissionAccessibilityBody": "Pauza needs Accessibility Service to detect when blocked apps are opened.",
+  "permissionFamilyControlsTitle": "Allow Family Controls",
+  "permissionFamilyControlsBody": "Pauza needs Family Controls authorization to manage app restrictions on iOS.",
+  "permissionCurrentStatusLabel": "Current status: {status}",
+  "@permissionCurrentStatusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionStatusGranted": "Granted",
+  "permissionStatusDenied": "Denied",
+  "permissionStatusRestricted": "Restricted",
+  "permissionStatusNotDetermined": "Not determined",
+  "permissionOpenSettingsButton": "Open settings",
+  "permissionAllowAccessButton": "Allow access",
   "blockedAppsCountLabel": "Blocked apps: {count}",
   "@blockedAppsCountLabel": {
     "placeholders": {

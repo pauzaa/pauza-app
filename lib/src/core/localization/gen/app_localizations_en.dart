@@ -96,6 +96,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noModesEmptyState => 'No modes yet';
 
   @override
+  String get permissionUsageAccessTitle => 'Allow Usage Access';
+
+  @override
+  String get permissionUsageAccessBody =>
+      'Pauza needs Usage Access to read app activity and apply blocking rules.';
+
+  @override
+  String get permissionAccessibilityTitle => 'Enable Accessibility Service';
+
+  @override
+  String get permissionAccessibilityBody =>
+      'Pauza needs Accessibility Service to detect when blocked apps are opened.';
+
+  @override
+  String get permissionFamilyControlsTitle => 'Allow Family Controls';
+
+  @override
+  String get permissionFamilyControlsBody =>
+      'Pauza needs Family Controls authorization to manage app restrictions on iOS.';
+
+  @override
+  String permissionCurrentStatusLabel(String status) {
+    return 'Current status: $status';
+  }
+
+  @override
+  String get permissionStatusGranted => 'Granted';
+
+  @override
+  String get permissionStatusDenied => 'Denied';
+
+  @override
+  String get permissionStatusRestricted => 'Restricted';
+
+  @override
+  String get permissionStatusNotDetermined => 'Not determined';
+
+  @override
+  String get permissionOpenSettingsButton => 'Open settings';
+
+  @override
+  String get permissionAllowAccessButton => 'Allow access';
+
+  @override
   String blockedAppsCountLabel(int count) {
     return 'Blocked apps: $count';
   }

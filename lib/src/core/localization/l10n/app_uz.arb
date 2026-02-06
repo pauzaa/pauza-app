@@ -29,6 +29,26 @@
   "deleteModeMessage": "Bu amalni ortga qaytarib bo'lmaydi.",
   "comingSoonMessage": "Tez orada",
   "noModesEmptyState": "Hozircha rejimlar yo'q",
+  "permissionUsageAccessTitle": "Foydalanish ruxsatini yoqing",
+  "permissionUsageAccessBody": "Pauza ilova faolligini ko'rish va bloklash qoidalarini qo'llash uchun Usage Access ruxsatiga muhtoj.",
+  "permissionAccessibilityTitle": "Accessibility xizmatini yoqing",
+  "permissionAccessibilityBody": "Pauza bloklangan ilovalar ochilganda aniqlash uchun Accessibility xizmatiga muhtoj.",
+  "permissionFamilyControlsTitle": "Family Controls ruxsatini bering",
+  "permissionFamilyControlsBody": "Pauza iOS'da ilova cheklovlarini boshqarish uchun Family Controls ruxsatiga muhtoj.",
+  "permissionCurrentStatusLabel": "Joriy holat: {status}",
+  "@permissionCurrentStatusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionStatusGranted": "Ruxsat berilgan",
+  "permissionStatusDenied": "Rad etilgan",
+  "permissionStatusRestricted": "Cheklangan",
+  "permissionStatusNotDetermined": "Aniqlanmagan",
+  "permissionOpenSettingsButton": "Sozlamalarni ochish",
+  "permissionAllowAccessButton": "Ruxsat berish",
   "blockedAppsCountLabel": "Bloklangan ilovalar: {count}",
   "@blockedAppsCountLabel": {
     "placeholders": {

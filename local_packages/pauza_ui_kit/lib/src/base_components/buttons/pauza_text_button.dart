@@ -20,7 +20,6 @@ final class PauzaTextButton extends PauzaButtonBase {
     super.foregroundColor,
     super.disabled,
     super.selected,
-    super.isLoading,
   });
 
   @override

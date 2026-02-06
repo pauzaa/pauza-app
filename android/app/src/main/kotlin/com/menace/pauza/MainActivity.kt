@@ -1,4 +1,4 @@
-package com.example.pauza
+package com.menace.pauza
 
 import io.flutter.embedding.android.FlutterActivity
 

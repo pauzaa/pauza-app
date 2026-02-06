@@ -1,3 +1,8 @@
 export 'package:pauza_ui_kit/src/theme/color_theme.dart';
 export 'package:pauza_ui_kit/src/theme/pauza_text_theme.dart';
 export 'package:pauza_ui_kit/src/theme/pauza_theme.dart';
+export 'package:pauza_ui_kit/src/foundations/export.dart';
+export 'package:pauza_ui_kit/src/base_components/buttons/export.dart';
+export 'package:pauza_ui_kit/src/base_components/inputs/export.dart';
+export 'package:pauza_ui_kit/src/base_components/checkbox/export.dart';
+export 'package:pauza_ui_kit/src/base_components/switch/export.dart';

@@ -2,5 +2,69 @@
   "@@locale": "en",
   "appName": "Pauza",
   "homeTitle": "Home",
-  "notFoundTitle": "Page not found"
+  "notFoundTitle": "Page not found",
+  "confirmButton": "Confirm",
+  "@confirmButton": {
+    "description": "Label for a confirm action on dialogs or forms."
+  },
+  "cancelButton": "Cancel",
+  "@cancelButton": {
+    "description": "Label for canceling an action."
+  },
+  "okButton": "OK",
+  "@okButton": {
+    "description": "Label to acknowledge information."
+  },
+  "yesButton": "Yes",
+  "@yesButton": {
+    "description": "Affirmative action label."
+  },
+  "noButton": "No",
+  "@noButton": {
+    "description": "Negative or dismissive action label."
+  },
+  "retryButton": "Retry",
+  "@retryButton": {
+    "description": "Label for reattempting a failed action."
+  },
+  "closeButton": "Close",
+  "@closeButton": {
+    "description": "Label for closing a sheet, dialog, or screen."
+  },
+  "nextButton": "Next",
+  "@nextButton": {
+    "description": "Label to move forward in a flow."
+  },
+  "previousButton": "Previous",
+  "@previousButton": {
+    "description": "Label to move back in a flow."
+  },
+  "submitButton": "Submit",
+  "@submitButton": {
+    "description": "Label to submit a form or send data."
+  },
+  "backButton": "Back",
+  "@backButton": {
+    "description": "Label to navigate back globally."
+  },
+  "loadingLabel": "Loading...",
+  "@loadingLabel": {
+    "description": "Text displayed while content is loading."
+  },
+  "errorTitle": "Something went wrong",
+  "@errorTitle": {
+    "description": "Title shown when an error occurs."
+  },
+  "successTitle": "Success",
+  "@successTitle": {
+    "description": "Title shown when an action completes successfully."
+  },
+  "searchPlaceholder": "Search",
+  "@searchPlaceholder": {
+    "description": "Placeholder text for search inputs."
+  },
+  "emptyStateMessage": "No items to show",
+  "@emptyStateMessage": {
+    "description": "Message displayed when a list has no content."
+  }
 }

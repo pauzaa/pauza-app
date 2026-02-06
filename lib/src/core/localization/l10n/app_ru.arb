@@ -2,5 +2,21 @@
   "@@locale": "ru",
   "appName": "Pauza",
   "homeTitle": "Главная",
-  "notFoundTitle": "Страница не найдена"
+  "notFoundTitle": "Страница не найдена",
+  "confirmButton": "Подтвердить",
+  "cancelButton": "Отмена",
+  "okButton": "OK",
+  "yesButton": "Да",
+  "noButton": "Нет",
+  "retryButton": "Повторить",
+  "closeButton": "Закрыть",
+  "nextButton": "Далее",
+  "previousButton": "Предыдущий",
+  "submitButton": "Отправить",
+  "backButton": "Назад",
+  "loadingLabel": "Загрузка...",
+  "errorTitle": "Что-то пошло не так",
+  "successTitle": "Успех",
+  "searchPlaceholder": "Поиск",
+  "emptyStateMessage": "Пока нет данных"
 }

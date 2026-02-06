@@ -77,7 +77,7 @@ ThemeData appThemeFromBrightness(Brightness brightness) {
     Brightness.dark => _darkColors,
   };
 
-  const baseTextTheme = PauzaTextTheme.base;
+  final pauzaTextTheme = PauzaTextTheme.fromColorTheme(colorTheme);
 
   return ThemeData(
     useMaterial3: true,
@@ -90,25 +90,9 @@ ThemeData appThemeFromBrightness(Brightness brightness) {
     shadowColor: colorTheme.onSurface.withValues(alpha: 0.5),
     hintColor: colorTheme.outlineVariant,
     dividerColor: colorTheme.outlineVariant,
-    extensions: <ThemeExtension<dynamic>>[colorTheme],
-    textTheme: baseTextTheme.copyWith(
-      displaySmall: baseTextTheme.displaySmall?.copyWith(
-        fontWeight: FontWeight.bold,
-      ),
-      headlineSmall: baseTextTheme.headlineSmall?.copyWith(
-        fontWeight: FontWeight.bold,
-      ),
-      titleLarge: baseTextTheme.titleLarge?.copyWith(
-        fontWeight: FontWeight.bold,
-      ),
-      titleMedium: baseTextTheme.titleMedium?.copyWith(
-        fontWeight: FontWeight.bold,
-      ),
-      labelMedium: baseTextTheme.labelMedium?.copyWith(
-        fontWeight: FontWeight.bold,
-        height: 1,
-      ),
-    ),
+    fontFamily: PauzaTextTheme.fontFamily,
+    extensions: <ThemeExtension<dynamic>>[colorTheme, pauzaTextTheme],
+    textTheme: pauzaTextTheme.material,
     colorScheme: ColorScheme(
       brightness: brightness,
       primary: colorTheme.primary,
@@ -195,6 +179,9 @@ extension PauzaThemeX on BuildContext {
   ThemeData get themeData => Theme.of(this);
 
   TextTheme get textTheme => TextTheme.of(this);
+
+  PauzaTextTheme get pauzaTextTheme =>
+      Theme.of(this).extension<PauzaTextTheme>()!;
 
   ColorScheme get colorScheme => ColorScheme.of(this);
 

@@ -2,5 +2,21 @@
   "@@locale": "uz",
   "appName": "Pauza",
   "homeTitle": "Bosh sahifa",
-  "notFoundTitle": "Sahifa topilmadi"
+  "notFoundTitle": "Sahifa topilmadi",
+  "confirmButton": "Tasdiqlash",
+  "cancelButton": "Bekor qilish",
+  "okButton": "OK",
+  "yesButton": "Ha",
+  "noButton": "Yo'q",
+  "retryButton": "Qaytadan urinib ko'rish",
+  "closeButton": "Yopish",
+  "nextButton": "Keyingi",
+  "previousButton": "Oldingi",
+  "submitButton": "Yuborish",
+  "backButton": "Ortga",
+  "loadingLabel": "Yuklanmoqda...",
+  "errorTitle": "Xatolik yuz berdi",
+  "successTitle": "Muvaffaqiyat",
+  "searchPlaceholder": "Qidirish",
+  "emptyStateMessage": "Ko'rsatish uchun elementlar yo'q"
 }

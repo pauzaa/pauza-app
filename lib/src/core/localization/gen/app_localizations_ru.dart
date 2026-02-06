@@ -16,4 +16,52 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get notFoundTitle => 'Страница не найдена';
+
+  @override
+  String get confirmButton => 'Подтвердить';
+
+  @override
+  String get cancelButton => 'Отмена';
+
+  @override
+  String get okButton => 'OK';
+
+  @override
+  String get yesButton => 'Да';
+
+  @override
+  String get noButton => 'Нет';
+
+  @override
+  String get retryButton => 'Повторить';
+
+  @override
+  String get closeButton => 'Закрыть';
+
+  @override
+  String get nextButton => 'Далее';
+
+  @override
+  String get previousButton => 'Предыдущий';
+
+  @override
+  String get submitButton => 'Отправить';
+
+  @override
+  String get backButton => 'Назад';
+
+  @override
+  String get loadingLabel => 'Загрузка...';
+
+  @override
+  String get errorTitle => 'Что-то пошло не так';
+
+  @override
+  String get successTitle => 'Успех';
+
+  @override
+  String get searchPlaceholder => 'Поиск';
+
+  @override
+  String get emptyStateMessage => 'Пока нет данных';
 }

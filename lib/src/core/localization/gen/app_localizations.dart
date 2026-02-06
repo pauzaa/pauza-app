@@ -117,6 +117,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Page not found'**
   String get notFoundTitle;
+
+  /// Label for a confirm action on dialogs or forms.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirmButton;
+
+  /// Label for canceling an action.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelButton;
+
+  /// Label to acknowledge information.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get okButton;
+
+  /// Affirmative action label.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yesButton;
+
+  /// Negative or dismissive action label.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get noButton;
+
+  /// Label for reattempting a failed action.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retryButton;
+
+  /// Label for closing a sheet, dialog, or screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get closeButton;
+
+  /// Label to move forward in a flow.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get nextButton;
+
+  /// Label to move back in a flow.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previousButton;
+
+  /// Label to submit a form or send data.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submitButton;
+
+  /// Label to navigate back globally.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get backButton;
+
+  /// Text displayed while content is loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loadingLabel;
+
+  /// Title shown when an error occurs.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get errorTitle;
+
+  /// Title shown when an action completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get successTitle;
+
+  /// Placeholder text for search inputs.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchPlaceholder;
+
+  /// Message displayed when a list has no content.
+  ///
+  /// In en, this message translates to:
+  /// **'No items to show'**
+  String get emptyStateMessage;
 }
 
 class _AppLocalizationsDelegate

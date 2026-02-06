@@ -11,7 +11,9 @@ class PauzaDependencies with AppFuseInitialization {
   @override
   Map<String, InitializationStep> get steps => <String, InitializationStep>{
     'init local database': (_) async {
-      localDatabase = SqfliteLocalDatabase();
+      localDatabase = SqfliteLocalDatabase(
+        schema: const PauzaLocalDatabaseSchemaV1(),
+      );
       await localDatabase.open();
     },
   };

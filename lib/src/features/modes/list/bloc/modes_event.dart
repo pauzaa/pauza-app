@@ -8,16 +8,23 @@ sealed class ModesListEvent extends Equatable {
 }
 
 final class ModesListRequested extends ModesListEvent {
-  const ModesListRequested({required this.platform});
-
-  final PauzaPlatform platform;
+  const ModesListRequested();
 
   @override
-  List<Object?> get props => <Object?>[platform];
+  List<Object?> get props => <Object?>[];
 }
 
 final class ModesDeleteRequested extends ModesListEvent {
   const ModesDeleteRequested({required this.modeId});
+
+  final String modeId;
+
+  @override
+  List<Object?> get props => <Object?>[modeId];
+}
+
+final class ModesSelectionRequested extends ModesListEvent {
+  const ModesSelectionRequested({required this.modeId});
 
   final String modeId;
 

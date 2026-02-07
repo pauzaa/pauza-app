@@ -12,6 +12,15 @@ class ModeUpsertDTO {
     required this.blockedAppIds,
   });
 
+  static const ModeUpsertDTO empty = ModeUpsertDTO(
+    title: '',
+    textOnScreen: '',
+    description: null,
+    allowedPausesCount: 0,
+    isEnabled: true,
+    blockedAppIds: ISetConst(<String>{}),
+  );
+
   final String title;
   final String textOnScreen;
   final String? description;
@@ -19,17 +28,21 @@ class ModeUpsertDTO {
   final bool isEnabled;
   final ISet<String> blockedAppIds;
 
+  static const Object _descriptionNotProvided = Object();
+
   ModeUpsertDTO copyWith({
     String? title,
     String? textOnScreen,
-    String? description,
+    Object? description = _descriptionNotProvided,
     int? allowedPausesCount,
     bool? isEnabled,
     ISet<String>? blockedAppIds,
   }) => ModeUpsertDTO(
     title: title ?? this.title,
     textOnScreen: textOnScreen ?? this.textOnScreen,
-    description: description ?? this.description,
+    description: identical(description, _descriptionNotProvided)
+        ? this.description
+        : description as String?,
     allowedPausesCount: allowedPausesCount ?? this.allowedPausesCount,
     isEnabled: isEnabled ?? this.isEnabled,
     blockedAppIds: blockedAppIds ?? this.blockedAppIds,

@@ -13,6 +13,7 @@ import 'package:pauza/src/features/permissions/widget/ios_family_controls_permis
 enum PauzaRoutes with Routable {
   root,
   home,
+  homeMain,
   modePicker,
   modeCreate,
   modeEdit,
@@ -26,6 +27,7 @@ enum PauzaRoutes with Routable {
   String get path => switch (this) {
     PauzaRoutes.root => '/',
     PauzaRoutes.home => '/home',
+    PauzaRoutes.homeMain => '/home/main',
     PauzaRoutes.modePicker => '/mode-picker',
     PauzaRoutes.modeCreate => '/modes/new',
     PauzaRoutes.modeEdit => '/modes/{midEdit}/edit',
@@ -42,6 +44,7 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.modeDeleteConfirm => PageType.dialog,
     PauzaRoutes.root ||
     PauzaRoutes.home ||
+    PauzaRoutes.homeMain ||
     PauzaRoutes.modeCreate ||
     PauzaRoutes.modeEdit ||
     PauzaRoutes.permissionUsageAccess ||
@@ -54,10 +57,12 @@ enum PauzaRoutes with Routable {
   Widget builder(Map<String, String> pathParams, Map<String, String> queryParams) => switch (this) {
     PauzaRoutes.root => const HomeScreen(),
     PauzaRoutes.home => const HomeScreen(),
+    PauzaRoutes.homeMain => const HomeMainScreen(),
     PauzaRoutes.modePicker => const ModePickerSheet(),
     PauzaRoutes.modeCreate => ModeEditorScreen.create(),
     PauzaRoutes.modeEdit => ModeEditorScreen.edit(modeId: pathParams['midEdit'] ?? ''),
-    PauzaRoutes.modeDeleteConfirm => const ConfirmDeleteModeDialog(),
+
+    PauzaRoutes.modeDeleteConfirm => ConfirmDeleteModeDialog(modeId: queryParams['mid']),
 
     PauzaRoutes.permissionUsageAccess => const AndroidUsageAccessPermissionScreen(),
     PauzaRoutes.permissionAccessibility => const AndroidAccessibilityPermissionScreen(),

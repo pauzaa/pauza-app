@@ -104,5 +104,28 @@
         "type": "int"
       }
     }
-  }
+  },
+  "createModeTitle": "Create mode",
+  "editModeTitle": "Edit mode",
+  "modeTitleFieldLabel": "Title",
+  "modeTextOnScreenFieldLabel": "Text on shield screen",
+  "modeDescriptionFieldLabel": "Description",
+  "modeEnabledLabel": "Enabled",
+  "modeBlockedAppsSectionTitle": "Blocked apps",
+  "modeBlockedAppsChooseButton": "Choose apps",
+  "modeBlockedAppsSearchLabel": "Search apps",
+  "modeBlockedAppsRequiredError": "Select at least one app",
+  "modeBlockedAppsSelectedCountLabel": "Selected apps: {count}",
+  "@modeBlockedAppsSelectedCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modeRequiredFieldError": "This field is required",
+  "modeLoadFailedMessage": "Unable to load mode data",
+  "modeSaveFailedMessage": "Unable to save mode",
+  "modeAppsLoadFailedMessage": "Unable to load apps",
+  "saveButton": "Save"
 }

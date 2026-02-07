@@ -144,4 +144,54 @@ class AppLocalizationsUz extends AppLocalizations {
   String blockedAppsCountLabel(int count) {
     return 'Bloklangan ilovalar: $count';
   }
+
+  @override
+  String get createModeTitle => 'Rejim yaratish';
+
+  @override
+  String get editModeTitle => 'Rejimni tahrirlash';
+
+  @override
+  String get modeTitleFieldLabel => 'Nomi';
+
+  @override
+  String get modeTextOnScreenFieldLabel => 'Bloklash ekranidagi matn';
+
+  @override
+  String get modeDescriptionFieldLabel => 'Tavsif';
+
+  @override
+  String get modeEnabledLabel => 'Yoqilgan';
+
+  @override
+  String get modeBlockedAppsSectionTitle => 'Bloklanadigan ilovalar';
+
+  @override
+  String get modeBlockedAppsChooseButton => 'Ilovalarni tanlash';
+
+  @override
+  String get modeBlockedAppsSearchLabel => 'Ilovalarni qidirish';
+
+  @override
+  String get modeBlockedAppsRequiredError => 'Kamida bitta ilovani tanlang';
+
+  @override
+  String modeBlockedAppsSelectedCountLabel(int count) {
+    return 'Tanlangan ilovalar: $count';
+  }
+
+  @override
+  String get modeRequiredFieldError => 'Bu maydon majburiy';
+
+  @override
+  String get modeLoadFailedMessage => 'Rejim ma\'lumotlarini yuklab bo\'lmadi';
+
+  @override
+  String get modeSaveFailedMessage => 'Rejimni saqlab bo\'lmadi';
+
+  @override
+  String get modeAppsLoadFailedMessage => 'Ilovalarni yuklab bo\'lmadi';
+
+  @override
+  String get saveButton => 'Saqlash';
 }

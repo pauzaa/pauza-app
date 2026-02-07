@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'dart:io';
 
 /// Platform key used in local DB records.
 enum PauzaPlatform {
@@ -9,8 +9,5 @@ enum PauzaPlatform {
 
   final String dbValue;
 
-  static PauzaPlatform get current => switch (defaultTargetPlatform) {
-    TargetPlatform.iOS => PauzaPlatform.ios,
-    _ => PauzaPlatform.android,
-  };
+  static PauzaPlatform get current => Platform.isIOS ? PauzaPlatform.ios : PauzaPlatform.android;
 }

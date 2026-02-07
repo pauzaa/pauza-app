@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:pauza/src/features/modes/model/mode.dart';
+import 'package:pauza/src/features/modes/common/model/mode.dart';
 
 @immutable
 class ModeSummary {

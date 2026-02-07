@@ -13,6 +13,17 @@ class Mode {
     required this.updatedAt,
   });
 
+  factory Mode.fromMap(Map<String, Object?> row) => Mode(
+    id: row['id'].toString(),
+    title: row['title'].toString(),
+    textOnScreen: row['text_on_screen'].toString(),
+    description: row['description'].toString(),
+    allowedPausesCount: int.tryParse(row['allowed_pauses_count'].toString()) ?? 0,
+    isEnabled: int.tryParse(row['is_enabled'].toString()) == 1,
+    createdAt: DateTime.fromMillisecondsSinceEpoch(int.tryParse(row['created_at'].toString()) ?? 0),
+    updatedAt: DateTime.fromMillisecondsSinceEpoch(int.tryParse(row['updated_at'].toString()) ?? 0),
+  );
+
   final String id;
   final String title;
   final String textOnScreen;
@@ -21,6 +32,25 @@ class Mode {
   final bool isEnabled;
   final DateTime createdAt;
   final DateTime updatedAt;
+
+  Mode copyWith({
+    String? title,
+    String? textOnScreen,
+    String? description,
+    int? allowedPausesCount,
+    bool? isEnabled,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => Mode(
+    id: id,
+    title: title ?? this.title,
+    textOnScreen: textOnScreen ?? this.textOnScreen,
+    description: description ?? this.description,
+    allowedPausesCount: allowedPausesCount ?? this.allowedPausesCount,
+    isEnabled: isEnabled ?? this.isEnabled,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
 
   @override
   String toString() =>

@@ -143,4 +143,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String blockedAppsCountLabel(int count) {
     return 'Blocked apps: $count';
   }
+
+  @override
+  String get createModeTitle => 'Create mode';
+
+  @override
+  String get editModeTitle => 'Edit mode';
+
+  @override
+  String get modeTitleFieldLabel => 'Title';
+
+  @override
+  String get modeTextOnScreenFieldLabel => 'Text on shield screen';
+
+  @override
+  String get modeDescriptionFieldLabel => 'Description';
+
+  @override
+  String get modeEnabledLabel => 'Enabled';
+
+  @override
+  String get modeBlockedAppsSectionTitle => 'Blocked apps';
+
+  @override
+  String get modeBlockedAppsChooseButton => 'Choose apps';
+
+  @override
+  String get modeBlockedAppsSearchLabel => 'Search apps';
+
+  @override
+  String get modeBlockedAppsRequiredError => 'Select at least one app';
+
+  @override
+  String modeBlockedAppsSelectedCountLabel(int count) {
+    return 'Selected apps: $count';
+  }
+
+  @override
+  String get modeRequiredFieldError => 'This field is required';
+
+  @override
+  String get modeLoadFailedMessage => 'Unable to load mode data';
+
+  @override
+  String get modeSaveFailedMessage => 'Unable to save mode';
+
+  @override
+  String get modeAppsLoadFailedMessage => 'Unable to load apps';
+
+  @override
+  String get saveButton => 'Save';
 }

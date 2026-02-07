@@ -1,11 +1,6 @@
 import 'package:pauza/src/core/local_database/local_database_schema.dart';
 import 'package:sqflite/sqflite.dart';
 
-abstract final class LocalDatabaseTableNames {
-  static const String modes = 'modes';
-  static const String modeBlockedApps = 'mode_blocked_apps';
-}
-
 abstract final class LocalDatabaseSqlStatements {
   static const String createModesTable = '''
 CREATE TABLE modes (
@@ -50,9 +45,5 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
   }
 
   @override
-  Future<void> onUpgrade(
-    Database database,
-    int oldVersion,
-    int newVersion,
-  ) async {}
+  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {}
 }

@@ -1,0 +1,26 @@
+part of 'modes_bloc.dart';
+
+sealed class ModesListEvent extends Equatable {
+  const ModesListEvent();
+
+  @override
+  List<Object?> get props => const <Object?>[];
+}
+
+final class ModesListRequested extends ModesListEvent {
+  const ModesListRequested({required this.platform});
+
+  final PauzaPlatform platform;
+
+  @override
+  List<Object?> get props => <Object?>[platform];
+}
+
+final class ModesDeleteRequested extends ModesListEvent {
+  const ModesDeleteRequested({required this.modeId});
+
+  final String modeId;
+
+  @override
+  List<Object?> get props => <Object?>[modeId];
+}

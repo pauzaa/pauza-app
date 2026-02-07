@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_dependencies.dart';
 import 'package:pauza/src/core/localization/gen/app_localizations.dart';
-import 'package:pauza/src/core/permissions/pauza_permission_requirement.dart';
-import 'package:pauza/src/core/permissions/permission_gate_state.dart';
-import 'package:pauza/src/core/permissions/permission_helper.dart';
+import 'package:pauza/src/features/permissions/model/pauza_permission_requirement.dart';
+import 'package:pauza/src/features/permissions/domain/permission_helper.dart';
 import 'package:pauza/src/features/permissions/common/permission_status_label.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
@@ -32,11 +31,10 @@ class PermissionRequirementScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.appName)),
       body: SafeArea(
-        child: StreamBuilder<PermissionGateState>(
-          stream: gate.stream,
-          initialData: gate.state,
-          builder: (context, snapshot) {
-            final gateState = snapshot.data ?? gate.state;
+        child: ListenableBuilder(
+          listenable: gate,
+          builder: (context, _) {
+            final gateState = gate.state;
             final status = gateState.statusOf(requirement);
 
             return Padding(

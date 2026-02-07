@@ -1,24 +1,24 @@
 import 'package:flutter/widgets.dart';
 import 'package:helm/helm.dart';
-import 'package:pauza/src/core/permissions/permission_helper.dart';
+import 'package:pauza/src/core/common/pauza_dependencies.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 
 mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
-  PauzaPermissionGate get permissionGate;
+  NavigationState? _pendingStack;
 
   late final HelmRouter router;
-  NavigationState? _pendingStack;
 
   @override
   void initState() {
     super.initState();
 
+    final permissionGate = PauzaDependencies.of(context).permissionGate;
+
     router = HelmRouter(
       routes: PauzaRoutes.values,
       refresh: permissionGate,
       guards: <NavigationGuard>[
-        (NavigationState pages) =>
-            pages.isEmpty ? [PauzaRoutes.notFound.page()] : pages,
+        (NavigationState pages) => pages.isEmpty ? [PauzaRoutes.notFound.page()] : pages,
         (pages) {
           if (pages.isNotEmpty && pages.first.name != PauzaRoutes.root.path) {
             return [PauzaRoutes.root.page(), ...pages];

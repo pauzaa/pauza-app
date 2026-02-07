@@ -144,4 +144,54 @@ class AppLocalizationsRu extends AppLocalizations {
   String blockedAppsCountLabel(int count) {
     return 'Заблокировано приложений: $count';
   }
+
+  @override
+  String get createModeTitle => 'Создать режим';
+
+  @override
+  String get editModeTitle => 'Изменить режим';
+
+  @override
+  String get modeTitleFieldLabel => 'Название';
+
+  @override
+  String get modeTextOnScreenFieldLabel => 'Текст на экране блокировки';
+
+  @override
+  String get modeDescriptionFieldLabel => 'Описание';
+
+  @override
+  String get modeEnabledLabel => 'Включен';
+
+  @override
+  String get modeBlockedAppsSectionTitle => 'Заблокированные приложения';
+
+  @override
+  String get modeBlockedAppsChooseButton => 'Выбрать приложения';
+
+  @override
+  String get modeBlockedAppsSearchLabel => 'Поиск приложений';
+
+  @override
+  String get modeBlockedAppsRequiredError => 'Выберите хотя бы одно приложение';
+
+  @override
+  String modeBlockedAppsSelectedCountLabel(int count) {
+    return 'Выбрано приложений: $count';
+  }
+
+  @override
+  String get modeRequiredFieldError => 'Поле обязательно';
+
+  @override
+  String get modeLoadFailedMessage => 'Не удалось загрузить данные режима';
+
+  @override
+  String get modeSaveFailedMessage => 'Не удалось сохранить режим';
+
+  @override
+  String get modeAppsLoadFailedMessage => 'Не удалось загрузить приложения';
+
+  @override
+  String get saveButton => 'Сохранить';
 }

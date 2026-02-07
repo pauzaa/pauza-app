@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pauza/src/core/permissions/pauza_permission_requirement.dart';
+import 'package:pauza/src/features/permissions/model/pauza_permission_requirement.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart' show PermissionStatus;
 
 @immutable
@@ -9,17 +9,10 @@ class PermissionGateState {
     Map<PauzaPermissionRequirement, PermissionStatus> statuses = const {},
     DateTime? checkedAt,
     this.lastError,
-  }) : statuses =
-           Map<PauzaPermissionRequirement, PermissionStatus>.unmodifiable(
-             statuses,
-           ),
+  }) : statuses = Map<PauzaPermissionRequirement, PermissionStatus>.unmodifiable(statuses),
        checkedAt = checkedAt ?? DateTime.fromMillisecondsSinceEpoch(0);
 
   factory PermissionGateState.initial() => PermissionGateState();
-
-  static const MapEquality<PauzaPermissionRequirement, PermissionStatus>
-  _statusesEquality =
-      MapEquality<PauzaPermissionRequirement, PermissionStatus>();
 
   final Map<PauzaPermissionRequirement, PermissionStatus> statuses;
   final DateTime checkedAt;
@@ -27,8 +20,15 @@ class PermissionGateState {
 
   bool get isReady => firstMissing == null;
 
-  PauzaPermissionRequirement? get firstMissing =>
-      PauzaPermissionRequirement.firstMissing(this);
+  PauzaPermissionRequirement? get firstMissing {
+    for (final requirement in PauzaPermissionRequirement.requiredForCurrentPlatform) {
+      final status = statusOf(requirement);
+      if (!status.isGranted) {
+        return requirement;
+      }
+    }
+    return null;
+  }
 
   PermissionStatus statusOf(PauzaPermissionRequirement requirement) =>
       statuses[requirement] ?? PermissionStatus.notDetermined;
@@ -36,13 +36,12 @@ class PermissionGateState {
   PermissionGateState copyWith({
     Map<PauzaPermissionRequirement, PermissionStatus>? statuses,
     DateTime? checkedAt,
-    Object? lastError,
-    bool clearLastError = false,
+    Object? error,
   }) {
     return PermissionGateState(
       statuses: statuses ?? this.statuses,
       checkedAt: checkedAt ?? this.checkedAt,
-      lastError: clearLastError ? null : (lastError ?? this.lastError),
+      lastError: error,
     );
   }
 
@@ -60,6 +59,12 @@ class PermissionGateState {
         ')';
   }
 
+  static String? _errorSignature(Object? error) =>
+      error == null ? null : '${error.runtimeType}:${error.toString()}';
+
+  static const MapEquality<PauzaPermissionRequirement, PermissionStatus> _statusesEquality =
+      MapEquality<PauzaPermissionRequirement, PermissionStatus>();
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -72,12 +77,6 @@ class PermissionGateState {
   }
 
   @override
-  int get hashCode => Object.hash(
-    _statusesEquality.hash(statuses),
-    checkedAt,
-    _errorSignature(lastError),
-  );
-
-  static String? _errorSignature(Object? error) =>
-      error == null ? null : '${error.runtimeType}:${error.toString()}';
+  int get hashCode =>
+      Object.hash(_statusesEquality.hash(statuses), checkedAt, _errorSignature(lastError));
 }

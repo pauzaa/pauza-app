@@ -56,5 +56,28 @@
         "type": "int"
       }
     }
-  }
+  },
+  "createModeTitle": "Rejim yaratish",
+  "editModeTitle": "Rejimni tahrirlash",
+  "modeTitleFieldLabel": "Nomi",
+  "modeTextOnScreenFieldLabel": "Bloklash ekranidagi matn",
+  "modeDescriptionFieldLabel": "Tavsif",
+  "modeEnabledLabel": "Yoqilgan",
+  "modeBlockedAppsSectionTitle": "Bloklanadigan ilovalar",
+  "modeBlockedAppsChooseButton": "Ilovalarni tanlash",
+  "modeBlockedAppsSearchLabel": "Ilovalarni qidirish",
+  "modeBlockedAppsRequiredError": "Kamida bitta ilovani tanlang",
+  "modeBlockedAppsSelectedCountLabel": "Tanlangan ilovalar: {count}",
+  "@modeBlockedAppsSelectedCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modeRequiredFieldError": "Bu maydon majburiy",
+  "modeLoadFailedMessage": "Rejim ma'lumotlarini yuklab bo'lmadi",
+  "modeSaveFailedMessage": "Rejimni saqlab bo'lmadi",
+  "modeAppsLoadFailedMessage": "Ilovalarni yuklab bo'lmadi",
+  "saveButton": "Saqlash"
 }

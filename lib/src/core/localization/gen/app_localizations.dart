@@ -357,6 +357,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Blocked apps: {count}'**
   String blockedAppsCountLabel(int count);
+
+  /// No description provided for @createModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create mode'**
+  String get createModeTitle;
+
+  /// No description provided for @editModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit mode'**
+  String get editModeTitle;
+
+  /// No description provided for @modeTitleFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get modeTitleFieldLabel;
+
+  /// No description provided for @modeTextOnScreenFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Text on shield screen'**
+  String get modeTextOnScreenFieldLabel;
+
+  /// No description provided for @modeDescriptionFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get modeDescriptionFieldLabel;
+
+  /// No description provided for @modeEnabledLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get modeEnabledLabel;
+
+  /// No description provided for @modeBlockedAppsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked apps'**
+  String get modeBlockedAppsSectionTitle;
+
+  /// No description provided for @modeBlockedAppsChooseButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose apps'**
+  String get modeBlockedAppsChooseButton;
+
+  /// No description provided for @modeBlockedAppsSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search apps'**
+  String get modeBlockedAppsSearchLabel;
+
+  /// No description provided for @modeBlockedAppsRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least one app'**
+  String get modeBlockedAppsRequiredError;
+
+  /// No description provided for @modeBlockedAppsSelectedCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected apps: {count}'**
+  String modeBlockedAppsSelectedCountLabel(int count);
+
+  /// No description provided for @modeRequiredFieldError.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get modeRequiredFieldError;
+
+  /// No description provided for @modeLoadFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load mode data'**
+  String get modeLoadFailedMessage;
+
+  /// No description provided for @modeSaveFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to save mode'**
+  String get modeSaveFailedMessage;
+
+  /// No description provided for @modeAppsLoadFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load apps'**
+  String get modeAppsLoadFailedMessage;
+
+  /// No description provided for @saveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveButton;
 }
 
 class _AppLocalizationsDelegate

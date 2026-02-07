@@ -1,8 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:pauza/src/core/localization/gen/app_localizations.dart';
-import 'package:pauza/src/core/permissions/permission_gate_state.dart';
-import 'package:pauza_screen_time/pauza_screen_time.dart'
-    show AndroidPermission, IOSPermission;
+import 'package:pauza_screen_time/pauza_screen_time.dart' show AndroidPermission, IOSPermission;
 
 enum PauzaPermissionRequirement {
   androidUsageAccess(
@@ -43,65 +43,44 @@ enum PauzaPermissionRequirement {
   final AndroidPermission? androidPermission;
   final IOSPermission? iosPermission;
 
-  static List<PauzaPermissionRequirement> requiredForCurrentPlatform() {
+  static List<PauzaPermissionRequirement> get requiredForCurrentPlatform {
     if (kIsWeb) {
       return const <PauzaPermissionRequirement>[];
     }
 
-    return switch (defaultTargetPlatform) {
-      TargetPlatform.android => const <PauzaPermissionRequirement>[
+    if (Platform.isAndroid) {
+      return const <PauzaPermissionRequirement>[
         PauzaPermissionRequirement.androidUsageAccess,
         PauzaPermissionRequirement.androidAccessibility,
-      ],
-      TargetPlatform.iOS => const <PauzaPermissionRequirement>[
-        PauzaPermissionRequirement.iosFamilyControls,
-      ],
-      TargetPlatform.fuchsia ||
-      TargetPlatform.linux ||
-      TargetPlatform.macOS ||
-      TargetPlatform.windows => const <PauzaPermissionRequirement>[],
-    };
-  }
-
-  static PauzaPermissionRequirement? firstMissing(PermissionGateState state) {
-    for (final requirement in requiredForCurrentPlatform()) {
-      final status = state.statusOf(requirement);
-      if (!status.isGranted) {
-        return requirement;
-      }
+      ];
     }
-    return null;
+    if (Platform.isIOS) {
+      return const <PauzaPermissionRequirement>[PauzaPermissionRequirement.iosFamilyControls];
+    }
+    return [];
   }
 
   String title(AppLocalizations l10n) {
     return switch (this) {
-      PauzaPermissionRequirement.androidUsageAccess =>
-        l10n.permissionUsageAccessTitle,
-      PauzaPermissionRequirement.androidAccessibility =>
-        l10n.permissionAccessibilityTitle,
-      PauzaPermissionRequirement.iosFamilyControls =>
-        l10n.permissionFamilyControlsTitle,
+      PauzaPermissionRequirement.androidUsageAccess => l10n.permissionUsageAccessTitle,
+      PauzaPermissionRequirement.androidAccessibility => l10n.permissionAccessibilityTitle,
+      PauzaPermissionRequirement.iosFamilyControls => l10n.permissionFamilyControlsTitle,
     };
   }
 
   String body(AppLocalizations l10n) {
     return switch (this) {
-      PauzaPermissionRequirement.androidUsageAccess =>
-        l10n.permissionUsageAccessBody,
-      PauzaPermissionRequirement.androidAccessibility =>
-        l10n.permissionAccessibilityBody,
-      PauzaPermissionRequirement.iosFamilyControls =>
-        l10n.permissionFamilyControlsBody,
+      PauzaPermissionRequirement.androidUsageAccess => l10n.permissionUsageAccessBody,
+      PauzaPermissionRequirement.androidAccessibility => l10n.permissionAccessibilityBody,
+      PauzaPermissionRequirement.iosFamilyControls => l10n.permissionFamilyControlsBody,
     };
   }
 
   String primaryActionLabel(AppLocalizations l10n) {
     return switch (this) {
       PauzaPermissionRequirement.androidUsageAccess ||
-      PauzaPermissionRequirement.androidAccessibility =>
-        l10n.permissionOpenSettingsButton,
-      PauzaPermissionRequirement.iosFamilyControls =>
-        l10n.permissionAllowAccessButton,
+      PauzaPermissionRequirement.androidAccessibility => l10n.permissionOpenSettingsButton,
+      PauzaPermissionRequirement.iosFamilyControls => l10n.permissionAllowAccessButton,
     };
   }
 }

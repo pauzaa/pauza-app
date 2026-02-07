@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:pauza/src/core/localization/gen/app_localizations.dart';
-import 'package:pauza/src/core/permissions/pauza_permission_requirement.dart';
+import 'package:pauza/src/features/permissions/model/pauza_permission_requirement.dart';
 import 'package:pauza/src/features/permissions/widget/permission_requirement_screen.dart';
 
 class IosFamilyControlsPermissionScreen extends StatelessWidget {

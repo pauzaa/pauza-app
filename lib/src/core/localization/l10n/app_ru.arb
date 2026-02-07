@@ -56,5 +56,28 @@
         "type": "int"
       }
     }
-  }
+  },
+  "createModeTitle": "Создать режим",
+  "editModeTitle": "Изменить режим",
+  "modeTitleFieldLabel": "Название",
+  "modeTextOnScreenFieldLabel": "Текст на экране блокировки",
+  "modeDescriptionFieldLabel": "Описание",
+  "modeEnabledLabel": "Включен",
+  "modeBlockedAppsSectionTitle": "Заблокированные приложения",
+  "modeBlockedAppsChooseButton": "Выбрать приложения",
+  "modeBlockedAppsSearchLabel": "Поиск приложений",
+  "modeBlockedAppsRequiredError": "Выберите хотя бы одно приложение",
+  "modeBlockedAppsSelectedCountLabel": "Выбрано приложений: {count}",
+  "@modeBlockedAppsSelectedCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modeRequiredFieldError": "Поле обязательно",
+  "modeLoadFailedMessage": "Не удалось загрузить данные режима",
+  "modeSaveFailedMessage": "Не удалось сохранить режим",
+  "modeAppsLoadFailedMessage": "Не удалось загрузить приложения",
+  "saveButton": "Сохранить"
 }

@@ -19,6 +19,22 @@
   "@yesButton": {
     "description": "Affirmative action label."
   },
+  "weekDaysShort": "{key, select, mon {Mon} tue {Tue} wed {Wed} thu {Thu} fri {Fri} sat {Sat} sun {Sun} other {Unknown}}",
+  "@weekDaysShort": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "weekDays": "{key, select, mon {Monday} tue {Tuesday} wed {Wednesday} thu {Thursday} fri {Friday} sat {Saturday} sun {Sunday} other {Unknown}}",
+  "@weekDays": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
   "noButton": "No",
   "@noButton": {
     "description": "Negative or dismissive action label."

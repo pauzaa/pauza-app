@@ -57,9 +57,10 @@ analyzer:
     always_declare_return_types: error
     inference_failure_on_collection_literal: error
     no_default_cases: error
-
-    #TEMP IGNORE
-    constant_identifier_names: ignore
+  
+  exclude:
+    - lib/src/core/localization/gen/**
+    - assets/l10n/**
 
 linter:
   rules:

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:helm/helm.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.dart';
+import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 
 class NotFoundScreen extends StatelessWidget {
@@ -12,7 +12,7 @@ class NotFoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = context.l10n;
 
     return Scaffold(
       appBar: AppBar(title: Text(appLocalizations.appName)),

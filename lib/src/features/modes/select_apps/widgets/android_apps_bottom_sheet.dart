@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.dart';
-import 'package:pauza/src/features/modes/add_edit/bloc/installed_apps_bloc.dart';
+import 'package:pauza/src/core/localization/l10n.dart';
+import 'package:pauza/src/features/modes/select_apps/bloc/installed_apps_bloc.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 class AndroidAppsBottomSheet extends StatefulWidget {
-  const AndroidAppsBottomSheet({
-    required this.initialSelectedAppIds,
-    super.key,
-  });
+  const AndroidAppsBottomSheet({required this.initialSelectedAppIds, super.key});
 
-  final Set<String> initialSelectedAppIds;
+  final Set<AppIdentifier> initialSelectedAppIds;
 
   @override
   State<AndroidAppsBottomSheet> createState() => _AndroidAppsBottomSheetState();
@@ -18,7 +15,7 @@ class AndroidAppsBottomSheet extends StatefulWidget {
 
 class _AndroidAppsBottomSheetState extends State<AndroidAppsBottomSheet> {
   final TextEditingController _searchController = TextEditingController();
-  late final Set<String> _selectedAppIds = Set<String>.from(
+  late final Set<AppIdentifier> _selectedAppIds = Set<AppIdentifier>.from(
     widget.initialSelectedAppIds,
   );
 
@@ -39,7 +36,7 @@ class _AndroidAppsBottomSheetState extends State<AndroidAppsBottomSheet> {
 
   void _onSearchChanged() => setState(() {});
 
-  void _toggle(String appId) {
+  void _toggle(AppIdentifier appId) {
     setState(() {
       if (_selectedAppIds.contains(appId)) {
         _selectedAppIds.remove(appId);
@@ -64,10 +61,7 @@ class _AndroidAppsBottomSheetState extends State<AndroidAppsBottomSheet> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: Text(
-              l10n.modeBlockedAppsSectionTitle,
-              style: textTheme.titleLarge,
-            ),
+            child: Text(l10n.modeBlockedAppsSectionTitle, style: textTheme.titleLarge),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
@@ -122,24 +116,19 @@ class _AndroidAppsBottomSheetState extends State<AndroidAppsBottomSheet> {
                           (app) => _searchQuery.isEmpty
                               ? true
                               : app.name.toLowerCase().contains(_searchQuery) ||
-                                    app.packageId.toLowerCase().contains(
-                                      _searchQuery,
-                                    ),
+                                    app.packageId.value.toLowerCase().contains(_searchQuery),
                         )
                         .toList(growable: false)
                       ..sort(
-                        (left, right) => left.name.toLowerCase().compareTo(
-                          right.name.toLowerCase(),
-                        ),
+                        (left, right) =>
+                            left.name.toLowerCase().compareTo(right.name.toLowerCase()),
                       );
 
                 if (apps.isEmpty) {
                   return Center(
                     child: Text(
                       l10n.emptyStateMessage,
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
+                      style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
                     ),
                   );
                 }
@@ -160,10 +149,7 @@ class _AndroidAppsBottomSheetState extends State<AndroidAppsBottomSheet> {
                         borderRadius: BorderRadius.circular(16),
                         onTap: () => _toggle(app.packageId),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                           child: Row(
                             children: [
                               Expanded(
@@ -180,7 +166,7 @@ class _AndroidAppsBottomSheetState extends State<AndroidAppsBottomSheet> {
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
-                                      app.packageId,
+                                      app.packageId.value,
                                       style: textTheme.bodySmall?.copyWith(
                                         color: isSelected
                                             ? colorScheme.onPrimaryContainer
@@ -192,9 +178,7 @@ class _AndroidAppsBottomSheetState extends State<AndroidAppsBottomSheet> {
                               ),
                               const SizedBox(width: 12),
                               Icon(
-                                isSelected
-                                    ? Icons.check_circle
-                                    : Icons.radio_button_unchecked,
+                                isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
                                 color: isSelected
                                     ? colorScheme.primary
                                     : colorScheme.onSurfaceVariant,

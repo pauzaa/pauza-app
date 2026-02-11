@@ -1,6 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-import 'app_localizations.dart';
+import 'app_localizations.g.dart';
 
 // ignore_for_file: type=lint
 
@@ -28,6 +28,36 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get yesButton => 'Ha';
+
+  @override
+  String weekDaysShort(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'mon': 'Mon',
+      'tue': 'Tue',
+      'wed': 'Wed',
+      'thu': 'Thu',
+      'fri': 'Fri',
+      'sat': 'Sat',
+      'sun': 'Sun',
+      'other': 'Unknown',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String weekDays(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'mon': 'Monday',
+      'tue': 'Tuesday',
+      'wed': 'Wednesday',
+      'thu': 'Thursday',
+      'fri': 'Friday',
+      'sat': 'Saturday',
+      'sun': 'Sunday',
+      'other': 'Unknown',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get noButton => 'Yo\'q';

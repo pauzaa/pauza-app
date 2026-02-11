@@ -12,13 +12,12 @@ final class BlockingSyncRequested extends BlockingEvent {
 }
 
 final class BlockingStartRequested extends BlockingEvent {
-  const BlockingStartRequested({required this.modeId, required this.platform});
+  const BlockingStartRequested(this.mode);
 
-  final String modeId;
-  final PauzaPlatform platform;
+  final Mode mode;
 
   @override
-  List<Object?> get props => <Object?>[modeId, platform];
+  List<Object?> get props => <Object?>[mode];
 }
 
 final class BlockingStopRequested extends BlockingEvent {

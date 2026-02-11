@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
-import 'package:pauza/src/features/modes/add_edit/data/pauza_screen_time_installed_apps_repository.dart';
+import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 part 'installed_apps_event.dart';
@@ -20,18 +20,10 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
     InstalledAppsRequested event,
     Emitter<InstalledAppsState> emit,
   ) async {
-    await _load(emit: emit, event: event);
-  }
-
-  Future<void> _load({
-    required Emitter<InstalledAppsState> emit,
-    required InstalledAppsRequested event,
-  }) async {
-    emit(state.loading());
-
     try {
-      final platform = PauzaPlatform.current;
-      switch (platform) {
+      emit(state.loading());
+
+      switch (kPauzaPlatform) {
         case PauzaPlatform.android:
           final apps = await _installedAppsRepository.getAndroidInstalledApps(
             includeSystemApps: event.includeSystemApps,
@@ -39,10 +31,7 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
           );
           emit(state.copyWith(items: apps, isLoading: false));
         case PauzaPlatform.ios:
-          final apps = await _installedAppsRepository.selectIOSApps(
-            preSelectedApps: event.preSelectedApps,
-          );
-          emit(state.copyWith(items: apps, isLoading: false));
+          throw UnsupportedError('IoS not supported');
       }
     } on Object catch (error) {
       emit(state.setError(error));

@@ -1,4 +1,4 @@
-import 'package:pauza/src/core/localization/gen/app_localizations.dart';
+import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart' show PermissionStatus;
 
 extension PermissionStatusLabel on PermissionStatus {

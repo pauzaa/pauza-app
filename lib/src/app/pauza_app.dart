@@ -2,7 +2,7 @@ import 'package:appfuse/appfuse.dart';
 import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_dependencies.dart';
 import 'package:pauza/src/core/common/root_scope.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.dart';
+import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_router.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 

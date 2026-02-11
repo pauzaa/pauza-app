@@ -5,9 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'app_localizations_en.dart';
-import 'app_localizations_ru.dart';
-import 'app_localizations_uz.dart';
+import 'app_localizations_en.g.dart';
+import 'app_localizations_ru.g.dart';
+import 'app_localizations_uz.g.dart';
 
 // ignore_for_file: type=lint
 
@@ -19,7 +19,7 @@ import 'app_localizations_uz.dart';
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'gen/app_localizations.dart';
+/// import 'gen/app_localizations.g.dart';
 ///
 /// return MaterialApp(
 ///   localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -141,6 +141,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yes'**
   String get yesButton;
+
+  /// No description provided for @weekDaysShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{key, select, mon {Mon} tue {Tue} wed {Wed} thu {Thu} fri {Fri} sat {Sat} sun {Sun} other {Unknown}}'**
+  String weekDaysShort(String key);
+
+  /// No description provided for @weekDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{key, select, mon {Monday} tue {Tuesday} wed {Wednesday} thu {Thursday} fri {Friday} sat {Saturday} sun {Sunday} other {Unknown}}'**
+  String weekDays(String key);
 
   /// Negative or dismissive action label.
   ///

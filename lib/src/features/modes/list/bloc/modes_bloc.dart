@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
-import 'package:pauza/src/features/modes/common/model/mode_summary.dart';
+import 'package:pauza/src/features/modes/common/model/models.dart';
 
 part 'modes_event.dart';
 part 'modes_state.dart';
@@ -19,10 +19,7 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
 
   final ModesRepository _modesRepository;
 
-  Future<void> _onModesRequested(
-    ModesListRequested event,
-    Emitter<ModesListState> emit,
-  ) async {
+  Future<void> _onModesRequested(ModesListRequested event, Emitter<ModesListState> emit) async {
     await _load(emit: emit);
   }
 
@@ -31,6 +28,7 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
     Emitter<ModesListState> emit,
   ) async {
     try {
+      emit(state.loading());
       await _modesRepository.deleteMode(event.modeId);
       await _load(emit: emit);
     } on Object catch (error) {
@@ -38,10 +36,7 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
     }
   }
 
-  void _onModesSelectionRequested(
-    ModesSelectionRequested event,
-    Emitter<ModesListState> emit,
-  ) {
+  void _onModesSelectionRequested(ModesSelectionRequested event, Emitter<ModesListState> emit) {
     if (state.selectedModeId == event.modeId) return;
     emit(state.copyWith(selectedModeId: event.modeId));
   }
@@ -50,50 +45,11 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
     emit(state.loading());
 
     try {
-      final platform = PauzaPlatform.current;
+      final summaries = await _modesRepository.getModes();
 
-      final summaries = await _modesRepository.listSummaries(
-        platform: platform,
-      );
-      final selectedModeId = _resolveSelectedModeId(
-        items: summaries,
-        selectedModeId: state.selectedModeId,
-      );
-
-      emit(
-        state.copyWith(
-          items: summaries,
-          selectedModeId: selectedModeId,
-          isLoading: false,
-          clearError: true,
-        ),
-      );
+      emit(state.copyWith(items: summaries, isLoading: false, clearError: true));
     } on Object catch (error) {
       emit(state.setError(error));
     }
-  }
-
-  String? _resolveSelectedModeId({
-    required List<ModeSummary> items,
-    required String? selectedModeId,
-  }) {
-    if (items.isEmpty) return null;
-
-    final stillExists = items.any(
-      (summary) => summary.mode.id == selectedModeId,
-    );
-    if (stillExists) return selectedModeId;
-
-    final currentSelected = state.selectedMode;
-    if (currentSelected != null) {
-      final updatedSelected = items.firstWhereOrNull(
-        (summary) => summary.mode.id == currentSelected.mode.id,
-      );
-      if (updatedSelected != null) {
-        return updatedSelected.mode.id;
-      }
-    }
-
-    return items.first.mode.id;
   }
 }

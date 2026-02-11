@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pauza/src/features/modes/common/model/mode_upsert_request.dart';
+import 'package:pauza/src/features/modes/common/model/mode.dart';
 
 class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
-  ModeUpsertDraftNotifier() : super(ModeUpsertDTO.empty);
+  ModeUpsertDraftNotifier() : super(const ModeUpsertDTO.initial());
 
   int _revision = 0;
 

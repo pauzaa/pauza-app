@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helm/helm.dart';
-import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/common/root_scope.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/widget/circular_mode_button.dart';
 import 'package:pauza/src/features/home/widget/current_mode_display.dart';
-import 'package:pauza/src/features/modes/common/model/mode_summary.dart';
+import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
 import 'package:pauza/src/features/modes/list/widget/mode_picker_sheet.dart';
 
@@ -29,22 +28,18 @@ class HomeScreen extends StatelessWidget {
                 ..add(const ModesListRequested()),
         ),
         BlocProvider(
-          create: (context) => BlockingBloc(
-            blockingRepository: rootScope.blockingRepository,
-            modesRepository: rootScope.modesRepository,
-          )..add(const BlockingSyncRequested()),
+          create: (context) =>
+              BlockingBloc(blockingRepository: rootScope.blockingRepository)
+                ..add(const BlockingSyncRequested()),
         ),
       ],
-      child: NestedNavigator(
-        initialRoute: PauzaRoutes.homeMain,
-        builder: (context, child) => child,
-      ),
+      child: const HomeContent(),
     );
   }
 }
 
-class HomeMainScreen extends StatelessWidget {
-  const HomeMainScreen({super.key});
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +52,10 @@ class HomeMainScreen extends StatelessWidget {
       },
 
       builder: (context, blockingState) {
-        return BlocSelector<ModesListBloc, ModesListState, ModeSummary?>(
+        return BlocSelector<ModesListBloc, ModesListState, Mode?>(
           selector: (state) => state.selectedMode,
           builder: (context, selectedMode) {
-            final displayModeName = selectedMode?.mode.title ?? 'No mode selected';
+            final displayModeName = selectedMode?.title ?? 'No mode selected';
 
             return Scaffold(
               body: Center(
@@ -78,21 +73,30 @@ class HomeMainScreen extends StatelessWidget {
                         }
 
                         if (selectedMode == null) {
-                          ModePickerSheet.show(context);
+                          ModePickerSheet.show(
+                            context,
+                            modes: context.read<ModesListBloc>().state.items,
+                          );
                           return;
                         }
 
-                        context.read<BlockingBloc>().add(
-                          BlockingStartRequested(
-                            modeId: selectedMode.mode.id,
-                            platform: PauzaPlatform.current,
-                          ),
-                        );
+                        context.read<BlockingBloc>().add(BlockingStartRequested(selectedMode));
                       },
                     ),
                     CurrentModeDisplay(
                       modeName: displayModeName,
-                      onTap: () => ModePickerSheet.show(context),
+                      onTap: () async {
+                        final selectedMode = await ModePickerSheet.show(
+                          context,
+                          modes: context.read<ModesListBloc>().state.items,
+                        );
+                        if (selectedMode == null) return;
+                        if (context.mounted) {
+                          context.read<ModesListBloc>().add(
+                            ModesSelectionRequested(modeId: selectedMode.id),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),

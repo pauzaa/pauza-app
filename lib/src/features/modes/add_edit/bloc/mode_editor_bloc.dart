@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
-import 'package:pauza/src/features/modes/common/model/mode_upsert_request.dart';
+import 'package:pauza/src/features/modes/common/model/mode.dart';
 
 part 'mode_editor_event.dart';
 part 'mode_editor_state.dart';
@@ -25,7 +23,7 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
     emit(const ModeEditorLoading());
 
     if (event.modeId == null) {
-      emit(const ModeEditorReady(modeId: null, request: ModeUpsertDTO.empty));
+      emit(const ModeEditorReady(modeId: null, request: ModeUpsertDTO.initial()));
       return;
     }
 
@@ -36,11 +34,6 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
         return;
       }
 
-      final blockedAppIds = await _modesRepository.listBlockedAppIds(
-        mode.id,
-        PauzaPlatform.current,
-      );
-
       emit(
         ModeEditorReady(
           modeId: mode.id,
@@ -49,8 +42,8 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
             textOnScreen: mode.textOnScreen,
             description: mode.description,
             allowedPausesCount: mode.allowedPausesCount,
-            isEnabled: mode.isEnabled,
-            blockedAppIds: blockedAppIds.toISet(),
+            blockedAppIds: mode.blockedAppIds,
+            schedule: mode.schedule,
           ),
         ),
       );
@@ -67,13 +60,9 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
 
     try {
       if (event.modeId == null) {
-        await _modesRepository.createMode(request: event.request, platform: PauzaPlatform.current);
+        await _modesRepository.createMode(event.request);
       } else {
-        await _modesRepository.updateMode(
-          modeId: event.modeId!,
-          request: event.request,
-          platform: PauzaPlatform.current,
-        );
+        await _modesRepository.updateMode(modeId: event.modeId!, request: event.request);
       }
       emit(ModeEditorSaveSuccess(modeId: event.modeId, request: event.request));
     } on Object catch (error) {

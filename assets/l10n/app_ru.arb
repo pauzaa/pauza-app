@@ -76,8 +76,13 @@
     }
   },
   "modeRequiredFieldError": "Поле обязательно",
+  "@modeRequiredFieldError": {},
   "modeLoadFailedMessage": "Не удалось загрузить данные режима",
+  "@modeLoadFailedMessage": {},
   "modeSaveFailedMessage": "Не удалось сохранить режим",
+  "@modeSaveFailedMessage": {},
   "modeAppsLoadFailedMessage": "Не удалось загрузить приложения",
-  "saveButton": "Сохранить"
+  "@modeAppsLoadFailedMessage": {},
+  "saveButton": "Сохранить",
+  "@saveButton": {}
 }

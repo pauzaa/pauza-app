@@ -1,10 +1,10 @@
-import 'package:appfuse/appfuse.dart';
 import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_dependencies.dart';
-import 'package:pauza/src/features/home/data/app_fuse_active_mode_storage.dart';
+import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/home/data/pauza_screen_time_blocking_repository.dart';
-import 'package:pauza/src/features/modes/add_edit/data/pauza_screen_time_installed_apps_repository.dart';
+import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 class RootScope extends StatefulWidget {
   const RootScope({required this.child, super.key});
@@ -25,13 +25,10 @@ class RootScopeState extends State<RootScope> {
 
   @override
   void initState() {
-    blockingRepository = PauzaScreenTimeBlockingRepository(
-      activeModeStorage: AppFuseActiveModeStorage(
-        fuseController: AppFuseScope.controller(context),
-      ),
-    );
+    blockingRepository = PauzaScreenTimeBlockingRepository(restrictions: AppRestrictionManager());
     modesRepository = ModesRepositoryImpl(
       localDatabase: PauzaDependencies.of(context).localDatabase,
+      platform: kPauzaPlatform,
     );
     installedAppsRepository = PauzaScreenTimeInstalledAppsRepository();
     super.initState();
@@ -56,10 +53,7 @@ class _InheritedRootScope extends InheritedWidget {
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
   /// For example: `SettingsScope.maybeOf(context)`.
-  static _InheritedRootScope? maybeOf(
-    BuildContext context, {
-    bool listen = true,
-  }) => listen
+  static _InheritedRootScope? maybeOf(BuildContext context, {bool listen = true}) => listen
       ? context.dependOnInheritedWidgetOfExactType<_InheritedRootScope>()
       : context.getInheritedWidgetOfExactType<_InheritedRootScope>();
 

@@ -33,6 +33,7 @@ migrate_working_dir/
 /build/
 /coverage/
 **/pubspec_overrides.yaml
+pubspec.lock
 
 # Symbolication related
 app.*.symbols

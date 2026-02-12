@@ -10,8 +10,6 @@ CREATE TABLE modes (
   description TEXT,
   allowed_pauses_count INTEGER NOT NULL DEFAULT 0
     CHECK (allowed_pauses_count >= 0),
-  is_enabled INTEGER NOT NULL DEFAULT 1
-    CHECK (is_enabled IN (0, 1)),
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );
@@ -19,13 +17,29 @@ CREATE TABLE modes (
 
   static const String createModeBlockedAppsTable = '''
 CREATE TABLE mode_blocked_apps (
-  id TEXT PRIMARY KEY NOT NULL,
   mode_id TEXT NOT NULL REFERENCES modes(id) ON DELETE CASCADE,
   platform TEXT NOT NULL CHECK (platform IN ('android','ios')),
   app_identifier TEXT NOT NULL,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL,
-  UNIQUE (mode_id, platform, app_identifier)
+  PRIMARY KEY (mode_id, platform, app_identifier)
+);
+''';
+
+  static const String createSchedulesTable = '''
+CREATE TABLE schedules (
+  id TEXT PRIMARY KEY NOT NULL,
+  mode_id TEXT NOT NULL REFERENCES modes(id) ON DELETE CASCADE,
+  days TEXT NOT NULL,
+  start_minute INTEGER NOT NULL
+    CHECK (start_minute BETWEEN 0 AND 1439),
+  end_minute INTEGER NOT NULL
+    CHECK (end_minute BETWEEN 0 AND 1439),
+  enabled INTEGER NOT NULL DEFAULT 0
+    CHECK (enabled IN (0, 1)),
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  UNIQUE (mode_id)
 );
 ''';
 }
@@ -41,6 +55,7 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
     final batch = database.batch();
     batch.execute(LocalDatabaseSqlStatements.createModesTable);
     batch.execute(LocalDatabaseSqlStatements.createModeBlockedAppsTable);
+    batch.execute(LocalDatabaseSqlStatements.createSchedulesTable);
     await batch.commit(noResult: true);
   }
 

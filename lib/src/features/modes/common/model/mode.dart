@@ -1,5 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/material.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
+import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 @immutable
@@ -24,7 +26,7 @@ class Mode {
   final DateTime createdAt;
   final DateTime updatedAt;
   final Schedule? schedule;
-  final List<AppIdentifier> blockedAppIds;
+  final IList<AppIdentifier> blockedAppIds;
 
   Mode copyWith({
     String? title,
@@ -35,7 +37,7 @@ class Mode {
     DateTime? createdAt,
     DateTime? updatedAt,
     Schedule? schedule,
-    List<AppIdentifier>? blockedAppIds,
+    IList<AppIdentifier>? blockedAppIds,
   }) => Mode(
     id: id,
     title: title ?? this.title,
@@ -50,9 +52,63 @@ class Mode {
 
   RestrictionMode toRestrictionMode() => RestrictionMode(
     modeId: id,
-    blockedAppIds: blockedAppIds,
+    blockedAppIds: blockedAppIds.toList(),
     schedule: schedule?.toRestrictionSchedule(),
   );
+
+  factory Mode.fromDbRow(Map<String, Object?> row) {
+    final createdAtMillis = row['created_at'] as int;
+    final updatedAtMillis = row['updated_at'] as int;
+
+    final scheduleDaysRaw = row['schedule_days'] as String?;
+    final scheduleStartMinute = row['schedule_start_minute'] as int?;
+    final scheduleEndMinute = row['schedule_end_minute'] as int?;
+    final scheduleEnabled = row['schedule_enabled'] as int?;
+
+    Schedule? schedule;
+    if (scheduleDaysRaw != null &&
+        scheduleStartMinute != null &&
+        scheduleEndMinute != null &&
+        scheduleEnabled != null) {
+      schedule = Schedule(
+        days: WeekDay.decodeDays(scheduleDaysRaw),
+        enabled: scheduleEnabled == 1,
+        start: TimeOfDayX.fromMinutesFromMidnight(scheduleStartMinute),
+        end: TimeOfDayX.fromMinutesFromMidnight(scheduleEndMinute),
+      );
+    }
+
+    final blockedAppsRaw = row['blocked_apps'] as String?;
+    final blockedAppIds = _parseBlockedApps(blockedAppsRaw);
+
+    return Mode(
+      id: row['id'] as String,
+      title: row['title'] as String,
+      textOnScreen: row['text_on_screen'] as String,
+      description: row['description'] as String?,
+      allowedPausesCount: row['allowed_pauses_count'] as int,
+      schedule: schedule,
+      blockedAppIds: blockedAppIds,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(createdAtMillis, isUtc: true),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(updatedAtMillis, isUtc: true),
+    );
+  }
+
+  static IList<AppIdentifier> _parseBlockedApps(String? blockedAppsRaw) {
+    if (blockedAppsRaw == null || blockedAppsRaw.trim().isEmpty) {
+      return const IList.empty();
+    }
+    final parts = blockedAppsRaw.split(',');
+    final ids = <AppIdentifier>[];
+    for (final part in parts) {
+      final value = part.trim();
+      if (value.isEmpty) {
+        continue;
+      }
+      ids.add(AppIdentifier(value));
+    }
+    return ids.toIList();
+  }
 
   @override
   String toString() =>
@@ -108,7 +164,7 @@ class ModeUpsertDTO {
         description: '',
         allowedPausesCount: 0,
         schedule: const Schedule.initial(),
-        blockedAppIds: const [],
+        blockedAppIds: const IList.empty(),
       );
 
   final String title;
@@ -116,7 +172,7 @@ class ModeUpsertDTO {
   final String? description;
   final int allowedPausesCount;
   final Schedule? schedule;
-  final List<AppIdentifier> blockedAppIds;
+  final IList<AppIdentifier> blockedAppIds;
 
   ModeUpsertDTO copyWith({
     String? title,
@@ -124,7 +180,7 @@ class ModeUpsertDTO {
     String? description,
     int? allowedPausesCount,
     Schedule? schedule,
-    List<AppIdentifier>? blockedAppIds,
+    IList<AppIdentifier>? blockedAppIds,
   }) => ModeUpsertDTO(
     title: title ?? this.title,
     textOnScreen: textOnScreen ?? this.textOnScreen,

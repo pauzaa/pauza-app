@@ -29,10 +29,6 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
 
     try {
       final mode = await _modesRepository.getMode(event.modeId!);
-      if (mode == null) {
-        emit(ModeEditorFailure(StateError('Mode not found: ${event.modeId}')));
-        return;
-      }
 
       emit(
         ModeEditorReady(

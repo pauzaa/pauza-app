@@ -36,4 +36,9 @@ class Schedule {
 
 extension TimeOfDayX on TimeOfDay {
   int get toMinutesFromMidnight => hour * 60 + minute;
+  static TimeOfDay fromMinutesFromMidnight(int minutes) {
+    final hour = minutes ~/ 60;
+    final minute = minutes % 60;
+    return TimeOfDay(hour: hour, minute: minute);
+  }
 }

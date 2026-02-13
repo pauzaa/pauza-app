@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helm/helm.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
-import 'package:pauza/src/core/common/root_scope.dart';
+import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/modes/select_apps/bloc/installed_apps_bloc.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';

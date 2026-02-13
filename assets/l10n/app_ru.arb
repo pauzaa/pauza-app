@@ -7,6 +7,22 @@
   "cancelButton": "Отмена",
   "okButton": "OK",
   "yesButton": "Да",
+  "weekDaysShort": "{key, select, mon {Пн} tue {Вт} wed {Ср} thu {Чт} fri {Пт} sat {Сб} sun {Вс} other {Неизвестно}}",
+  "@weekDaysShort": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "weekDays": "{key, select, mon {Понедельник} tue {Вторник} wed {Среда} thu {Четверг} fri {Пятница} sat {Суббота} sun {Воскресенье} other {Неизвестно}}",
+  "@weekDays": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
   "noButton": "Нет",
   "retryButton": "Повторить",
   "closeButton": "Закрыть",
@@ -30,11 +46,13 @@
   "comingSoonMessage": "Скоро будет",
   "noModesEmptyState": "Режимов пока нет",
   "permissionUsageAccessTitle": "Разрешите доступ к статистике",
-  "permissionUsageAccessBody": "Pauza нужен доступ к статистике, чтобы видеть активность приложений и применять блокировки.",
+  "permissionUsageAccessBody": "Pauza использует доступ к статистике, чтобы понимать, какие приложения активны, и применять ваши правила блокировки. Данные остаются на устройстве.",
   "permissionAccessibilityTitle": "Включите службу специальных возможностей",
-  "permissionAccessibilityBody": "Pauza нужна служба специальных возможностей, чтобы определять запуск заблокированных приложений.",
-  "permissionFamilyControlsTitle": "Разрешите Family Controls",
-  "permissionFamilyControlsBody": "Pauza нужна авторизация Family Controls для управления ограничениями приложений на iOS.",
+  "permissionAccessibilityBody": "Pauza использует спец. возможности, чтобы сразу показывать экран блокировки при запуске запрещенного приложения.",
+  "permissionExactAlarmTitle": "Разрешите точные будильники",
+  "permissionExactAlarmBody": "Точные будильники делают расписания и таймеры паузы точными, чтобы блокировки начинались и заканчивались вовремя.",
+  "permissionFamilyControlsTitle": "Разрешите Family Controls (Screen Time)",
+  "permissionFamilyControlsBody": "Pauza использует авторизацию Family Controls / Screen Time для управления ограничениями приложений на iOS.",
   "permissionCurrentStatusLabel": "Текущий статус: {status}",
   "@permissionCurrentStatusLabel": {
     "placeholders": {
@@ -76,13 +94,8 @@
     }
   },
   "modeRequiredFieldError": "Поле обязательно",
-  "@modeRequiredFieldError": {},
   "modeLoadFailedMessage": "Не удалось загрузить данные режима",
-  "@modeLoadFailedMessage": {},
   "modeSaveFailedMessage": "Не удалось сохранить режим",
-  "@modeSaveFailedMessage": {},
   "modeAppsLoadFailedMessage": "Не удалось загрузить приложения",
-  "@modeAppsLoadFailedMessage": {},
-  "saveButton": "Сохранить",
-  "@saveButton": {}
+  "saveButton": "Сохранить"
 }

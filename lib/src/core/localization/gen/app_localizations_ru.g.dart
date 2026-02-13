@@ -32,14 +32,14 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String weekDaysShort(String key) {
     String _temp0 = intl.Intl.selectLogic(key, {
-      'mon': 'Mon',
-      'tue': 'Tue',
-      'wed': 'Wed',
-      'thu': 'Thu',
-      'fri': 'Fri',
-      'sat': 'Sat',
-      'sun': 'Sun',
-      'other': 'Unknown',
+      'mon': 'Пн',
+      'tue': 'Вт',
+      'wed': 'Ср',
+      'thu': 'Чт',
+      'fri': 'Пт',
+      'sat': 'Сб',
+      'sun': 'Вс',
+      'other': 'Неизвестно',
     });
     return '$_temp0';
   }
@@ -47,14 +47,14 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String weekDays(String key) {
     String _temp0 = intl.Intl.selectLogic(key, {
-      'mon': 'Monday',
-      'tue': 'Tuesday',
-      'wed': 'Wednesday',
-      'thu': 'Thursday',
-      'fri': 'Friday',
-      'sat': 'Saturday',
-      'sun': 'Sunday',
-      'other': 'Unknown',
+      'mon': 'Понедельник',
+      'tue': 'Вторник',
+      'wed': 'Среда',
+      'thu': 'Четверг',
+      'fri': 'Пятница',
+      'sat': 'Суббота',
+      'sun': 'Воскресенье',
+      'other': 'Неизвестно',
     });
     return '$_temp0';
   }
@@ -130,7 +130,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get permissionUsageAccessBody =>
-      'Pauza нужен доступ к статистике, чтобы видеть активность приложений и применять блокировки.';
+      'Pauza использует доступ к статистике, чтобы понимать, какие приложения активны, и применять ваши правила блокировки. Данные остаются на устройстве.';
 
   @override
   String get permissionAccessibilityTitle =>
@@ -138,14 +138,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get permissionAccessibilityBody =>
-      'Pauza нужна служба специальных возможностей, чтобы определять запуск заблокированных приложений.';
+      'Pauza использует спец. возможности, чтобы сразу показывать экран блокировки при запуске запрещенного приложения.';
 
   @override
-  String get permissionFamilyControlsTitle => 'Разрешите Family Controls';
+  String get permissionExactAlarmTitle => 'Разрешите точные будильники';
+
+  @override
+  String get permissionExactAlarmBody =>
+      'Точные будильники делают расписания и таймеры паузы точными, чтобы блокировки начинались и заканчивались вовремя.';
+
+  @override
+  String get permissionFamilyControlsTitle =>
+      'Разрешите Family Controls (Screen Time)';
 
   @override
   String get permissionFamilyControlsBody =>
-      'Pauza нужна авторизация Family Controls для управления ограничениями приложений на iOS.';
+      'Pauza использует авторизацию Family Controls / Screen Time для управления ограничениями приложений на iOS.';
 
   @override
   String permissionCurrentStatusLabel(String status) {

@@ -19,6 +19,13 @@ enum PauzaPermissionRequirement {
     whyL10nKey: 'permissionAccessibilityBody',
     androidPermission: AndroidPermission.accessibility,
   ),
+  androidExactAlarm(
+    id: 'android_exact_alarm',
+    routePath: '/permissions/exact-alarm',
+    titleL10nKey: 'permissionExactAlarmTitle',
+    whyL10nKey: 'permissionExactAlarmBody',
+    androidPermission: AndroidPermission.exactAlarm,
+  ),
   iosFamilyControls(
     id: 'ios_family_controls',
     routePath: '/permissions/family-controls',
@@ -52,6 +59,7 @@ enum PauzaPermissionRequirement {
       return const <PauzaPermissionRequirement>[
         PauzaPermissionRequirement.androidUsageAccess,
         PauzaPermissionRequirement.androidAccessibility,
+        PauzaPermissionRequirement.androidExactAlarm,
       ];
     }
     if (Platform.isIOS) {
@@ -64,6 +72,7 @@ enum PauzaPermissionRequirement {
     return switch (this) {
       PauzaPermissionRequirement.androidUsageAccess => l10n.permissionUsageAccessTitle,
       PauzaPermissionRequirement.androidAccessibility => l10n.permissionAccessibilityTitle,
+      PauzaPermissionRequirement.androidExactAlarm => l10n.permissionExactAlarmTitle,
       PauzaPermissionRequirement.iosFamilyControls => l10n.permissionFamilyControlsTitle,
     };
   }
@@ -72,6 +81,7 @@ enum PauzaPermissionRequirement {
     return switch (this) {
       PauzaPermissionRequirement.androidUsageAccess => l10n.permissionUsageAccessBody,
       PauzaPermissionRequirement.androidAccessibility => l10n.permissionAccessibilityBody,
+      PauzaPermissionRequirement.androidExactAlarm => l10n.permissionExactAlarmBody,
       PauzaPermissionRequirement.iosFamilyControls => l10n.permissionFamilyControlsBody,
     };
   }
@@ -79,7 +89,8 @@ enum PauzaPermissionRequirement {
   String primaryActionLabel(AppLocalizations l10n) {
     return switch (this) {
       PauzaPermissionRequirement.androidUsageAccess ||
-      PauzaPermissionRequirement.androidAccessibility => l10n.permissionOpenSettingsButton,
+      PauzaPermissionRequirement.androidAccessibility ||
+      PauzaPermissionRequirement.androidExactAlarm => l10n.permissionOpenSettingsButton,
       PauzaPermissionRequirement.iosFamilyControls => l10n.permissionAllowAccessButton,
     };
   }

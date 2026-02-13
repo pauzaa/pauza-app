@@ -7,6 +7,22 @@
   "cancelButton": "Bekor qilish",
   "okButton": "OK",
   "yesButton": "Ha",
+  "weekDaysShort": "{key, select, mon {Du} tue {Se} wed {Ch} thu {Pa} fri {Ju} sat {Sh} sun {Ya} other {Noma'lum}}",
+  "@weekDaysShort": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "weekDays": "{key, select, mon {Dushanba} tue {Seshanba} wed {Chorshanba} thu {Payshanba} fri {Juma} sat {Shanba} sun {Yakshanba} other {Noma'lum}}",
+  "@weekDays": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
   "noButton": "Yo'q",
   "retryButton": "Qaytadan urinib ko'rish",
   "closeButton": "Yopish",
@@ -30,11 +46,13 @@
   "comingSoonMessage": "Tez orada",
   "noModesEmptyState": "Hozircha rejimlar yo'q",
   "permissionUsageAccessTitle": "Foydalanish ruxsatini yoqing",
-  "permissionUsageAccessBody": "Pauza ilova faolligini ko'rish va bloklash qoidalarini qo'llash uchun Usage Access ruxsatiga muhtoj.",
+  "permissionUsageAccessBody": "Pauza Usage Access orqali qaysi ilovalar faol ekanini biladi va bloklash qoidalarini qo'llaydi. Ma'lumotlar qurilmangizda qoladi.",
   "permissionAccessibilityTitle": "Accessibility xizmatini yoqing",
-  "permissionAccessibilityBody": "Pauza bloklangan ilovalar ochilganda aniqlash uchun Accessibility xizmatiga muhtoj.",
-  "permissionFamilyControlsTitle": "Family Controls ruxsatini bering",
-  "permissionFamilyControlsBody": "Pauza iOS'da ilova cheklovlarini boshqarish uchun Family Controls ruxsatiga muhtoj.",
+  "permissionAccessibilityBody": "Pauza bloklangan ilova ochilganda darhol bloklash ekranini ko'rsatish uchun Accessibility xizmatidan foydalanadi.",
+  "permissionExactAlarmTitle": "Aniq signal ruxsatini bering",
+  "permissionExactAlarmBody": "Aniq signal (exact alarm) jadval va pauza taymerlarini aniq ishlatib, bloklashni o'z vaqtida boshlatadi va tugatadi.",
+  "permissionFamilyControlsTitle": "Family Controls (Screen Time) ruxsatini bering",
+  "permissionFamilyControlsBody": "Pauza iOS'da ilova cheklovlarini boshqarish uchun Family Controls / Screen Time ruxsatidan foydalanadi.",
   "permissionCurrentStatusLabel": "Joriy holat: {status}",
   "@permissionCurrentStatusLabel": {
     "placeholders": {

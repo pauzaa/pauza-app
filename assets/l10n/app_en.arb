@@ -1,8 +1,17 @@
 {
   "@@locale": "en",
   "appName": "Pauza",
+  "@appName": {
+    "description": "The name of the application."
+  },
   "homeTitle": "Home",
+  "@homeTitle": {
+    "description": "Title for the home screen."
+  },
   "notFoundTitle": "Page not found",
+  "@notFoundTitle": {
+    "description": "Title shown when a page is not found."
+  },
   "confirmButton": "Confirm",
   "@confirmButton": {
     "description": "Label for a confirm action on dialogs or forms."
@@ -84,21 +93,77 @@
     "description": "Message displayed when a list has no content."
   },
   "startButton": "Start",
+  "@startButton": {
+    "description": "Label to start an action or mode."
+  },
   "stopButton": "Stop",
+  "@stopButton": {
+    "description": "Label to stop an active action or mode."
+  },
   "selectModeTitle": "Select mode",
+  "@selectModeTitle": {
+    "description": "Title for selecting a mode."
+  },
   "addModeButton": "Add new mode",
+  "@addModeButton": {
+    "description": "Button label to add a new mode."
+  },
   "editModeButton": "Edit",
+  "@editModeButton": {
+    "description": "Button label to edit a mode."
+  },
   "deleteModeButton": "Delete",
+  "@deleteModeButton": {
+    "description": "Button label to delete a mode."
+  },
   "deleteModeTitle": "Delete mode?",
+  "@deleteModeTitle": {
+    "description": "Title for the delete mode confirmation dialog."
+  },
   "deleteModeMessage": "This action cannot be undone.",
+  "@deleteModeMessage": {
+    "description": "Warning message shown when deleting a mode."
+  },
   "comingSoonMessage": "Coming soon",
+  "@comingSoonMessage": {
+    "description": "Message displayed for features not yet available."
+  },
   "noModesEmptyState": "No modes yet",
+  "@noModesEmptyState": {
+    "description": "Message shown when no modes have been created."
+  },
   "permissionUsageAccessTitle": "Allow Usage Access",
-  "permissionUsageAccessBody": "Pauza needs Usage Access to read app activity and apply blocking rules.",
+  "@permissionUsageAccessTitle": {
+    "description": "Title for the Usage Access permission request."
+  },
+  "permissionUsageAccessBody": "Pauza uses Usage Access to understand which apps are active and enforce your blocking rules. This data stays on your device.",
+  "@permissionUsageAccessBody": {
+    "description": "Explanation of why Usage Access permission is needed."
+  },
   "permissionAccessibilityTitle": "Enable Accessibility Service",
-  "permissionAccessibilityBody": "Pauza needs Accessibility Service to detect when blocked apps are opened.",
-  "permissionFamilyControlsTitle": "Allow Family Controls",
-  "permissionFamilyControlsBody": "Pauza needs Family Controls authorization to manage app restrictions on iOS.",
+  "@permissionAccessibilityTitle": {
+    "description": "Title for the Accessibility Service permission request."
+  },
+  "permissionAccessibilityBody": "Pauza uses Accessibility to detect when a blocked app opens so it can show the block screen immediately.",
+  "@permissionAccessibilityBody": {
+    "description": "Explanation of why Accessibility permission is needed."
+  },
+  "permissionExactAlarmTitle": "Allow Exact Alarms",
+  "@permissionExactAlarmTitle": {
+    "description": "Title for the Exact Alarms permission request."
+  },
+  "permissionExactAlarmBody": "Exact alarms keep schedules and pause timers accurate so blocks start and end on time.",
+  "@permissionExactAlarmBody": {
+    "description": "Explanation of why Exact Alarms permission is needed."
+  },
+  "permissionFamilyControlsTitle": "Allow Family Controls (Screen Time)",
+  "@permissionFamilyControlsTitle": {
+    "description": "Title for the Family Controls permission request."
+  },
+  "permissionFamilyControlsBody": "Pauza uses Family Controls / Screen Time authorization to manage app restrictions on iOS.",
+  "@permissionFamilyControlsBody": {
+    "description": "Explanation of why Family Controls permission is needed."
+  },
   "permissionCurrentStatusLabel": "Current status: {status}",
   "@permissionCurrentStatusLabel": {
     "placeholders": {
@@ -108,11 +173,29 @@
     }
   },
   "permissionStatusGranted": "Granted",
+  "@permissionStatusGranted": {
+    "description": "Label shown when a permission has been granted."
+  },
   "permissionStatusDenied": "Denied",
+  "@permissionStatusDenied": {
+    "description": "Label shown when a permission has been denied."
+  },
   "permissionStatusRestricted": "Restricted",
+  "@permissionStatusRestricted": {
+    "description": "Label shown when a permission is restricted."
+  },
   "permissionStatusNotDetermined": "Not determined",
+  "@permissionStatusNotDetermined": {
+    "description": "Label shown when a permission status is not yet determined."
+  },
   "permissionOpenSettingsButton": "Open settings",
+  "@permissionOpenSettingsButton": {
+    "description": "Button label to open system settings for permissions."
+  },
   "permissionAllowAccessButton": "Allow access",
+  "@permissionAllowAccessButton": {
+    "description": "Button label to grant permission access."
+  },
   "blockedAppsCountLabel": "Blocked apps: {count}",
   "@blockedAppsCountLabel": {
     "placeholders": {
@@ -122,15 +205,45 @@
     }
   },
   "createModeTitle": "Create mode",
+  "@createModeTitle": {
+    "description": "Title for the create mode screen."
+  },
   "editModeTitle": "Edit mode",
+  "@editModeTitle": {
+    "description": "Title for the edit mode screen."
+  },
   "modeTitleFieldLabel": "Title",
+  "@modeTitleFieldLabel": {
+    "description": "Label for the mode title input field."
+  },
   "modeTextOnScreenFieldLabel": "Text on shield screen",
+  "@modeTextOnScreenFieldLabel": {
+    "description": "Label for the text displayed on the block screen."
+  },
   "modeDescriptionFieldLabel": "Description",
+  "@modeDescriptionFieldLabel": {
+    "description": "Label for the mode description input field."
+  },
   "modeEnabledLabel": "Enabled",
+  "@modeEnabledLabel": {
+    "description": "Label for the mode enabled toggle."
+  },
   "modeBlockedAppsSectionTitle": "Blocked apps",
+  "@modeBlockedAppsSectionTitle": {
+    "description": "Title for the blocked apps section in mode settings."
+  },
   "modeBlockedAppsChooseButton": "Choose apps",
+  "@modeBlockedAppsChooseButton": {
+    "description": "Button label to choose apps to block."
+  },
   "modeBlockedAppsSearchLabel": "Search apps",
+  "@modeBlockedAppsSearchLabel": {
+    "description": "Label for the app search input."
+  },
   "modeBlockedAppsRequiredError": "Select at least one app",
+  "@modeBlockedAppsRequiredError": {
+    "description": "Error message shown when no apps are selected."
+  },
   "modeBlockedAppsSelectedCountLabel": "Selected apps: {count}",
   "@modeBlockedAppsSelectedCountLabel": {
     "placeholders": {
@@ -140,8 +253,23 @@
     }
   },
   "modeRequiredFieldError": "This field is required",
+  "@modeRequiredFieldError": {
+    "description": "Error message shown when a required field is empty."
+  },
   "modeLoadFailedMessage": "Unable to load mode data",
+  "@modeLoadFailedMessage": {
+    "description": "Error message shown when mode data fails to load."
+  },
   "modeSaveFailedMessage": "Unable to save mode",
+  "@modeSaveFailedMessage": {
+    "description": "Error message shown when saving a mode fails."
+  },
   "modeAppsLoadFailedMessage": "Unable to load apps",
-  "saveButton": "Save"
+  "@modeAppsLoadFailedMessage": {
+    "description": "Error message shown when app list fails to load."
+  },
+  "saveButton": "Save",
+  "@saveButton": {
+    "description": "Button label to save changes."
+  }
 }

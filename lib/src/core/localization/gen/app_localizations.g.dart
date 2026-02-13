@@ -98,21 +98,22 @@ abstract class AppLocalizations {
     Locale('en'),
     Locale('ru'),
     Locale('uz'),
+    Locale.fromSubtags(languageCode: 'uz', scriptCode: 'Cyrl'),
   ];
 
-  /// No description provided for @appName.
+  /// The name of the application.
   ///
   /// In en, this message translates to:
   /// **'Pauza'**
   String get appName;
 
-  /// No description provided for @homeTitle.
+  /// Title for the home screen.
   ///
   /// In en, this message translates to:
   /// **'Home'**
   String get homeTitle;
 
-  /// No description provided for @notFoundTitle.
+  /// Title shown when a page is not found.
   ///
   /// In en, this message translates to:
   /// **'Page not found'**
@@ -226,100 +227,112 @@ abstract class AppLocalizations {
   /// **'No items to show'**
   String get emptyStateMessage;
 
-  /// No description provided for @startButton.
+  /// Label to start an action or mode.
   ///
   /// In en, this message translates to:
   /// **'Start'**
   String get startButton;
 
-  /// No description provided for @stopButton.
+  /// Label to stop an active action or mode.
   ///
   /// In en, this message translates to:
   /// **'Stop'**
   String get stopButton;
 
-  /// No description provided for @selectModeTitle.
+  /// Title for selecting a mode.
   ///
   /// In en, this message translates to:
   /// **'Select mode'**
   String get selectModeTitle;
 
-  /// No description provided for @addModeButton.
+  /// Button label to add a new mode.
   ///
   /// In en, this message translates to:
   /// **'Add new mode'**
   String get addModeButton;
 
-  /// No description provided for @editModeButton.
+  /// Button label to edit a mode.
   ///
   /// In en, this message translates to:
   /// **'Edit'**
   String get editModeButton;
 
-  /// No description provided for @deleteModeButton.
+  /// Button label to delete a mode.
   ///
   /// In en, this message translates to:
   /// **'Delete'**
   String get deleteModeButton;
 
-  /// No description provided for @deleteModeTitle.
+  /// Title for the delete mode confirmation dialog.
   ///
   /// In en, this message translates to:
   /// **'Delete mode?'**
   String get deleteModeTitle;
 
-  /// No description provided for @deleteModeMessage.
+  /// Warning message shown when deleting a mode.
   ///
   /// In en, this message translates to:
   /// **'This action cannot be undone.'**
   String get deleteModeMessage;
 
-  /// No description provided for @comingSoonMessage.
+  /// Message displayed for features not yet available.
   ///
   /// In en, this message translates to:
   /// **'Coming soon'**
   String get comingSoonMessage;
 
-  /// No description provided for @noModesEmptyState.
+  /// Message shown when no modes have been created.
   ///
   /// In en, this message translates to:
   /// **'No modes yet'**
   String get noModesEmptyState;
 
-  /// No description provided for @permissionUsageAccessTitle.
+  /// Title for the Usage Access permission request.
   ///
   /// In en, this message translates to:
   /// **'Allow Usage Access'**
   String get permissionUsageAccessTitle;
 
-  /// No description provided for @permissionUsageAccessBody.
+  /// Explanation of why Usage Access permission is needed.
   ///
   /// In en, this message translates to:
-  /// **'Pauza needs Usage Access to read app activity and apply blocking rules.'**
+  /// **'Pauza uses Usage Access to understand which apps are active and enforce your blocking rules. This data stays on your device.'**
   String get permissionUsageAccessBody;
 
-  /// No description provided for @permissionAccessibilityTitle.
+  /// Title for the Accessibility Service permission request.
   ///
   /// In en, this message translates to:
   /// **'Enable Accessibility Service'**
   String get permissionAccessibilityTitle;
 
-  /// No description provided for @permissionAccessibilityBody.
+  /// Explanation of why Accessibility permission is needed.
   ///
   /// In en, this message translates to:
-  /// **'Pauza needs Accessibility Service to detect when blocked apps are opened.'**
+  /// **'Pauza uses Accessibility to detect when a blocked app opens so it can show the block screen immediately.'**
   String get permissionAccessibilityBody;
 
-  /// No description provided for @permissionFamilyControlsTitle.
+  /// Title for the Exact Alarms permission request.
   ///
   /// In en, this message translates to:
-  /// **'Allow Family Controls'**
+  /// **'Allow Exact Alarms'**
+  String get permissionExactAlarmTitle;
+
+  /// Explanation of why Exact Alarms permission is needed.
+  ///
+  /// In en, this message translates to:
+  /// **'Exact alarms keep schedules and pause timers accurate so blocks start and end on time.'**
+  String get permissionExactAlarmBody;
+
+  /// Title for the Family Controls permission request.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Family Controls (Screen Time)'**
   String get permissionFamilyControlsTitle;
 
-  /// No description provided for @permissionFamilyControlsBody.
+  /// Explanation of why Family Controls permission is needed.
   ///
   /// In en, this message translates to:
-  /// **'Pauza needs Family Controls authorization to manage app restrictions on iOS.'**
+  /// **'Pauza uses Family Controls / Screen Time authorization to manage app restrictions on iOS.'**
   String get permissionFamilyControlsBody;
 
   /// No description provided for @permissionCurrentStatusLabel.
@@ -328,37 +341,37 @@ abstract class AppLocalizations {
   /// **'Current status: {status}'**
   String permissionCurrentStatusLabel(String status);
 
-  /// No description provided for @permissionStatusGranted.
+  /// Label shown when a permission has been granted.
   ///
   /// In en, this message translates to:
   /// **'Granted'**
   String get permissionStatusGranted;
 
-  /// No description provided for @permissionStatusDenied.
+  /// Label shown when a permission has been denied.
   ///
   /// In en, this message translates to:
   /// **'Denied'**
   String get permissionStatusDenied;
 
-  /// No description provided for @permissionStatusRestricted.
+  /// Label shown when a permission is restricted.
   ///
   /// In en, this message translates to:
   /// **'Restricted'**
   String get permissionStatusRestricted;
 
-  /// No description provided for @permissionStatusNotDetermined.
+  /// Label shown when a permission status is not yet determined.
   ///
   /// In en, this message translates to:
   /// **'Not determined'**
   String get permissionStatusNotDetermined;
 
-  /// No description provided for @permissionOpenSettingsButton.
+  /// Button label to open system settings for permissions.
   ///
   /// In en, this message translates to:
   /// **'Open settings'**
   String get permissionOpenSettingsButton;
 
-  /// No description provided for @permissionAllowAccessButton.
+  /// Button label to grant permission access.
   ///
   /// In en, this message translates to:
   /// **'Allow access'**
@@ -370,61 +383,61 @@ abstract class AppLocalizations {
   /// **'Blocked apps: {count}'**
   String blockedAppsCountLabel(int count);
 
-  /// No description provided for @createModeTitle.
+  /// Title for the create mode screen.
   ///
   /// In en, this message translates to:
   /// **'Create mode'**
   String get createModeTitle;
 
-  /// No description provided for @editModeTitle.
+  /// Title for the edit mode screen.
   ///
   /// In en, this message translates to:
   /// **'Edit mode'**
   String get editModeTitle;
 
-  /// No description provided for @modeTitleFieldLabel.
+  /// Label for the mode title input field.
   ///
   /// In en, this message translates to:
   /// **'Title'**
   String get modeTitleFieldLabel;
 
-  /// No description provided for @modeTextOnScreenFieldLabel.
+  /// Label for the text displayed on the block screen.
   ///
   /// In en, this message translates to:
   /// **'Text on shield screen'**
   String get modeTextOnScreenFieldLabel;
 
-  /// No description provided for @modeDescriptionFieldLabel.
+  /// Label for the mode description input field.
   ///
   /// In en, this message translates to:
   /// **'Description'**
   String get modeDescriptionFieldLabel;
 
-  /// No description provided for @modeEnabledLabel.
+  /// Label for the mode enabled toggle.
   ///
   /// In en, this message translates to:
   /// **'Enabled'**
   String get modeEnabledLabel;
 
-  /// No description provided for @modeBlockedAppsSectionTitle.
+  /// Title for the blocked apps section in mode settings.
   ///
   /// In en, this message translates to:
   /// **'Blocked apps'**
   String get modeBlockedAppsSectionTitle;
 
-  /// No description provided for @modeBlockedAppsChooseButton.
+  /// Button label to choose apps to block.
   ///
   /// In en, this message translates to:
   /// **'Choose apps'**
   String get modeBlockedAppsChooseButton;
 
-  /// No description provided for @modeBlockedAppsSearchLabel.
+  /// Label for the app search input.
   ///
   /// In en, this message translates to:
   /// **'Search apps'**
   String get modeBlockedAppsSearchLabel;
 
-  /// No description provided for @modeBlockedAppsRequiredError.
+  /// Error message shown when no apps are selected.
   ///
   /// In en, this message translates to:
   /// **'Select at least one app'**
@@ -436,31 +449,31 @@ abstract class AppLocalizations {
   /// **'Selected apps: {count}'**
   String modeBlockedAppsSelectedCountLabel(int count);
 
-  /// No description provided for @modeRequiredFieldError.
+  /// Error message shown when a required field is empty.
   ///
   /// In en, this message translates to:
   /// **'This field is required'**
   String get modeRequiredFieldError;
 
-  /// No description provided for @modeLoadFailedMessage.
+  /// Error message shown when mode data fails to load.
   ///
   /// In en, this message translates to:
   /// **'Unable to load mode data'**
   String get modeLoadFailedMessage;
 
-  /// No description provided for @modeSaveFailedMessage.
+  /// Error message shown when saving a mode fails.
   ///
   /// In en, this message translates to:
   /// **'Unable to save mode'**
   String get modeSaveFailedMessage;
 
-  /// No description provided for @modeAppsLoadFailedMessage.
+  /// Error message shown when app list fails to load.
   ///
   /// In en, this message translates to:
   /// **'Unable to load apps'**
   String get modeAppsLoadFailedMessage;
 
-  /// No description provided for @saveButton.
+  /// Button label to save changes.
   ///
   /// In en, this message translates to:
   /// **'Save'**
@@ -485,6 +498,18 @@ class _AppLocalizationsDelegate
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when language+script codes are specified.
+  switch (locale.languageCode) {
+    case 'uz':
+      {
+        switch (locale.scriptCode) {
+          case 'Cyrl':
+            return AppLocalizationsUzCyrl();
+        }
+        break;
+      }
+  }
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en':

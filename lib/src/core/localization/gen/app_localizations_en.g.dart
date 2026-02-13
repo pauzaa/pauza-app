@@ -130,21 +130,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionUsageAccessBody =>
-      'Pauza needs Usage Access to read app activity and apply blocking rules.';
+      'Pauza uses Usage Access to understand which apps are active and enforce your blocking rules. This data stays on your device.';
 
   @override
   String get permissionAccessibilityTitle => 'Enable Accessibility Service';
 
   @override
   String get permissionAccessibilityBody =>
-      'Pauza needs Accessibility Service to detect when blocked apps are opened.';
+      'Pauza uses Accessibility to detect when a blocked app opens so it can show the block screen immediately.';
 
   @override
-  String get permissionFamilyControlsTitle => 'Allow Family Controls';
+  String get permissionExactAlarmTitle => 'Allow Exact Alarms';
+
+  @override
+  String get permissionExactAlarmBody =>
+      'Exact alarms keep schedules and pause timers accurate so blocks start and end on time.';
+
+  @override
+  String get permissionFamilyControlsTitle =>
+      'Allow Family Controls (Screen Time)';
 
   @override
   String get permissionFamilyControlsBody =>
-      'Pauza needs Family Controls authorization to manage app restrictions on iOS.';
+      'Pauza uses Family Controls / Screen Time authorization to manage app restrictions on iOS.';
 
   @override
   String permissionCurrentStatusLabel(String status) {

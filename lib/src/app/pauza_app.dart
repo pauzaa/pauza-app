@@ -19,6 +19,7 @@ class PauzaApp extends StatefulWidget {
   static final supportedLanguages = <Locale, String>{
     const Locale('en'): 'English',
     const Locale('uz'): 'O\'zbek',
+    const Locale('uz', 'Cyrl'): 'Ўзбекча',
     const Locale('ru'): 'Русский',
   };
 
@@ -59,7 +60,9 @@ class _PauzaAppState extends State<PauzaApp> with RouterStateMixin<PauzaApp> {
       builder: (context, child) {
         return MediaQuery(
           key: builderKey,
-          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.noScaling),
           child: RootScope(child: child ?? const SizedBox.shrink()),
         );
       },

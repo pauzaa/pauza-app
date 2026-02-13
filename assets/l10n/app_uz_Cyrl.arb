@@ -1,0 +1,101 @@
+{
+  "@@locale": "uz_Cyrl",
+  "appName": "Pauza",
+  "homeTitle": "Бош саҳифа",
+  "notFoundTitle": "Саҳифа топилмади",
+  "confirmButton": "Тасдиқлаш",
+  "cancelButton": "Бекор қилиш",
+  "okButton": "OK",
+  "yesButton": "Ҳа",
+  "weekDaysShort": "{key, select, mon {Ду} tue {Се} wed {Чо} thu {Па} fri {Жу} sat {Ша} sun {Як} other {Номаълум}}",
+  "@weekDaysShort": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "weekDays": "{key, select, mon {Душанба} tue {Сешанба} wed {Чоршанба} thu {Пайшанба} fri {Жума} sat {Шанба} sun {Якшанба} other {Номаълум}}",
+  "@weekDays": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "noButton": "Йўқ",
+  "retryButton": "Қайтадан уриниб кўриш",
+  "closeButton": "Ёпиш",
+  "nextButton": "Кейинги",
+  "previousButton": "Олдинги",
+  "submitButton": "Юбориш",
+  "backButton": "Ортга",
+  "loadingLabel": "Юкланмоқда...",
+  "errorTitle": "Хатолик юз берди",
+  "successTitle": "Муваффақият",
+  "searchPlaceholder": "Қидириш",
+  "emptyStateMessage": "Кўрсатиш учун элементлар йўқ",
+  "startButton": "Бошлаш",
+  "stopButton": "Тўхтатиш",
+  "selectModeTitle": "Режимни танланг",
+  "addModeButton": "Янги режим қўшиш",
+  "editModeButton": "Таҳрирлаш",
+  "deleteModeButton": "Ўчириш",
+  "deleteModeTitle": "Режим ўчирилсинми?",
+  "deleteModeMessage": "Бу амални ортга қайтариб бўлмайди.",
+  "comingSoonMessage": "Тез орада",
+  "noModesEmptyState": "Ҳозирча режимлар йўқ",
+  "permissionUsageAccessTitle": "Фойдаланиш рухсатини ёнг",
+  "permissionUsageAccessBody": "Pauza Usage Access орқали қайси иловалар фаол эканини билади ва блоклаш қоидаларини қўллайди. Маълумотлар қурилмангизда қолади.",
+  "permissionAccessibilityTitle": "Accessibility хизматини ёнг",
+  "permissionAccessibilityBody": "Pauza блокланган илова очилганда дарҳол блоклаш экранини кўрсатиш учун Accessibility хизматидан фойдаланади.",
+  "permissionExactAlarmTitle": "Аниқ сигнал рухсатини беринг",
+  "permissionExactAlarmBody": "Аниқ сигнал (exact alarm) жадвал ва пауза таймерларини аниқ ишлатиб, блоклашни ўз вақтида бошлади ва тугатади.",
+  "permissionFamilyControlsTitle": "Family Controls (Screen Time) рухсатини беринг",
+  "permissionFamilyControlsBody": "Pauza iOS'да илова чекловларини бошқариш учун Family Controls / Screen Time рухсатидан фойдаланади.",
+  "permissionCurrentStatusLabel": "Жорий ҳолат: {status}",
+  "@permissionCurrentStatusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionStatusGranted": "Рухсат берилган",
+  "permissionStatusDenied": "Рад этилган",
+  "permissionStatusRestricted": "Чекланган",
+  "permissionStatusNotDetermined": "Аниқланмаган",
+  "permissionOpenSettingsButton": "Созламаларни очиш",
+  "permissionAllowAccessButton": "Рухсат бериш",
+  "blockedAppsCountLabel": "Блокланган иловалар: {count}",
+  "@blockedAppsCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createModeTitle": "Режим яратиш",
+  "editModeTitle": "Режимни таҳрирлаш",
+  "modeTitleFieldLabel": "Номи",
+  "modeTextOnScreenFieldLabel": "Блоклаш экранидаги матн",
+  "modeDescriptionFieldLabel": "Тавсиф",
+  "modeEnabledLabel": "Ёқилган",
+  "modeBlockedAppsSectionTitle": "Блокланадиган иловалар",
+  "modeBlockedAppsChooseButton": "Иловаларни танлаш",
+  "modeBlockedAppsSearchLabel": "Иловаларни қидириш",
+  "modeBlockedAppsRequiredError": "Камида битта иловани танланг",
+  "modeBlockedAppsSelectedCountLabel": "Танланган иловалар: {count}",
+  "@modeBlockedAppsSelectedCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modeRequiredFieldError": "Бу майдон мажбурий",
+  "modeLoadFailedMessage": "Режим маълумотларини юклаб бўлмади",
+  "modeSaveFailedMessage": "Режимни сақлаб бўлмади",
+  "modeAppsLoadFailedMessage": "Иловаларни юклаб бўлмади",
+  "saveButton": "Сақлаш"
+}

@@ -9,8 +9,8 @@ abstract interface class BlockingRepository {
   Future<void> stopBlocking();
 }
 
-class PauzaScreenTimeBlockingRepository implements BlockingRepository {
-  PauzaScreenTimeBlockingRepository({required AppRestrictionManager restrictions})
+class PauzaBlockingRepository implements BlockingRepository {
+  PauzaBlockingRepository({required AppRestrictionManager restrictions})
     : _restrictions = restrictions;
 
   final AppRestrictionManager _restrictions;

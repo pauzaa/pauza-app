@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_dependencies.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/permissions/model/pauza_permission_requirement.dart';
-import 'package:pauza/src/features/permissions/domain/permission_helper.dart';
+import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
 import 'package:pauza/src/features/permissions/common/permission_status_label.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 

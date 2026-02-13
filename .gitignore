@@ -47,7 +47,4 @@ app.*.map.json
 /android/app/release
 
 # Markdown files (except README.md and docs)
-*.md
-!README.md
-
 .codex/skills

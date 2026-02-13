@@ -1,7 +1,7 @@
 import 'package:appfuse/appfuse.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
-import 'package:pauza/src/features/permissions/domain/permission_helper.dart';
+import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart' show PermissionManager;
 
 class PauzaDependencies with AppFuseInitialization {

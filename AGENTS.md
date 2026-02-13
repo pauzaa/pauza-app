@@ -1,0 +1,198 @@
+# Instructions for this repository
+
+## Build/lint/test commands
+
+```bash
+# Install dependencies
+dart pub get
+
+# Run the app
+flutter run
+
+# Build for production
+flutter build apk          # Android
+flutter build ios          # iOS
+flutter build web          # Web
+
+# Run all tests
+flutter test
+
+# Run a single test file
+flutter test test/path/to/test_file.dart
+
+# Run a specific test by name
+flutter test --name "test name"
+
+# Run tests with coverage
+flutter test --coverage
+
+# Analyze code
+flutter analyze
+
+# Fix lint issues automatically
+flutter fix --apply
+
+# Format code
+dart format .
+
+# Format with line length
+dart format --line-length=80 .
+
+# Generate code (if using build_runner)
+dart run build_runner build
+
+# Watch for code generation
+flutter pub run build_runner watch
+
+# Generate localizations
+flutter gen-l10n
+```
+
+## Code style guidelines
+
+### Imports
+- Always prefer `package:` imports over relative imports
+- ✅ `import 'package:pauza/src/features/modes/common/model/mode.dart';`
+- ❌ `import '../modes/common/model/mode.dart';`
+- Group imports: Dart/Flutter SDK first, then third-party, then package imports
+
+### File structure & organization
+- Follow the preferred layout where each feature lives in its own folder under `lib/src/features/`
+- Core utilities go under `lib/src/core/`
+- Tests under `test/` should mirror the `lib/` structure
+
+```
+lib/
+└── src/
+    ├── core/
+    │   ├── common/
+    │   └── utils/
+    └── features/
+        ├── feature_1/
+        │   ├── common/
+        │   ├── subfeature_1_a/
+        │   │   ├── data/
+        │   │   ├── model/
+        │   │   └── widget/
+        │   ├── subfeature_1_b/
+        │   └── subfeature_1_c/
+        ├── feature_2/
+        └── feature_3/
+test/
+```
+
+### UI Kit ownership
+- This project consumes a local `pauza_ui_kit` package
+- All new UI widgets/components belong in that package (not directly in `lib/src`)
+
+### Naming conventions
+- Files: `snake_case.dart`
+- Classes: `PascalCase`
+- Methods/variables: `camelCase`
+- Private members: `_camelCase`
+- Constants: `lowerCamelCase` (Dart style, not SCREAMING_SNAKE_CASE)
+- Abstract interfaces: `abstract interface class FooRepository`
+- Implementations: `class FooRepositoryImpl implements FooRepository`
+
+### Types & formatting
+- Use `final` for all variables that don't need reassignment
+- Declare return types explicitly (`always_declare_return_types`)
+- Use single quotes for strings (`prefer_single_quotes`)
+- Omit local variable types when inferred (`omit_local_variable_types`)
+- Require trailing commas (`require_trailing_commas`)
+- Always put required named parameters first
+- Use const constructors where possible
+- Avoid unnecessary containers
+- Avoid relative lib imports
+
+### Architecture & typing
+- Modularize app functionality into features and recursive subfeatures
+- Favor strong typing everywhere
+- Use DTOs when crossing layer boundaries
+- Repository layers need an abstract interface plus a concrete implementation:
+  ```dart
+  abstract interface class ModesRepository { ... }
+  class ModesRepositoryImpl implements ModesRepository { ... }
+  ```
+- Use Dart 3 pattern clauses (e.g., `if case final ...`) when they improve clarity
+
+### Enums & models
+- Prefer enhanced enums (Dart ≥2.17) when associating data or behavior with enum values
+- Domain models must be:
+  - Immutable (`@immutable`)
+  - Override `toString()`
+  - Provide custom equality/`hashCode` logic
+- Prefer placing model-related methods on the model itself (not in repositories or helpers)
+- If the model comes from another package or cannot be modified, use an extension
+
+### BLoC pattern
+- State classes should extend `Equatable`
+- Use one of two state patterns:
+  1. **Single state class** with `copyWith` for simple blocs:
+     ```dart
+     final class MyState extends Equatable {
+       const MyState({this.isLoading = false, this.error, this.data});
+       final bool isLoading;
+       final Object? error;
+       final Data? data;
+       MyState copyWith({...}) => MyState(...);
+       @override
+       List<Object?> get props => [isLoading, error, data];
+     }
+     ```
+  2. **Sealed class** with subclasses for complex state machines:
+     ```dart
+     sealed class MyState extends Equatable {
+       const MyState();
+       @override
+       List<Object?> get props => const [];
+     }
+     final class MyInitial extends MyState { const MyInitial(); }
+     final class MyLoading extends MyState { const MyLoading(); }
+     final class MyReady extends MyState {
+       const MyReady(this.data);
+       final Data data;
+       @override
+       List<Object?> get props => [data];
+     }
+     final class MyFailure extends MyState {
+       const MyFailure(this.error);
+       final Object error;
+       @override
+       List<Object?> get props => [error];
+     }
+     ```
+- Handle errors within try-catch blocks and emit error states
+- Keep events and states in separate part files
+
+### Error handling
+- Use try-catch blocks in BLoC methods
+- Emit appropriate error states rather than throwing
+- Handle edge cases explicitly (e.g., empty lists, null checks)
+
+### Localization
+- Use the `AppLocalizations` class for all user-facing strings
+- Add new strings to `assets/l10n/app_en.arb` first
+- Run `flutter gen-l10n` after modifying ARB files
+- Generated files are in `lib/src/core/localization/gen/`
+
+### Linting
+- Always run `flutter analyze` and fix all issues before finalizing any change
+- Key enforced rules (treated as errors):
+  - `always_use_package_imports`
+  - `avoid_relative_lib_imports`
+  - `prefer_single_quotes`
+  - `require_trailing_commas`
+  - `prefer_final_locals`
+  - `prefer_const_constructors`
+  - `unnecessary_this`, `unnecessary_new`, `unnecessary_const`
+  - `missing_required_param`, `missing_return`
+  - `unused_import`, `unused_local_variable`, `unused_element`
+  - `annotate_overrides`
+  - `always_declare_return_types`
+  - `strict-inference: true`, `strict-raw-types: true`
+
+### Git workflow
+- Never commit secrets or keys
+- Run linter and fix all issues before committing
+- Generated files (in `lib/src/core/localization/gen/`, `.dart_tool/`, `build/`) should not be committed

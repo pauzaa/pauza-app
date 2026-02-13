@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_dependencies.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
-import 'package:pauza/src/features/home/data/pauza_screen_time_blocking_repository.dart';
+import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -25,7 +25,7 @@ class RootScopeState extends State<RootScope> {
 
   @override
   void initState() {
-    blockingRepository = PauzaScreenTimeBlockingRepository(restrictions: AppRestrictionManager());
+    blockingRepository = PauzaBlockingRepository(restrictions: AppRestrictionManager());
     modesRepository = ModesRepositoryImpl(
       localDatabase: PauzaDependencies.of(context).localDatabase,
       platform: kPauzaPlatform,

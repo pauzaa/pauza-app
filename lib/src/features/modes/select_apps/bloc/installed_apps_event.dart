@@ -8,16 +8,19 @@ sealed class InstalledAppsEvent extends Equatable {
 }
 
 final class InstalledAppsRequested extends InstalledAppsEvent {
-  const InstalledAppsRequested({
-    this.includeSystemApps = false,
-    this.includeIcons = true,
-    this.preSelectedApps,
-  });
+  const InstalledAppsRequested({this.includeSystemApps = false, this.includeIcons = true});
 
   final bool includeSystemApps;
   final bool includeIcons;
-  final List<IOSAppInfo>? preSelectedApps;
 
   @override
-  List<Object?> get props => <Object?>[includeSystemApps, includeIcons, preSelectedApps];
+  List<Object?> get props => <Object?>[includeSystemApps, includeIcons];
+}
+
+final class InitialAppsSearched extends InstalledAppsEvent {
+  const InitialAppsSearched({required this.searchQuery});
+  final String searchQuery;
+
+  @override
+  List<Object?> get props => <Object?>[searchQuery];
 }

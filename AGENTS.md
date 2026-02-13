@@ -85,6 +85,12 @@ test/
 - This project consumes a local `pauza_ui_kit` package
 - All new UI widgets/components belong in that package (not directly in `lib/src`)
 
+### UI Development Guidelines
+- **Widget Separation**: Avoid `_buildItem()` helper methods. Break complex UIs into standalone widgets.
+- **File Organization**: One widget per file. Do not pile multiple widgets in a single file.
+- **Theming**: Use `Theme.of(context)` for all colors and styles. No hard-coded values.
+- **Localization**: Use `AppLocalizations` (via context.l10n) for all user-facing strings.
+
 ### Naming conventions
 - Files: `snake_case.dart`
 - Classes: `PascalCase`

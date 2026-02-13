@@ -5,7 +5,6 @@ import 'package:helm/helm.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
-import 'package:pauza/src/features/modes/select_apps/bloc/installed_apps_bloc.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/select_apps/widgets/android_apps_bottom_sheet.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
@@ -91,12 +90,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
           useSafeArea: true,
           showDragHandle: true,
           builder: (_) {
-            return BlocProvider(
-              create: (_) =>
-                  InstalledAppsBloc(installedAppsRepository: rootScope.installedAppsRepository)
-                    ..add(const InstalledAppsRequested(includeSystemApps: true)),
-              child: AndroidAppsBottomSheet(initialSelectedAppIds: currentSelection),
-            );
+            return AndroidAppsBottomSheet(initialSelectedAppIds: currentSelection);
           },
         );
         if (!mounted || selectedIds == null) {

@@ -1,42 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pauza/src/core/localization/l10n.dart';
+import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/features/modes/select_apps/bloc/installed_apps_bloc.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
-class AndroidAppsBottomSheet extends StatefulWidget {
+class AndroidAppsBottomSheet extends StatelessWidget {
   const AndroidAppsBottomSheet({required this.initialSelectedAppIds, super.key});
 
   final Set<AppIdentifier> initialSelectedAppIds;
 
+  static Future<Set<AppIdentifier>?> show(
+    BuildContext context, {
+    required Set<AppIdentifier> initialSelectedAppIds,
+  }) {
+    return showModalBottomSheet<Set<AppIdentifier>>(
+      context: context,
+      builder: (_) => AndroidAppsBottomSheet(initialSelectedAppIds: initialSelectedAppIds),
+    );
+  }
+
   @override
-  State<AndroidAppsBottomSheet> createState() => _AndroidAppsBottomSheetState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) =>
+          InstalledAppsBloc(installedAppsRepository: RootScope.of(context).installedAppsRepository)
+            ..add(const InstalledAppsRequested(includeSystemApps: true)),
+      child: _AndroidAppsBottomSheetContent(initialSelectedAppIds),
+    );
+  }
 }
 
-class _AndroidAppsBottomSheetState extends State<AndroidAppsBottomSheet> {
-  final TextEditingController _searchController = TextEditingController();
+class _AndroidAppsBottomSheetContent extends StatefulWidget {
+  const _AndroidAppsBottomSheetContent(this.initialSelectedAppIds);
+  final Set<AppIdentifier> initialSelectedAppIds;
+
+  @override
+  State<_AndroidAppsBottomSheetContent> createState() => _AndroidAppsBottomSheetContentState();
+}
+
+class _AndroidAppsBottomSheetContentState extends State<_AndroidAppsBottomSheetContent> {
   late final Set<AppIdentifier> _selectedAppIds = Set<AppIdentifier>.from(
     widget.initialSelectedAppIds,
   );
 
-  String get _searchQuery => _searchController.text.trim().toLowerCase();
-
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
-    _searchController.removeListener(_onSearchChanged);
-    _searchController.dispose();
     super.dispose();
   }
 
-  void _onSearchChanged() => setState(() {});
-
-  void _toggle(AppIdentifier appId) {
+  void toggle(AppIdentifier appId) {
     setState(() {
       if (_selectedAppIds.contains(appId)) {
         _selectedAppIds.remove(appId);
@@ -46,175 +63,16 @@ class _AndroidAppsBottomSheetState extends State<AndroidAppsBottomSheet> {
     });
   }
 
+  void onSearchChanged(String searchQuery) {
+    context.read<InstalledAppsBloc>().add(InitialAppsSearched(searchQuery: searchQuery));
+  }
+
+  void onDonePressed() {
+    Navigator.of(context).pop(_selectedAppIds);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
-    final height = MediaQuery.sizeOf(context).height * 0.85;
-
-    return SizedBox(
-      height: height,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: Text(l10n.modeBlockedAppsSectionTitle, style: textTheme.titleLarge),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                labelText: l10n.modeBlockedAppsSearchLabel,
-                prefixIcon: const Icon(Icons.search),
-              ),
-            ),
-          ),
-          Expanded(
-            child: BlocBuilder<InstalledAppsBloc, InstalledAppsState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (state.hasError) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            l10n.modeAppsLoadFailedMessage,
-                            style: textTheme.bodyLarge,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 12),
-                          FilledButton.tonal(
-                            onPressed: () {
-                              context.read<InstalledAppsBloc>().add(
-                                const InstalledAppsRequested(
-                                  includeIcons: false,
-                                  includeSystemApps: true,
-                                ),
-                              );
-                            },
-                            child: Text(l10n.retryButton),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
-                final apps =
-                    state.items
-                        .whereType<AndroidAppInfo>()
-                        .where(
-                          (app) => _searchQuery.isEmpty
-                              ? true
-                              : app.name.toLowerCase().contains(_searchQuery) ||
-                                    app.packageId.value.toLowerCase().contains(_searchQuery),
-                        )
-                        .toList(growable: false)
-                      ..sort(
-                        (left, right) =>
-                            left.name.toLowerCase().compareTo(right.name.toLowerCase()),
-                      );
-
-                if (apps.isEmpty) {
-                  return Center(
-                    child: Text(
-                      l10n.emptyStateMessage,
-                      style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
-                    ),
-                  );
-                }
-
-                return ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                  itemCount: apps.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    final app = apps[index];
-                    final isSelected = _selectedAppIds.contains(app.packageId);
-                    return Material(
-                      color: isSelected
-                          ? colorScheme.primaryContainer
-                          : colorScheme.surfaceContainer,
-                      borderRadius: BorderRadius.circular(16),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: () => _toggle(app.packageId),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      app.name,
-                                      style: textTheme.titleMedium?.copyWith(
-                                        color: isSelected
-                                            ? colorScheme.onPrimaryContainer
-                                            : colorScheme.onSurface,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      app.packageId.value,
-                                      style: textTheme.bodySmall?.copyWith(
-                                        color: isSelected
-                                            ? colorScheme.onPrimaryContainer
-                                            : colorScheme.onSurfaceVariant,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Icon(
-                                isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
-                                color: isSelected
-                                    ? colorScheme.primary
-                                    : colorScheme.onSurfaceVariant,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(l10n.cancelButton),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: () => Navigator.of(context).pop(_selectedAppIds),
-                    child: Text(l10n.okButton),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+    return const Placeholder();
   }
 }

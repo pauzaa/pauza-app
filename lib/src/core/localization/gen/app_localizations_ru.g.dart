@@ -232,4 +232,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get saveButton => 'Сохранить';
+
+  @override
+  String get selectAppsTitle => 'Select apps';
+
+  @override
+  String get doneButton => 'Done';
+
+  @override
+  String get otherAppsCategory => 'Other';
 }

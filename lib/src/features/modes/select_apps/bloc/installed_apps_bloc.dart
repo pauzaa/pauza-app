@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,8 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
     on<InstalledAppsRequested>(_onInstalledAppsRequested);
     on<InitialAppsSearched>(
       _onInitialAppsSearched,
-      transformer: (events, mapper) => events.debounceTime(debounceDuration).switchMap(mapper),
+      transformer: (events, mapper) =>
+          events.debounceTime(debounceDuration).switchMap(mapper),
     );
   }
 
@@ -58,8 +60,12 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
       final filteredApps = state.allApps
           .where(
             (app) =>
-                app.name.toLowerCase().contains(event.searchQuery.toLowerCase()) ||
-                app.packageId.value.toLowerCase().contains(event.searchQuery.toLowerCase()),
+                app.name.toLowerCase().contains(
+                  event.searchQuery.toLowerCase(),
+                ) ||
+                app.packageId.value.toLowerCase().contains(
+                  event.searchQuery.toLowerCase(),
+                ),
           )
           .toIList();
       emit(state.copyWith(filteredApps: filteredApps));

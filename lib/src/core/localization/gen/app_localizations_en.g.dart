@@ -231,4 +231,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveButton => 'Save';
+
+  @override
+  String get selectAppsTitle => 'Select apps';
+
+  @override
+  String get doneButton => 'Done';
+
+  @override
+  String get otherAppsCategory => 'Other';
 }

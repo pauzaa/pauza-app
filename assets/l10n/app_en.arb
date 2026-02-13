@@ -271,5 +271,17 @@
   "saveButton": "Save",
   "@saveButton": {
     "description": "Button label to save changes."
+  },
+  "selectAppsTitle": "Select apps",
+  "@selectAppsTitle": {
+    "description": "Title for the app selection sheet."
+  },
+  "doneButton": "Done",
+  "@doneButton": {
+    "description": "Label for the done button."
+  },
+  "otherAppsCategory": "Other",
+  "@otherAppsCategory": {
+    "description": "Category label for apps with unknown category."
   }
 }

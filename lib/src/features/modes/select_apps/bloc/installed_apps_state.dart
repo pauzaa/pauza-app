@@ -13,13 +13,21 @@ final class InstalledAppsState extends Equatable {
   final IList<AndroidAppInfo> filteredApps;
   final Object? error;
 
-  IList<AndroidAppInfo> get effectiveApps => filteredApps.isEmpty ? allApps : filteredApps;
+  IList<AndroidAppInfo> get effectiveApps =>
+      filteredApps.isEmpty ? allApps : filteredApps;
+
+  Map<String, List<AndroidAppInfo>> get groupedApps {
+    final sortedApps = effectiveApps.toList()
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    return groupBy(sortedApps, (app) => app.category ?? 'Other');
+  }
 
   bool get hasError => error != null;
 
   InstalledAppsState loading() => copyWith(isLoading: true);
 
-  InstalledAppsState setError(Object error) => copyWith(error: error, isLoading: false);
+  InstalledAppsState setError(Object error) =>
+      copyWith(error: error, isLoading: false);
 
   InstalledAppsState copyWith({
     bool? isLoading,

@@ -478,6 +478,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get saveButton;
+
+  /// Title for the app selection sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Select apps'**
+  String get selectAppsTitle;
+
+  /// Label for the done button.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get doneButton;
+
+  /// Category label for apps with unknown category.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get otherAppsCategory;
 }
 
 class _AppLocalizationsDelegate

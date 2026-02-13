@@ -231,6 +231,15 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get saveButton => 'Saqlash';
+
+  @override
+  String get selectAppsTitle => 'Select apps';
+
+  @override
+  String get doneButton => 'Done';
+
+  @override
+  String get otherAppsCategory => 'Other';
 }
 
 /// The translations for Uzbek, using the Cyrillic script (`uz_Cyrl`).

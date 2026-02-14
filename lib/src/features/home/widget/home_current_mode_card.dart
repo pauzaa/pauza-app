@@ -29,8 +29,8 @@ class HomeCurrentModeCard extends StatelessWidget {
             spacing: PauzaSpacing.medium,
             children: <Widget>[
               SizedBox(
-                width: 56,
-                height: 56,
+                width: PauzaFormSizes.small,
+                height: PauzaFormSizes.small,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: context.colorScheme.primary.withValues(alpha: 0.1),

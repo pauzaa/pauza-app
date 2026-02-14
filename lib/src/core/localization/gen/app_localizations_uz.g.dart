@@ -15,6 +15,15 @@ class AppLocalizationsUz extends AppLocalizations {
   String get homeTitle => 'Bosh sahifa';
 
   @override
+  String get statsTitle => 'Statistika';
+
+  @override
+  String get leaderboardTitle => 'Reyting';
+
+  @override
+  String get profileTitle => 'Profil';
+
+  @override
   String get notFoundTitle => 'Sahifa topilmadi';
 
   @override
@@ -331,6 +340,15 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get homeTitle => 'Бош саҳифа';
+
+  @override
+  String get statsTitle => 'Статистика';
+
+  @override
+  String get leaderboardTitle => 'Рейтинг';
+
+  @override
+  String get profileTitle => 'Профил';
 
   @override
   String get notFoundTitle => 'Саҳифа топилмади';

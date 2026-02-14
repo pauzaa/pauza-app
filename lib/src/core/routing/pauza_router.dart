@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:helm/helm.dart';
 import 'package:pauza/src/core/common/pauza_dependencies.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
+import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
 
 mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
   NavigationState? _pendingStack;
@@ -18,95 +19,49 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
       routes: PauzaRoutes.values,
       refresh: permissionGate,
       guards: <NavigationGuard>[
-        (NavigationState pages) => pages.isEmpty ? [PauzaRoutes.notFound.page()] : pages,
-        (pages) {
-          if (pages.isNotEmpty && pages.first.name != PauzaRoutes.root.path) {
-            return [PauzaRoutes.root.page(), ...pages];
-          }
-          return pages;
-        },
-        (pages) {
-          final missingRequirement = permissionGate.state.isReady;
-          if (missingRequirement) {
-            final pending = _pendingStack;
-            if (pending == null) {
-              return pages;
-            }
-
-            _pendingStack = null;
-            return _sameStack(pending, pages) ? pages : pending;
-          }
-
-          final guardedPages = <Page<Object?>>[
-            PauzaRoutes.root.page(),
-            PauzaRoutes.permissions.page(),
-          ];
-
-          final isAlreadyGuarded = _sameStack(pages, guardedPages);
-
-          if (!isAlreadyGuarded && _pendingStack == null) {
-            _pendingStack = pages;
-          }
-
-          return isAlreadyGuarded ? pages : guardedPages;
-        },
+        _emptyPageGuard,
+        _normalizeToRootShell,
+        _permissionGuard(permissionGate),
       ],
     );
   }
 
-  bool _sameStack(NavigationState left, NavigationState right) {
-    if (left.length != right.length) {
-      return false;
-    }
-
-    for (var i = 0; i < left.length; i++) {
-      final l = left[i];
-      final r = right[i];
-
-      if (l.name != r.name) {
-        return false;
-      }
-
-      final lMeta = l.meta;
-      final rMeta = r.meta;
-      if (lMeta?.route != rMeta?.route) {
-        return false;
-      }
-      if (!_sameMaps(lMeta?.pathParams, rMeta?.pathParams)) {
-        return false;
-      }
-      if (!_sameMaps(lMeta?.queryParams, rMeta?.queryParams)) {
-        return false;
-      }
-
-      final lChildren = lMeta?.children;
-      final rChildren = rMeta?.children;
-      if (lChildren == null || rChildren == null) {
-        if (lChildren != rChildren) {
-          return false;
-        }
-        continue;
-      }
-      if (!_sameStack(lChildren, rChildren)) {
-        return false;
-      }
-    }
-
-    return true;
+  NavigationState _emptyPageGuard(NavigationState pages) {
+    return pages.isEmpty ? [PauzaRoutes.notFound.page()] : pages;
   }
 
-  bool _sameMaps(Map<String, String>? left, Map<String, String>? right) {
-    final leftMap = left ?? const <String, String>{};
-    final rightMap = right ?? const <String, String>{};
-    if (leftMap.length != rightMap.length) {
-      return false;
-    }
+  NavigationState _normalizeToRootShell(NavigationState pages) {
+    final rootPage = pages.firstWhere(
+      (page) => page.meta?.route == PauzaRoutes.root,
+      orElse: () => PauzaRoutes.root.page(),
+    );
 
-    for (final entry in leftMap.entries) {
-      if (rightMap[entry.key] != entry.value) {
-        return false;
+    final topLevelPages = pages.where((page) => page.meta?.route != PauzaRoutes.root).toList();
+
+    return [rootPage, ...topLevelPages];
+  }
+
+  NavigationGuard _permissionGuard(PauzaPermissionGate permissionGate) {
+    return (pages) {
+      final isReady = permissionGate.state.isReady;
+
+      if (isReady) {
+        final pending = _pendingStack;
+        _pendingStack = null;
+        return pending ?? pages;
       }
-    }
-    return true;
+
+      final isOnPermissionsScreen = pages.any(
+        (page) => page.meta?.route == PauzaRoutes.permissions,
+      );
+
+      if (!isOnPermissionsScreen) {
+        _pendingStack = pages;
+      }
+
+      return isOnPermissionsScreen
+          ? pages
+          : _normalizeToRootShell([PauzaRoutes.permissions.page()]);
+    };
   }
 }

@@ -15,6 +15,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeTitle => 'Главная';
 
   @override
+  String get statsTitle => 'Статистика';
+
+  @override
+  String get leaderboardTitle => 'Лидерборд';
+
+  @override
+  String get profileTitle => 'Профиль';
+
+  @override
   String get notFoundTitle => 'Страница не найдена';
 
   @override

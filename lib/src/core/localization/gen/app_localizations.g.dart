@@ -113,6 +113,24 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get homeTitle;
 
+  /// Title for the stats screen and navigation destination.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get statsTitle;
+
+  /// Title for the leaderboard screen and navigation destination.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaderboard'**
+  String get leaderboardTitle;
+
+  /// Title for the profile screen and navigation destination.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTitle;
+
   /// Title shown when a page is not found.
   ///
   /// In en, this message translates to:

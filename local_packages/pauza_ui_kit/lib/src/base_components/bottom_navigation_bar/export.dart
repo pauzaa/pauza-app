@@ -1,0 +1,1 @@
+export 'package:pauza_ui_kit/src/base_components/bottom_navigation_bar/pauza_bottom_navigation_bar.dart';

@@ -15,6 +15,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTitle => 'Home';
 
   @override
+  String get statsTitle => 'Stats';
+
+  @override
+  String get leaderboardTitle => 'Leaderboard';
+
+  @override
+  String get profileTitle => 'Profile';
+
+  @override
   String get notFoundTitle => 'Page not found';
 
   @override

@@ -38,12 +38,16 @@ class HomeContent extends StatelessWidget {
                 return ListView(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(vertical: PauzaSpacing.large),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: PauzaSpacing.large,
+                    horizontal: PauzaSpacing.large,
+                  ),
                   children: <Widget>[
                     PauzaDashboardAppBar(
                       greeting: l10n.homeGreeting(DateTime.now().hour.toString()),
                       title: l10n.homeDashboardTitle,
                       showSettingsButton: false,
+                      padding: EdgeInsets.zero,
                     ),
                     const SizedBox(height: PauzaSpacing.large),
                     const Center(child: HomeStatsPill(metrics: metrics)),
@@ -60,12 +64,9 @@ class HomeContent extends StatelessWidget {
                             },
                     ),
                     const SizedBox(height: PauzaSpacing.extraLarge),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large),
-                      child: HomeCurrentModeCard(
-                        effectiveMode,
-                        onTap: () => _onCurrentModePressed(context, modesState.items),
-                      ),
+                    HomeCurrentModeCard(
+                      effectiveMode,
+                      onTap: () => _onCurrentModePressed(context, modesState.items),
                     ),
                   ],
                 );

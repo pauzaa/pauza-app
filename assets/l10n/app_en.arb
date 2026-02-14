@@ -8,6 +8,18 @@
   "@homeTitle": {
     "description": "Title for the home screen."
   },
+  "statsTitle": "Stats",
+  "@statsTitle": {
+    "description": "Title for the stats screen and navigation destination."
+  },
+  "leaderboardTitle": "Leaderboard",
+  "@leaderboardTitle": {
+    "description": "Title for the leaderboard screen and navigation destination."
+  },
+  "profileTitle": "Profile",
+  "@profileTitle": {
+    "description": "Title for the profile screen and navigation destination."
+  },
   "notFoundTitle": "Page not found",
   "@notFoundTitle": {
     "description": "Title shown when a page is not found."

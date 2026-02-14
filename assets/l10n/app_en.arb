@@ -132,6 +132,14 @@
   "@noModesEmptyState": {
     "description": "Message shown when no modes have been created."
   },
+  "selectMode": "Select mode",
+  "@selectMode": {
+    "description": "Toast or hint prompting user to choose a mode before starting."
+  },
+  "alreadyBlocking": "Already blocking",
+  "@alreadyBlocking": {
+    "description": "Toast shown when user tries to start a session while blocking is already active."
+  },
   "permissionUsageAccessTitle": "Allow Usage Access",
   "@permissionUsageAccessTitle": {
     "description": "Title for the Usage Access permission request."
@@ -307,5 +315,36 @@
   "otherAppsCategory": "Other",
   "@otherAppsCategory": {
     "description": "Category label for apps with unknown category."
+  },
+  "homeGreeting": "{hour, select, 0{Good Night} 1{Good Night} 2{Good Night} 3{Good Night} 4{Good Night} 5{Good Morning} 6{Good Morning} 7{Good Morning} 8{Good Morning} 9{Good Morning} 10{Good Morning} 11{Good Morning} 12{Good Afternoon} 13{Good Afternoon} 14{Good Afternoon} 15{Good Afternoon} 16{Good Afternoon} 17{Good Evening} 18{Good Evening} 19{Good Evening} 20{Good Evening} 21{Good Evening} 22{Good Night} 23{Good Night} other{Good Night}}",
+  "@homeGreeting": {
+    "description": "Time-of-day greeting. Hour of day (0-23) in local time.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "homeDashboardTitle": "Pauza Dashboard",
+  "homePauzaSessionLabel": "Pauza Session",
+  "homeCurrentModeLabel": "Current mode",
+  "homeDayStreakLabel": "{count} Day Streak",
+  "@homeDayStreakLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeDurationHoursMinutesLabel": "{hours}h {minutes}m",
+  "@homeDurationHoursMinutesLabel": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

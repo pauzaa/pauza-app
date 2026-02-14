@@ -4,6 +4,7 @@ import 'package:helm/helm.dart';
 import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
+import 'package:pauza/src/features/home/widget/home_content.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -31,14 +32,5 @@ class HomeScreen extends StatelessWidget {
       ],
       child: const HomeContent(),
     );
-  }
-}
-
-class HomeContent extends StatelessWidget {
-  const HomeContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }

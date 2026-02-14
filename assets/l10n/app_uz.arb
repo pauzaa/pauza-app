@@ -45,6 +45,8 @@
   "deleteModeMessage": "Bu amalni ortga qaytarib bo'lmaydi.",
   "comingSoonMessage": "Tez orada",
   "noModesEmptyState": "Hozircha rejimlar yo'q",
+  "selectMode": "Rejimni tanlang",
+  "alreadyBlocking": "Bloklanish allaqachon yoqilgan",
   "permissionUsageAccessTitle": "Foydalanish ruxsatini yoqing",
   "permissionUsageAccessBody": "Pauza Usage Access orqali qaysi ilovalar faol ekanini biladi va bloklash qoidalarini qo'llaydi. Ma'lumotlar qurilmangizda qoladi.",
   "permissionAccessibilityTitle": "Accessibility xizmatini yoqing",
@@ -103,5 +105,36 @@
   "modeLoadFailedMessage": "Rejim ma'lumotlarini yuklab bo'lmadi",
   "modeSaveFailedMessage": "Rejimni saqlab bo'lmadi",
   "modeAppsLoadFailedMessage": "Ilovalarni yuklab bo'lmadi",
-  "saveButton": "Saqlash"
+  "saveButton": "Saqlash",
+  "homeGreeting": "{hour, select, 0{Xayrli tun} 1{Xayrli tun} 2{Xayrli tun} 3{Xayrli tun} 4{Xayrli tun} 5{Xayrli tong} 6{Xayrli tong} 7{Xayrli tong} 8{Xayrli tong} 9{Xayrli tong} 10{Xayrli tong} 11{Xayrli tong} 12{Xayrli kun} 13{Xayrli kun} 14{Xayrli kun} 15{Xayrli kun} 16{Xayrli kun} 17{Xayrli kech} 18{Xayrli kech} 19{Xayrli kech} 20{Xayrli kech} 21{Xayrli kech} 22{Xayrli tun} 23{Xayrli tun} other{Xayrli tun}}",
+  "@homeGreeting": {
+    "description": "Time-of-day greeting. Hour of day (0-23) in local time.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "homeDashboardTitle": "Pauza Dashboard",
+  "homePauzaSessionLabel": "Pauza Session",
+  "homeCurrentModeLabel": "Joriy rejim",
+  "homeDayStreakLabel": "{count} kunlik seriya",
+  "@homeDayStreakLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeDurationHoursMinutesLabel": "{hours}s {minutes}d",
+  "@homeDurationHoursMinutesLabel": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

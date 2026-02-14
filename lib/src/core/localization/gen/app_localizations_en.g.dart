@@ -126,6 +126,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noModesEmptyState => 'No modes yet';
 
   @override
+  String get selectMode => 'Select mode';
+
+  @override
+  String get alreadyBlocking => 'Already blocking';
+
+  @override
   String get permissionUsageAccessTitle => 'Allow Usage Access';
 
   @override
@@ -263,4 +269,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get otherAppsCategory => 'Other';
+
+  @override
+  String homeGreeting(String hour) {
+    String _temp0 = intl.Intl.selectLogic(hour, {
+      '0': 'Good Night',
+      '1': 'Good Night',
+      '2': 'Good Night',
+      '3': 'Good Night',
+      '4': 'Good Night',
+      '5': 'Good Morning',
+      '6': 'Good Morning',
+      '7': 'Good Morning',
+      '8': 'Good Morning',
+      '9': 'Good Morning',
+      '10': 'Good Morning',
+      '11': 'Good Morning',
+      '12': 'Good Afternoon',
+      '13': 'Good Afternoon',
+      '14': 'Good Afternoon',
+      '15': 'Good Afternoon',
+      '16': 'Good Afternoon',
+      '17': 'Good Evening',
+      '18': 'Good Evening',
+      '19': 'Good Evening',
+      '20': 'Good Evening',
+      '21': 'Good Evening',
+      '22': 'Good Night',
+      '23': 'Good Night',
+      'other': 'Good Night',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get homeDashboardTitle => 'Pauza Dashboard';
+
+  @override
+  String get homePauzaSessionLabel => 'Pauza Session';
+
+  @override
+  String get homeCurrentModeLabel => 'Current mode';
+
+  @override
+  String homeDayStreakLabel(int count) {
+    return '$count Day Streak';
+  }
+
+  @override
+  String homeDurationHoursMinutesLabel(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
 }

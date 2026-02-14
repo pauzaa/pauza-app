@@ -287,6 +287,18 @@ abstract class AppLocalizations {
   /// **'No modes yet'**
   String get noModesEmptyState;
 
+  /// Toast or hint prompting user to choose a mode before starting.
+  ///
+  /// In en, this message translates to:
+  /// **'Select mode'**
+  String get selectMode;
+
+  /// Toast shown when user tries to start a session while blocking is already active.
+  ///
+  /// In en, this message translates to:
+  /// **'Already blocking'**
+  String get alreadyBlocking;
+
   /// Title for the Usage Access permission request.
   ///
   /// In en, this message translates to:
@@ -532,6 +544,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get otherAppsCategory;
+
+  /// Time-of-day greeting. Hour of day (0-23) in local time.
+  ///
+  /// In en, this message translates to:
+  /// **'{hour, select, 0{Good Night} 1{Good Night} 2{Good Night} 3{Good Night} 4{Good Night} 5{Good Morning} 6{Good Morning} 7{Good Morning} 8{Good Morning} 9{Good Morning} 10{Good Morning} 11{Good Morning} 12{Good Afternoon} 13{Good Afternoon} 14{Good Afternoon} 15{Good Afternoon} 16{Good Afternoon} 17{Good Evening} 18{Good Evening} 19{Good Evening} 20{Good Evening} 21{Good Evening} 22{Good Night} 23{Good Night} other{Good Night}}'**
+  String homeGreeting(String hour);
+
+  /// No description provided for @homeDashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pauza Dashboard'**
+  String get homeDashboardTitle;
+
+  /// No description provided for @homePauzaSessionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pauza Session'**
+  String get homePauzaSessionLabel;
+
+  /// No description provided for @homeCurrentModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current mode'**
+  String get homeCurrentModeLabel;
+
+  /// No description provided for @homeDayStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Day Streak'**
+  String homeDayStreakLabel(int count);
+
+  /// No description provided for @homeDurationHoursMinutesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String homeDurationHoursMinutesLabel(int hours, int minutes);
 }
 
 class _AppLocalizationsDelegate

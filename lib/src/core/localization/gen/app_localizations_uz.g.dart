@@ -126,6 +126,12 @@ class AppLocalizationsUz extends AppLocalizations {
   String get noModesEmptyState => 'Hozircha rejimlar yo\'q';
 
   @override
+  String get selectMode => 'Rejimni tanlang';
+
+  @override
+  String get alreadyBlocking => 'Bloklanish allaqachon yoqilgan';
+
+  @override
   String get permissionUsageAccessTitle => 'Foydalanish ruxsatini yoqing';
 
   @override
@@ -263,6 +269,57 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get otherAppsCategory => 'Other';
+
+  @override
+  String homeGreeting(String hour) {
+    String _temp0 = intl.Intl.selectLogic(hour, {
+      '0': 'Xayrli tun',
+      '1': 'Xayrli tun',
+      '2': 'Xayrli tun',
+      '3': 'Xayrli tun',
+      '4': 'Xayrli tun',
+      '5': 'Xayrli tong',
+      '6': 'Xayrli tong',
+      '7': 'Xayrli tong',
+      '8': 'Xayrli tong',
+      '9': 'Xayrli tong',
+      '10': 'Xayrli tong',
+      '11': 'Xayrli tong',
+      '12': 'Xayrli kun',
+      '13': 'Xayrli kun',
+      '14': 'Xayrli kun',
+      '15': 'Xayrli kun',
+      '16': 'Xayrli kun',
+      '17': 'Xayrli kech',
+      '18': 'Xayrli kech',
+      '19': 'Xayrli kech',
+      '20': 'Xayrli kech',
+      '21': 'Xayrli kech',
+      '22': 'Xayrli tun',
+      '23': 'Xayrli tun',
+      'other': 'Xayrli tun',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get homeDashboardTitle => 'Pauza Dashboard';
+
+  @override
+  String get homePauzaSessionLabel => 'Pauza Session';
+
+  @override
+  String get homeCurrentModeLabel => 'Joriy rejim';
+
+  @override
+  String homeDayStreakLabel(int count) {
+    return '$count kunlik seriya';
+  }
+
+  @override
+  String homeDurationHoursMinutesLabel(int hours, int minutes) {
+    return '${hours}s ${minutes}d';
+  }
 }
 
 /// The translations for Uzbek, using the Cyrillic script (`uz_Cyrl`).
@@ -385,6 +442,12 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get noModesEmptyState => 'Ҳозирча режимлар йўқ';
+
+  @override
+  String get selectMode => 'Режимни танланг';
+
+  @override
+  String get alreadyBlocking => 'Блокланиш аллақачон ёқилган';
 
   @override
   String get permissionUsageAccessTitle => 'Фойдаланиш рухсатини ёнг';
@@ -515,4 +578,55 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get saveButton => 'Сақлаш';
+
+  @override
+  String homeGreeting(String hour) {
+    String _temp0 = intl.Intl.selectLogic(hour, {
+      '0': 'Хайрли тун',
+      '1': 'Хайрли тун',
+      '2': 'Хайрли тун',
+      '3': 'Хайрли тун',
+      '4': 'Хайрли тун',
+      '5': 'Хайрли тонг',
+      '6': 'Хайрли тонг',
+      '7': 'Хайрли тонг',
+      '8': 'Хайрли тонг',
+      '9': 'Хайрли тонг',
+      '10': 'Хайрли тонг',
+      '11': 'Хайрли тонг',
+      '12': 'Хайрли кун',
+      '13': 'Хайрли кун',
+      '14': 'Хайрли кун',
+      '15': 'Хайрли кун',
+      '16': 'Хайрли кун',
+      '17': 'Хайрли кеч',
+      '18': 'Хайрли кеч',
+      '19': 'Хайрли кеч',
+      '20': 'Хайрли кеч',
+      '21': 'Хайрли кеч',
+      '22': 'Хайрли тун',
+      '23': 'Хайрли тун',
+      'other': 'Хайрли тун',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get homeDashboardTitle => 'Pauza Dashboard';
+
+  @override
+  String get homePauzaSessionLabel => 'Pauza Session';
+
+  @override
+  String get homeCurrentModeLabel => 'Жорий режим';
+
+  @override
+  String homeDayStreakLabel(int count) {
+    return '$count кунлик серия';
+  }
+
+  @override
+  String homeDurationHoursMinutesLabel(int hours, int minutes) {
+    return '$hoursс $minutesд';
+  }
 }

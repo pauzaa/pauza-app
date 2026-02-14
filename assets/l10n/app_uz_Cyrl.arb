@@ -45,6 +45,8 @@
   "deleteModeMessage": "Бу амални ортга қайтариб бўлмайди.",
   "comingSoonMessage": "Тез орада",
   "noModesEmptyState": "Ҳозирча режимлар йўқ",
+  "selectMode": "Режимни танланг",
+  "alreadyBlocking": "Блокланиш аллақачон ёқилган",
   "permissionUsageAccessTitle": "Фойдаланиш рухсатини ёнг",
   "permissionUsageAccessBody": "Pauza Usage Access орқали қайси иловалар фаол эканини билади ва блоклаш қоидаларини қўллайди. Маълумотлар қурилмангизда қолади.",
   "permissionAccessibilityTitle": "Accessibility хизматини ёнг",
@@ -103,5 +105,36 @@
   "modeLoadFailedMessage": "Режим маълумотларини юклаб бўлмади",
   "modeSaveFailedMessage": "Режимни сақлаб бўлмади",
   "modeAppsLoadFailedMessage": "Иловаларни юклаб бўлмади",
-  "saveButton": "Сақлаш"
+  "saveButton": "Сақлаш",
+  "homeGreeting": "{hour, select, 0{Хайрли тун} 1{Хайрли тун} 2{Хайрли тун} 3{Хайрли тун} 4{Хайрли тун} 5{Хайрли тонг} 6{Хайрли тонг} 7{Хайрли тонг} 8{Хайрли тонг} 9{Хайрли тонг} 10{Хайрли тонг} 11{Хайрли тонг} 12{Хайрли кун} 13{Хайрли кун} 14{Хайрли кун} 15{Хайрли кун} 16{Хайрли кун} 17{Хайрли кеч} 18{Хайрли кеч} 19{Хайрли кеч} 20{Хайрли кеч} 21{Хайрли кеч} 22{Хайрли тун} 23{Хайрли тун} other{Хайрли тун}}",
+  "@homeGreeting": {
+    "description": "Time-of-day greeting. Hour of day (0-23) in local time.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "homeDashboardTitle": "Pauza Dashboard",
+  "homePauzaSessionLabel": "Pauza Session",
+  "homeCurrentModeLabel": "Жорий режим",
+  "homeDayStreakLabel": "{count} кунлик серия",
+  "@homeDayStreakLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeDurationHoursMinutesLabel": "{hours}с {minutes}д",
+  "@homeDurationHoursMinutesLabel": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

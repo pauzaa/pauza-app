@@ -126,6 +126,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noModesEmptyState => 'Режимов пока нет';
 
   @override
+  String get selectMode => 'Выберите режим';
+
+  @override
+  String get alreadyBlocking => 'Блокировка уже включена';
+
+  @override
   String get permissionUsageAccessTitle => 'Разрешите доступ к статистике';
 
   @override
@@ -263,4 +269,55 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get otherAppsCategory => 'Other';
+
+  @override
+  String homeGreeting(String hour) {
+    String _temp0 = intl.Intl.selectLogic(hour, {
+      '0': 'Доброй ночи',
+      '1': 'Доброй ночи',
+      '2': 'Доброй ночи',
+      '3': 'Доброй ночи',
+      '4': 'Доброй ночи',
+      '5': 'Доброе утро',
+      '6': 'Доброе утро',
+      '7': 'Доброе утро',
+      '8': 'Доброе утро',
+      '9': 'Доброе утро',
+      '10': 'Доброе утро',
+      '11': 'Доброе утро',
+      '12': 'Добрый день',
+      '13': 'Добрый день',
+      '14': 'Добрый день',
+      '15': 'Добрый день',
+      '16': 'Добрый день',
+      '17': 'Добрый вечер',
+      '18': 'Добрый вечер',
+      '19': 'Добрый вечер',
+      '20': 'Добрый вечер',
+      '21': 'Добрый вечер',
+      '22': 'Доброй ночи',
+      '23': 'Доброй ночи',
+      'other': 'Доброй ночи',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get homeDashboardTitle => 'Pauza Dashboard';
+
+  @override
+  String get homePauzaSessionLabel => 'Pauza Session';
+
+  @override
+  String get homeCurrentModeLabel => 'Текущий режим';
+
+  @override
+  String homeDayStreakLabel(int count) {
+    return '$count дней подряд';
+  }
+
+  @override
+  String homeDurationHoursMinutesLabel(int hours, int minutes) {
+    return '$hoursч $minutesм';
+  }
 }

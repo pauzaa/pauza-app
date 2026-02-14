@@ -126,6 +126,7 @@ ThemeData appThemeFromBrightness(Brightness brightness) {
       leadingWidth: 56,
       scrolledUnderElevation: 0,
       backgroundColor: colorTheme.surface,
+      centerTitle: true,
       foregroundColor: colorTheme.onSurface,
     ),
     navigationBarTheme: NavigationBarThemeData(

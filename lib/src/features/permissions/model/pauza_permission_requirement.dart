@@ -1,52 +1,23 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
-import 'package:pauza_screen_time/pauza_screen_time.dart' show AndroidPermission, IOSPermission;
+import 'package:pauza_screen_time/pauza_screen_time.dart'
+    show AndroidPermission, IOSPermission, PermissionStatus;
 
 enum PauzaPermissionRequirement {
-  androidUsageAccess(
-    id: 'android_usage_access',
-    routePath: '/permissions/usage-access',
-    titleL10nKey: 'permissionUsageAccessTitle',
-    whyL10nKey: 'permissionUsageAccessBody',
-    androidPermission: AndroidPermission.usageStats,
-  ),
+  androidUsageAccess(id: 'android_usage_access', androidPermission: AndroidPermission.usageStats),
   androidAccessibility(
     id: 'android_accessibility',
-    routePath: '/permissions/accessibility',
-    titleL10nKey: 'permissionAccessibilityTitle',
-    whyL10nKey: 'permissionAccessibilityBody',
     androidPermission: AndroidPermission.accessibility,
   ),
-  androidExactAlarm(
-    id: 'android_exact_alarm',
-    routePath: '/permissions/exact-alarm',
-    titleL10nKey: 'permissionExactAlarmTitle',
-    whyL10nKey: 'permissionExactAlarmBody',
-    androidPermission: AndroidPermission.exactAlarm,
-  ),
-  iosFamilyControls(
-    id: 'ios_family_controls',
-    routePath: '/permissions/family-controls',
-    titleL10nKey: 'permissionFamilyControlsTitle',
-    whyL10nKey: 'permissionFamilyControlsBody',
-    iosPermission: IOSPermission.familyControls,
-  );
+  androidExactAlarm(id: 'android_exact_alarm', androidPermission: AndroidPermission.exactAlarm),
+  iosFamilyControls(id: 'ios_family_controls', iosPermission: IOSPermission.familyControls);
 
-  const PauzaPermissionRequirement({
-    required this.id,
-    required this.routePath,
-    required this.titleL10nKey,
-    required this.whyL10nKey,
-    this.androidPermission,
-    this.iosPermission,
-  });
+  const PauzaPermissionRequirement({required this.id, this.androidPermission, this.iosPermission});
 
   final String id;
-  final String routePath;
-  final String titleL10nKey;
-  final String whyL10nKey;
   final AndroidPermission? androidPermission;
   final IOSPermission? iosPermission;
 
@@ -94,4 +65,31 @@ enum PauzaPermissionRequirement {
       PauzaPermissionRequirement.iosFamilyControls => l10n.permissionAllowAccessButton,
     };
   }
+
+  String shortBody(AppLocalizations l10n) {
+    return switch (this) {
+      PauzaPermissionRequirement.androidUsageAccess => l10n.permissionUsageAccessShortBody,
+      PauzaPermissionRequirement.androidAccessibility => l10n.permissionAccessibilityShortBody,
+      PauzaPermissionRequirement.androidExactAlarm => l10n.permissionExactAlarmShortBody,
+      PauzaPermissionRequirement.iosFamilyControls => l10n.permissionFamilyControlsShortBody,
+    };
+  }
+
+  IconData get iconData {
+    return switch (this) {
+      PauzaPermissionRequirement.androidUsageAccess => Icons.query_stats,
+      PauzaPermissionRequirement.androidAccessibility => Icons.accessibility_new,
+      PauzaPermissionRequirement.androidExactAlarm => Icons.alarm_on,
+      PauzaPermissionRequirement.iosFamilyControls => Icons.family_restroom,
+    };
+  }
+}
+
+extension PermissionStatusLabel on PermissionStatus {
+  String label(AppLocalizations l10n) => switch (this) {
+    PermissionStatus.granted => l10n.permissionStatusGranted,
+    PermissionStatus.denied => l10n.permissionStatusDenied,
+    PermissionStatus.restricted => l10n.permissionStatusRestricted,
+    PermissionStatus.notDetermined => l10n.permissionStatusNotDetermined,
+  };
 }

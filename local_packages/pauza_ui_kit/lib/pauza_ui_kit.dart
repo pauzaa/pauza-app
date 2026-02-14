@@ -7,3 +7,4 @@ export 'package:pauza_ui_kit/src/base_components/inputs/export.dart';
 export 'package:pauza_ui_kit/src/base_components/checkbox/export.dart';
 export 'package:pauza_ui_kit/src/base_components/switch/export.dart';
 export 'package:pauza_ui_kit/src/base_components/scaffolds/export.dart';
+export 'package:pauza_ui_kit/src/base_components/list_tiles/export.dart';

@@ -155,6 +155,29 @@ class AppLocalizationsUz extends AppLocalizations {
       'Pauza iOS\'da ilova cheklovlarini boshqarish uchun Family Controls / Screen Time ruxsatidan foydalanadi.';
 
   @override
+  String get permissionsRequiredTitle => 'Ruxsatlar talab qilinadi';
+
+  @override
+  String get permissionsRequiredBody =>
+      'Diqqatingizni jamlash va chalg\'ituvchi ilovalarni samarali bloklash uchun Pauza\'ga quyida keltirilgan ruxsatlar kerak. Ma\'lumotlaringiz qurilmangizda qoladi.';
+
+  @override
+  String get permissionUsageAccessShortBody =>
+      'Foydalanishni kuzatish va limitlarni qo\'llash';
+
+  @override
+  String get permissionAccessibilityShortBody =>
+      'Cheklangan ilovalarni aniqlash va bloklash';
+
+  @override
+  String get permissionExactAlarmShortBody =>
+      'Jadval va taymerlarni aniq ishlatish';
+
+  @override
+  String get permissionFamilyControlsShortBody =>
+      'iOS\'da ilova cheklovlarini boshqarish';
+
+  @override
   String permissionCurrentStatusLabel(String status) {
     return 'Joriy holat: $status';
   }
@@ -391,6 +414,29 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   @override
   String get permissionFamilyControlsBody =>
       'Pauza iOS\'да илова чекловларини бошқариш учун Family Controls / Screen Time рухсатидан фойдаланади.';
+
+  @override
+  String get permissionsRequiredTitle => 'Рухсатлар талаб қилинади';
+
+  @override
+  String get permissionsRequiredBody =>
+      'Диққатингизни жамлаш ва чалғитувчи иловаларни самарали блоклаш учун Pauza\'га қуйида келтирилган рухсатлар керак. Маълумотларингиз қурилмангизда қолади.';
+
+  @override
+  String get permissionUsageAccessShortBody =>
+      'Фойдаланишни кузатиш ва лимитларни қўллаш';
+
+  @override
+  String get permissionAccessibilityShortBody =>
+      'Чекланган иловаларни аниқлаш ва блоклаш';
+
+  @override
+  String get permissionExactAlarmShortBody =>
+      'Жадвал ва таймерларни аниқ ишлатиш';
+
+  @override
+  String get permissionFamilyControlsShortBody =>
+      'iOS\'да илова чекловларини бошқариш';
 
   @override
   String permissionCurrentStatusLabel(String status) {

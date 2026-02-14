@@ -53,6 +53,12 @@
   "permissionExactAlarmBody": "Точные будильники делают расписания и таймеры паузы точными, чтобы блокировки начинались и заканчивались вовремя.",
   "permissionFamilyControlsTitle": "Разрешите Family Controls (Screen Time)",
   "permissionFamilyControlsBody": "Pauza использует авторизацию Family Controls / Screen Time для управления ограничениями приложений на iOS.",
+  "permissionsRequiredTitle": "Требуются разрешения",
+  "permissionsRequiredBody": "Чтобы помогать вам сохранять фокус и эффективно блокировать отвлекающие приложения, Pauza нужны разрешения из списка ниже. Ваши данные остаются на устройстве.",
+  "permissionUsageAccessShortBody": "Отслеживание использования и лимитов",
+  "permissionAccessibilityShortBody": "Определение и блокировка ограниченных приложений",
+  "permissionExactAlarmShortBody": "Точное расписание и таймеры",
+  "permissionFamilyControlsShortBody": "Управление ограничениями приложений на iOS",
   "permissionCurrentStatusLabel": "Текущий статус: {status}",
   "@permissionCurrentStatusLabel": {
     "placeholders": {

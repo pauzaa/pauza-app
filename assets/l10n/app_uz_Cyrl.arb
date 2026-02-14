@@ -53,6 +53,12 @@
   "permissionExactAlarmBody": "Аниқ сигнал (exact alarm) жадвал ва пауза таймерларини аниқ ишлатиб, блоклашни ўз вақтида бошлади ва тугатади.",
   "permissionFamilyControlsTitle": "Family Controls (Screen Time) рухсатини беринг",
   "permissionFamilyControlsBody": "Pauza iOS'да илова чекловларини бошқариш учун Family Controls / Screen Time рухсатидан фойдаланади.",
+  "permissionsRequiredTitle": "Рухсатлар талаб қилинади",
+  "permissionsRequiredBody": "Диққатингизни жамлаш ва чалғитувчи иловаларни самарали блоклаш учун Pauza'га қуйида келтирилган рухсатлар керак. Маълумотларингиз қурилмангизда қолади.",
+  "permissionUsageAccessShortBody": "Фойдаланишни кузатиш ва лимитларни қўллаш",
+  "permissionAccessibilityShortBody": "Чекланган иловаларни аниқлаш ва блоклаш",
+  "permissionExactAlarmShortBody": "Жадвал ва таймерларни аниқ ишлатиш",
+  "permissionFamilyControlsShortBody": "iOS'да илова чекловларини бошқариш",
   "permissionCurrentStatusLabel": "Жорий ҳолат: {status}",
   "@permissionCurrentStatusLabel": {
     "placeholders": {

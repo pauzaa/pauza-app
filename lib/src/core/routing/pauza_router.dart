@@ -26,8 +26,8 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
           return pages;
         },
         (pages) {
-          final missingRequirement = permissionGate.state.firstMissing;
-          if (missingRequirement == null) {
+          final missingRequirement = permissionGate.state.isReady;
+          if (missingRequirement) {
             final pending = _pendingStack;
             if (pending == null) {
               return pages;
@@ -39,8 +39,9 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
 
           final guardedPages = <Page<Object?>>[
             PauzaRoutes.root.page(),
-            missingRequirement.route.page(),
+            PauzaRoutes.permissions.page(),
           ];
+
           final isAlreadyGuarded = _sameStack(pages, guardedPages);
 
           if (!isAlreadyGuarded && _pendingStack == null) {

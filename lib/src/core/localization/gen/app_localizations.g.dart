@@ -335,6 +335,42 @@ abstract class AppLocalizations {
   /// **'Pauza uses Family Controls / Screen Time authorization to manage app restrictions on iOS.'**
   String get permissionFamilyControlsBody;
 
+  /// Title for the combined permissions gate screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions Required'**
+  String get permissionsRequiredTitle;
+
+  /// Description for the combined permissions gate screen.
+  ///
+  /// In en, this message translates to:
+  /// **'To help you stay focused and block distracting apps effectively, Pauza needs the permissions listed below. Your data stays private on your device.'**
+  String get permissionsRequiredBody;
+
+  /// Short description for Usage Access permission row.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitor usage and enforce limits'**
+  String get permissionUsageAccessShortBody;
+
+  /// Short description for Accessibility permission row.
+  ///
+  /// In en, this message translates to:
+  /// **'Identify and block restricted apps'**
+  String get permissionAccessibilityShortBody;
+
+  /// Short description for Exact Alarms permission row.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep schedules and timers accurate'**
+  String get permissionExactAlarmShortBody;
+
+  /// Short description for Family Controls permission row.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage app restrictions on iOS'**
+  String get permissionFamilyControlsShortBody;
+
   /// No description provided for @permissionCurrentStatusLabel.
   ///
   /// In en, this message translates to:

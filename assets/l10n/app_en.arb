@@ -164,6 +164,30 @@
   "@permissionFamilyControlsBody": {
     "description": "Explanation of why Family Controls permission is needed."
   },
+  "permissionsRequiredTitle": "Permissions Required",
+  "@permissionsRequiredTitle": {
+    "description": "Title for the combined permissions gate screen."
+  },
+  "permissionsRequiredBody": "To help you stay focused and block distracting apps effectively, Pauza needs the permissions listed below. Your data stays private on your device.",
+  "@permissionsRequiredBody": {
+    "description": "Description for the combined permissions gate screen."
+  },
+  "permissionUsageAccessShortBody": "Monitor usage and enforce limits",
+  "@permissionUsageAccessShortBody": {
+    "description": "Short description for Usage Access permission row."
+  },
+  "permissionAccessibilityShortBody": "Identify and block restricted apps",
+  "@permissionAccessibilityShortBody": {
+    "description": "Short description for Accessibility permission row."
+  },
+  "permissionExactAlarmShortBody": "Keep schedules and timers accurate",
+  "@permissionExactAlarmShortBody": {
+    "description": "Short description for Exact Alarms permission row."
+  },
+  "permissionFamilyControlsShortBody": "Manage app restrictions on iOS",
+  "@permissionFamilyControlsShortBody": {
+    "description": "Short description for Family Controls permission row."
+  },
   "permissionCurrentStatusLabel": "Current status: {status}",
   "@permissionCurrentStatusLabel": {
     "placeholders": {

@@ -155,6 +155,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'Pauza uses Family Controls / Screen Time authorization to manage app restrictions on iOS.';
 
   @override
+  String get permissionsRequiredTitle => 'Permissions Required';
+
+  @override
+  String get permissionsRequiredBody =>
+      'To help you stay focused and block distracting apps effectively, Pauza needs the permissions listed below. Your data stays private on your device.';
+
+  @override
+  String get permissionUsageAccessShortBody =>
+      'Monitor usage and enforce limits';
+
+  @override
+  String get permissionAccessibilityShortBody =>
+      'Identify and block restricted apps';
+
+  @override
+  String get permissionExactAlarmShortBody =>
+      'Keep schedules and timers accurate';
+
+  @override
+  String get permissionFamilyControlsShortBody =>
+      'Manage app restrictions on iOS';
+
+  @override
   String permissionCurrentStatusLabel(String status) {
     return 'Current status: $status';
   }

@@ -53,6 +53,12 @@
   "permissionExactAlarmBody": "Aniq signal (exact alarm) jadval va pauza taymerlarini aniq ishlatib, bloklashni o'z vaqtida boshlatadi va tugatadi.",
   "permissionFamilyControlsTitle": "Family Controls (Screen Time) ruxsatini bering",
   "permissionFamilyControlsBody": "Pauza iOS'da ilova cheklovlarini boshqarish uchun Family Controls / Screen Time ruxsatidan foydalanadi.",
+  "permissionsRequiredTitle": "Ruxsatlar talab qilinadi",
+  "permissionsRequiredBody": "Diqqatingizni jamlash va chalg'ituvchi ilovalarni samarali bloklash uchun Pauza'ga quyida keltirilgan ruxsatlar kerak. Ma'lumotlaringiz qurilmangizda qoladi.",
+  "permissionUsageAccessShortBody": "Foydalanishni kuzatish va limitlarni qo'llash",
+  "permissionAccessibilityShortBody": "Cheklangan ilovalarni aniqlash va bloklash",
+  "permissionExactAlarmShortBody": "Jadval va taymerlarni aniq ishlatish",
+  "permissionFamilyControlsShortBody": "iOS'da ilova cheklovlarini boshqarish",
   "permissionCurrentStatusLabel": "Joriy holat: {status}",
   "@permissionCurrentStatusLabel": {
     "placeholders": {

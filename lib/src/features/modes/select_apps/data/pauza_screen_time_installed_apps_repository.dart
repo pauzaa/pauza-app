@@ -9,11 +9,9 @@ abstract interface class InstalledAppsRepository {
   Future<List<IOSAppInfo>> selectIOSApps({List<IOSAppInfo>? preSelectedApps});
 }
 
-class PauzaScreenTimeInstalledAppsRepository
-    implements InstalledAppsRepository {
-  PauzaScreenTimeInstalledAppsRepository({
-    InstalledAppsManager? installedAppsManager,
-  }) : _installedAppsManager = installedAppsManager ?? InstalledAppsManager();
+class PauzaScreenTimeInstalledAppsRepository implements InstalledAppsRepository {
+  PauzaScreenTimeInstalledAppsRepository({required InstalledAppsManager installedAppsManager})
+    : _installedAppsManager = installedAppsManager;
 
   final InstalledAppsManager _installedAppsManager;
 

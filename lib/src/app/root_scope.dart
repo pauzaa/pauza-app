@@ -4,7 +4,6 @@ import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
-import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 class RootScope extends StatefulWidget {
   const RootScope({required this.child, super.key});
@@ -25,12 +24,19 @@ class RootScopeState extends State<RootScope> {
 
   @override
   void initState() {
-    blockingRepository = PauzaBlockingRepository(restrictions: AppRestrictionManager());
+    blockingRepository = PauzaBlockingRepository(
+      restrictions: PauzaDependencies.of(context).appRestrictionManager,
+    );
+
     modesRepository = ModesRepositoryImpl(
       localDatabase: PauzaDependencies.of(context).localDatabase,
       platform: kPauzaPlatform,
     );
-    installedAppsRepository = PauzaScreenTimeInstalledAppsRepository();
+
+    installedAppsRepository = PauzaScreenTimeInstalledAppsRepository(
+      installedAppsManager: PauzaDependencies.of(context).installedAppsManager,
+    );
+
     super.initState();
   }
 

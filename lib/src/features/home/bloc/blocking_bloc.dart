@@ -23,7 +23,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     try {
       final restrictionSession = await _blockingRepository.getRestrictionSession();
 
-      if (restrictionSession.activeModeId case final activeModeId?) {
+      if (restrictionSession.activeMode?.modeId  case final activeModeId?) {
         emit(state.setActiveModeId(activeModeId, isLoading: false));
         return;
       } else {

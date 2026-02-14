@@ -55,7 +55,6 @@ class PauzaPermissionGateNotifier extends ChangeNotifier
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-
     super.dispose();
   }
 

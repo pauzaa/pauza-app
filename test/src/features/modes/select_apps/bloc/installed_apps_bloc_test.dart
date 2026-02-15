@@ -1,4 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/modes/select_apps/bloc/installed_apps_bloc.dart';
 import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
@@ -6,25 +5,25 @@ import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 void main() {
   group('InstalledAppsBloc', () {
-    test('load initializes selection and categories', () async {
+    test('load initializes apps and categories', () async {
       final bloc = InstalledAppsBloc(
         installedAppsRepository: _FakeInstalledAppsRepository(apps: _apps),
         debounceDuration: Duration.zero,
       );
 
-      bloc.add(
-        InstalledAppsRequested(
-          initialSelectedAppIds: ISet(const [_instagramId]),
-          includeSystemApps: true,
-        ),
-      );
+      bloc.add(const InstalledAppsRequested(includeSystemApps: true));
 
       await Future<void>.delayed(Duration.zero);
 
       expect(bloc.state.hasError, isFalse);
-      expect(bloc.state.selectedAppIds.contains(_instagramId), isTrue);
-      expect(bloc.state.availableCategoryKeys, containsAll(<String>['Social', 'Video']));
-      expect(bloc.state.visibleGroupedApps.keys, containsAll(<String>['Social', 'Video']));
+      expect(
+        bloc.state.availableCategoryKeys,
+        containsAll(<String>['Social', 'Video']),
+      );
+      expect(
+        bloc.state.visibleGroupedApps.keys,
+        containsAll(<String>['Social', 'Video']),
+      );
 
       await bloc.close();
     });
@@ -35,7 +34,7 @@ void main() {
         debounceDuration: Duration.zero,
       );
 
-      bloc.add(const InstalledAppsRequested(initialSelectedAppIds: ISet<AppIdentifier>.empty()));
+      bloc.add(const InstalledAppsRequested());
       await Future<void>.delayed(Duration.zero);
 
       bloc.add(const CategoryFilterChanged(categoryKey: 'Video'));
@@ -57,7 +56,7 @@ void main() {
         debounceDuration: Duration.zero,
       );
 
-      bloc.add(const InstalledAppsRequested(initialSelectedAppIds: ISet<AppIdentifier>.empty()));
+      bloc.add(const InstalledAppsRequested());
       await Future<void>.delayed(Duration.zero);
 
       bloc.add(const CategoryFilterChanged(categoryKey: 'Social'));
@@ -69,55 +68,15 @@ void main() {
       await bloc.close();
     });
 
-    test('app toggle updates selected IDs', () async {
-      final bloc = InstalledAppsBloc(
-        installedAppsRepository: _FakeInstalledAppsRepository(apps: _apps),
-        debounceDuration: Duration.zero,
-      );
-
-      bloc.add(const InstalledAppsRequested(initialSelectedAppIds: ISet<AppIdentifier>.empty()));
-      await Future<void>.delayed(Duration.zero);
-
-      bloc.add(const AppSelectionToggled(appId: _instagramId));
-      await Future<void>.delayed(Duration.zero);
-      expect(bloc.state.selectedAppIds.contains(_instagramId), isTrue);
-
-      bloc.add(const AppSelectionToggled(appId: _instagramId));
-      await Future<void>.delayed(Duration.zero);
-      expect(bloc.state.selectedAppIds.contains(_instagramId), isFalse);
-
-      await bloc.close();
-    });
-
-    test('category bulk toggle selects all and deselects all', () async {
-      final bloc = InstalledAppsBloc(
-        installedAppsRepository: _FakeInstalledAppsRepository(apps: _apps),
-        debounceDuration: Duration.zero,
-      );
-
-      bloc.add(const InstalledAppsRequested(initialSelectedAppIds: ISet<AppIdentifier>.empty()));
-      await Future<void>.delayed(Duration.zero);
-
-      bloc.add(const CategorySelectionToggled(categoryKey: 'Social'));
-      await Future<void>.delayed(Duration.zero);
-      expect(bloc.state.selectedAppIds.contains(_instagramId), isTrue);
-      expect(bloc.state.selectedAppIds.contains(_xId), isTrue);
-
-      bloc.add(const CategorySelectionToggled(categoryKey: 'Social'));
-      await Future<void>.delayed(Duration.zero);
-      expect(bloc.state.selectedAppIds.contains(_instagramId), isFalse);
-      expect(bloc.state.selectedAppIds.contains(_xId), isFalse);
-
-      await bloc.close();
-    });
-
     test('failure path sets error state', () async {
       final bloc = InstalledAppsBloc(
-        installedAppsRepository: _FakeInstalledAppsRepository(error: Exception('failed')),
+        installedAppsRepository: _FakeInstalledAppsRepository(
+          error: Exception('failed'),
+        ),
         debounceDuration: Duration.zero,
       );
 
-      bloc.add(const InstalledAppsRequested(initialSelectedAppIds: ISet<AppIdentifier>.empty()));
+      bloc.add(const InstalledAppsRequested());
       await Future<void>.delayed(Duration.zero);
 
       expect(bloc.state.hasError, isTrue);
@@ -128,18 +87,29 @@ void main() {
   });
 }
 
-const AppIdentifier _instagramId = AppIdentifier.android('com.instagram.android');
+const AppIdentifier _instagramId = AppIdentifier.android(
+  'com.instagram.android',
+);
 const AppIdentifier _xId = AppIdentifier.android('com.twitter.android');
-const AppIdentifier _youtubeId = AppIdentifier.android('com.google.android.youtube');
+const AppIdentifier _youtubeId = AppIdentifier.android(
+  'com.google.android.youtube',
+);
 
 const List<AndroidAppInfo> _apps = <AndroidAppInfo>[
-  AndroidAppInfo(packageId: _instagramId, name: 'Instagram', category: 'Social'),
+  AndroidAppInfo(
+    packageId: _instagramId,
+    name: 'Instagram',
+    category: 'Social',
+  ),
   AndroidAppInfo(packageId: _xId, name: 'X', category: 'Social'),
   AndroidAppInfo(packageId: _youtubeId, name: 'YouTube', category: 'Video'),
 ];
 
 class _FakeInstalledAppsRepository implements InstalledAppsRepository {
-  _FakeInstalledAppsRepository({this.apps = const <AndroidAppInfo>[], this.error});
+  _FakeInstalledAppsRepository({
+    this.apps = const <AndroidAppInfo>[],
+    this.error,
+  });
 
   final List<AndroidAppInfo> apps;
   final Object? error;
@@ -157,7 +127,9 @@ class _FakeInstalledAppsRepository implements InstalledAppsRepository {
   }
 
   @override
-  Future<List<IOSAppInfo>> selectIOSApps({List<IOSAppInfo>? preSelectedApps}) async {
+  Future<List<IOSAppInfo>> selectIOSApps({
+    List<IOSAppInfo>? preSelectedApps,
+  }) async {
     return preSelectedApps ?? const <IOSAppInfo>[];
   }
 }

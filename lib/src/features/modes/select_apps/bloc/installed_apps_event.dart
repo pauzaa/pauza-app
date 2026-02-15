@@ -9,21 +9,15 @@ sealed class InstalledAppsEvent extends Equatable {
 
 final class InstalledAppsRequested extends InstalledAppsEvent {
   const InstalledAppsRequested({
-    required this.initialSelectedAppIds,
-    this.includeSystemApps = false,
+    this.includeSystemApps = true,
     this.includeIcons = true,
   });
 
-  final ISet<AppIdentifier> initialSelectedAppIds;
   final bool includeSystemApps;
   final bool includeIcons;
 
   @override
-  List<Object?> get props => <Object?>[
-    initialSelectedAppIds,
-    includeSystemApps,
-    includeIcons,
-  ];
+  List<Object?> get props => <Object?>[includeSystemApps, includeIcons];
 }
 
 final class SearchQueryChanged extends InstalledAppsEvent {
@@ -39,24 +33,6 @@ final class CategoryFilterChanged extends InstalledAppsEvent {
   const CategoryFilterChanged({required this.categoryKey});
 
   final String? categoryKey;
-
-  @override
-  List<Object?> get props => <Object?>[categoryKey];
-}
-
-final class AppSelectionToggled extends InstalledAppsEvent {
-  const AppSelectionToggled({required this.appId});
-
-  final AppIdentifier appId;
-
-  @override
-  List<Object?> get props => <Object?>[appId];
-}
-
-final class CategorySelectionToggled extends InstalledAppsEvent {
-  const CategorySelectionToggled({required this.categoryKey});
-
-  final String categoryKey;
 
   @override
   List<Object?> get props => <Object?>[categoryKey];

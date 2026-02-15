@@ -5,7 +5,7 @@ import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecy
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
-    show PermissionManager, AppRestrictionManager, InstalledAppsManager;
+    show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
 
 class PauzaDependencies with AppFuseInitialization {
   late final LocalDatabase localDatabase;
@@ -13,6 +13,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final PermissionManager permissionManager;
   late final InstalledAppsManager installedAppsManager;
   late final AppRestrictionManager appRestrictionManager;
+  late final UsageStatsManager usageStatsManager;
   late final RestrictionLifecycleRepository restrictionLifecycleRepository;
 
   static PauzaDependencies of(BuildContext context) =>
@@ -36,6 +37,7 @@ class PauzaDependencies with AppFuseInitialization {
     'init managers': (_) async {
       installedAppsManager = InstalledAppsManager();
       appRestrictionManager = AppRestrictionManager();
+      usageStatsManager = UsageStatsManager();
     },
     'init restriction lifecycle sync coordinator': (_) async {
       restrictionLifecycleRepository = RestrictionLifecycleRepositoryImpl(

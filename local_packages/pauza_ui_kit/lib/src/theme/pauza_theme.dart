@@ -139,6 +139,17 @@ ThemeData appThemeFromBrightness(Brightness brightness) {
         side: BorderSide(color: colorTheme.outline.withValues(alpha: isDark ? 0.9 : 0.6)),
       ),
     ),
+    bottomSheetTheme: BottomSheetThemeData(
+      showDragHandle: true,
+      backgroundColor: colorTheme.surface,
+      modalElevation: 2,
+      modalBackgroundColor: colorTheme.surface,
+      shadowColor: colorTheme.onSurface.withValues(alpha: isDark ? 0.7 : 0.5),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(PauzaCornerRadius.large)),
+        side: BorderSide(color: colorTheme.outlineVariant.withValues(alpha: 0.6)),
+      ),
+    ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),

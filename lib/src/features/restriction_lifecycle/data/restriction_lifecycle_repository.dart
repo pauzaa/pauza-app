@@ -262,7 +262,6 @@ INSERT INTO restriction_sessions (
   created_at,
   updated_at
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-)
 ON CONFLICT(session_id) DO UPDATE SET
   mode_id = excluded.mode_id,
   source = excluded.source,

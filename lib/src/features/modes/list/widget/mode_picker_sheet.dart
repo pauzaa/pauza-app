@@ -23,7 +23,6 @@ class ModePickerSheet extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      backgroundColor: Colors.transparent,
       useRootNavigator: true,
       builder: (context) => ModePickerSheet(modes: modes, activeModeId: activeModeId),
     );

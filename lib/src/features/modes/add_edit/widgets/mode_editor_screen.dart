@@ -346,14 +346,9 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
 
     try {
       if (kPauzaPlatform == PauzaPlatform.android) {
-        final selectedIds = await showModalBottomSheet<Set<AppIdentifier>>(
-          context: context,
-          isScrollControlled: true,
-          useSafeArea: true,
-          showDragHandle: true,
-          builder: (_) {
-            return AndroidAppsBottomSheet(initialSelectedAppIds: currentSelection);
-          },
+        final selectedIds = await AndroidAppsBottomSheet.show(
+          context,
+          initialSelectedAppIds: currentSelection,
         );
         if (!mounted || selectedIds == null) {
           return;

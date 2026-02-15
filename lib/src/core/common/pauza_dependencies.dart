@@ -1,11 +1,18 @@
 import 'package:appfuse/appfuse.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
+import 'package:pauza/src/features/nfc/data/nfc_manager_client.dart';
+import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
+import 'package:pauza/src/features/nfc/data/nfc_repository_impl.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_plugin_client.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
-    show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
+    show
+        AppRestrictionManager,
+        InstalledAppsManager,
+        PermissionManager,
+        UsageStatsManager;
 
 class PauzaDependencies with AppFuseInitialization {
   late final LocalDatabase localDatabase;
@@ -15,6 +22,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final AppRestrictionManager appRestrictionManager;
   late final UsageStatsManager usageStatsManager;
   late final RestrictionLifecycleRepository restrictionLifecycleRepository;
+  late final NfcRepository nfcRepository;
 
   static PauzaDependencies of(BuildContext context) =>
       AppFuseScope.of(context).init as PauzaDependencies;
@@ -38,6 +46,7 @@ class PauzaDependencies with AppFuseInitialization {
       installedAppsManager = InstalledAppsManager();
       appRestrictionManager = AppRestrictionManager();
       usageStatsManager = UsageStatsManager();
+      nfcRepository = NfcRepositoryImpl(managerClient: NfcManagerClientImpl());
     },
     'init restriction lifecycle sync coordinator': (_) async {
       restrictionLifecycleRepository = RestrictionLifecycleRepositoryImpl(

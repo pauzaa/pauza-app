@@ -14,10 +14,12 @@ final class PauzaOutlinedButton extends PauzaButtonBase {
     super.radius,
     super.icon,
     super.iconAlignment,
+    super.iconColor,
     super.textStyle,
     super.padding,
     super.backgroundColor,
     super.foregroundColor,
+    super.borderColor,
     super.disabled,
     super.selected,
   });
@@ -26,7 +28,7 @@ final class PauzaOutlinedButton extends PauzaButtonBase {
   BorderSide borderSideToApply(BuildContext context) {
     return disabled
         ? BorderSide.none
-        : BorderSide(color: context.colorScheme.outlineVariant);
+        : BorderSide(color: borderColor ?? context.colorScheme.outline);
   }
 
   @override
@@ -52,6 +54,17 @@ final class PauzaOutlinedButton extends PauzaButtonBase {
         return foregroundColor ?? context.colorScheme.onPrimary;
       }
       return foregroundColor ?? context.colorScheme.onSurface;
+    });
+  }
+
+  @override
+  WidgetStateProperty<Color?> iconColorProperty(BuildContext context) {
+    if (iconColor == null) return foregroundColorProperty(context);
+    return WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+      if (states.contains(WidgetState.disabled)) {
+        return iconColor!.withValues(alpha: 0.38);
+      }
+      return iconColor;
     });
   }
 }

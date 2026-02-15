@@ -38,7 +38,7 @@ enum PauzaButtonSize {
     PauzaButtonSize.xSmall => context.textTheme.labelLarge ?? const TextStyle(),
     PauzaButtonSize.small => context.textTheme.labelLarge ?? const TextStyle(),
     PauzaButtonSize.medium => context.textTheme.labelLarge ?? const TextStyle(),
-    PauzaButtonSize.large => context.textTheme.labelLarge ?? const TextStyle(),
+    PauzaButtonSize.large => context.textTheme.bodyLarge ?? const TextStyle(),
   };
 }
 
@@ -52,12 +52,14 @@ abstract base class PauzaButtonBase extends StatelessWidget {
     this.width,
     this.elevation,
     this.radius = PauzaCornerRadius.medium,
-    this.icon,  
+    this.icon,
     this.iconAlignment = IconAlignment.start,
+    this.iconColor,
     this.textStyle,
     this.padding,
     this.backgroundColor,
     this.foregroundColor,
+    this.borderColor,
     this.disabled = false,
     this.selected = false,
   });
@@ -71,16 +73,22 @@ abstract base class PauzaButtonBase extends StatelessWidget {
   final double radius;
   final Widget? icon;
   final IconAlignment iconAlignment;
+  final Color? iconColor;
   final TextStyle? textStyle;
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final Color? borderColor;
   final bool disabled;
   final bool selected;
 
   WidgetStateProperty<Color?> backgroundColorProperty(BuildContext context);
 
   WidgetStateProperty<Color?> foregroundColorProperty(BuildContext context);
+
+  /// Icon color uses the same state resolution as [foregroundColorProperty].
+  /// When [iconColor] is null, defaults to [foregroundColorProperty].
+  WidgetStateProperty<Color?> iconColorProperty(BuildContext context);
 
   WidgetStateProperty<Color?> overlayColorProperty(BuildContext context) {
     return WidgetStateProperty.resolveWith((Set<WidgetState> states) {
@@ -118,7 +126,7 @@ abstract base class PauzaButtonBase extends StatelessWidget {
           padding: padding ?? size.padding,
           iconSize: PauzaIconSizes.small,
         ).copyWith(
-          iconColor: foregroundColorProperty(context),
+          iconColor: iconColorProperty(context),
           backgroundColor: backgroundColorProperty(context),
           overlayColor: overlayColorProperty(context),
           foregroundColor: foregroundColorProperty(context),

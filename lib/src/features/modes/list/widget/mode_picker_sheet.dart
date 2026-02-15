@@ -4,7 +4,6 @@ import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_screen.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
-import 'package:pauza/src/features/modes/list/widget/add_mode_button.dart';
 import 'package:pauza/src/features/modes/list/widget/confirm_delete_mode_dialog.dart';
 import 'package:pauza/src/features/modes/list/widget/mode_list_item.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
@@ -25,82 +24,36 @@ class ModePickerSheet extends StatelessWidget {
       isScrollControlled: true,
       useSafeArea: true,
       backgroundColor: Colors.transparent,
-      builder: (context) =>
-          ModePickerSheet(modes: modes, activeModeId: activeModeId),
+      useRootNavigator: true,
+      builder: (context) => ModePickerSheet(modes: modes, activeModeId: activeModeId),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colorScheme = context.colorScheme;
 
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.sizeOf(context).height * 0.9,
-      ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(PauzaCornerRadius.large),
-          ),
-        ),
-        child: Column(
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+      child: BottomSheetScaffold(
+        bodyPadding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium),
+        title: Text(l10n.selectModeTitle),
+        body: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: PauzaSpacing.regular),
-            Center(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
-                ),
-                child: const SizedBox(width: 54, height: 5),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                PauzaSpacing.medium,
-                PauzaSpacing.medium,
-                PauzaSpacing.small,
-                PauzaSpacing.medium,
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      l10n.selectModeTitle,
-                      style: context.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close),
-                  ),
-                ],
-              ),
-            ),
             if (modes.isEmpty)
               Padding(
                 padding: const EdgeInsets.all(PauzaSpacing.large),
                 child: Center(
-                  child: Text(
-                    l10n.noModesEmptyState,
-                    style: context.textTheme.bodyLarge,
-                  ),
+                  child: Text(l10n.noModesEmptyState, style: context.textTheme.bodyLarge),
                 ),
               )
             else
               Flexible(
                 child: ListView.separated(
                   shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: PauzaSpacing.medium,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium),
                   itemCount: modes.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: PauzaSpacing.regular),
@@ -116,8 +69,15 @@ class ModePickerSheet extends StatelessWidget {
                   },
                 ),
               ),
-            AddModeButton(onPressed: () => _onAddNewMode(context)),
-            const SizedBox(height: PauzaSpacing.large),
+            PauzaOutlinedButton(
+              title: Text(l10n.addModeButton),
+              size: PauzaButtonSize.large,
+              iconColor: context.colorScheme.primary,
+              borderColor: context.colorScheme.primary,
+              textStyle: context.textTheme.titleLarge,
+              onPressed: () => _onAddNewMode(context),
+              icon: const Icon(Icons.add_circle_outline),
+            ),
           ],
         ),
       ),

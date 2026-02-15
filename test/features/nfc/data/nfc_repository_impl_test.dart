@@ -1,7 +1,8 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:pauza/src/features/nfc/data/nfc_manager_client.dart';
-import 'package:pauza/src/features/nfc/data/nfc_repository_impl.dart';
+import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_availability.dart';
 import 'package:pauza/src/features/nfc/model/nfc_errors.dart';
 import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
@@ -25,11 +26,14 @@ void main() {
     test('maps discovered tag snapshot to NFC card DTO', () async {
       final repository = NfcRepositoryImpl(
         managerClient: _FakeNfcManagerClient(
-          scanResult: const NfcTagSnapshot(
+          scanResult: NfcTagSnapshot(
             uidHex: '01020304',
-            techTypes: <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA],
+            techTypes: IList(const <NfcTagTech>[
+              NfcTagTech.ndef,
+              NfcTagTech.nfcA,
+            ]),
             isNdefFormatted: true,
-            ndefRecords: <NfcNdefRecordDto>[
+            ndefRecords: IList(const <NfcNdefRecordDto>[
               NfcNdefRecordDto(
                 tnf: 'wellKnown',
                 typeHex: '54',
@@ -37,8 +41,10 @@ void main() {
                 payloadHex: '02656e4869',
                 payloadText: 'Hi',
               ),
-            ],
-            rawSnapshot: <String, Object?>{'nfca': <String, Object?>{}},
+            ]),
+            rawSnapshot: IMap(const <String, Object?>{
+              'nfca': <String, Object?>{},
+            }),
           ),
         ),
         uuid: const Uuid(),
@@ -50,7 +56,7 @@ void main() {
       expect(card.techTypes, <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA]);
       expect(card.isNdefFormatted, isTrue);
       expect(card.ndefRecords.length, 1);
-      expect(card.rawSnapshot, const <String, Object?>{
+      expect(card.rawSnapshot.unlock, const <String, Object?>{
         'nfca': <String, Object?>{},
       });
       expect(card.id, isNotEmpty);
@@ -84,7 +90,7 @@ void main() {
   });
 }
 
-final class _FakeNfcManagerClient implements NfcManagerClient {
+final class _FakeNfcManagerClient implements NfcOperations {
   _FakeNfcManagerClient({
     this.availability = NfcAvailability.enabled,
     this.isSessionActive = false,
@@ -110,12 +116,12 @@ final class _FakeNfcManagerClient implements NfcManagerClient {
   @override
   Future<NfcTagSnapshot> scanSingleTag({required Duration timeout}) async {
     return scanResult ??
-        const NfcTagSnapshot(
+        NfcTagSnapshot(
           uidHex: null,
-          techTypes: <NfcTagTech>[NfcTagTech.unknown],
+          techTypes: IList(const <NfcTagTech>[NfcTagTech.unknown]),
           isNdefFormatted: false,
-          ndefRecords: <NfcNdefRecordDto>[],
-          rawSnapshot: <String, Object?>{},
+          ndefRecords: IList(const <NfcNdefRecordDto>[]),
+          rawSnapshot: IMap(const <String, Object?>{}),
         );
   }
 

@@ -34,7 +34,9 @@ final class ModeEditorAllowedPausesTile extends StatelessWidget {
               children: <Widget>[
                 Text(
                   title,
-                  style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                  style: context.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 Text(
                   subtitle,

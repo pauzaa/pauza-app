@@ -4,7 +4,11 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 @immutable
 class ModeEditorDayChipItem {
-  const ModeEditorDayChipItem({required this.id, required this.label, required this.isSelected});
+  const ModeEditorDayChipItem({
+    required this.id,
+    required this.label,
+    required this.isSelected,
+  });
 
   final String id;
   final String label;
@@ -67,7 +71,9 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                      style: context.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   PauzaSwitch(value: enabled, onChanged: onToggle),
@@ -79,8 +85,10 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
                   runSpacing: PauzaSpacing.small,
                   children: days
                       .map(
-                        (item) =>
-                            _ModeEditorDayChip(item: item, onPressed: () => onDayPressed(item.id)),
+                        (item) => _ModeEditorDayChip(
+                          item: item,
+                          onPressed: () => onDayPressed(item.id),
+                        ),
                       )
                       .toList(growable: false),
                 ),
@@ -110,7 +118,9 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
         if (hasError)
           Text(
             errorText!,
-            style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.error),
+            style: context.textTheme.bodySmall?.copyWith(
+              color: context.colorScheme.error,
+            ),
           ),
       ],
     );
@@ -161,7 +171,11 @@ final class _ModeEditorDayChip extends StatelessWidget {
 }
 
 final class _ModeEditorTimeField extends StatelessWidget {
-  const _ModeEditorTimeField({required this.title, required this.value, required this.onPressed});
+  const _ModeEditorTimeField({
+    required this.title,
+    required this.value,
+    required this.onPressed,
+  });
 
   final String title;
   final String value;
@@ -196,7 +210,9 @@ final class _ModeEditorTimeField extends StatelessWidget {
               ),
               Text(
                 value,
-                style: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+                style: context.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ],
           ),

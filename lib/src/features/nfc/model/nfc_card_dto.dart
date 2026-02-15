@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_tag_tech.dart';
@@ -17,10 +18,10 @@ class NfcCardDto {
   final String id;
   final DateTime detectedAt;
   final String? uidHex;
-  final List<NfcTagTech> techTypes;
   final bool isNdefFormatted;
-  final List<NfcNdefRecordDto> ndefRecords;
-  final Map<String, Object?> rawSnapshot;
+  final IList<NfcTagTech> techTypes;
+  final IList<NfcNdefRecordDto> ndefRecords;
+  final IMap<String, Object?> rawSnapshot;
 
   Map<String, Object?> toJson() {
     return <String, Object?>{
@@ -76,15 +77,17 @@ class NfcCardDto {
           DateTime.tryParse(json['detectedAt'] as String? ?? '') ??
           DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
       uidHex: json['uidHex'] as String?,
-      techTypes: List<NfcTagTech>.unmodifiable(techTypeValues),
+      techTypes: techTypeValues.lock,
       isNdefFormatted: json['isNdefFormatted'] as bool? ?? false,
-      ndefRecords: List<NfcNdefRecordDto>.unmodifiable(ndefRecordValues),
+      ndefRecords: ndefRecordValues.lock,
       rawSnapshot: rawSnapshot is Map<Object?, Object?>
-          ? rawSnapshot.map(
-              (key, value) =>
-                  MapEntry(key is String ? key : key.toString(), value),
-            )
-          : const <String, Object?>{},
+          ? rawSnapshot
+                .map(
+                  (key, value) =>
+                      MapEntry(key is String ? key : key.toString(), value),
+                )
+                .lock
+          : const <String, Object?>{}.lock,
     );
   }
 
@@ -111,10 +114,10 @@ class NfcCardDto {
         other.id == id &&
         other.detectedAt == detectedAt &&
         other.uidHex == uidHex &&
-        listEquals(other.techTypes, techTypes) &&
+        other.techTypes == techTypes &&
         other.isNdefFormatted == isNdefFormatted &&
-        listEquals(other.ndefRecords, ndefRecords) &&
-        mapEquals(other.rawSnapshot, rawSnapshot);
+        other.ndefRecords == ndefRecords &&
+        other.rawSnapshot == rawSnapshot;
   }
 
   @override
@@ -123,14 +126,10 @@ class NfcCardDto {
       id,
       detectedAt,
       uidHex,
-      Object.hashAll(techTypes),
+      techTypes,
       isNdefFormatted,
-      Object.hashAll(ndefRecords),
-      Object.hashAll(
-        rawSnapshot.entries
-            .map((entry) => Object.hash(entry.key, entry.value))
-            .toList(growable: false),
-      ),
+      ndefRecords,
+      rawSnapshot,
     );
   }
 }

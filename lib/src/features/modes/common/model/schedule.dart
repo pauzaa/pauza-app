@@ -31,16 +31,21 @@ class Schedule {
     endMinutes: end.toMinutesFromMidnight,
   );
 
-  Schedule copyWith({ISet<WeekDay>? days, bool? enabled, TimeOfDay? start, TimeOfDay? end}) =>
-      Schedule(
-        days: days ?? this.days,
-        enabled: enabled ?? this.enabled,
-        start: start ?? this.start,
-        end: end ?? this.end,
-      );
+  Schedule copyWith({
+    ISet<WeekDay>? days,
+    bool? enabled,
+    TimeOfDay? start,
+    TimeOfDay? end,
+  }) => Schedule(
+    days: days ?? this.days,
+    enabled: enabled ?? this.enabled,
+    start: start ?? this.start,
+    end: end ?? this.end,
+  );
 
   @override
-  String toString() => 'Schedule(days: $days, enabled: $enabled, start: $start, end: $end)';
+  String toString() =>
+      'Schedule(days: $days, enabled: $enabled, start: $start, end: $end)';
 }
 
 extension TimeOfDayX on TimeOfDay {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
-
 final class ModeEditorStickyActionBar extends StatelessWidget {
   const ModeEditorStickyActionBar({
     required this.buttonLabel,
@@ -19,7 +18,9 @@ final class ModeEditorStickyActionBar extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
-        border: Border(top: BorderSide(color: context.colorScheme.outlineVariant)),
+        border: Border(
+          top: BorderSide(color: context.colorScheme.outlineVariant),
+        ),
       ),
       child: SafeArea(
         minimum: const EdgeInsets.all(PauzaSpacing.medium),
@@ -29,7 +30,9 @@ final class ModeEditorStickyActionBar extends StatelessWidget {
           disabled: isBusy,
           width: double.infinity,
           size: PauzaButtonSize.large,
-          textStyle: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+          textStyle: context.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
           radius: PauzaCornerRadius.large,
           title: isBusy
               ? SizedBox(

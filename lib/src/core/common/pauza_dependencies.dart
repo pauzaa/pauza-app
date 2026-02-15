@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/nfc/data/nfc_manager_client.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
-import 'package:pauza/src/features/nfc/data/nfc_repository_impl.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_plugin_client.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
@@ -46,7 +45,7 @@ class PauzaDependencies with AppFuseInitialization {
       installedAppsManager = InstalledAppsManager();
       appRestrictionManager = AppRestrictionManager();
       usageStatsManager = UsageStatsManager();
-      nfcRepository = NfcRepositoryImpl(managerClient: NfcManagerClientImpl());
+      nfcRepository = NfcRepositoryImpl(managerClient: NfcManagerClient());
     },
     'init restriction lifecycle sync coordinator': (_) async {
       restrictionLifecycleRepository = RestrictionLifecycleRepositoryImpl(

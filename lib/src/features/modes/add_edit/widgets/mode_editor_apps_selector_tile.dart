@@ -27,7 +27,9 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ModeEditorCard(
-          borderColor: hasError ? context.colorScheme.error.withValues(alpha: 0.8) : null,
+          borderColor: hasError
+              ? context.colorScheme.error.withValues(alpha: 0.8)
+              : null,
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
@@ -37,7 +39,9 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                 DecoratedBox(
                   decoration: BoxDecoration(
                     color: context.colorScheme.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
+                    borderRadius: BorderRadius.circular(
+                      PauzaCornerRadius.medium,
+                    ),
                   ),
                   child: SizedBox(
                     width: PauzaFormSizes.xSmall,
@@ -52,7 +56,9 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         title,
-                        style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                        style: context.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       Text(
                         subtitle,
@@ -82,7 +88,10 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                Icon(Icons.chevron_right, color: context.colorScheme.onSurfaceVariant),
+                Icon(
+                  Icons.chevron_right,
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
               ],
             ),
           ),
@@ -90,7 +99,9 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
         if (hasError)
           Text(
             errorText!,
-            style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.error),
+            style: context.textTheme.bodySmall?.copyWith(
+              color: context.colorScheme.error,
+            ),
           ),
       ],
     );

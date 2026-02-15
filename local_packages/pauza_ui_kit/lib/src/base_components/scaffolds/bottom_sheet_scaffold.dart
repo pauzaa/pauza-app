@@ -79,11 +79,15 @@ final class BottomSheetScaffold extends StatelessWidget {
                   ),
                 ),
                 if (showDivider)
-                  Divider(color: colorScheme.outlineVariant.withValues(alpha: 0.8), height: 1),
+                  Divider(
+                    color: colorScheme.outlineVariant.withValues(alpha: 0.8),
+                    height: 1,
+                  ),
                 Flexible(
                   child: Padding(padding: bodyPadding, child: body),
                 ),
-                if (footer != null) Padding(padding: footerPadding, child: footer),
+                if (footer != null)
+                  Padding(padding: footerPadding, child: footer),
               ],
             ),
           ),

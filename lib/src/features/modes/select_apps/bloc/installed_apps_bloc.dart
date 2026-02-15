@@ -21,7 +21,8 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
     on<InstalledAppsRequested>(_onInstalledAppsRequested);
     on<SearchQueryChanged>(
       _onSearchQueryChanged,
-      transformer: (events, mapper) => events.debounceTime(debounceDuration).switchMap(mapper),
+      transformer: (events, mapper) =>
+          events.debounceTime(debounceDuration).switchMap(mapper),
     );
     on<CategoryFilterChanged>(_onCategoryFilterChanged);
   }
@@ -61,11 +62,17 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
     }
   }
 
-  FutureOr<void> _onSearchQueryChanged(SearchQueryChanged event, Emitter<InstalledAppsState> emit) {
+  FutureOr<void> _onSearchQueryChanged(
+    SearchQueryChanged event,
+    Emitter<InstalledAppsState> emit,
+  ) {
     emit(_buildProjectedState(state.copyWith(searchQuery: event.searchQuery)));
   }
 
-  void _onCategoryFilterChanged(CategoryFilterChanged event, Emitter<InstalledAppsState> emit) {
+  void _onCategoryFilterChanged(
+    CategoryFilterChanged event,
+    Emitter<InstalledAppsState> emit,
+  ) {
     emit(
       _buildProjectedState(
         state.copyWith(
@@ -84,7 +91,8 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
 
     final availableCategoryKeys = _computeAvailableCategories(filteredApps);
 
-    final selectedCategoryKey = availableCategoryKeys.contains(currentState.selectedCategoryKey)
+    final selectedCategoryKey =
+        availableCategoryKeys.contains(currentState.selectedCategoryKey)
         ? currentState.selectedCategoryKey
         : null;
 
@@ -128,7 +136,8 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
 
   IList<String> _computeAvailableCategories(IList<AndroidAppInfo> apps) {
     final grouped = groupBy(apps, (app) => app.category ?? _otherCategoryKey);
-    final categories = grouped.keys.toList(growable: false)..sort(_compareCategoryKeys);
+    final categories = grouped.keys.toList(growable: false)
+      ..sort(_compareCategoryKeys);
     return categories.toIList();
   }
 
@@ -149,7 +158,8 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
     ).map((key, value) => MapEntry(key, value.toIList()));
 
     if (selectedCategoryKey == null) {
-      final sortedKeys = grouped.keys.toList(growable: false)..sort(_compareCategoryKeys);
+      final sortedKeys = grouped.keys.toList(growable: false)
+        ..sort(_compareCategoryKeys);
 
       return {for (final key in sortedKeys) key: grouped[key]!};
     }

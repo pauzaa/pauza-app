@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/nfc/model/nfc_card_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
@@ -19,15 +20,15 @@ void main() {
         id: 'card-id-1',
         detectedAt: detectedAt,
         uidHex: 'a1b2c3d4',
-        techTypes: const <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA],
+        techTypes: IList(const <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA]),
         isNdefFormatted: true,
-        ndefRecords: const <NfcNdefRecordDto>[record],
-        rawSnapshot: const <String, Object?>{
+        ndefRecords: IList(const <NfcNdefRecordDto>[record]),
+        rawSnapshot: IMap(const <String, Object?>{
           'ndef': <String, Object?>{
             'identifier': <int>[1, 2, 3, 4],
           },
           'meta': <Object?>['x', 1],
-        },
+        }),
       );
 
       final restored = NfcCardDto.fromJson(dto.toJson());

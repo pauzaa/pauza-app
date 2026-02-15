@@ -9,7 +9,9 @@ void main() {
   group('AndroidAppsBottomSheet widgets', () {
     test('sheet can be constructed with initial IDs', () {
       expect(
-        const AndroidAppsBottomSheet(initialSelectedAppIds: ISet<AppIdentifier>.empty()),
+        const AndroidAppsBottomSheet(
+          initialSelectedAppIds: ISet<AppIdentifier>.empty(),
+        ),
         isNotNull,
       );
     });

@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 class SelectedAppsScope extends InheritedNotifier<SelectedAppsNotifier> {
-  const SelectedAppsScope({required super.notifier, required super.child, super.key});
+  const SelectedAppsScope({
+    required super.notifier,
+    required super.child,
+    super.key,
+  });
 
   static SelectedAppsNotifier of(BuildContext context, {bool watch = true}) {
     final scope = watch
@@ -14,14 +18,16 @@ class SelectedAppsScope extends InheritedNotifier<SelectedAppsNotifier> {
   }
 
   static SelectedAppsNotifier? maybeOf(BuildContext context) {
-    final scope = context.dependOnInheritedWidgetOfExactType<SelectedAppsScope>();
+    final scope = context
+        .dependOnInheritedWidgetOfExactType<SelectedAppsScope>();
     return scope?.notifier;
   }
 }
 
 class SelectedAppsNotifier extends ChangeNotifier {
-  SelectedAppsNotifier({ISet<AppIdentifier> initialSelected = const ISetConst(<AppIdentifier>{})})
-    : _selectedAppIds = initialSelected;
+  SelectedAppsNotifier({
+    ISet<AppIdentifier> initialSelected = const ISetConst(<AppIdentifier>{}),
+  }) : _selectedAppIds = initialSelected;
 
   ISet<AppIdentifier> _selectedAppIds;
 
@@ -59,7 +65,8 @@ class SelectedAppsNotifier extends ChangeNotifier {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is SelectedAppsNotifier && other._selectedAppIds == _selectedAppIds;
+    return other is SelectedAppsNotifier &&
+        other._selectedAppIds == _selectedAppIds;
   }
 
   @override

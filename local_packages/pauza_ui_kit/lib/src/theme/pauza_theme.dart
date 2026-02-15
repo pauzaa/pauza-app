@@ -128,7 +128,9 @@ ThemeData appThemeFromBrightness(Brightness brightness) {
       centerTitle: true,
       foregroundColor: colorTheme.onSurface,
     ),
-    navigationBarTheme: NavigationBarThemeData(indicatorColor: colorTheme.primary),
+    navigationBarTheme: NavigationBarThemeData(
+      indicatorColor: colorTheme.primary,
+    ),
     cardTheme: CardThemeData(
       elevation: 0,
       margin: EdgeInsets.zero,
@@ -136,7 +138,9 @@ ThemeData appThemeFromBrightness(Brightness brightness) {
       shadowColor: colorTheme.onSurface.withValues(alpha: isDark ? 0.8 : 0.7),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: colorTheme.outline.withValues(alpha: isDark ? 0.9 : 0.6)),
+        side: BorderSide(
+          color: colorTheme.outline.withValues(alpha: isDark ? 0.9 : 0.6),
+        ),
       ),
     ),
     bottomSheetTheme: BottomSheetThemeData(
@@ -146,14 +150,20 @@ ThemeData appThemeFromBrightness(Brightness brightness) {
       modalBackgroundColor: colorTheme.surface,
       shadowColor: colorTheme.onSurface.withValues(alpha: isDark ? 0.7 : 0.5),
       shape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(PauzaCornerRadius.large)),
-        side: BorderSide(color: colorTheme.outlineVariant.withValues(alpha: 0.6)),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(PauzaCornerRadius.large),
+        ),
+        side: BorderSide(
+          color: colorTheme.outlineVariant.withValues(alpha: 0.6),
+        ),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      fillColor: isDark ? colorTheme.surfaceContainer : colorTheme.surfaceContainerLow,
+      fillColor: isDark
+          ? colorTheme.surfaceContainer
+          : colorTheme.surfaceContainerLow,
       border: InputBorder.none,
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(PauzaCornerRadius.xxSmall),
@@ -173,7 +183,9 @@ ThemeData appThemeFromBrightness(Brightness brightness) {
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(PauzaCornerRadius.xxSmall),
-        borderSide: BorderSide(color: colorTheme.onSurfaceVariant.withAlpha(40)),
+        borderSide: BorderSide(
+          color: colorTheme.onSurfaceVariant.withAlpha(40),
+        ),
       ),
     ),
 
@@ -214,9 +226,11 @@ extension PauzaThemeX on BuildContext {
 
   TextTheme get textTheme => TextTheme.of(this);
 
-  PauzaTextTheme get pauzaTextTheme => Theme.of(this).extension<PauzaTextTheme>()!;
+  PauzaTextTheme get pauzaTextTheme =>
+      Theme.of(this).extension<PauzaTextTheme>()!;
 
   ColorScheme get colorScheme => ColorScheme.of(this);
 
-  PauzaColorScheme get pauzaColorScheme => Theme.of(this).extension<PauzaColorScheme>()!;
+  PauzaColorScheme get pauzaColorScheme =>
+      Theme.of(this).extension<PauzaColorScheme>()!;
 }

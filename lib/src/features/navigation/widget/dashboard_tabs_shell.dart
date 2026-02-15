@@ -24,10 +24,22 @@ class DashboardTabsShell extends StatelessWidget {
           body: child,
           bottomNavigationBar: PauzaBottomNavigationBar(
             destinations: [
-              PauzaNavigationDestination(icon: Icons.home_rounded, label: l10n.homeTitle),
-              PauzaNavigationDestination(icon: Icons.bar_chart_rounded, label: l10n.statsTitle),
-              PauzaNavigationDestination(icon: Icons.leaderboard, label: l10n.leaderboardTitle),
-              PauzaNavigationDestination(icon: Icons.person_rounded, label: l10n.profileTitle),
+              PauzaNavigationDestination(
+                icon: Icons.home_rounded,
+                label: l10n.homeTitle,
+              ),
+              PauzaNavigationDestination(
+                icon: Icons.bar_chart_rounded,
+                label: l10n.statsTitle,
+              ),
+              PauzaNavigationDestination(
+                icon: Icons.leaderboard,
+                label: l10n.leaderboardTitle,
+              ),
+              PauzaNavigationDestination(
+                icon: Icons.person_rounded,
+                label: l10n.profileTitle,
+              ),
             ],
             selectedIndex: selectedIndex,
             onTabPressed: onTabPressed,

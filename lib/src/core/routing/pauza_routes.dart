@@ -49,14 +49,19 @@ enum PauzaRoutes with Routable {
   };
 
   @override
-  Widget builder(Map<String, String> pathParams, Map<String, String> queryParams) => switch (this) {
+  Widget builder(
+    Map<String, String> pathParams,
+    Map<String, String> queryParams,
+  ) => switch (this) {
     PauzaRoutes.root => const DashboardTabsShell(),
     PauzaRoutes.home => const HomeScreen(),
     PauzaRoutes.stats => const StatsScreen(),
     PauzaRoutes.leaderboard => const LeaderboardScreen(),
     PauzaRoutes.profile => const ProfileScreen(),
     PauzaRoutes.modeCreate => ModeEditorScreen.create(),
-    PauzaRoutes.modeEdit => ModeEditorScreen.edit(modeId: pathParams['midEdit'] ?? ''),
+    PauzaRoutes.modeEdit => ModeEditorScreen.edit(
+      modeId: pathParams['midEdit'] ?? '',
+    ),
     PauzaRoutes.permissions => const PermissionsScreen(),
     PauzaRoutes.notFound => const NotFoundScreen(),
   };

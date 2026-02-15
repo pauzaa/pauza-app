@@ -497,6 +497,12 @@ abstract class AppLocalizations {
   /// **'Choose apps'**
   String get modeBlockedAppsChooseButton;
 
+  /// Subtitle for blocked apps selector card.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize what to block'**
+  String get modeBlockedAppsSubtitle;
+
   /// Label for the app search input.
   ///
   /// In en, this message translates to:
@@ -515,6 +521,66 @@ abstract class AppLocalizations {
   /// **'Selected apps: {count}'**
   String modeBlockedAppsSelectedCountLabel(int count);
 
+  /// Title for schedule section on mode editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule (Optional)'**
+  String get modeScheduleTitle;
+
+  /// Label for schedule start time picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Start time'**
+  String get modeScheduleStartTimeLabel;
+
+  /// Label for schedule end time picker.
+  ///
+  /// In en, this message translates to:
+  /// **'End time'**
+  String get modeScheduleEndTimeLabel;
+
+  /// Error shown when schedule is enabled without selected days.
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least one day'**
+  String get modeScheduleDaysRequiredError;
+
+  /// Section title for strictness controls.
+  ///
+  /// In en, this message translates to:
+  /// **'Strictness'**
+  String get modeStrictnessTitle;
+
+  /// Title for allowed pauses control.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed pauses'**
+  String get modeAllowedPausesTitle;
+
+  /// Subtitle for allowed pauses control.
+  ///
+  /// In en, this message translates to:
+  /// **'Short breaks during session'**
+  String get modeAllowedPausesSubtitle;
+
+  /// Error shown when allowed pauses count is out of range.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed pauses must be between {min} and {max}'**
+  String modeAllowedPausesOutOfRangeError(int min, int max);
+
+  /// Button label for deleting the edited mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Focus Mode'**
+  String get modeDeleteFocusButton;
+
+  /// Bottom call to action to save mode changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Mode'**
+  String get modeSaveButton;
+
   /// Error message shown when a required field is empty.
   ///
   /// In en, this message translates to:
@@ -532,6 +598,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to save mode'**
   String get modeSaveFailedMessage;
+
+  /// Error message shown when deleting a mode fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to delete mode'**
+  String get modeDeleteFailedMessage;
 
   /// Error message shown when app list fails to load.
   ///

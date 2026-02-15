@@ -31,7 +31,8 @@ class Schedule {
   );
 
   @override
-  String toString() => 'Schedule(days: $days, enabled: $enabled, start: $start, end: $end)';
+  String toString() =>
+      'Schedule(days: $days, enabled: $enabled, start: $start, end: $end)';
 }
 
 extension TimeOfDayX on TimeOfDay {

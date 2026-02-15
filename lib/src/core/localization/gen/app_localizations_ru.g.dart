@@ -245,6 +245,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get modeBlockedAppsChooseButton => 'Выбрать приложения';
 
   @override
+  String get modeBlockedAppsSubtitle => 'Настройте, что блокировать';
+
+  @override
   String get modeBlockedAppsSearchLabel => 'Поиск приложений';
 
   @override
@@ -256,6 +259,38 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get modeScheduleTitle => 'Расписание (необязательно)';
+
+  @override
+  String get modeScheduleStartTimeLabel => 'Время начала';
+
+  @override
+  String get modeScheduleEndTimeLabel => 'Время окончания';
+
+  @override
+  String get modeScheduleDaysRequiredError => 'Выберите хотя бы один день';
+
+  @override
+  String get modeStrictnessTitle => 'Строгость';
+
+  @override
+  String get modeAllowedPausesTitle => 'Разрешенные паузы';
+
+  @override
+  String get modeAllowedPausesSubtitle => 'Короткие перерывы во время сессии';
+
+  @override
+  String modeAllowedPausesOutOfRangeError(int min, int max) {
+    return 'Разрешенные паузы должны быть от $min до $max';
+  }
+
+  @override
+  String get modeDeleteFocusButton => 'Удалить режим фокуса';
+
+  @override
+  String get modeSaveButton => 'Сохранить режим';
+
+  @override
   String get modeRequiredFieldError => 'Поле обязательно';
 
   @override
@@ -263,6 +298,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get modeSaveFailedMessage => 'Не удалось сохранить режим';
+
+  @override
+  String get modeDeleteFailedMessage => 'Не удалось удалить режим';
 
   @override
   String get modeAppsLoadFailedMessage => 'Не удалось загрузить приложения';

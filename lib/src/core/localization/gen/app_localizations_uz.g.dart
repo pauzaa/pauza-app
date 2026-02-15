@@ -245,6 +245,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get modeBlockedAppsChooseButton => 'Ilovalarni tanlash';
 
   @override
+  String get modeBlockedAppsSubtitle => 'Nimani bloklashni sozlang';
+
+  @override
   String get modeBlockedAppsSearchLabel => 'Ilovalarni qidirish';
 
   @override
@@ -256,6 +259,38 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
+  String get modeScheduleTitle => 'Jadval (ixtiyoriy)';
+
+  @override
+  String get modeScheduleStartTimeLabel => 'Boshlanish vaqti';
+
+  @override
+  String get modeScheduleEndTimeLabel => 'Tugash vaqti';
+
+  @override
+  String get modeScheduleDaysRequiredError => 'Kamida bitta kunni tanlang';
+
+  @override
+  String get modeStrictnessTitle => 'Qat\'iylik';
+
+  @override
+  String get modeAllowedPausesTitle => 'Ruxsat etilgan tanaffuslar';
+
+  @override
+  String get modeAllowedPausesSubtitle => 'Sessiya davomida qisqa tanaffuslar';
+
+  @override
+  String modeAllowedPausesOutOfRangeError(int min, int max) {
+    return 'Ruxsat etilgan tanaffuslar $min va $max oralig\'ida bo\'lishi kerak';
+  }
+
+  @override
+  String get modeDeleteFocusButton => 'Fokus rejimini o\'chirish';
+
+  @override
+  String get modeSaveButton => 'Rejimni saqlash';
+
+  @override
   String get modeRequiredFieldError => 'Bu maydon majburiy';
 
   @override
@@ -263,6 +298,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get modeSaveFailedMessage => 'Rejimni saqlab bo\'lmadi';
+
+  @override
+  String get modeDeleteFailedMessage => 'Rejimni o\'chirib bo\'lmadi';
 
   @override
   String get modeAppsLoadFailedMessage => 'Ilovalarni yuklab bo\'lmadi';
@@ -581,6 +619,9 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get modeBlockedAppsChooseButton => 'Иловаларни танлаш';
 
   @override
+  String get modeBlockedAppsSubtitle => 'Нимани блоклашни созланг';
+
+  @override
   String get modeBlockedAppsSearchLabel => 'Иловаларни қидириш';
 
   @override
@@ -592,6 +633,38 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   }
 
   @override
+  String get modeScheduleTitle => 'Жадвал (ихтиёрий)';
+
+  @override
+  String get modeScheduleStartTimeLabel => 'Бошланиш вақти';
+
+  @override
+  String get modeScheduleEndTimeLabel => 'Тугаш вақти';
+
+  @override
+  String get modeScheduleDaysRequiredError => 'Камида битта кунни танланг';
+
+  @override
+  String get modeStrictnessTitle => 'Қатъийлик';
+
+  @override
+  String get modeAllowedPausesTitle => 'Рухсат этилган танаффуслар';
+
+  @override
+  String get modeAllowedPausesSubtitle => 'Сессия давомида қисқа танаффуслар';
+
+  @override
+  String modeAllowedPausesOutOfRangeError(int min, int max) {
+    return 'Рухсат этилган танаффуслар $min ва $max оралиғида бўлиши керак';
+  }
+
+  @override
+  String get modeDeleteFocusButton => 'Фокус режимини ўчириш';
+
+  @override
+  String get modeSaveButton => 'Режимни сақлаш';
+
+  @override
   String get modeRequiredFieldError => 'Бу майдон мажбурий';
 
   @override
@@ -599,6 +672,9 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get modeSaveFailedMessage => 'Режимни сақлаб бўлмади';
+
+  @override
+  String get modeDeleteFailedMessage => 'Режимни ўчириб бўлмади';
 
   @override
   String get modeAppsLoadFailedMessage => 'Иловаларни юклаб бўлмади';

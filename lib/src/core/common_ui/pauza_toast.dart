@@ -11,9 +11,8 @@ class Toast extends SnackBar {
     Key? key,
   }) {
     final effectiveTextStyle =
-        (textStyle ?? TextStyle(color: textColor ?? Colors.white, fontSize: 16)).copyWith(
-          color: textColor,
-        );
+        (textStyle ?? TextStyle(color: textColor ?? Colors.white, fontSize: 16))
+            .copyWith(color: textColor);
     return Toast._(
       duration: duration,
       width: width,
@@ -25,7 +24,11 @@ class Toast extends SnackBar {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Text(message, textAlign: TextAlign.center, style: effectiveTextStyle),
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+              style: effectiveTextStyle,
+            ),
           ),
         ),
       ),
@@ -33,14 +36,18 @@ class Toast extends SnackBar {
     );
   }
 
-  const Toast._({required super.content, required super.duration, required super.width, super.key})
-    : super(
-        behavior: SnackBarBehavior.floating,
-        dismissDirection: DismissDirection.none,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        padding: EdgeInsets.zero,
-      );
+  const Toast._({
+    required super.content,
+    required super.duration,
+    required super.width,
+    super.key,
+  }) : super(
+         behavior: SnackBarBehavior.floating,
+         dismissDirection: DismissDirection.none,
+         backgroundColor: Colors.transparent,
+         elevation: 0,
+         padding: EdgeInsets.zero,
+       );
 }
 
 extension ShowToast on BuildContext {

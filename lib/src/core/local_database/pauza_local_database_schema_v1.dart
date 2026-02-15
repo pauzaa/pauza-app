@@ -88,11 +88,17 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
     batch.execute(LocalDatabaseSqlStatements.createModesTable);
     batch.execute(LocalDatabaseSqlStatements.createModeBlockedAppsTable);
     batch.execute(LocalDatabaseSqlStatements.createSchedulesTable);
-    batch.execute(LocalDatabaseSqlStatements.createRestrictionLifecycleEventsTable);
+    batch.execute(
+      LocalDatabaseSqlStatements.createRestrictionLifecycleEventsTable,
+    );
     batch.execute(LocalDatabaseSqlStatements.createRestrictionSessionsTable);
     await batch.commit(noResult: true);
   }
 
   @override
-  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {}
+  Future<void> onUpgrade(
+    Database database,
+    int oldVersion,
+    int newVersion,
+  ) async {}
 }

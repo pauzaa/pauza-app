@@ -280,6 +280,10 @@
   "@modeBlockedAppsChooseButton": {
     "description": "Button label to choose apps to block."
   },
+  "modeBlockedAppsSubtitle": "Customize what to block",
+  "@modeBlockedAppsSubtitle": {
+    "description": "Subtitle for blocked apps selector card."
+  },
   "modeBlockedAppsSearchLabel": "Search apps",
   "@modeBlockedAppsSearchLabel": {
     "description": "Label for the app search input."
@@ -296,6 +300,54 @@
       }
     }
   },
+  "modeScheduleTitle": "Schedule (Optional)",
+  "@modeScheduleTitle": {
+    "description": "Title for schedule section on mode editor."
+  },
+  "modeScheduleStartTimeLabel": "Start time",
+  "@modeScheduleStartTimeLabel": {
+    "description": "Label for schedule start time picker."
+  },
+  "modeScheduleEndTimeLabel": "End time",
+  "@modeScheduleEndTimeLabel": {
+    "description": "Label for schedule end time picker."
+  },
+  "modeScheduleDaysRequiredError": "Select at least one day",
+  "@modeScheduleDaysRequiredError": {
+    "description": "Error shown when schedule is enabled without selected days."
+  },
+  "modeStrictnessTitle": "Strictness",
+  "@modeStrictnessTitle": {
+    "description": "Section title for strictness controls."
+  },
+  "modeAllowedPausesTitle": "Allowed pauses",
+  "@modeAllowedPausesTitle": {
+    "description": "Title for allowed pauses control."
+  },
+  "modeAllowedPausesSubtitle": "Short breaks during session",
+  "@modeAllowedPausesSubtitle": {
+    "description": "Subtitle for allowed pauses control."
+  },
+  "modeAllowedPausesOutOfRangeError": "Allowed pauses must be between {min} and {max}",
+  "@modeAllowedPausesOutOfRangeError": {
+    "description": "Error shown when allowed pauses count is out of range.",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "modeDeleteFocusButton": "Delete Focus Mode",
+  "@modeDeleteFocusButton": {
+    "description": "Button label for deleting the edited mode."
+  },
+  "modeSaveButton": "Save Mode",
+  "@modeSaveButton": {
+    "description": "Bottom call to action to save mode changes."
+  },
   "modeRequiredFieldError": "This field is required",
   "@modeRequiredFieldError": {
     "description": "Error message shown when a required field is empty."
@@ -307,6 +359,10 @@
   "modeSaveFailedMessage": "Unable to save mode",
   "@modeSaveFailedMessage": {
     "description": "Error message shown when saving a mode fails."
+  },
+  "modeDeleteFailedMessage": "Unable to delete mode",
+  "@modeDeleteFailedMessage": {
+    "description": "Error message shown when deleting a mode fails."
   },
   "modeAppsLoadFailedMessage": "Unable to load apps",
   "@modeAppsLoadFailedMessage": {

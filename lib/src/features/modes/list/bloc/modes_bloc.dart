@@ -19,7 +19,10 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
 
   final ModesRepository _modesRepository;
 
-  Future<void> _onModesRequested(ModesListRequested event, Emitter<ModesListState> emit) async {
+  Future<void> _onModesRequested(
+    ModesListRequested event,
+    Emitter<ModesListState> emit,
+  ) async {
     await _load(emit: emit);
   }
 
@@ -36,7 +39,10 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
     }
   }
 
-  void _onModesSelectionRequested(ModesSelectionRequested event, Emitter<ModesListState> emit) {
+  void _onModesSelectionRequested(
+    ModesSelectionRequested event,
+    Emitter<ModesListState> emit,
+  ) {
     if (state.selectedModeId == event.modeId) return;
     emit(state.copyWith(selectedModeId: event.modeId));
   }
@@ -47,7 +53,9 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
     try {
       final summaries = await _modesRepository.getModes();
 
-      emit(state.copyWith(items: summaries, isLoading: false, clearError: true));
+      emit(
+        state.copyWith(items: summaries, isLoading: false, clearError: true),
+      );
     } on Object catch (error) {
       emit(state.setError(error));
     }

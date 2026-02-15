@@ -197,12 +197,11 @@ class HomeContent extends StatelessWidget {
                       const SizedBox(height: PauzaSpacing.extraLarge),
                       HomeCurrentModeCard(
                         effectiveMode,
-                        onTap: () =>
-                            _onCurrentModePressed(
-                              context,
-                              modesState.items,
-                              effectiveMode,
-                            ),
+                        onTap: () => _onCurrentModePressed(
+                          context,
+                          modesState.items,
+                          effectiveMode,
+                        ),
                       ),
                     ],
                   ],

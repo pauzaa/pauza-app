@@ -31,7 +31,9 @@ class PermissionRequirementRow extends StatelessWidget {
       leading: _PermissionLeadingIcon(iconData: requirement.iconData),
       trailing: Icon(
         isGranted ? Icons.done : Icons.chevron_right,
-        color: isGranted ? context.pauzaColorScheme.success : context.colorScheme.onSurfaceVariant,
+        color: isGranted
+            ? context.pauzaColorScheme.success
+            : context.colorScheme.onSurfaceVariant,
       ),
     );
   }

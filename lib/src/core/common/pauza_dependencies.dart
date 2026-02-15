@@ -21,12 +21,16 @@ class PauzaDependencies with AppFuseInitialization {
   @override
   Map<String, InitializationStep> get steps => <String, InitializationStep>{
     'init local database': (_) async {
-      localDatabase = SqfliteLocalDatabase(schema: const PauzaLocalDatabaseSchemaV1());
+      localDatabase = SqfliteLocalDatabase(
+        schema: const PauzaLocalDatabaseSchemaV1(),
+      );
       await localDatabase.open();
     },
     'init permissions': (_) async {
       permissionManager = PermissionManager();
-      permissionGate = PauzaPermissionGateNotifier(permissionManager: permissionManager);
+      permissionGate = PauzaPermissionGateNotifier(
+        permissionManager: permissionManager,
+      );
       await permissionGate.refresh(force: true);
     },
     'init managers': (_) async {
@@ -36,7 +40,9 @@ class PauzaDependencies with AppFuseInitialization {
     'init restriction lifecycle sync coordinator': (_) async {
       restrictionLifecycleRepository = RestrictionLifecycleRepositoryImpl(
         localDatabase: localDatabase,
-        pluginClient: RestrictionLifecyclePluginClientImpl(restrictions: appRestrictionManager),
+        pluginClient: RestrictionLifecyclePluginClientImpl(
+          restrictions: appRestrictionManager,
+        ),
       );
       try {
         await restrictionLifecycleRepository.syncFromPluginQueue();

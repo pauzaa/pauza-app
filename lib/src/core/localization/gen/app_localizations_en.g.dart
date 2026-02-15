@@ -245,6 +245,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get modeBlockedAppsChooseButton => 'Choose apps';
 
   @override
+  String get modeBlockedAppsSubtitle => 'Customize what to block';
+
+  @override
   String get modeBlockedAppsSearchLabel => 'Search apps';
 
   @override
@@ -256,6 +259,38 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get modeScheduleTitle => 'Schedule (Optional)';
+
+  @override
+  String get modeScheduleStartTimeLabel => 'Start time';
+
+  @override
+  String get modeScheduleEndTimeLabel => 'End time';
+
+  @override
+  String get modeScheduleDaysRequiredError => 'Select at least one day';
+
+  @override
+  String get modeStrictnessTitle => 'Strictness';
+
+  @override
+  String get modeAllowedPausesTitle => 'Allowed pauses';
+
+  @override
+  String get modeAllowedPausesSubtitle => 'Short breaks during session';
+
+  @override
+  String modeAllowedPausesOutOfRangeError(int min, int max) {
+    return 'Allowed pauses must be between $min and $max';
+  }
+
+  @override
+  String get modeDeleteFocusButton => 'Delete Focus Mode';
+
+  @override
+  String get modeSaveButton => 'Save Mode';
+
+  @override
   String get modeRequiredFieldError => 'This field is required';
 
   @override
@@ -263,6 +298,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get modeSaveFailedMessage => 'Unable to save mode';
+
+  @override
+  String get modeDeleteFailedMessage => 'Unable to delete mode';
 
   @override
   String get modeAppsLoadFailedMessage => 'Unable to load apps';

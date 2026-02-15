@@ -24,3 +24,12 @@ final class ModeEditorSaveRequested extends ModeEditorEvent {
   @override
   List<Object?> get props => <Object?>[request];
 }
+
+final class ModeEditorDeleteRequested extends ModeEditorEvent {
+  const ModeEditorDeleteRequested({required this.modeId});
+
+  final String? modeId;
+
+  @override
+  List<Object?> get props => <Object?>[modeId];
+}

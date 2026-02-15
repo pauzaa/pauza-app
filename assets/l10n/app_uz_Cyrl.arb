@@ -104,9 +104,31 @@
       }
     }
   },
+  "modeBlockedAppsSubtitle": "Нимани блоклашни созланг",
+  "modeScheduleTitle": "Жадвал (ихтиёрий)",
+  "modeScheduleStartTimeLabel": "Бошланиш вақти",
+  "modeScheduleEndTimeLabel": "Тугаш вақти",
+  "modeScheduleDaysRequiredError": "Камида битта кунни танланг",
+  "modeStrictnessTitle": "Қатъийлик",
+  "modeAllowedPausesTitle": "Рухсат этилган танаффуслар",
+  "modeAllowedPausesSubtitle": "Сессия давомида қисқа танаффуслар",
+  "modeAllowedPausesOutOfRangeError": "Рухсат этилган танаффуслар {min} ва {max} оралиғида бўлиши керак",
+  "@modeAllowedPausesOutOfRangeError": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "modeDeleteFocusButton": "Фокус режимини ўчириш",
+  "modeSaveButton": "Режимни сақлаш",
   "modeRequiredFieldError": "Бу майдон мажбурий",
   "modeLoadFailedMessage": "Режим маълумотларини юклаб бўлмади",
   "modeSaveFailedMessage": "Режимни сақлаб бўлмади",
+  "modeDeleteFailedMessage": "Режимни ўчириб бўлмади",
   "modeAppsLoadFailedMessage": "Иловаларни юклаб бўлмади",
   "saveButton": "Сақлаш",
   "homeGreeting": "{hour, select, 0{Хайрли тун} 1{Хайрли тун} 2{Хайрли тун} 3{Хайрли тун} 4{Хайрли тун} 5{Хайрли тонг} 6{Хайрли тонг} 7{Хайрли тонг} 8{Хайрли тонг} 9{Хайрли тонг} 10{Хайрли тонг} 11{Хайрли тонг} 12{Хайрли кун} 13{Хайрли кун} 14{Хайрли кун} 15{Хайрли кун} 16{Хайрли кун} 17{Хайрли кеч} 18{Хайрли кеч} 19{Хайрли кеч} 20{Хайрли кеч} 21{Хайрли кеч} 22{Хайрли тун} 23{Хайрли тун} other{Хайрли тун}}",

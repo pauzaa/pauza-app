@@ -8,7 +8,10 @@ sealed class InstalledAppsEvent extends Equatable {
 }
 
 final class InstalledAppsRequested extends InstalledAppsEvent {
-  const InstalledAppsRequested({this.includeSystemApps = false, this.includeIcons = true});
+  const InstalledAppsRequested({
+    this.includeSystemApps = false,
+    this.includeIcons = true,
+  });
 
   final bool includeSystemApps;
   final bool includeIcons;

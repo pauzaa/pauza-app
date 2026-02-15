@@ -28,7 +28,10 @@ final class PauzaListTileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16),
-      side: BorderSide(color: borderColor ?? context.colorScheme.outline, width: borderWidth),
+      side: BorderSide(
+        color: borderColor ?? context.colorScheme.outline,
+        width: borderWidth,
+      ),
     );
 
     return Material(

@@ -12,7 +12,10 @@ abstract interface class ModesRepository {
 
   Future<void> createMode(ModeUpsertDTO request);
 
-  Future<void> updateMode({required String modeId, required ModeUpsertDTO request});
+  Future<void> updateMode({
+    required String modeId,
+    required ModeUpsertDTO request,
+  });
 
   Future<void> deleteMode(String modeId);
 }
@@ -184,7 +187,10 @@ INSERT INTO mode_blocked_apps (
   }
 
   @override
-  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {
+  Future<void> updateMode({
+    required String modeId,
+    required ModeUpsertDTO request,
+  }) async {
     final now = DateTime.now().toUtc().millisecondsSinceEpoch;
 
     await _localDatabase.transaction((transaction) async {
@@ -205,7 +211,9 @@ INSERT INTO mode_blocked_apps (
           .map((row) => row['app_identifier'])
           .whereType<String>()
           .toSet();
-      final requestedBlocked = request.blockedAppIds.map((id) => id.raw).toSet();
+      final requestedBlocked = request.blockedAppIds
+          .map((id) => id.raw)
+          .toSet();
       final removedBlocked = existingBlocked.difference(requestedBlocked);
       final addedBlocked = requestedBlocked.difference(existingBlocked);
 

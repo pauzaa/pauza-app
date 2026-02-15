@@ -14,7 +14,9 @@ final class BottomSheetScaffold extends StatelessWidget {
     this.showDivider = true,
     this.maxHeight,
     this.maxHeightFactor = 0.85,
-    this.borderRadius = const BorderRadius.vertical(top: Radius.circular(PauzaCornerRadius.large)),
+    this.borderRadius = const BorderRadius.vertical(
+      top: Radius.circular(PauzaCornerRadius.large),
+    ),
     this.headerPadding = const EdgeInsets.fromLTRB(
       PauzaSpacing.medium,
       PauzaSpacing.regular,
@@ -62,7 +64,9 @@ final class BottomSheetScaffold extends StatelessWidget {
               color: colorScheme.surface,
               borderRadius: borderRadius,
               border: Border(
-                top: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.6)),
+                top: BorderSide(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.6),
+                ),
               ),
               boxShadow: <BoxShadow>[
                 BoxShadow(
@@ -83,7 +87,9 @@ final class BottomSheetScaffold extends StatelessWidget {
                       width: 40,
                       decoration: BoxDecoration(
                         color: colorScheme.outlineVariant,
-                        borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
+                        borderRadius: BorderRadius.circular(
+                          PauzaCornerRadius.full,
+                        ),
                       ),
                     ),
                   ],
@@ -110,11 +116,15 @@ final class BottomSheetScaffold extends StatelessWidget {
                     ),
                   ),
                   if (showDivider)
-                    Divider(color: colorScheme.outlineVariant.withValues(alpha: 0.8), height: 1),
+                    Divider(
+                      color: colorScheme.outlineVariant.withValues(alpha: 0.8),
+                      height: 1,
+                    ),
                   Flexible(
                     child: Padding(padding: bodyPadding, child: body),
                   ),
-                  if (footer != null) Padding(padding: footerPadding, child: footer),
+                  if (footer != null)
+                    Padding(padding: footerPadding, child: footer),
                 ],
               ),
             ),

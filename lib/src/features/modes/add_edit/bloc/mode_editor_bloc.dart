@@ -12,6 +12,7 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
       super(const ModeEditorInitial()) {
     on<ModeEditorLoadRequested>(_onLoadRequested);
     on<ModeEditorSaveRequested>(_onSaveRequested);
+    on<ModeEditorDeleteRequested>(_onDeleteRequested);
   }
 
   final ModesRepository _modesRepository;
@@ -23,7 +24,9 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
     emit(const ModeEditorLoading());
 
     if (event.modeId == null) {
-      emit(const ModeEditorReady(modeId: null, request: ModeUpsertDTO.initial()));
+      emit(
+        const ModeEditorReady(modeId: null, request: ModeUpsertDTO.initial()),
+      );
       return;
     }
 
@@ -58,9 +61,32 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
       if (event.modeId == null) {
         await _modesRepository.createMode(event.request);
       } else {
-        await _modesRepository.updateMode(modeId: event.modeId!, request: event.request);
+        await _modesRepository.updateMode(
+          modeId: event.modeId!,
+          request: event.request,
+        );
       }
       emit(ModeEditorSaveSuccess(modeId: event.modeId, request: event.request));
+    } on Object catch (error) {
+      emit(ModeEditorFailure(error));
+    }
+  }
+
+  Future<void> _onDeleteRequested(
+    ModeEditorDeleteRequested event,
+    Emitter<ModeEditorState> emit,
+  ) async {
+    emit(const ModeEditorLoading());
+
+    final modeId = event.modeId;
+    if (modeId == null || modeId.isEmpty) {
+      emit(ModeEditorFailure(StateError('Missing mode id for delete.')));
+      return;
+    }
+
+    try {
+      await _modesRepository.deleteMode(modeId);
+      emit(ModeEditorDeleteSuccess(modeId: modeId));
     } on Object catch (error) {
       emit(ModeEditorFailure(error));
     }

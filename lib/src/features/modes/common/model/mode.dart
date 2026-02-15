@@ -89,8 +89,14 @@ class Mode {
       allowedPausesCount: row['allowed_pauses_count'] as int,
       schedule: schedule,
       blockedAppIds: blockedAppIds,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(createdAtMillis, isUtc: true),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(updatedAtMillis, isUtc: true),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(
+        createdAtMillis,
+        isUtc: true,
+      ),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(
+        updatedAtMillis,
+        isUtc: true,
+      ),
     );
   }
 

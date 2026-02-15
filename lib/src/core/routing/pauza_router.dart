@@ -36,7 +36,9 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
       orElse: () => PauzaRoutes.root.page(),
     );
 
-    final topLevelPages = pages.where((page) => page.meta?.route != PauzaRoutes.root).toList();
+    final topLevelPages = pages
+        .where((page) => page.meta?.route != PauzaRoutes.root)
+        .toList();
 
     return [rootPage, ...topLevelPages];
   }

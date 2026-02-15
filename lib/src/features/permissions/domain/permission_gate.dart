@@ -34,8 +34,8 @@ class PauzaPermissionGateNotifier extends ChangeNotifier
   final PermissionManager _permissionManager;
   final Duration minRefreshInterval;
 
-  static const MapEquality<PauzaPermissionRequirement, PermissionStatus> _statusEquality =
-      MapEquality<PauzaPermissionRequirement, PermissionStatus>();
+  static const MapEquality<PauzaPermissionRequirement, PermissionStatus>
+  _statusEquality = MapEquality<PauzaPermissionRequirement, PermissionStatus>();
 
   PermissionGateState _state = PermissionGateState.initial();
 
@@ -129,14 +129,20 @@ class PauzaPermissionGateNotifier extends ChangeNotifier
       _applyState(nextState);
     } on Object catch (error) {
       _applyState(
-        PermissionGateState(statuses: _state.statuses, checkedAt: checkedAt, lastError: error),
+        PermissionGateState(
+          statuses: _state.statuses,
+          checkedAt: checkedAt,
+          lastError: error,
+        ),
       );
     } finally {
       _lastRefreshAt = checkedAt;
     }
   }
 
-  Future<PermissionGateState> _checkRequiredPermissions(DateTime checkedAt) async {
+  Future<PermissionGateState> _checkRequiredPermissions(
+    DateTime checkedAt,
+  ) async {
     final required = PauzaPermissionRequirement.requiredForCurrentPlatform;
     if (required.isEmpty) {
       return PermissionGateState(checkedAt: checkedAt);
@@ -151,7 +157,9 @@ class PauzaPermissionGateNotifier extends ChangeNotifier
           .map((requirement) => requirement.androidPermission)
           .whereType<AndroidPermission>()
           .toList(growable: false);
-      final statuses = await _permissionManager.checkAndroidPermissions(permissions);
+      final statuses = await _permissionManager.checkAndroidPermissions(
+        permissions,
+      );
       final mapped = <PauzaPermissionRequirement, PermissionStatus>{
         for (final requirement in required)
           if (requirement.androidPermission case final permission)
@@ -165,7 +173,9 @@ class PauzaPermissionGateNotifier extends ChangeNotifier
           .map((requirement) => requirement.iosPermission)
           .whereType<IOSPermission>()
           .toList(growable: false);
-      final statuses = await _permissionManager.checkIOSPermissions(permissions);
+      final statuses = await _permissionManager.checkIOSPermissions(
+        permissions,
+      );
       final mapped = <PauzaPermissionRequirement, PermissionStatus>{
         for (final requirement in required)
           if (requirement.iosPermission case final permission)
@@ -180,7 +190,8 @@ class PauzaPermissionGateNotifier extends ChangeNotifier
   void _applyState(PermissionGateState nextState) {
     final shouldNotify =
         !_statusEquality.equals(_state.statuses, nextState.statuses) ||
-        _errorSignature(_state.lastError) != _errorSignature(nextState.lastError);
+        _errorSignature(_state.lastError) !=
+            _errorSignature(nextState.lastError);
 
     _state = nextState;
     if (!shouldNotify) {

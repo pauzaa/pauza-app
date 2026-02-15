@@ -15,7 +15,8 @@ class HomeStatsPill extends StatelessWidget {
     final streakLabel = metrics.streakDays == null
         ? '--'
         : l10n.homeDayStreakLabel(metrics.streakDays!);
-    final durationLabel = metrics.focusedDuration?.formatDurationLabel(l10n) ?? '--';
+    final durationLabel =
+        metrics.focusedDuration?.formatDurationLabel(l10n) ?? '--';
 
     return DecoratedBox(
       decoration: BoxDecoration(

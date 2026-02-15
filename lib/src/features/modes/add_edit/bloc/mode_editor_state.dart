@@ -38,6 +38,15 @@ final class ModeEditorSaveSuccess extends ModeEditorState {
   List<Object?> get props => <Object?>[modeId, request];
 }
 
+final class ModeEditorDeleteSuccess extends ModeEditorState {
+  const ModeEditorDeleteSuccess({required this.modeId});
+
+  final String modeId;
+
+  @override
+  List<Object?> get props => <Object?>[modeId];
+}
+
 final class ModeEditorFailure extends ModeEditorState {
   const ModeEditorFailure(this.error);
 

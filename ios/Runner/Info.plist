@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NFCReaderUsageDescription</key>
+	<string>Pauza uses NFC to scan supported tags when you start NFC-based actions.</string>
 </dict>
 </plist>

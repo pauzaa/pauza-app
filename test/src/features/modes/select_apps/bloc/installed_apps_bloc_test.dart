@@ -11,7 +11,7 @@ void main() {
         debounceDuration: Duration.zero,
       );
 
-      bloc.add(const InstalledAppsRequested(includeSystemApps: true));
+      bloc.add(const InstalledAppsRequested());
 
       await Future<void>.delayed(Duration.zero);
 

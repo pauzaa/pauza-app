@@ -4,7 +4,10 @@ import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
+import 'package:pauza/src/features/nfc/domain/nfc_capability_controller.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
+import 'package:pauza/src/features/nfc/widget/nfc_capability_scope.dart';
 
 class RootScope extends StatefulWidget {
   const RootScope({required this.child, super.key});
@@ -22,6 +25,8 @@ class RootScopeState extends State<RootScope> {
   late final BlockingRepository blockingRepository;
   late final ModesRepository modesRepository;
   late final InstalledAppsRepository installedAppsRepository;
+  late final NfcRepository nfcRepository;
+  late final NfcCapabilityController nfcCapabilityController;
   late final RestrictionLifecycleSyncCoordinator
   restrictionLifecycleSyncCoordinator;
 
@@ -43,6 +48,11 @@ class RootScopeState extends State<RootScope> {
       installedAppsManager: PauzaDependencies.of(context).installedAppsManager,
     );
 
+    nfcRepository = PauzaDependencies.of(context).nfcRepository;
+    nfcCapabilityController = NfcCapabilityController(
+      repository: nfcRepository,
+    );
+
     restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
       repository: PauzaDependencies.of(context).restrictionLifecycleRepository,
     );
@@ -54,12 +64,19 @@ class RootScopeState extends State<RootScope> {
   @override
   void dispose() {
     restrictionLifecycleSyncCoordinator.detach();
+    nfcCapabilityController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedRootScope(data: this, child: widget.child);
+    return _InheritedRootScope(
+      data: this,
+      child: NfcCapabilityScope(
+        controller: nfcCapabilityController,
+        child: widget.child,
+      ),
+    );
   }
 }
 

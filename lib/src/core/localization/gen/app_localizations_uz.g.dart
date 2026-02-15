@@ -324,6 +324,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get homeQuickPauseLabel => 'Quick Pause';
 
   @override
+  String get homeResumeButtonLabel => 'Resume';
+
+  @override
   String get homeCurrentModeLabel => 'Joriy rejim';
 
   @override

@@ -120,6 +120,34 @@ void main() {
       await sub.cancel();
       await bloc.close();
     });
+
+    test('resume clears pausedUntil and keeps active session', () async {
+      final now = DateTime.now().toUtc();
+      final repository = _FakeBlockingRepository(
+        restrictionState: _restrictionState(
+          activeModeId: 'mode-1',
+          startedAt: now.subtract(const Duration(minutes: 5)),
+          pausedUntil: now.add(const Duration(minutes: 5)),
+        ),
+      );
+      final bloc = BlockingBloc(blockingRepository: repository);
+
+      bloc.add(const BlockingSyncRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      final emitted = <BlockingState>[];
+      final sub = bloc.stream.listen(emitted.add);
+      bloc.add(const BlockingResumeRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(repository.resumeCallCount, 1);
+      expect(emitted, isNotEmpty);
+      expect(emitted.last.activeModeId, 'mode-1');
+      expect(emitted.last.pausedUntil, isNull);
+
+      await sub.cancel();
+      await bloc.close();
+    });
   });
 }
 
@@ -128,6 +156,7 @@ class _FakeBlockingRepository implements BlockingRepository {
 
   RestrictionState restrictionState;
   int stopCallCount = 0;
+  int resumeCallCount = 0;
   final List<Duration> pauseDurations = <Duration>[];
 
   @override
@@ -158,6 +187,15 @@ class _FakeBlockingRepository implements BlockingRepository {
   Future<void> stopBlocking() async {
     stopCallCount += 1;
     restrictionState = _restrictionState(activeModeId: null);
+  }
+
+  @override
+  Future<void> resumeBlocking() async {
+    resumeCallCount += 1;
+    restrictionState = _restrictionState(
+      activeModeId: restrictionState.activeMode?.modeId,
+      startedAt: restrictionState.startedAt,
+    );
   }
 
   @override

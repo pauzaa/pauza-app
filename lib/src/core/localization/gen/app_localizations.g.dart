@@ -593,6 +593,12 @@ abstract class AppLocalizations {
   /// **'Quick Pause'**
   String get homeQuickPauseLabel;
 
+  /// No description provided for @homeResumeButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get homeResumeButtonLabel;
+
   /// No description provided for @homeCurrentModeLabel.
   ///
   /// In en, this message translates to:

@@ -32,3 +32,7 @@ final class BlockingQuickPauseRequested extends BlockingEvent {
   @override
   List<Object?> get props => <Object?>[duration];
 }
+
+final class BlockingResumeRequested extends BlockingEvent {
+  const BlockingResumeRequested();
+}

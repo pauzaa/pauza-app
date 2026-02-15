@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide NavigationDestination;
 import 'package:helm/helm.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
@@ -33,7 +34,7 @@ class DashboardTabsShell extends StatelessWidget {
                 label: l10n.statsTitle,
               ),
               PauzaNavigationDestination(
-                icon: Icons.leaderboard,
+                icon: Symbols.rewarded_ads,
                 label: l10n.leaderboardTitle,
               ),
               PauzaNavigationDestination(

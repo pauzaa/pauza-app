@@ -12,6 +12,7 @@ import 'package:pauza/src/features/home/widget/home_start_session_button.dart';
 import 'package:pauza/src/features/home/widget/home_stats_pill.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
+import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -206,7 +207,7 @@ class _NoopModesRepository implements ModesRepository {
     description: null,
     allowedPausesCount: 3,
     schedule: null,
-    blockedAppIds: const IList<AppIdentifier>.empty(),
+    blockedAppIds: const ISet<AppIdentifier>.empty(),
     createdAt: DateTime.now().toUtc(),
     updatedAt: DateTime.now().toUtc(),
   );

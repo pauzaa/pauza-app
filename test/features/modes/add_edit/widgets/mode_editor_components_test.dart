@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_allowed_pauses_tile.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_apps_selector_tile.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_section_label.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {

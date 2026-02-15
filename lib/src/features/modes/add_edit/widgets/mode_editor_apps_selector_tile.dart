@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pauza_ui_kit/src/base_components/mode_editor/mode_editor_card.dart';
-import 'package:pauza_ui_kit/src/foundations/sizes.dart';
-import 'package:pauza_ui_kit/src/foundations/spacing.dart';
-import 'package:pauza_ui_kit/src/theme/pauza_theme.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_card.dart';
+import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 final class ModeEditorAppsSelectorTile extends StatelessWidget {
   const ModeEditorAppsSelectorTile({
@@ -25,12 +23,11 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
     final hasError = errorText != null;
 
     return Column(
+      spacing: PauzaSpacing.small,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ModeEditorCard(
-          borderColor: hasError
-              ? context.colorScheme.error.withValues(alpha: 0.8)
-              : context.colorScheme.outlineVariant,
+          borderColor: hasError ? context.colorScheme.error.withValues(alpha: 0.8) : null,
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
@@ -40,9 +37,7 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                 DecoratedBox(
                   decoration: BoxDecoration(
                     color: context.colorScheme.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(
-                      PauzaCornerRadius.medium,
-                    ),
+                    borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
                   ),
                   child: SizedBox(
                     width: PauzaFormSizes.xSmall,
@@ -57,9 +52,7 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         title,
-                        style: context.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       Text(
                         subtitle,
@@ -70,40 +63,35 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: PauzaSpacing.medium,
-                    vertical: PauzaSpacing.small,
-                  ),
+                DecoratedBox(
                   decoration: BoxDecoration(
                     color: context.colorScheme.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
                   ),
-                  child: Text(
-                    selectedCountLabel,
-                    style: context.textTheme.labelLarge?.copyWith(
-                      color: context.colorScheme.primary,
-                      fontWeight: FontWeight.w700,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: PauzaSpacing.medium,
+                      vertical: PauzaSpacing.small,
+                    ),
+                    child: Text(
+                      selectedCountLabel,
+                      style: context.textTheme.labelLarge?.copyWith(
+                        color: context.colorScheme.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),
-                Icon(
-                  Icons.chevron_right,
-                  color: context.colorScheme.onSurfaceVariant,
-                ),
+                Icon(Icons.chevron_right, color: context.colorScheme.onSurfaceVariant),
               ],
             ),
           ),
         ),
-        if (hasError) ...<Widget>[
-          const SizedBox(height: PauzaSpacing.small),
+        if (hasError)
           Text(
             errorText!,
-            style: context.textTheme.bodySmall?.copyWith(
-              color: context.colorScheme.error,
-            ),
+            style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.error),
           ),
-        ],
       ],
     );
   }

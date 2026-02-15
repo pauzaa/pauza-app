@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/modes/select_apps/widgets/android_apps_bottom_sheet.dart';
@@ -8,7 +9,7 @@ void main() {
   group('AndroidAppsBottomSheet widgets', () {
     test('sheet can be constructed with initial IDs', () {
       expect(
-        const AndroidAppsBottomSheet(initialSelectedAppIds: <AppIdentifier>{}),
+        const AndroidAppsBottomSheet(initialSelectedAppIds: ISet<AppIdentifier>.empty()),
         isNotNull,
       );
     });

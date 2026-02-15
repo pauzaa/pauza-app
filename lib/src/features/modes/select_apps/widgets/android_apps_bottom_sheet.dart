@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/app/root_scope.dart';
@@ -12,11 +13,11 @@ class AndroidAppsBottomSheet extends StatelessWidget {
     super.key,
   });
 
-  final Set<AppIdentifier> initialSelectedAppIds;
+  final ISet<AppIdentifier> initialSelectedAppIds;
 
   static Future<Set<AppIdentifier>?> show(
     BuildContext context, {
-    required Set<AppIdentifier> initialSelectedAppIds,
+    required ISet<AppIdentifier> initialSelectedAppIds,
   }) {
     return showModalBottomSheet<Set<AppIdentifier>>(
       context: context,

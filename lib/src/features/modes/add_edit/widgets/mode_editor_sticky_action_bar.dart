@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pauza_ui_kit/src/base_components/buttons/pauza_button_base.dart';
-import 'package:pauza_ui_kit/src/base_components/buttons/pauza_filled_button.dart';
-import 'package:pauza_ui_kit/src/foundations/sizes.dart';
-import 'package:pauza_ui_kit/src/foundations/spacing.dart';
-import 'package:pauza_ui_kit/src/theme/pauza_theme.dart';
+import 'package:pauza_ui_kit/pauza_ui_kit.dart';
+
 
 final class ModeEditorStickyActionBar extends StatelessWidget {
   const ModeEditorStickyActionBar({
@@ -14,7 +11,7 @@ final class ModeEditorStickyActionBar extends StatelessWidget {
   });
 
   final String buttonLabel;
-  final VoidCallback? onPressed;
+  final VoidCallback onPressed;
   final bool isBusy;
 
   @override
@@ -22,18 +19,17 @@ final class ModeEditorStickyActionBar extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
-        border: Border(
-          top: BorderSide(color: context.colorScheme.outlineVariant),
-        ),
+        border: Border(top: BorderSide(color: context.colorScheme.outlineVariant)),
       ),
       child: SafeArea(
         minimum: const EdgeInsets.all(PauzaSpacing.medium),
         top: false,
         child: PauzaFilledButton(
-          onPressed: isBusy ? () {} : (onPressed ?? () {}),
-          disabled: isBusy || onPressed == null,
+          onPressed: onPressed,
+          disabled: isBusy,
           width: double.infinity,
           size: PauzaButtonSize.large,
+          textStyle: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
           radius: PauzaCornerRadius.large,
           title: isBusy
               ? SizedBox(
@@ -44,13 +40,7 @@ final class ModeEditorStickyActionBar extends StatelessWidget {
                     strokeWidth: 2.3,
                   ),
                 )
-              : Text(
-                  buttonLabel,
-                  style: context.textTheme.headlineSmall?.copyWith(
-                    color: context.colorScheme.onPrimary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+              : Text(buttonLabel),
         ),
       ),
     );

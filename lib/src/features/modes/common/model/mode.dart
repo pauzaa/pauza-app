@@ -26,7 +26,7 @@ class Mode {
   final DateTime createdAt;
   final DateTime updatedAt;
   final Schedule? schedule;
-  final IList<AppIdentifier> blockedAppIds;
+  final ISet<AppIdentifier> blockedAppIds;
 
   Mode copyWith({
     String? title,
@@ -37,7 +37,7 @@ class Mode {
     DateTime? createdAt,
     DateTime? updatedAt,
     Schedule? schedule,
-    IList<AppIdentifier>? blockedAppIds,
+    ISet<AppIdentifier>? blockedAppIds,
   }) => Mode(
     id: id,
     title: title ?? this.title,
@@ -71,7 +71,7 @@ class Mode {
         scheduleEndMinute != null &&
         scheduleEnabled != null) {
       schedule = Schedule(
-        days: WeekDay.decodeDays(scheduleDaysRaw),
+        days: WeekDay.decodeDays(scheduleDaysRaw).toISet(),
         enabled: scheduleEnabled == 1,
         start: TimeOfDayX.fromMinutesFromMidnight(scheduleStartMinute),
         end: TimeOfDayX.fromMinutesFromMidnight(scheduleEndMinute),
@@ -89,20 +89,14 @@ class Mode {
       allowedPausesCount: row['allowed_pauses_count'] as int,
       schedule: schedule,
       blockedAppIds: blockedAppIds,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-        createdAtMillis,
-        isUtc: true,
-      ),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(
-        updatedAtMillis,
-        isUtc: true,
-      ),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(createdAtMillis, isUtc: true),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(updatedAtMillis, isUtc: true),
     );
   }
 
-  static IList<AppIdentifier> _parseBlockedApps(String? blockedAppsRaw) {
+  static ISet<AppIdentifier> _parseBlockedApps(String? blockedAppsRaw) {
     if (blockedAppsRaw == null || blockedAppsRaw.trim().isEmpty) {
-      return const IList.empty();
+      return const ISet.empty();
     }
     final parts = blockedAppsRaw.split(',');
     final ids = <AppIdentifier>[];
@@ -113,7 +107,7 @@ class Mode {
       }
       ids.add(AppIdentifier(value));
     }
-    return ids.toIList();
+    return ids.toISet();
   }
 
   @override
@@ -149,50 +143,5 @@ class Mode {
     Object.hashAllUnordered(blockedAppIds),
     createdAt,
     updatedAt,
-  );
-}
-
-@immutable
-class ModeUpsertDTO {
-  const ModeUpsertDTO({
-    required this.title,
-    required this.textOnScreen,
-    required this.description,
-    required this.allowedPausesCount,
-    required this.schedule,
-    required this.blockedAppIds,
-  });
-
-  const ModeUpsertDTO.initial()
-    : this(
-        title: '',
-        textOnScreen: '',
-        description: '',
-        allowedPausesCount: 0,
-        schedule: const Schedule.initial(),
-        blockedAppIds: const IList.empty(),
-      );
-
-  final String title;
-  final String textOnScreen;
-  final String? description;
-  final int allowedPausesCount;
-  final Schedule? schedule;
-  final IList<AppIdentifier> blockedAppIds;
-
-  ModeUpsertDTO copyWith({
-    String? title,
-    String? textOnScreen,
-    String? description,
-    int? allowedPausesCount,
-    Schedule? schedule,
-    IList<AppIdentifier>? blockedAppIds,
-  }) => ModeUpsertDTO(
-    title: title ?? this.title,
-    textOnScreen: textOnScreen ?? this.textOnScreen,
-    description: description ?? this.description,
-    allowedPausesCount: allowedPausesCount ?? this.allowedPausesCount,
-    schedule: schedule ?? this.schedule,
-    blockedAppIds: blockedAppIds ?? this.blockedAppIds,
   );
 }

@@ -47,7 +47,7 @@ enum WeekDay implements Localizable {
     return sortedDays;
   }
 
-  static String encodeDays(List<WeekDay> days) {
+  static String encodeDays(Iterable<WeekDay> days) {
     if (days.isEmpty) {
       return '';
     }

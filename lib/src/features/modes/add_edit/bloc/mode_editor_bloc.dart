@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
-import 'package:pauza/src/features/modes/common/model/mode.dart';
+import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 
 part 'mode_editor_event.dart';
 part 'mode_editor_state.dart';

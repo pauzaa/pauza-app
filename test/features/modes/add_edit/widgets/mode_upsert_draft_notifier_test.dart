@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
-import 'package:pauza/src/features/modes/common/model/mode.dart';
+import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -15,14 +15,8 @@ void main() {
       final result = notifier.validateForSubmit();
 
       expect(result.isValid, isFalse);
-      expect(
-        result[ModeUpsertValidationField.title],
-        ModeUpsertValidationCode.required,
-      );
-      expect(
-        result[ModeUpsertValidationField.textOnScreen],
-        ModeUpsertValidationCode.required,
-      );
+      expect(result[ModeUpsertValidationField.title], ModeUpsertValidationCode.required);
+      expect(result[ModeUpsertValidationField.textOnScreen], ModeUpsertValidationCode.required);
       expect(
         result[ModeUpsertValidationField.blockedApps],
         ModeUpsertValidationCode.blockedAppsRequired,
@@ -33,7 +27,7 @@ void main() {
       final notifier = ModeUpsertDraftNotifier()
         ..updateTitle('Deep Work')
         ..updateTextOnScreen('Stay focused')
-        ..updateBlockedApps({const AppIdentifier('app.one')})
+        ..updateBlockedApps(ISet(const [AppIdentifier('app.one')]))
         ..toggleScheduleEnabled(true);
 
       final result = notifier.validateForSubmit();
@@ -47,10 +41,7 @@ void main() {
 
     test('create mode stores null schedule when disabled', () {
       final notifier = ModeUpsertDraftNotifier()
-        ..configureForMode(
-          initialDraft: const ModeUpsertDTO.initial(),
-          isEditMode: false,
-        )
+        ..configureForMode(initialDraft: const ModeUpsertDTO.initial(), isEditMode: false)
         ..toggleScheduleEnabled(true)
         ..toggleScheduleDay(WeekDay.mon)
         ..toggleScheduleEnabled(false);
@@ -60,37 +51,32 @@ void main() {
       expect(request.schedule, isNull);
     });
 
-    test(
-      'edit mode keeps schedule object disabled when it existed initially',
-      () {
-        final notifier = ModeUpsertDraftNotifier()
-          ..configureForMode(
-            isEditMode: true,
-            initialDraft: ModeUpsertDTO(
-              title: 'Focus',
-              textOnScreen: 'Focus',
-              description: null,
-              allowedPausesCount: 2,
-              blockedAppIds: IList<AppIdentifier>(const <AppIdentifier>[
-                AppIdentifier('app.one'),
-              ]),
-              schedule: const Schedule(
-                days: <WeekDay>[WeekDay.mon],
-                start: TimeOfDay(hour: 9, minute: 0),
-                end: TimeOfDay(hour: 17, minute: 0),
-                enabled: true,
-              ),
+    test('edit mode keeps schedule object disabled when it existed initially', () {
+      final notifier = ModeUpsertDraftNotifier()
+        ..configureForMode(
+          isEditMode: true,
+          initialDraft: ModeUpsertDTO(
+            title: 'Focus',
+            textOnScreen: 'Focus',
+            description: null,
+            allowedPausesCount: 2,
+            blockedAppIds: ISet<AppIdentifier>(const <AppIdentifier>[AppIdentifier('app.one')]),
+            schedule: Schedule(
+              days: ISet<WeekDay>(const [WeekDay.mon]),
+              start: const TimeOfDay(hour: 9, minute: 0),
+              end: const TimeOfDay(hour: 17, minute: 0),
+              enabled: true,
             ),
-          )
-          ..toggleScheduleEnabled(false);
+          ),
+        )
+        ..toggleScheduleEnabled(false);
 
-        final request = notifier.buildSubmitRequest();
+      final request = notifier.buildSubmitRequest();
 
-        expect(request.schedule, isNotNull);
-        expect(request.schedule?.enabled, isFalse);
-        expect(request.schedule?.days, isNotEmpty);
-      },
-    );
+      expect(request.schedule, isNotNull);
+      expect(request.schedule?.enabled, isFalse);
+      expect(request.schedule?.days, isNotEmpty);
+    });
 
     test('allowed pauses are clamped to 0..5', () {
       final notifier = ModeUpsertDraftNotifier();

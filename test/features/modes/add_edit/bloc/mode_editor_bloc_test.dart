@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
+import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 
 void main() {
   group('ModeEditorBloc', () {
@@ -13,7 +14,7 @@ void main() {
       final request = const ModeUpsertDTO.initial().copyWith(
         title: 'Deep Work',
         textOnScreen: 'Stay focused',
-        blockedAppIds: const IList.empty(),
+        blockedAppIds: const ISet.empty(),
       );
 
       bloc.add(ModeEditorSaveRequested(modeId: null, request: request));
@@ -81,7 +82,7 @@ class _FakeModesRepository implements ModesRepository {
       description: null,
       allowedPausesCount: 2,
       schedule: null,
-      blockedAppIds: const IList.empty(),
+      blockedAppIds: const ISet.empty(),
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );

@@ -8,6 +8,7 @@ import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_screen.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
+import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
@@ -101,7 +102,7 @@ class _TestModesRepository implements ModesRepository {
       description: 'desc',
       allowedPausesCount: 2,
       schedule: null,
-      blockedAppIds: const IList.empty(),
+      blockedAppIds: const ISet.empty(),
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );

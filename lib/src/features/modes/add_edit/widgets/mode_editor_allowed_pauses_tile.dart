@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pauza_ui_kit/src/base_components/buttons/pauza_icon_button.dart';
-import 'package:pauza_ui_kit/src/base_components/mode_editor/mode_editor_card.dart';
-import 'package:pauza_ui_kit/src/foundations/sizes.dart';
-import 'package:pauza_ui_kit/src/foundations/spacing.dart';
-import 'package:pauza_ui_kit/src/theme/pauza_theme.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_card.dart';
+import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 final class ModeEditorAllowedPausesTile extends StatelessWidget {
   const ModeEditorAllowedPausesTile({
@@ -37,9 +34,7 @@ final class ModeEditorAllowedPausesTile extends StatelessWidget {
               children: <Widget>[
                 Text(
                   title,
-                  style: context.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 Text(
                   subtitle,
@@ -57,27 +52,26 @@ final class ModeEditorAllowedPausesTile extends StatelessWidget {
               border: Border.all(color: context.colorScheme.outlineVariant),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(PauzaSpacing.small),
+              padding: const EdgeInsets.all(4),
               child: Row(
                 spacing: PauzaSpacing.medium,
                 children: <Widget>[
                   PauzaIconButton.outlined(
-                    onPressed: canDecrement ? onDecrement : null,
+                    onPressed: onDecrement,
                     disabled: !canDecrement,
                     icon: const Icon(Icons.remove),
                   ),
-                  SizedBox(
-                    width: PauzaFormSizes.xxSmall,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Text(
                       '$value',
-                      textAlign: TextAlign.center,
                       style: context.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                   PauzaIconButton.filled(
-                    onPressed: canIncrement ? onIncrement : null,
+                    onPressed: onIncrement,
                     disabled: !canIncrement,
                     icon: const Icon(Icons.add),
                   ),

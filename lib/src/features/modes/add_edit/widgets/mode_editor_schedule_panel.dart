@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pauza_ui_kit/src/base_components/mode_editor/mode_editor_card.dart';
-import 'package:pauza_ui_kit/src/base_components/switch/pauza_switch.dart';
-import 'package:pauza_ui_kit/src/foundations/sizes.dart';
-import 'package:pauza_ui_kit/src/foundations/spacing.dart';
-import 'package:pauza_ui_kit/src/theme/pauza_theme.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_card.dart';
+import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 @immutable
 class ModeEditorDayChipItem {
-  const ModeEditorDayChipItem({
-    required this.id,
-    required this.label,
-    required this.isSelected,
-  });
+  const ModeEditorDayChipItem({required this.id, required this.label, required this.isSelected});
 
   final String id;
   final String label;
@@ -54,6 +47,7 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: PauzaSpacing.small,
       children: <Widget>[
         ModeEditorCard(
           borderColor: hasError
@@ -63,19 +57,17 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
             spacing: PauzaSpacing.medium,
             children: <Widget>[
               Row(
+                spacing: PauzaSpacing.regular,
                 children: <Widget>[
                   Icon(
                     Icons.calendar_today_outlined,
                     color: context.colorScheme.primary,
                     size: PauzaIconSizes.small,
                   ),
-                  const SizedBox(width: PauzaSpacing.medium),
                   Expanded(
                     child: Text(
                       title,
-                      style: context.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                     ),
                   ),
                   PauzaSwitch(value: enabled, onChanged: onToggle),
@@ -87,10 +79,8 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
                   runSpacing: PauzaSpacing.small,
                   children: days
                       .map(
-                        (item) => _ModeEditorDayChip(
-                          item: item,
-                          onPressed: () => onDayPressed(item.id),
-                        ),
+                        (item) =>
+                            _ModeEditorDayChip(item: item, onPressed: () => onDayPressed(item.id)),
                       )
                       .toList(growable: false),
                 ),
@@ -117,15 +107,11 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
             ],
           ),
         ),
-        if (hasError) ...<Widget>[
-          const SizedBox(height: PauzaSpacing.small),
+        if (hasError)
           Text(
             errorText!,
-            style: context.textTheme.bodySmall?.copyWith(
-              color: context.colorScheme.error,
-            ),
+            style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.error),
           ),
-        ],
       ],
     );
   }
@@ -175,11 +161,7 @@ final class _ModeEditorDayChip extends StatelessWidget {
 }
 
 final class _ModeEditorTimeField extends StatelessWidget {
-  const _ModeEditorTimeField({
-    required this.title,
-    required this.value,
-    required this.onPressed,
-  });
+  const _ModeEditorTimeField({required this.title, required this.value, required this.onPressed});
 
   final String title;
   final String value;
@@ -203,6 +185,7 @@ final class _ModeEditorTimeField extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: PauzaSpacing.small,
             children: <Widget>[
               Text(
                 title.toUpperCase(),
@@ -211,12 +194,9 @@ final class _ModeEditorTimeField extends StatelessWidget {
                   letterSpacing: 1.2,
                 ),
               ),
-              const SizedBox(height: PauzaSpacing.small),
               Text(
                 value,
-                style: context.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+                style: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
               ),
             ],
           ),

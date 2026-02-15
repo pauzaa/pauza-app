@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pauza_ui_kit/src/foundations/sizes.dart';
-import 'package:pauza_ui_kit/src/theme/pauza_theme.dart';
+import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 final class ModeEditorCard extends StatelessWidget {
   const ModeEditorCard({

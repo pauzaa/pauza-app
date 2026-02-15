@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -13,13 +14,13 @@ class Schedule {
 
   const Schedule.initial()
     : this(
-        days: const [],
+        days: const ISet.empty(),
         enabled: false,
         start: const TimeOfDay(hour: 8, minute: 0),
         end: const TimeOfDay(hour: 18, minute: 00),
       );
 
-  final List<WeekDay> days;
+  final ISet<WeekDay> days;
   final bool enabled;
   final TimeOfDay start;
   final TimeOfDay end;
@@ -30,9 +31,16 @@ class Schedule {
     endMinutes: end.toMinutesFromMidnight,
   );
 
+  Schedule copyWith({ISet<WeekDay>? days, bool? enabled, TimeOfDay? start, TimeOfDay? end}) =>
+      Schedule(
+        days: days ?? this.days,
+        enabled: enabled ?? this.enabled,
+        start: start ?? this.start,
+        end: end ?? this.end,
+      );
+
   @override
-  String toString() =>
-      'Schedule(days: $days, enabled: $enabled, start: $start, end: $end)';
+  String toString() => 'Schedule(days: $days, enabled: $enabled, start: $start, end: $end)';
 }
 
 extension TimeOfDayX on TimeOfDay {

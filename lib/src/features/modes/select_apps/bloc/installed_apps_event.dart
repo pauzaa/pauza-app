@@ -14,7 +14,7 @@ final class InstalledAppsRequested extends InstalledAppsEvent {
     this.includeIcons = true,
   });
 
-  final Set<AppIdentifier> initialSelectedAppIds;
+  final ISet<AppIdentifier> initialSelectedAppIds;
   final bool includeSystemApps;
   final bool includeIcons;
 

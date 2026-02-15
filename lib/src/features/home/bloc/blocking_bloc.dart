@@ -16,6 +16,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     on<BlockingStartRequested>(_onStartRequested);
     on<BlockingStopRequested>(_onStopRequested);
     on<BlockingQuickPauseRequested>(_onQuickPauseRequested);
+    on<BlockingResumeRequested>(_onResumeRequested);
   }
 
   final BlockingRepository _blockingRepository;
@@ -78,6 +79,19 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     try {
       emit(state.loading());
       await _blockingRepository.pauseBlocking(event.duration);
+      await _syncSessionState(emit: emit);
+    } catch (error) {
+      emit(state.setError(error));
+    }
+  }
+
+  Future<void> _onResumeRequested(
+    BlockingResumeRequested event,
+    Emitter<BlockingState> emit,
+  ) async {
+    try {
+      emit(state.loading());
+      await _blockingRepository.resumeBlocking();
       await _syncSessionState(emit: emit);
     } catch (error) {
       emit(state.setError(error));

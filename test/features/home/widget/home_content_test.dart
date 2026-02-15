@@ -44,6 +44,7 @@ void main() {
       expect(find.text('1m'), findsOneWidget);
       expect(find.text('5m'), findsOneWidget);
       expect(find.text('10m'), findsOneWidget);
+      expect(find.text('RESUME'), findsNothing);
       expect(
         tester
             .widget<HomeStartSessionButton>(find.byType(HomeStartSessionButton))
@@ -63,6 +64,41 @@ void main() {
       addTearDown(modesBloc.close);
       addTearDown(blockingBloc.close);
     });
+
+    testWidgets(
+      'renders resume button and hides quick pause pills when paused',
+      (tester) async {
+        await tester.binding.setSurfaceSize(const Size(1200, 3000));
+        addTearDown(() => tester.binding.setSurfaceSize(null));
+
+        final modesBloc = _TestModesListBloc();
+        final blockingBloc = _TestBlockingBloc();
+        blockingBloc.emitForTest(
+          BlockingState(
+            activeModeId: 'mode-1',
+            sessionStartedAt: DateTime.now().subtract(const Duration(hours: 1)),
+            pausedUntil: DateTime.now().add(const Duration(minutes: 1)),
+          ),
+        );
+
+        await tester.pumpWidget(
+          _TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc),
+        );
+        await tester.pump();
+
+        expect(find.text('RESUME'), findsOneWidget);
+        expect(find.text('1m'), findsNothing);
+        expect(find.text('5m'), findsNothing);
+        expect(find.text('10m'), findsNothing);
+
+        await tester.tap(find.text('RESUME'));
+        await tester.pump();
+        expect(blockingBloc.lastEvent, isA<BlockingResumeRequested>());
+
+        addTearDown(modesBloc.close);
+        addTearDown(blockingBloc.close);
+      },
+    );
 
     testWidgets('renders default home body when session is not active', (
       tester,
@@ -131,6 +167,14 @@ class _TestModesListBloc extends ModesListBloc {
 class _TestBlockingBloc extends BlockingBloc {
   _TestBlockingBloc() : super(blockingRepository: _NoopBlockingRepository());
 
+  BlockingEvent? lastEvent;
+
+  @override
+  void add(BlockingEvent event) {
+    lastEvent = event;
+    super.add(event);
+  }
+
   void emitForTest(BlockingState value) {
     emit(value);
   }
@@ -183,6 +227,9 @@ class _NoopBlockingRepository implements BlockingRepository {
 
   @override
   Future<void> pauseBlocking(Duration duration) async {}
+
+  @override
+  Future<void> resumeBlocking() async {}
 
   @override
   Future<void> startBlocking({

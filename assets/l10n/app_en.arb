@@ -341,6 +341,7 @@
   "homePauzaSessionLabel": "Pauza Session",
   "homeSessionDurationLabel": "Session Duration",
   "homeQuickPauseLabel": "Quick Pause",
+  "homeResumeButtonLabel": "Resume",
   "homeCurrentModeLabel": "Current mode",
   "homeDayStreakLabel": "{count} Day Streak",
   "@homeDayStreakLabel": {

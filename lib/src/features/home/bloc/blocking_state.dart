@@ -43,6 +43,8 @@ final class BlockingState extends Equatable {
     activeModeId: modeId,
     sessionStartedAt: sessionStartedAt,
     pausedUntil: pausedUntil,
+    clearSessionStartedAt: sessionStartedAt == null,
+    clearPausedUntil: pausedUntil == null,
     isLoading: isLoading,
   );
 

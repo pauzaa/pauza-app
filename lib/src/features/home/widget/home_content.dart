@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:pauza/src/core/common/extensions.dart';
 import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
@@ -85,7 +86,7 @@ class HomeContent extends StatelessWidget {
                               };
 
                           return Text(
-                            _formatTimer(duration),
+                            duration.formatTimerHhMmSs(),
                             textAlign: TextAlign.center,
                             style: context.textTheme.displayLarge?.copyWith(
                               color: context.colorScheme.onSurface,
@@ -109,62 +110,75 @@ class HomeContent extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: PauzaSpacing.extraLarge),
-                      Text(
-                        l10n.homeQuickPauseLabel.toUpperCase(),
-                        textAlign: TextAlign.center,
-                        style: context.textTheme.titleMedium?.copyWith(
-                          color: context.colorScheme.onSurfaceVariant,
-                          letterSpacing: 3,
+                      if (blockingState.isPaused) ...<Widget>[
+                        FilledButton(
+                          onPressed: isBusy
+                              ? null
+                              : () {
+                                  context.read<BlockingBloc>().add(
+                                    const BlockingResumeRequested(),
+                                  );
+                                },
+                          child: Text(l10n.homeResumeButtonLabel.toUpperCase()),
                         ),
-                      ),
-                      const SizedBox(height: PauzaSpacing.medium),
-                      Row(
-                        spacing: PauzaSpacing.medium,
-                        children: <Widget>[
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: isBusy
-                                  ? null
-                                  : () {
-                                      context.read<BlockingBloc>().add(
-                                        const BlockingQuickPauseRequested(
-                                          Duration(minutes: 1),
-                                        ),
-                                      );
-                                    },
-                              child: const Text('1m'),
-                            ),
+                      ] else ...<Widget>[
+                        Text(
+                          l10n.homeQuickPauseLabel.toUpperCase(),
+                          textAlign: TextAlign.center,
+                          style: context.textTheme.titleMedium?.copyWith(
+                            color: context.colorScheme.onSurfaceVariant,
+                            letterSpacing: 3,
                           ),
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: isBusy
-                                  ? null
-                                  : () {
-                                      context.read<BlockingBloc>().add(
-                                        const BlockingQuickPauseRequested(
-                                          Duration(minutes: 5),
-                                        ),
-                                      );
-                                    },
-                              child: const Text('5m'),
+                        ),
+                        const SizedBox(height: PauzaSpacing.medium),
+                        Row(
+                          spacing: PauzaSpacing.medium,
+                          children: <Widget>[
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: isBusy
+                                    ? null
+                                    : () {
+                                        context.read<BlockingBloc>().add(
+                                          const BlockingQuickPauseRequested(
+                                            Duration(minutes: 1),
+                                          ),
+                                        );
+                                      },
+                                child: const Text('1m'),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: isBusy
-                                  ? null
-                                  : () {
-                                      context.read<BlockingBloc>().add(
-                                        const BlockingQuickPauseRequested(
-                                          Duration(minutes: 10),
-                                        ),
-                                      );
-                                    },
-                              child: const Text('10m'),
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: isBusy
+                                    ? null
+                                    : () {
+                                        context.read<BlockingBloc>().add(
+                                          const BlockingQuickPauseRequested(
+                                            Duration(minutes: 5),
+                                          ),
+                                        );
+                                      },
+                                child: const Text('5m'),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: isBusy
+                                    ? null
+                                    : () {
+                                        context.read<BlockingBloc>().add(
+                                          const BlockingQuickPauseRequested(
+                                            Duration(minutes: 10),
+                                          ),
+                                        );
+                                      },
+                                child: const Text('10m'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ] else ...<Widget>[
                       const SizedBox(height: PauzaSpacing.large),
                       const Center(child: HomeStatsPill(metrics: metrics)),
@@ -245,12 +259,5 @@ class HomeContent extends StatelessWidget {
     }
 
     return modesState.items.firstOrNull;
-  }
-
-  String _formatTimer(Duration duration) {
-    final hours = duration.inHours.toString().padLeft(2, '0');
-    final minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-    final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
-    return '$hours:$minutes:$seconds';
   }
 }

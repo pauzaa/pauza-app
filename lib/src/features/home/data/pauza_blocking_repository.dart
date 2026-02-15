@@ -14,6 +14,8 @@ abstract interface class BlockingRepository {
 
   Future<void> pauseBlocking(Duration duration);
 
+  Future<void> resumeBlocking();
+
   Future<void> syncRestrictionLifecycleEvents();
 }
 
@@ -52,6 +54,12 @@ class PauzaBlockingRepository implements BlockingRepository {
   @override
   Future<void> pauseBlocking(Duration duration) async {
     await _restrictions.pauseEnforcement(duration);
+    await syncRestrictionLifecycleEvents();
+  }
+
+  @override
+  Future<void> resumeBlocking() async {
+    await _restrictions.resumeEnforcement();
     await syncRestrictionLifecycleEvents();
   }
 

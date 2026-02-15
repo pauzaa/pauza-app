@@ -318,6 +318,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homePauzaSessionLabel => 'Pauza Session';
 
   @override
+  String get homeSessionDurationLabel => 'Session Duration';
+
+  @override
+  String get homeQuickPauseLabel => 'Quick Pause';
+
+  @override
   String get homeCurrentModeLabel => 'Current mode';
 
   @override

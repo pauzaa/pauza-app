@@ -339,6 +339,8 @@
   },
   "homeDashboardTitle": "Pauza Dashboard",
   "homePauzaSessionLabel": "Pauza Session",
+  "homeSessionDurationLabel": "Session Duration",
+  "homeQuickPauseLabel": "Quick Pause",
   "homeCurrentModeLabel": "Current mode",
   "homeDayStreakLabel": "{count} Day Streak",
   "@homeDayStreakLabel": {

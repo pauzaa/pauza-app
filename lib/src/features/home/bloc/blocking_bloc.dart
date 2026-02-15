@@ -15,6 +15,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     on<BlockingSyncRequested>(_onSyncRequested);
     on<BlockingStartRequested>(_onStartRequested);
     on<BlockingStopRequested>(_onStopRequested);
+    on<BlockingQuickPauseRequested>(_onQuickPauseRequested);
   }
 
   final BlockingRepository _blockingRepository;
@@ -25,15 +26,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
   ) async {
     try {
       await _blockingRepository.syncRestrictionLifecycleEvents();
-      final restrictionSession = await _blockingRepository
-          .getRestrictionSession();
-
-      if (restrictionSession.activeMode?.modeId case final activeModeId?) {
-        emit(state.setActiveModeId(activeModeId, isLoading: false));
-        return;
-      } else {
-        emit(state.clearActiveModeId(isLoading: false));
-      }
+      await _syncSessionState(emit: emit);
     } catch (error) {
       emit(state.setError(error));
     }
@@ -57,8 +50,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
       );
 
       await _blockingRepository.startBlocking(mode: event.mode, shield: shield);
-
-      emit(state.setActiveModeId(event.mode.id, isLoading: false));
+      await _syncSessionState(emit: emit);
     } catch (error) {
       emit(state.setError(error));
     }
@@ -77,5 +69,37 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     } catch (error) {
       emit(state.setError(error));
     }
+  }
+
+  Future<void> _onQuickPauseRequested(
+    BlockingQuickPauseRequested event,
+    Emitter<BlockingState> emit,
+  ) async {
+    try {
+      emit(state.loading());
+      await _blockingRepository.pauseBlocking(event.duration);
+      await _syncSessionState(emit: emit);
+    } catch (error) {
+      emit(state.setError(error));
+    }
+  }
+
+  Future<void> _syncSessionState({required Emitter<BlockingState> emit}) async {
+    final restrictionSession = await _blockingRepository
+        .getRestrictionSession();
+    final activeModeId = restrictionSession.activeMode?.modeId;
+    if (activeModeId == null) {
+      emit(state.clearActiveModeId(isLoading: false));
+      return;
+    }
+
+    emit(
+      state.setSessionState(
+        modeId: activeModeId,
+        sessionStartedAt: restrictionSession.startedAt,
+        pausedUntil: restrictionSession.pausedUntil,
+        isLoading: false,
+      ),
+    );
   }
 }

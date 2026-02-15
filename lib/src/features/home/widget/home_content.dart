@@ -31,9 +31,13 @@ class HomeContent extends StatelessWidget {
           builder: (context, modesState) {
             return BlocBuilder<BlockingBloc, BlockingState>(
               builder: (context, blockingState) {
-                final effectiveMode = resolve(modesState: modesState, blockingState: blockingState);
+                final effectiveMode = resolve(
+                  modesState: modesState,
+                  blockingState: blockingState,
+                );
 
                 final isBusy = modesState.isLoading || blockingState.isLoading;
+                final isActiveSession = blockingState.isBlocking;
 
                 return ListView(
                   physics: const BouncingScrollPhysics(),
@@ -44,30 +48,145 @@ class HomeContent extends StatelessWidget {
                   ),
                   children: <Widget>[
                     PauzaDashboardAppBar(
-                      greeting: l10n.homeGreeting(DateTime.now().hour.toString()),
+                      greeting: l10n.homeGreeting(
+                        DateTime.now().hour.toString(),
+                      ),
                       title: l10n.homeDashboardTitle,
                       showSettingsButton: false,
                       padding: EdgeInsets.zero,
                     ),
-                    const SizedBox(height: PauzaSpacing.large),
-                    const Center(child: HomeStatsPill(metrics: metrics)),
-                    const SizedBox(height: PauzaSpacing.extraLarge),
-                    HomeStartSessionButton(
-                      onTap: isBusy
-                          ? null
-                          : () {
-                              _onStartPressed(
-                                context: context,
-                                mode: effectiveMode,
-                                isBlocking: blockingState.isBlocking,
-                              );
-                            },
-                    ),
-                    const SizedBox(height: PauzaSpacing.extraLarge),
-                    HomeCurrentModeCard(
-                      effectiveMode,
-                      onTap: () => _onCurrentModePressed(context, modesState.items),
-                    ),
+                    if (isActiveSession) ...<Widget>[
+                      const SizedBox(height: PauzaSpacing.extraLarge),
+                      Text(
+                        l10n.homeSessionDurationLabel.toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: context.textTheme.titleLarge?.copyWith(
+                          letterSpacing: 4,
+                          color: context.colorScheme.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: PauzaSpacing.medium),
+                      StreamBuilder<DateTime>(
+                        stream: Stream<DateTime>.periodic(
+                          const Duration(seconds: 1),
+                          (_) => DateTime.now(),
+                        ),
+                        initialData: DateTime.now(),
+                        builder: (context, snapshot) {
+                          final now = snapshot.data ?? DateTime.now();
+                          final duration =
+                              switch (blockingState.sessionStartedAt) {
+                                final startedAt? =>
+                                  now.isAfter(startedAt)
+                                      ? now.difference(startedAt)
+                                      : Duration.zero,
+                                null => Duration.zero,
+                              };
+
+                          return Text(
+                            _formatTimer(duration),
+                            textAlign: TextAlign.center,
+                            style: context.textTheme.displayLarge?.copyWith(
+                              color: context.colorScheme.onSurface,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 2,
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: PauzaSpacing.extraLarge),
+                      Center(
+                        child: HomeStartSessionButton(
+                          isActiveSession: true,
+                          onTap: isBusy
+                              ? null
+                              : () {
+                                  context.read<BlockingBloc>().add(
+                                    const BlockingStopRequested(),
+                                  );
+                                },
+                        ),
+                      ),
+                      const SizedBox(height: PauzaSpacing.extraLarge),
+                      Text(
+                        l10n.homeQuickPauseLabel.toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: context.textTheme.titleMedium?.copyWith(
+                          color: context.colorScheme.onSurfaceVariant,
+                          letterSpacing: 3,
+                        ),
+                      ),
+                      const SizedBox(height: PauzaSpacing.medium),
+                      Row(
+                        spacing: PauzaSpacing.medium,
+                        children: <Widget>[
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: isBusy
+                                  ? null
+                                  : () {
+                                      context.read<BlockingBloc>().add(
+                                        const BlockingQuickPauseRequested(
+                                          Duration(minutes: 1),
+                                        ),
+                                      );
+                                    },
+                              child: const Text('1m'),
+                            ),
+                          ),
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: isBusy
+                                  ? null
+                                  : () {
+                                      context.read<BlockingBloc>().add(
+                                        const BlockingQuickPauseRequested(
+                                          Duration(minutes: 5),
+                                        ),
+                                      );
+                                    },
+                              child: const Text('5m'),
+                            ),
+                          ),
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: isBusy
+                                  ? null
+                                  : () {
+                                      context.read<BlockingBloc>().add(
+                                        const BlockingQuickPauseRequested(
+                                          Duration(minutes: 10),
+                                        ),
+                                      );
+                                    },
+                              child: const Text('10m'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ] else ...<Widget>[
+                      const SizedBox(height: PauzaSpacing.large),
+                      const Center(child: HomeStatsPill(metrics: metrics)),
+                      const SizedBox(height: PauzaSpacing.extraLarge),
+                      HomeStartSessionButton(
+                        onTap: isBusy
+                            ? null
+                            : () {
+                                _onStartPressed(
+                                  context: context,
+                                  mode: effectiveMode,
+                                  isBlocking: blockingState.isBlocking,
+                                );
+                              },
+                      ),
+                      const SizedBox(height: PauzaSpacing.extraLarge),
+                      HomeCurrentModeCard(
+                        effectiveMode,
+                        onTap: () =>
+                            _onCurrentModePressed(context, modesState.items),
+                      ),
+                    ],
                   ],
                 );
               },
@@ -78,13 +197,18 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  Future<void> _onCurrentModePressed(BuildContext context, List<Mode> modes) async {
+  Future<void> _onCurrentModePressed(
+    BuildContext context,
+    List<Mode> modes,
+  ) async {
     final selectedMode = await ModePickerSheet.show(context, modes: modes);
     if (selectedMode == null || !context.mounted) {
       return;
     }
 
-    context.read<ModesListBloc>().add(ModesSelectionRequested(modeId: selectedMode.id));
+    context.read<ModesListBloc>().add(
+      ModesSelectionRequested(modeId: selectedMode.id),
+    );
   }
 
   void _onStartPressed({
@@ -104,7 +228,10 @@ class HomeContent extends StatelessWidget {
     context.read<BlockingBloc>().add(BlockingStartRequested(mode));
   }
 
-  Mode? resolve({required ModesListState modesState, required BlockingState blockingState}) {
+  Mode? resolve({
+    required ModesListState modesState,
+    required BlockingState blockingState,
+  }) {
     if (modesState.selectedMode case final selected?) {
       return selected;
     }
@@ -118,5 +245,12 @@ class HomeContent extends StatelessWidget {
     }
 
     return modesState.items.firstOrNull;
+  }
+
+  String _formatTimer(Duration duration) {
+    final hours = duration.inHours.toString().padLeft(2, '0');
+    final minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+    return '$hours:$minutes:$seconds';
   }
 }

@@ -42,6 +42,38 @@ CREATE TABLE schedules (
   UNIQUE (mode_id)
 );
 ''';
+
+  static const String createRestrictionLifecycleEventsTable = '''
+CREATE TABLE restriction_lifecycle_events (
+  id TEXT PRIMARY KEY NOT NULL,
+  session_id TEXT NOT NULL,
+  mode_id TEXT NOT NULL,
+  action TEXT NOT NULL CHECK (action IN ('START', 'PAUSE', 'RESUME', 'END')),
+  source TEXT NOT NULL CHECK (source IN ('manual', 'schedule')),
+  reason TEXT NOT NULL,
+  occurred_at INTEGER NOT NULL,
+  created_at INTEGER NOT NULL
+);
+''';
+
+  static const String createRestrictionSessionsTable = '''
+CREATE TABLE restriction_sessions (
+  session_id TEXT PRIMARY KEY NOT NULL,
+  mode_id TEXT NOT NULL,
+  source TEXT NOT NULL CHECK (source IN ('manual', 'schedule')),
+  started_at INTEGER NOT NULL,
+  ended_at INTEGER,
+  pause_count INTEGER NOT NULL DEFAULT 0,
+  total_paused_ms INTEGER NOT NULL DEFAULT 0,
+  last_paused_at INTEGER,
+  integrity_status TEXT NOT NULL DEFAULT 'ok'
+    CHECK (integrity_status IN ('ok', 'anomaly')),
+  last_anomaly_reason TEXT,
+  last_event_id TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+''';
 }
 
 final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
@@ -56,6 +88,8 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
     batch.execute(LocalDatabaseSqlStatements.createModesTable);
     batch.execute(LocalDatabaseSqlStatements.createModeBlockedAppsTable);
     batch.execute(LocalDatabaseSqlStatements.createSchedulesTable);
+    batch.execute(LocalDatabaseSqlStatements.createRestrictionLifecycleEventsTable);
+    batch.execute(LocalDatabaseSqlStatements.createRestrictionSessionsTable);
     await batch.commit(noResult: true);
   }
 

@@ -4,6 +4,7 @@ import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
 
 class RootScope extends StatefulWidget {
   const RootScope({required this.child, super.key});
@@ -21,11 +22,13 @@ class RootScopeState extends State<RootScope> {
   late final BlockingRepository blockingRepository;
   late final ModesRepository modesRepository;
   late final InstalledAppsRepository installedAppsRepository;
+  late final RestrictionLifecycleSyncCoordinator restrictionLifecycleSyncCoordinator;
 
   @override
   void initState() {
     blockingRepository = PauzaBlockingRepository(
       restrictions: PauzaDependencies.of(context).appRestrictionManager,
+      restrictionLifecycleRepository: PauzaDependencies.of(context).restrictionLifecycleRepository,
     );
 
     modesRepository = ModesRepositoryImpl(
@@ -37,11 +40,17 @@ class RootScopeState extends State<RootScope> {
       installedAppsManager: PauzaDependencies.of(context).installedAppsManager,
     );
 
+    restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
+      repository: PauzaDependencies.of(context).restrictionLifecycleRepository,
+    );
+    restrictionLifecycleSyncCoordinator.attach();
+
     super.initState();
   }
 
   @override
   void dispose() {
+    restrictionLifecycleSyncCoordinator.detach();
     super.dispose();
   }
 

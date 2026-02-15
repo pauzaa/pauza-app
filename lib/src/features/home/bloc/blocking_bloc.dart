@@ -19,11 +19,16 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
 
   final BlockingRepository _blockingRepository;
 
-  Future<void> _onSyncRequested(BlockingSyncRequested event, Emitter<BlockingState> emit) async {
+  Future<void> _onSyncRequested(
+    BlockingSyncRequested event,
+    Emitter<BlockingState> emit,
+  ) async {
     try {
-      final restrictionSession = await _blockingRepository.getRestrictionSession();
+      await _blockingRepository.syncRestrictionLifecycleEvents();
+      final restrictionSession = await _blockingRepository
+          .getRestrictionSession();
 
-      if (restrictionSession.activeMode?.modeId  case final activeModeId?) {
+      if (restrictionSession.activeMode?.modeId case final activeModeId?) {
         emit(state.setActiveModeId(activeModeId, isLoading: false));
         return;
       } else {
@@ -34,7 +39,10 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     }
   }
 
-  Future<void> _onStartRequested(BlockingStartRequested event, Emitter<BlockingState> emit) async {
+  Future<void> _onStartRequested(
+    BlockingStartRequested event,
+    Emitter<BlockingState> emit,
+  ) async {
     try {
       emit(state.loading());
 
@@ -56,7 +64,10 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     }
   }
 
-  Future<void> _onStopRequested(BlockingStopRequested event, Emitter<BlockingState> emit) async {
+  Future<void> _onStopRequested(
+    BlockingStopRequested event,
+    Emitter<BlockingState> emit,
+  ) async {
     try {
       emit(state.loading());
 

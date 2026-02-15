@@ -30,48 +30,24 @@ class AndroidAppsBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => InstalledAppsBloc(
-        installedAppsRepository: RootScope.of(context).installedAppsRepository,
-      )..add(const InstalledAppsRequested(includeSystemApps: true)),
-      child: _AndroidAppsBottomSheetContent(initialSelectedAppIds),
+      create: (_) =>
+          InstalledAppsBloc(
+            installedAppsRepository: RootScope.of(
+              context,
+            ).installedAppsRepository,
+          )..add(
+            InstalledAppsRequested(
+              includeSystemApps: true,
+              initialSelectedAppIds: initialSelectedAppIds,
+            ),
+          ),
+      child: const AndroidAppsBottomSheetContent(),
     );
   }
 }
 
-class _AndroidAppsBottomSheetContent extends StatefulWidget {
-  const _AndroidAppsBottomSheetContent(this.initialSelectedAppIds);
-  final Set<AppIdentifier> initialSelectedAppIds;
-
-  @override
-  State<_AndroidAppsBottomSheetContent> createState() =>
-      _AndroidAppsBottomSheetContentState();
-}
-
-class _AndroidAppsBottomSheetContentState
-    extends State<_AndroidAppsBottomSheetContent> {
-  late final Set<AppIdentifier> _selectedAppIds = Set<AppIdentifier>.from(
-    widget.initialSelectedAppIds,
-  );
-
-  void toggle(AppIdentifier appId) {
-    setState(() {
-      if (_selectedAppIds.contains(appId)) {
-        _selectedAppIds.remove(appId);
-      } else {
-        _selectedAppIds.add(appId);
-      }
-    });
-  }
-
-  void onSearchChanged(String searchQuery) {
-    context.read<InstalledAppsBloc>().add(
-      InitialAppsSearched(searchQuery: searchQuery),
-    );
-  }
-
-  void onDonePressed() {
-    Navigator.of(context).pop(_selectedAppIds);
-  }
+class AndroidAppsBottomSheetContent extends StatelessWidget {
+  const AndroidAppsBottomSheetContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,14 +61,39 @@ class _AndroidAppsBottomSheetContentState
           return Center(child: Text(context.l10n.modeAppsLoadFailedMessage));
         }
 
-        final groupedApps = state.groupedApps;
-
         return BottomSheetScaffold(
-          title: Text(context.l10n.selectAppsTitle),
+          showDivider: false,
+          title: Row(
+            children: [
+              Expanded(child: Text(context.l10n.selectAppsForPauzaTitle)),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: context.colorScheme.primary.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: PauzaSpacing.medium,
+                    vertical: PauzaSpacing.small,
+                  ),
+                  child: Text(
+                    context.l10n.appsSelectedCountLabel(state.selectedCount),
+                    style: context.textTheme.titleMedium?.copyWith(
+                      color: context.colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           footer: PauzaFilledButton(
-            onPressed: onDonePressed,
-            title: Text(context.l10n.doneButton),
+            onPressed: () {
+              Navigator.of(context).pop(state.selectedAppIds.toSet());
+            },
+            title: Text(context.l10n.selectButton),
             width: double.infinity,
+            size: PauzaButtonSize.large,
+            radius: PauzaCornerRadius.full,
           ),
           body: Column(
             children: [
@@ -101,67 +102,191 @@ class _AndroidAppsBottomSheetContentState
                   horizontal: PauzaSpacing.medium,
                 ),
                 child: PauzaTextFormField(
-                  onChanged: onSearchChanged,
+                  onChanged: (query) {
+                    context.read<InstalledAppsBloc>().add(
+                      SearchQueryChanged(searchQuery: query),
+                    );
+                  },
                   decoration: PauzaInputDecoration(
                     prefixIcon: const Icon(Icons.search),
                     hintText: context.l10n.modeBlockedAppsSearchLabel,
                   ),
                 ),
               ),
+              const SizedBox(height: PauzaSpacing.medium),
+              SizedBox(
+                height: 52,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: PauzaSpacing.medium,
+                  ),
+                  children: [
+                    PauzaFilterChip(
+                      label: context.l10n.allAppsCategory,
+                      isSelected: state.selectedCategoryKey == null,
+                      onPressed: () {
+                        context.read<InstalledAppsBloc>().add(
+                          const CategoryFilterChanged(categoryKey: null),
+                        );
+                      },
+                    ),
+                    const SizedBox(width: PauzaSpacing.regular),
+                    ...state.availableCategoryKeys.map(
+                      (categoryKey) => Padding(
+                        padding: const EdgeInsets.only(
+                          right: PauzaSpacing.regular,
+                        ),
+                        child: PauzaFilterChip(
+                          label: _localizeCategoryName(context, categoryKey),
+                          isSelected: state.selectedCategoryKey == categoryKey,
+                          onPressed: () {
+                            context.read<InstalledAppsBloc>().add(
+                              CategoryFilterChanged(categoryKey: categoryKey),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: PauzaSpacing.regular),
               Expanded(
-                child: ListView.builder(
-                  itemCount: groupedApps.length,
-                  itemBuilder: (context, index) {
-                    final category = groupedApps.keys.elementAt(index);
-                    final apps = groupedApps.values.elementAt(index);
-                    final categoryName = category == 'Other'
-                        ? context.l10n.otherAppsCategory
-                        : category;
+                child: state.visibleGroupedApps.isEmpty
+                    ? Center(
+                        child: Text(
+                          context.l10n.emptyStateMessage,
+                          style: context.textTheme.bodyLarge?.copyWith(
+                            color: context.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: PauzaSpacing.medium,
+                          vertical: PauzaSpacing.small,
+                        ),
+                        itemCount: state.visibleGroupedApps.length,
+                        separatorBuilder: (_, separatorIndex) =>
+                            const SizedBox(height: PauzaSpacing.large),
+                        itemBuilder: (context, index) {
+                          final categoryKey = state.visibleGroupedApps.keys
+                              .elementAt(index);
+                          final categoryApps =
+                              state.visibleGroupedApps[categoryKey]!;
+                          final isCategoryFullySelected = state
+                              .isCategoryFullySelected(categoryKey);
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            PauzaSpacing.medium,
-                            PauzaSpacing.regular,
-                            PauzaSpacing.medium,
-                            PauzaSpacing.small,
-                          ),
-                          child: Text(
-                            categoryName,
-                            style: context.textTheme.titleMedium?.copyWith(
-                              color: context.colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        ...apps.map(
-                          (app) => ListTile(
-                            leading: app.icon != null
-                                ? Image.memory(app.icon!, width: 40, height: 40)
-                                : const Icon(Icons.android),
-                            title: Text(app.name),
-                            trailing: PauzaCheckbox(
-                              value: _selectedAppIds.contains(app.packageId),
-                              onChanged: (_) => toggle(app.packageId),
-                            ),
-                            onTap: () => toggle(app.packageId),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: PauzaSpacing.medium,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      _localizeCategoryName(
+                                        context,
+                                        categoryKey,
+                                      ).toUpperCase(),
+                                      style: context.textTheme.titleMedium
+                                          ?.copyWith(
+                                            color: context
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 1.8,
+                                          ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      context.read<InstalledAppsBloc>().add(
+                                        CategorySelectionToggled(
+                                          categoryKey: categoryKey,
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      isCategoryFullySelected
+                                          ? context.l10n.deselectAllButton
+                                          : context.l10n.selectAllButton,
+                                      style: context.textTheme.titleMedium
+                                          ?.copyWith(
+                                            color: context.colorScheme.primary,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: PauzaSpacing.regular),
+                              ...categoryApps.map(
+                                (app) => Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: PauzaSpacing.medium,
+                                  ),
+                                  child: PauzaAppSelectionTile(
+                                    onTap: () {
+                                      context.read<InstalledAppsBloc>().add(
+                                        AppSelectionToggled(
+                                          appId: app.packageId,
+                                        ),
+                                      );
+                                    },
+                                    leading: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                        PauzaCornerRadius.medium,
+                                      ),
+                                      child: SizedBox(
+                                        width: 52,
+                                        height: 52,
+                                        child: app.icon != null
+                                            ? Image.memory(
+                                                app.icon!,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : DecoratedBox(
+                                                decoration: BoxDecoration(
+                                                  color: context
+                                                      .colorScheme
+                                                      .surfaceContainer,
+                                                ),
+                                                child: Icon(
+                                                  Icons.android,
+                                                  color: context
+                                                      .colorScheme
+                                                      .onSurfaceVariant,
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                    title: app.name,
+                                    trailing: PauzaSelectionIndicator(
+                                      isSelected: state.isAppSelected(
+                                        app.packageId,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
               ),
             ],
           ),
         );
       },
     );
+  }
+
+  String _localizeCategoryName(BuildContext context, String categoryKey) {
+    if (categoryKey == 'Other') {
+      return context.l10n.otherAppsCategory;
+    }
+
+    return categoryKey;
   }
 }

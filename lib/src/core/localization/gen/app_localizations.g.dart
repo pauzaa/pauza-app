@@ -623,11 +623,47 @@ abstract class AppLocalizations {
   /// **'Select apps'**
   String get selectAppsTitle;
 
+  /// Title for the redesigned Android app selection sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Apps for Pauza'**
+  String get selectAppsForPauzaTitle;
+
   /// Label for the done button.
   ///
   /// In en, this message translates to:
   /// **'Done'**
   String get doneButton;
+
+  /// Label for selecting apps and closing the bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get selectButton;
+
+  /// Badge label showing how many apps are selected.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String appsSelectedCountLabel(int count);
+
+  /// Filter chip label that shows all app categories.
+  ///
+  /// In en, this message translates to:
+  /// **'All Apps'**
+  String get allAppsCategory;
+
+  /// Action to select every app in a category.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get selectAllButton;
+
+  /// Action to deselect every app in a category.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect all'**
+  String get deselectAllButton;
 
   /// Category label for apps with unknown category.
   ///

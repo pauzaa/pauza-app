@@ -312,10 +312,30 @@ class AppLocalizationsUz extends AppLocalizations {
   String get selectAppsTitle => 'Select apps';
 
   @override
+  String get selectAppsForPauzaTitle => 'Pauza uchun ilovalarni tanlang';
+
+  @override
   String get doneButton => 'Done';
 
   @override
-  String get otherAppsCategory => 'Other';
+  String get selectButton => 'Tanlash';
+
+  @override
+  String appsSelectedCountLabel(int count) {
+    return '$count ta tanlandi';
+  }
+
+  @override
+  String get allAppsCategory => 'Barcha ilovalar';
+
+  @override
+  String get selectAllButton => 'Barchasini tanlash';
+
+  @override
+  String get deselectAllButton => 'Tanlovni bekor qilish';
+
+  @override
+  String get otherAppsCategory => 'Boshqa';
 
   @override
   String homeGreeting(String hour) {
@@ -681,6 +701,29 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get saveButton => 'Сақлаш';
+
+  @override
+  String get selectAppsForPauzaTitle => 'Pauza учун иловаларни танланг';
+
+  @override
+  String get selectButton => 'Танлаш';
+
+  @override
+  String appsSelectedCountLabel(int count) {
+    return '$count та танланди';
+  }
+
+  @override
+  String get allAppsCategory => 'Барча иловалар';
+
+  @override
+  String get selectAllButton => 'Барчасини танлаш';
+
+  @override
+  String get deselectAllButton => 'Танловни бекор қилиш';
+
+  @override
+  String get otherAppsCategory => 'Бошқа';
 
   @override
   String homeGreeting(String hour) {

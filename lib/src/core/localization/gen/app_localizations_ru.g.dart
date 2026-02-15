@@ -312,10 +312,30 @@ class AppLocalizationsRu extends AppLocalizations {
   String get selectAppsTitle => 'Select apps';
 
   @override
+  String get selectAppsForPauzaTitle => 'Выберите приложения для Pauza';
+
+  @override
   String get doneButton => 'Done';
 
   @override
-  String get otherAppsCategory => 'Other';
+  String get selectButton => 'Выбрать';
+
+  @override
+  String appsSelectedCountLabel(int count) {
+    return '$count выбрано';
+  }
+
+  @override
+  String get allAppsCategory => 'Все приложения';
+
+  @override
+  String get selectAllButton => 'Выбрать все';
+
+  @override
+  String get deselectAllButton => 'Снять выбор';
+
+  @override
+  String get otherAppsCategory => 'Другое';
 
   @override
   String homeGreeting(String hour) {

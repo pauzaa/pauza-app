@@ -23,3 +23,12 @@ final class BlockingStartRequested extends BlockingEvent {
 final class BlockingStopRequested extends BlockingEvent {
   const BlockingStopRequested();
 }
+
+final class BlockingQuickPauseRequested extends BlockingEvent {
+  const BlockingQuickPauseRequested(this.duration);
+
+  final Duration duration;
+
+  @override
+  List<Object?> get props => <Object?>[duration];
+}

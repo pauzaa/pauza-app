@@ -581,6 +581,18 @@ abstract class AppLocalizations {
   /// **'Pauza Session'**
   String get homePauzaSessionLabel;
 
+  /// No description provided for @homeSessionDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Session Duration'**
+  String get homeSessionDurationLabel;
+
+  /// No description provided for @homeQuickPauseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Pause'**
+  String get homeQuickPauseLabel;
+
   /// No description provided for @homeCurrentModeLabel.
   ///
   /// In en, this message translates to:

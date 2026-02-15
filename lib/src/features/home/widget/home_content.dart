@@ -198,7 +198,11 @@ class HomeContent extends StatelessWidget {
                       HomeCurrentModeCard(
                         effectiveMode,
                         onTap: () =>
-                            _onCurrentModePressed(context, modesState.items),
+                            _onCurrentModePressed(
+                              context,
+                              modesState.items,
+                              effectiveMode,
+                            ),
                       ),
                     ],
                   ],
@@ -214,14 +218,19 @@ class HomeContent extends StatelessWidget {
   Future<void> _onCurrentModePressed(
     BuildContext context,
     List<Mode> modes,
+    Mode? selectedMode,
   ) async {
-    final selectedMode = await ModePickerSheet.show(context, modes: modes);
-    if (selectedMode == null || !context.mounted) {
+    final pickedMode = await ModePickerSheet.show(
+      context,
+      modes: modes,
+      activeModeId: selectedMode?.id,
+    );
+    if (pickedMode == null || !context.mounted) {
       return;
     }
 
     context.read<ModesListBloc>().add(
-      ModesSelectionRequested(modeId: selectedMode.id),
+      ModesSelectionRequested(modeId: pickedMode.id),
     );
   }
 

@@ -10,62 +10,117 @@ import 'package:pauza/src/features/modes/list/widget/mode_list_item.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class ModePickerSheet extends StatelessWidget {
-  const ModePickerSheet({required this.modes, super.key});
+  const ModePickerSheet({required this.modes, this.activeModeId, super.key});
 
   final List<Mode> modes;
+  final String? activeModeId;
 
-  static Future<Mode?> show(BuildContext context, {required List<Mode> modes}) {
+  static Future<Mode?> show(
+    BuildContext context, {
+    required List<Mode> modes,
+    String? activeModeId,
+  }) {
     return showModalBottomSheet<Mode>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (context) => ModePickerSheet(modes: modes),
+      backgroundColor: Colors.transparent,
+      builder: (context) =>
+          ModePickerSheet(modes: modes, activeModeId: activeModeId),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(PauzaSpacing.medium),
-          child: Text(
-            l10n.selectModeTitle,
-            style: Theme.of(context).textTheme.titleLarge,
+    final colorScheme = context.colorScheme;
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.9,
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(PauzaCornerRadius.large),
           ),
         ),
-        if (modes.isEmpty)
-          Padding(
-            padding: const EdgeInsets.all(PauzaSpacing.large),
-            child: Center(
-              child: Text(
-                l10n.noModesEmptyState,
-                style: Theme.of(context).textTheme.bodyLarge,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: PauzaSpacing.regular),
+            Center(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
+                ),
+                child: const SizedBox(width: 54, height: 5),
               ),
             ),
-          )
-        else
-          Flexible(
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: modes.length,
-              separatorBuilder: (context, index) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final mode = modes[index];
-                return ModeListItem(
-                  mode: mode,
-                  onTap: () => _onModeTap(context, mode),
-                  onEdit: () => _onEditMode(context, mode),
-                  onDelete: () => _onDeleteMode(context, mode),
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                PauzaSpacing.medium,
+                PauzaSpacing.medium,
+                PauzaSpacing.small,
+                PauzaSpacing.medium,
+              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      l10n.selectModeTitle,
+                      style: context.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
             ),
-          ),
-        AddModeButton(onPressed: () => _onAddNewMode(context)),
-      ],
+            if (modes.isEmpty)
+              Padding(
+                padding: const EdgeInsets.all(PauzaSpacing.large),
+                child: Center(
+                  child: Text(
+                    l10n.noModesEmptyState,
+                    style: context.textTheme.bodyLarge,
+                  ),
+                ),
+              )
+            else
+              Flexible(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: PauzaSpacing.medium,
+                  ),
+                  itemCount: modes.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: PauzaSpacing.regular),
+                  itemBuilder: (context, index) {
+                    final mode = modes[index];
+                    return ModeListItem(
+                      mode: mode,
+                      isSelected: mode.id == activeModeId,
+                      onTap: () => _onModeTap(context, mode),
+                      onEdit: () => _onEditMode(context, mode),
+                      onDelete: () => _onDeleteMode(context, mode),
+                    );
+                  },
+                ),
+              ),
+            AddModeButton(onPressed: () => _onAddNewMode(context)),
+            const SizedBox(height: PauzaSpacing.large),
+          ],
+        ),
+      ),
     );
   }
 

@@ -131,6 +131,20 @@
   "modeDeleteFailedMessage": "Не удалось удалить режим",
   "modeAppsLoadFailedMessage": "Не удалось загрузить приложения",
   "saveButton": "Сохранить",
+  "selectAppsForPauzaTitle": "Выберите приложения для Pauza",
+  "selectButton": "Выбрать",
+  "appsSelectedCountLabel": "{count} выбрано",
+  "@appsSelectedCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allAppsCategory": "Все приложения",
+  "selectAllButton": "Выбрать все",
+  "deselectAllButton": "Снять выбор",
+  "otherAppsCategory": "Другое",
   "homeGreeting": "{hour, select, 0{Доброй ночи} 1{Доброй ночи} 2{Доброй ночи} 3{Доброй ночи} 4{Доброй ночи} 5{Доброе утро} 6{Доброе утро} 7{Доброе утро} 8{Доброе утро} 9{Доброе утро} 10{Доброе утро} 11{Доброе утро} 12{Добрый день} 13{Добрый день} 14{Добрый день} 15{Добрый день} 16{Добрый день} 17{Добрый вечер} 18{Добрый вечер} 19{Добрый вечер} 20{Добрый вечер} 21{Добрый вечер} 22{Доброй ночи} 23{Доброй ночи} other{Доброй ночи}}",
   "@homeGreeting": {
     "description": "Time-of-day greeting. Hour of day (0-23) in local time.",

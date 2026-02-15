@@ -312,7 +312,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectAppsTitle => 'Select apps';
 
   @override
+  String get selectAppsForPauzaTitle => 'Select Apps for Pauza';
+
+  @override
   String get doneButton => 'Done';
+
+  @override
+  String get selectButton => 'Select';
+
+  @override
+  String appsSelectedCountLabel(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String get allAppsCategory => 'All Apps';
+
+  @override
+  String get selectAllButton => 'Select all';
+
+  @override
+  String get deselectAllButton => 'Deselect all';
 
   @override
   String get otherAppsCategory => 'Other';

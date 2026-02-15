@@ -376,9 +376,38 @@
   "@selectAppsTitle": {
     "description": "Title for the app selection sheet."
   },
+  "selectAppsForPauzaTitle": "Select Apps for Pauza",
+  "@selectAppsForPauzaTitle": {
+    "description": "Title for the redesigned Android app selection sheet."
+  },
   "doneButton": "Done",
   "@doneButton": {
     "description": "Label for the done button."
+  },
+  "selectButton": "Select",
+  "@selectButton": {
+    "description": "Label for selecting apps and closing the bottom sheet."
+  },
+  "appsSelectedCountLabel": "{count} selected",
+  "@appsSelectedCountLabel": {
+    "description": "Badge label showing how many apps are selected.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allAppsCategory": "All Apps",
+  "@allAppsCategory": {
+    "description": "Filter chip label that shows all app categories."
+  },
+  "selectAllButton": "Select all",
+  "@selectAllButton": {
+    "description": "Action to select every app in a category."
+  },
+  "deselectAllButton": "Deselect all",
+  "@deselectAllButton": {
+    "description": "Action to deselect every app in a category."
   },
   "otherAppsCategory": "Other",
   "@otherAppsCategory": {

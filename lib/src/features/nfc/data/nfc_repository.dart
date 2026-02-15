@@ -10,7 +10,11 @@ import 'package:uuid/uuid.dart';
 abstract interface class NfcRepository {
   bool get isScanInProgress;
 
+  bool get canOpenSystemSettingsForNfc;
+
   Future<NfcChipAvailability> getAvailability();
+
+  Future<bool> openSystemSettingsForNfc();
 
   Future<NfcCardDto> scanSingleCard({
     Duration timeout = const Duration(seconds: 20),
@@ -31,6 +35,10 @@ final class NfcRepositoryImpl implements NfcRepository {
   bool get isScanInProgress => _managerClient.isSessionActive;
 
   @override
+  bool get canOpenSystemSettingsForNfc =>
+      _managerClient.canOpenSystemSettingsForNfc;
+
+  @override
   Future<NfcChipAvailability> getAvailability() async {
     try {
       final availability = await _managerClient.checkAvailability();
@@ -42,6 +50,11 @@ final class NfcRepositoryImpl implements NfcRepository {
     } on Object catch (error) {
       throw NfcException.fromError(error);
     }
+  }
+
+  @override
+  Future<bool> openSystemSettingsForNfc() async {
+    return _managerClient.openSystemSettingsForNfc();
   }
 
   @override
@@ -61,13 +74,6 @@ final class NfcRepositoryImpl implements NfcRepository {
       throw const NfcException(
         code: NfcErrorCode.disabled,
         message: 'NFC is disabled on this device.',
-      );
-    }
-
-    if (availability == NfcChipAvailability.unknown) {
-      throw const NfcException(
-        code: NfcErrorCode.unknown,
-        message: 'NFC availability is unknown.',
       );
     }
 

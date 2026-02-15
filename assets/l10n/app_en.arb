@@ -240,6 +240,42 @@
   "@permissionAllowAccessButton": {
     "description": "Button label to grant permission access."
   },
+  "nfcOpenSettingsButton": "Open settings",
+  "@nfcOpenSettingsButton": {
+    "description": "Button label to open NFC-related system settings."
+  },
+  "nfcGuidanceAvailableTitle": "NFC is ready",
+  "@nfcGuidanceAvailableTitle": {
+    "description": "Title shown when NFC is available."
+  },
+  "nfcGuidanceAvailableBody": "Your device is ready to scan NFC tags.",
+  "@nfcGuidanceAvailableBody": {
+    "description": "Body shown when NFC is available."
+  },
+  "nfcGuidanceDisabledTitle": "Turn on NFC",
+  "@nfcGuidanceDisabledTitle": {
+    "description": "Title shown when NFC is supported but disabled."
+  },
+  "nfcGuidanceDisabledBody": "NFC is turned off on this device. Enable it in system settings to continue.",
+  "@nfcGuidanceDisabledBody": {
+    "description": "Body shown when NFC is supported but disabled."
+  },
+  "nfcGuidanceNotSupportedTitle": "NFC is not supported",
+  "@nfcGuidanceNotSupportedTitle": {
+    "description": "Title shown when NFC is not supported on the current device."
+  },
+  "nfcGuidanceNotSupportedBody": "This device does not support NFC scanning.",
+  "@nfcGuidanceNotSupportedBody": {
+    "description": "Body shown when NFC is not supported on the current device."
+  },
+  "nfcGuidanceUnknownTitle": "NFC status unavailable",
+  "@nfcGuidanceUnknownTitle": {
+    "description": "Title shown when NFC status cannot be determined."
+  },
+  "nfcGuidanceUnknownBody": "We could not determine NFC availability right now. Try again in a moment.",
+  "@nfcGuidanceUnknownBody": {
+    "description": "Body shown when NFC status cannot be determined."
+  },
   "blockedAppsCountLabel": "Blocked apps: {count}",
   "@blockedAppsCountLabel": {
     "placeholders": {

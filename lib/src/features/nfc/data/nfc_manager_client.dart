@@ -10,6 +10,7 @@ import 'package:nfc_manager/nfc_manager_ios.dart';
 import 'package:pauza/src/features/nfc/model/nfc_errors.dart';
 import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_tag_tech.dart';
+import 'package:pauza/src/features/nfc/data/nfc_system_settings_launcher.dart';
 
 @immutable
 class NfcTagSnapshot {
@@ -158,8 +159,7 @@ class NfcTagSnapshot {
 
     final androidNdef = NdefAndroid.from(tag);
     if (androidNdef != null) {
-      message =
-          androidNdef.cachedNdefMessage ?? await androidNdef.getNdefMessage();
+      message = androidNdef.cachedNdefMessage ?? await androidNdef.getNdefMessage();
     }
 
     final iosNdef = NdefIos.from(tag);
@@ -171,9 +171,7 @@ class NfcTagSnapshot {
       return const <NfcNdefRecordDto>[];
     }
 
-    return message.records
-        .map((record) => _recordToDto(record))
-        .toList(growable: false);
+    return message.records.map((record) => _recordToDto(record)).toList(growable: false);
   }
 
   static bool _isNdefTag(NfcTag tag) {
@@ -215,9 +213,7 @@ class NfcTagSnapshot {
       final languageCodeLength = status & 0x3F;
       final utf16 = (status & 0x80) != 0;
 
-      final textBytes = raw
-          .skip(languageCodeLength + 1)
-          .toList(growable: false);
+      final textBytes = raw.skip(languageCodeLength + 1).toList(growable: false);
       if (textBytes.isEmpty) {
         return null;
       }
@@ -246,24 +242,43 @@ abstract interface class NfcOperations {
 
   bool get isSessionActive;
 
+  bool get canOpenSystemSettingsForNfc;
+
+  Future<bool> openSystemSettingsForNfc();
+
   Future<NfcTagSnapshot> scanSingleTag({required Duration timeout});
 
   Future<void> stopSession({String? alertMessage, String? errorMessage});
 }
 
 class NfcManagerClient implements NfcOperations {
-  NfcManagerClient._() : _manager = _tryGetDefaultManager();
+  NfcManagerClient._()
+    : _manager = _tryGetDefaultManager(),
+      _settingsLauncher = AndroidIntentNfcSystemSettingsLauncher();
 
   static final NfcManagerClient _instance = NfcManagerClient._();
 
   factory NfcManagerClient() => _instance;
 
   final NfcManager? _manager;
+  final NfcSystemSettingsLauncher _settingsLauncher;
 
   bool _isSessionActive = false;
 
   @override
   bool get isSessionActive => _isSessionActive;
+
+  @override
+  bool get canOpenSystemSettingsForNfc => _settingsLauncher.isSupported;
+
+  @override
+  Future<bool> openSystemSettingsForNfc() async {
+    if (!canOpenSystemSettingsForNfc) {
+      return false;
+    }
+
+    return _settingsLauncher.openNfcSettings();
+  }
 
   @override
   Future<NfcAvailability> checkAvailability() async {
@@ -347,10 +362,7 @@ class NfcManagerClient implements NfcOperations {
     }
 
     try {
-      await manager.stopSession(
-        alertMessageIos: alertMessage,
-        errorMessageIos: errorMessage,
-      );
+      await manager.stopSession(alertMessageIos: alertMessage, errorMessageIos: errorMessage);
     } on Object {
       // Ignore stop failures: session may already be closed or unavailable.
     }

@@ -443,6 +443,60 @@ abstract class AppLocalizations {
   /// **'Allow access'**
   String get permissionAllowAccessButton;
 
+  /// Button label to open NFC-related system settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get nfcOpenSettingsButton;
+
+  /// Title shown when NFC is available.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC is ready'**
+  String get nfcGuidanceAvailableTitle;
+
+  /// Body shown when NFC is available.
+  ///
+  /// In en, this message translates to:
+  /// **'Your device is ready to scan NFC tags.'**
+  String get nfcGuidanceAvailableBody;
+
+  /// Title shown when NFC is supported but disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on NFC'**
+  String get nfcGuidanceDisabledTitle;
+
+  /// Body shown when NFC is supported but disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC is turned off on this device. Enable it in system settings to continue.'**
+  String get nfcGuidanceDisabledBody;
+
+  /// Title shown when NFC is not supported on the current device.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC is not supported'**
+  String get nfcGuidanceNotSupportedTitle;
+
+  /// Body shown when NFC is not supported on the current device.
+  ///
+  /// In en, this message translates to:
+  /// **'This device does not support NFC scanning.'**
+  String get nfcGuidanceNotSupportedBody;
+
+  /// Title shown when NFC status cannot be determined.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC status unavailable'**
+  String get nfcGuidanceUnknownTitle;
+
+  /// Body shown when NFC status cannot be determined.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not determine NFC availability right now. Try again in a moment.'**
+  String get nfcGuidanceUnknownBody;
+
   /// No description provided for @blockedAppsCountLabel.
   ///
   /// In en, this message translates to:

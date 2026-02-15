@@ -33,7 +33,7 @@ class NfcCardDto {
       'ndefRecords': ndefRecords
           .map((record) => record.toJson())
           .toList(growable: false),
-      'rawSnapshot': rawSnapshot,
+      'rawSnapshot': rawSnapshot.unlock,
     };
   }
 

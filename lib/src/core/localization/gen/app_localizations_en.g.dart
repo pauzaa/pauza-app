@@ -216,6 +216,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permissionAllowAccessButton => 'Allow access';
 
   @override
+  String get nfcOpenSettingsButton => 'Open settings';
+
+  @override
+  String get nfcGuidanceAvailableTitle => 'NFC is ready';
+
+  @override
+  String get nfcGuidanceAvailableBody =>
+      'Your device is ready to scan NFC tags.';
+
+  @override
+  String get nfcGuidanceDisabledTitle => 'Turn on NFC';
+
+  @override
+  String get nfcGuidanceDisabledBody =>
+      'NFC is turned off on this device. Enable it in system settings to continue.';
+
+  @override
+  String get nfcGuidanceNotSupportedTitle => 'NFC is not supported';
+
+  @override
+  String get nfcGuidanceNotSupportedBody =>
+      'This device does not support NFC scanning.';
+
+  @override
+  String get nfcGuidanceUnknownTitle => 'NFC status unavailable';
+
+  @override
+  String get nfcGuidanceUnknownBody =>
+      'We could not determine NFC availability right now. Try again in a moment.';
+
+  @override
   String blockedAppsCountLabel(int count) {
     return 'Blocked apps: $count';
   }

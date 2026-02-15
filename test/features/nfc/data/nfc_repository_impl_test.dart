@@ -87,6 +87,26 @@ void main() {
 
       expect(repository.isScanInProgress, isTrue);
     });
+
+    test('forwards NFC system settings support', () async {
+      final managerClient = _FakeNfcManagerClient(
+        canOpenSystemSettingsForNfc: true,
+      );
+      final repository = NfcRepositoryImpl(managerClient: managerClient);
+
+      expect(repository.canOpenSystemSettingsForNfc, isTrue);
+    });
+
+    test('forwards opening NFC system settings', () async {
+      final managerClient = _FakeNfcManagerClient(
+        openSystemSettingsResult: true,
+      );
+      final repository = NfcRepositoryImpl(managerClient: managerClient);
+
+      final opened = await repository.openSystemSettingsForNfc();
+
+      expect(opened, isTrue);
+    });
   });
 }
 
@@ -96,6 +116,8 @@ final class _FakeNfcManagerClient implements NfcOperations {
     this.isSessionActive = false,
     this.scanResult,
     this.checkAvailabilityError,
+    this.canOpenSystemSettingsForNfc = false,
+    this.openSystemSettingsResult = false,
   });
 
   final NfcAvailability availability;
@@ -103,6 +125,9 @@ final class _FakeNfcManagerClient implements NfcOperations {
   bool isSessionActive;
   final NfcTagSnapshot? scanResult;
   final Object? checkAvailabilityError;
+  @override
+  final bool canOpenSystemSettingsForNfc;
+  final bool openSystemSettingsResult;
 
   @override
   Future<NfcAvailability> checkAvailability() async {
@@ -124,6 +149,9 @@ final class _FakeNfcManagerClient implements NfcOperations {
           rawSnapshot: IMap(const <String, Object?>{}),
         );
   }
+
+  @override
+  Future<bool> openSystemSettingsForNfc() async => openSystemSettingsResult;
 
   @override
   Future<void> stopSession({

@@ -5,9 +5,7 @@ import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
-import 'package:pauza/src/features/nfc/domain/nfc_capability_controller.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
-import 'package:pauza/src/features/nfc/widget/nfc_capability_scope.dart';
 
 class RootScope extends StatefulWidget {
   const RootScope({required this.child, super.key});
@@ -26,17 +24,13 @@ class RootScopeState extends State<RootScope> {
   late final ModesRepository modesRepository;
   late final InstalledAppsRepository installedAppsRepository;
   late final NfcRepository nfcRepository;
-  late final NfcCapabilityController nfcCapabilityController;
-  late final RestrictionLifecycleSyncCoordinator
-  restrictionLifecycleSyncCoordinator;
+  late final RestrictionLifecycleSyncCoordinator restrictionLifecycleSyncCoordinator;
 
   @override
   void initState() {
     blockingRepository = PauzaBlockingRepository(
       restrictions: PauzaDependencies.of(context).appRestrictionManager,
-      restrictionLifecycleRepository: PauzaDependencies.of(
-        context,
-      ).restrictionLifecycleRepository,
+      restrictionLifecycleRepository: PauzaDependencies.of(context).restrictionLifecycleRepository,
     );
 
     modesRepository = ModesRepositoryImpl(
@@ -49,9 +43,6 @@ class RootScopeState extends State<RootScope> {
     );
 
     nfcRepository = PauzaDependencies.of(context).nfcRepository;
-    nfcCapabilityController = NfcCapabilityController(
-      repository: nfcRepository,
-    );
 
     restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
       repository: PauzaDependencies.of(context).restrictionLifecycleRepository,
@@ -64,19 +55,12 @@ class RootScopeState extends State<RootScope> {
   @override
   void dispose() {
     restrictionLifecycleSyncCoordinator.detach();
-    nfcCapabilityController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedRootScope(
-      data: this,
-      child: NfcCapabilityScope(
-        controller: nfcCapabilityController,
-        child: widget.child,
-      ),
-    );
+    return _InheritedRootScope(data: this, child: widget.child);
   }
 }
 
@@ -88,10 +72,7 @@ class _InheritedRootScope extends InheritedWidget {
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
   /// For example: `SettingsScope.maybeOf(context)`.
-  static _InheritedRootScope? maybeOf(
-    BuildContext context, {
-    bool listen = true,
-  }) => listen
+  static _InheritedRootScope? maybeOf(BuildContext context, {bool listen = true}) => listen
       ? context.dependOnInheritedWidgetOfExactType<_InheritedRootScope>()
       : context.getInheritedWidgetOfExactType<_InheritedRootScope>();
 

@@ -198,6 +198,23 @@ test/
   - `always_declare_return_types`
   - `strict-inference: true`, `strict-raw-types: true`
 
+### Widget test stability (important)
+- **Avoid `pumpAndSettle()` with continuously animating widgets** (for example chart widgets, repeating animations, indeterminate progress indicators).
+- Why: `pumpAndSettle()` waits until there are no scheduled frames; ongoing animations keep scheduling frames forever, so tests hang.
+- Prefer bounded pumping for UI assertions:
+  - `await tester.pump();`
+  - `await tester.pump(const Duration(milliseconds: 200));`
+  - Add only the minimum extra pumps needed for the assertion.
+- For chart-heavy UIs, prefer disabling animation in test-only config when possible (for example, pass animation duration as `Duration.zero`).
+- **Do not `await bloc.close()` while the widget tree still listens to that bloc** (for example when provided via `BlocProvider` in the same test).
+- Why: active stream listeners in mounted widgets can keep cleanup from completing and cause stalls/timeouts.
+- Preferred cleanup patterns:
+  - Register cleanup immediately: `addTearDown(bloc.close);`
+  - If manual close is required in-test, unmount first:
+    - `await tester.pumpWidget(const SizedBox.shrink());`
+    - `await tester.pump();`
+    - `await bloc.close();`
+
 ### Git workflow
 - Never commit secrets or keys
 - Run linter and fix all issues before committing

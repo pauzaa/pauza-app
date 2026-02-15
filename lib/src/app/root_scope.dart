@@ -6,6 +6,7 @@ import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_inst
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
+import 'package:pauza/src/features/stats/data/stats_usage_repository.dart';
 
 class RootScope extends StatefulWidget {
   const RootScope({required this.child, super.key});
@@ -24,7 +25,9 @@ class RootScopeState extends State<RootScope> {
   late final ModesRepository modesRepository;
   late final InstalledAppsRepository installedAppsRepository;
   late final NfcRepository nfcRepository;
-  late final RestrictionLifecycleSyncCoordinator restrictionLifecycleSyncCoordinator;
+  late final StatsUsageRepository statsUsageRepository;
+  late final RestrictionLifecycleSyncCoordinator
+  restrictionLifecycleSyncCoordinator;
 
   @override
   void initState() {
@@ -39,6 +42,10 @@ class RootScopeState extends State<RootScope> {
     );
 
     installedAppsRepository = PauzaScreenTimeInstalledAppsRepository(
+      installedAppsManager: PauzaDependencies.of(context).installedAppsManager,
+    );
+    statsUsageRepository = StatsUsageRepositoryImpl(
+      usageStatsManager: PauzaDependencies.of(context).usageStatsManager,
       installedAppsManager: PauzaDependencies.of(context).installedAppsManager,
     );
 

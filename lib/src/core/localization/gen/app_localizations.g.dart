@@ -778,6 +778,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{hours}h {minutes}m'**
   String homeDurationHoursMinutesLabel(int hours, int minutes);
+
+  /// No description provided for @deviceUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'Device Usage'**
+  String get deviceUsage;
+
+  /// No description provided for @usageStatsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Stats'**
+  String get usageStatsTab;
+
+  /// No description provided for @blockingStatsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocking Stats'**
+  String get blockingStatsTab;
+
+  /// No description provided for @thisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This Week'**
+  String get thisWeek;
+
+  /// No description provided for @totalTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Time'**
+  String get totalTime;
+
+  /// No description provided for @usageTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Trend'**
+  String get usageTrend;
+
+  /// No description provided for @statsDailyAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Average'**
+  String get statsDailyAverage;
+
+  /// No description provided for @statsBucketSocial.
+  ///
+  /// In en, this message translates to:
+  /// **'Social'**
+  String get statsBucketSocial;
+
+  /// No description provided for @statsBucketProductivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Productivity'**
+  String get statsBucketProductivity;
+
+  /// No description provided for @statsBucketOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get statsBucketOther;
+
+  /// No description provided for @statsDeltaVsLastPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} vs last period'**
+  String statsDeltaVsLastPeriod(String value);
+
+  /// No description provided for @statsPermissionRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage permission required'**
+  String get statsPermissionRequiredTitle;
+
+  /// No description provided for @statsPermissionRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Usage Access to view Android usage statistics.'**
+  String get statsPermissionRequiredBody;
+
+  /// No description provided for @statsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load usage statistics.'**
+  String get statsLoadFailed;
+
+  /// No description provided for @statsNoUsageData.
+  ///
+  /// In en, this message translates to:
+  /// **'No usage data for the selected period.'**
+  String get statsNoUsageData;
+
+  /// No description provided for @statsIosReportUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'iOS report unavailable'**
+  String get statsIosReportUnavailableTitle;
+
+  /// No description provided for @statsIosReportUnavailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure Screen Time permission and Device Activity Report extension are configured.'**
+  String get statsIosReportUnavailableBody;
 }
 
 class _AppLocalizationsDelegate

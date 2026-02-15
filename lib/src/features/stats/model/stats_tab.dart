@@ -1,0 +1,1 @@
+enum StatsTab { usage, blocking }

@@ -482,5 +482,29 @@
         "type": "int"
       }
     }
-  }
+  },
+  "deviceUsage": "Device Usage",
+  "usageStatsTab": "Usage Stats",
+  "blockingStatsTab": "Blocking Stats",
+  "thisWeek": "This Week",
+  "totalTime": "Total Time",
+  "usageTrend": "Usage Trend",
+  "statsDailyAverage": "Daily Average",
+  "statsBucketSocial": "Social",
+  "statsBucketProductivity": "Productivity",
+  "statsBucketOther": "Other",
+  "statsDeltaVsLastPeriod": "{value} vs last period",
+  "@statsDeltaVsLastPeriod": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsPermissionRequiredTitle": "Usage permission required",
+  "statsPermissionRequiredBody": "Allow Usage Access to view Android usage statistics.",
+  "statsLoadFailed": "Failed to load usage statistics.",
+  "statsNoUsageData": "No usage data for the selected period.",
+  "statsIosReportUnavailableTitle": "iOS report unavailable",
+  "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured."
 }

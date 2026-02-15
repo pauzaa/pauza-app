@@ -427,6 +427,61 @@ class AppLocalizationsUz extends AppLocalizations {
   String homeDurationHoursMinutesLabel(int hours, int minutes) {
     return '${hours}s ${minutes}d';
   }
+
+  @override
+  String get deviceUsage => 'Device Usage';
+
+  @override
+  String get usageStatsTab => 'Usage Stats';
+
+  @override
+  String get blockingStatsTab => 'Blocking Stats';
+
+  @override
+  String get thisWeek => 'This Week';
+
+  @override
+  String get totalTime => 'Total Time';
+
+  @override
+  String get usageTrend => 'Usage Trend';
+
+  @override
+  String get statsDailyAverage => 'Daily Average';
+
+  @override
+  String get statsBucketSocial => 'Social';
+
+  @override
+  String get statsBucketProductivity => 'Productivity';
+
+  @override
+  String get statsBucketOther => 'Other';
+
+  @override
+  String statsDeltaVsLastPeriod(String value) {
+    return '$value vs last period';
+  }
+
+  @override
+  String get statsPermissionRequiredTitle => 'Usage permission required';
+
+  @override
+  String get statsPermissionRequiredBody =>
+      'Allow Usage Access to view Android usage statistics.';
+
+  @override
+  String get statsLoadFailed => 'Failed to load usage statistics.';
+
+  @override
+  String get statsNoUsageData => 'No usage data for the selected period.';
+
+  @override
+  String get statsIosReportUnavailableTitle => 'iOS report unavailable';
+
+  @override
+  String get statsIosReportUnavailableBody =>
+      'Make sure Screen Time permission and Device Activity Report extension are configured.';
 }
 
 /// The translations for Uzbek, using the Cyrillic script (`uz_Cyrl`).
@@ -806,4 +861,59 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String homeDurationHoursMinutesLabel(int hours, int minutes) {
     return '$hoursс $minutesд';
   }
+
+  @override
+  String get deviceUsage => 'Device Usage';
+
+  @override
+  String get usageStatsTab => 'Usage Stats';
+
+  @override
+  String get blockingStatsTab => 'Blocking Stats';
+
+  @override
+  String get thisWeek => 'This Week';
+
+  @override
+  String get totalTime => 'Total Time';
+
+  @override
+  String get usageTrend => 'Usage Trend';
+
+  @override
+  String get statsDailyAverage => 'Daily Average';
+
+  @override
+  String get statsBucketSocial => 'Social';
+
+  @override
+  String get statsBucketProductivity => 'Productivity';
+
+  @override
+  String get statsBucketOther => 'Other';
+
+  @override
+  String statsDeltaVsLastPeriod(String value) {
+    return '$value vs last period';
+  }
+
+  @override
+  String get statsPermissionRequiredTitle => 'Usage permission required';
+
+  @override
+  String get statsPermissionRequiredBody =>
+      'Allow Usage Access to view Android usage statistics.';
+
+  @override
+  String get statsLoadFailed => 'Failed to load usage statistics.';
+
+  @override
+  String get statsNoUsageData => 'No usage data for the selected period.';
+
+  @override
+  String get statsIosReportUnavailableTitle => 'iOS report unavailable';
+
+  @override
+  String get statsIosReportUnavailableBody =>
+      'Make sure Screen Time permission and Device Activity Report extension are configured.';
 }

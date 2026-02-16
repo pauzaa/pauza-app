@@ -6,7 +6,7 @@ import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_inst
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
-import 'package:pauza/src/features/stats/data/stats_usage_repository.dart';
+import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
 
 class RootScope extends StatefulWidget {
   const RootScope({required this.child, super.key});

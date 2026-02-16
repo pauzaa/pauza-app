@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:pauza/src/features/stats/model/usage_category_bucket.dart';
+import 'package:pauza/src/features/stats/usage_stats/model/usage_category_bucket.dart';
 
 @immutable
 class UsageTrendPoint {

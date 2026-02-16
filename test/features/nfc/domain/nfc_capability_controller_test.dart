@@ -125,3 +125,7 @@
 //     String? errorMessage,
 //   }) async {}
 // }
+
+void main() {
+  // Tests commented out - NFC classes are deprecated
+}

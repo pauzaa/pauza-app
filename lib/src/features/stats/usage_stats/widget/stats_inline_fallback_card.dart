@@ -28,12 +28,7 @@ class StatsInlineFallbackCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              title,
-              style: context.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
             const SizedBox(height: PauzaSpacing.small),
             Text(
               message,
@@ -43,9 +38,10 @@ class StatsInlineFallbackCard extends StatelessWidget {
             ),
             if (actionLabel != null && onActionPressed != null) ...<Widget>[
               const SizedBox(height: PauzaSpacing.medium),
-              FilledButton(
-                onPressed: onActionPressed,
-                child: Text(actionLabel!),
+              PauzaFilledButton(
+                onPressed: onActionPressed!,
+                size: PauzaButtonSize.small,
+                title: Text(actionLabel!),
               ),
             ],
           ],

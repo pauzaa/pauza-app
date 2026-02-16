@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:pauza/src/features/stats/model/usage_category_bucket.dart';
+import 'package:pauza/src/features/stats/usage_stats/model/usage_category_bucket.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class StatsDonutChart extends StatelessWidget {
@@ -10,10 +10,7 @@ class StatsDonutChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = buckets.values.fold<Duration>(
-      Duration.zero,
-      (sum, duration) => sum + duration,
-    );
+    final total = buckets.values.fold<Duration>(Duration.zero, (sum, duration) => sum + duration);
 
     final sections = <PieChartSectionData>[
       _section(context, UsageCategoryBucket.social, total),
@@ -36,27 +33,15 @@ class StatsDonutChart extends StatelessWidget {
     );
   }
 
-  PieChartSectionData _section(
-    BuildContext context,
-    UsageCategoryBucket bucket,
-    Duration total,
-  ) {
+  PieChartSectionData _section(BuildContext context, UsageCategoryBucket bucket, Duration total) {
     final value = buckets[bucket]?.inMilliseconds.toDouble() ?? 0;
     final fallback = total.inMilliseconds == 0 ? 1.0 : value;
 
     return PieChartSectionData(
       value: fallback,
-      color: _colorForBucket(context, bucket),
+      color: bucket.getColorForFonutBucket(context.colorScheme),
       title: '',
       radius: 28,
     );
-  }
-
-  Color _colorForBucket(BuildContext context, UsageCategoryBucket bucket) {
-    return switch (bucket) {
-      UsageCategoryBucket.social => context.colorScheme.primary,
-      UsageCategoryBucket.productivity => context.colorScheme.onSurfaceVariant,
-      UsageCategoryBucket.other => context.colorScheme.outline,
-    };
   }
 }

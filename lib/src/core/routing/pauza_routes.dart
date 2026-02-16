@@ -7,7 +7,7 @@ import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_screen.dar
 import 'package:pauza/src/features/not_found/widget/not_found_screen.dart';
 import 'package:pauza/src/features/permissions/widget/permissions_screen.dart';
 import 'package:pauza/src/features/profile/widget/profile_screen.dart';
-import 'package:pauza/src/features/stats/widget/stats_screen.dart';
+import 'package:pauza/src/features/stats/common/widget/stats_screen.dart';
 
 enum PauzaRoutes with Routable {
   root,

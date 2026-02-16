@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:pauza/src/features/stats/model/stats_tab.dart';
+import 'package:pauza/src/features/stats/common/model/stats_tab.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class StatsTabs extends StatelessWidget {
   const StatsTabs({
-    required this.selectedTab,
     required this.usageLabel,
     required this.blockingLabel,
+    required this.selectedTab,
     required this.onChanged,
     super.key,
   });
 
-  final StatsTab selectedTab;
   final String usageLabel;
   final String blockingLabel;
+  final StatsTab selectedTab;
   final ValueChanged<StatsTab> onChanged;
 
   @override
@@ -31,16 +31,16 @@ class StatsTabs extends StatelessWidget {
             Expanded(
               child: _StatsTabButton(
                 title: usageLabel,
-                isSelected: selectedTab == StatsTab.usage,
                 onTap: () => onChanged(StatsTab.usage),
+                isSelected: selectedTab == StatsTab.usage,
               ),
             ),
             const SizedBox(width: PauzaSpacing.small),
             Expanded(
               child: _StatsTabButton(
                 title: blockingLabel,
-                isSelected: selectedTab == StatsTab.blocking,
                 onTap: () => onChanged(StatsTab.blocking),
+                isSelected: selectedTab == StatsTab.blocking,
               ),
             ),
           ],
@@ -51,11 +51,7 @@ class StatsTabs extends StatelessWidget {
 }
 
 final class _StatsTabButton extends StatelessWidget {
-  const _StatsTabButton({
-    required this.title,
-    required this.isSelected,
-    required this.onTap,
-  });
+  const _StatsTabButton({required this.title, required this.isSelected, required this.onTap});
 
   final String title;
   final bool isSelected;
@@ -72,7 +68,7 @@ final class _StatsTabButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: PauzaSpacing.medium),
+          padding: const EdgeInsets.symmetric(vertical: PauzaSpacing.regular),
           child: Text(
             title,
             textAlign: TextAlign.center,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/extensions.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
-import 'package:pauza/src/features/stats/model/usage_summary.dart';
-import 'package:pauza/src/features/stats/widget/stats_donut_chart.dart';
+import 'package:pauza/src/features/stats/usage_stats/model/usage_summary.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_donut_chart.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class StatsTotalTimeCard extends StatelessWidget {
@@ -12,8 +12,6 @@ class StatsTotalTimeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deltaPercent = summary.deltaPercent;
-
     return DecoratedBox(
       decoration: BoxDecoration(
         color: context.colorScheme.surfaceContainerLow,
@@ -23,6 +21,7 @@ class StatsTotalTimeCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(PauzaSpacing.large),
         child: Column(
+          spacing: PauzaSpacing.medium,
           children: <Widget>[
             Row(
               children: <Widget>[
@@ -35,20 +34,12 @@ class StatsTotalTimeCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (deltaPercent != null)
+                if (summary.deltaPercent case final deltaPercent?)
                   DecoratedBox(
                     decoration: BoxDecoration(
-                      color: context.colorScheme.primary.withValues(
-                        alpha: 0.15,
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        PauzaCornerRadius.small,
-                      ),
-                      border: Border.all(
-                        color: context.colorScheme.primary.withValues(
-                          alpha: 0.5,
-                        ),
-                      ),
+                      color: context.colorScheme.primary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(PauzaCornerRadius.small),
+                      border: Border.all(color: context.colorScheme.primary.withValues(alpha: 0.5)),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -56,9 +47,7 @@ class StatsTotalTimeCard extends StatelessWidget {
                         vertical: PauzaSpacing.small,
                       ),
                       child: Text(
-                        context.l10n.statsDeltaVsLastPeriod(
-                          _formatDelta(deltaPercent),
-                        ),
+                        context.l10n.statsDeltaVsLastPeriod(_formatDelta(deltaPercent)),
                         style: context.textTheme.titleMedium?.copyWith(
                           color: context.colorScheme.primary,
                           fontWeight: FontWeight.w700,
@@ -68,7 +57,6 @@ class StatsTotalTimeCard extends StatelessWidget {
                   ),
               ],
             ),
-            const SizedBox(height: PauzaSpacing.medium),
             Stack(
               alignment: Alignment.center,
               children: <Widget>[
@@ -78,9 +66,7 @@ class StatsTotalTimeCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       summary.dailyAverage.formatDurationLabel(context.l10n),
-                      style: context.textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: context.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),
                     ),
                     Text(
                       context.l10n.statsDailyAverage,
@@ -92,7 +78,6 @@ class StatsTotalTimeCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: PauzaSpacing.medium),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -134,14 +119,14 @@ final class _LegendItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: PauzaSpacing.small,
       children: <Widget>[
         Container(
           width: 12,
           height: 12,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        const SizedBox(width: PauzaSpacing.small),
-        Text(label, style: context.textTheme.headlineSmall),
+        Text(label, style: context.textTheme.titleMedium),
       ],
     );
   }

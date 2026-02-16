@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
-import 'package:pauza/src/features/stats/widget/stats_inline_fallback_card.dart';
+import 'package:pauza/src/features/stats/usage_stats/bloc/stats_bloc.dart';
+import 'package:pauza/src/features/stats/usage_stats/bloc/stats_state.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_inline_fallback_card.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class StatsIosUsageReportCard extends StatelessWidget {
-  const StatsIosUsageReportCard({
-    required this.start,
-    required this.end,
-    super.key,
-  });
-
-  final DateTime start;
-  final DateTime end;
+  const StatsIosUsageReportCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +33,21 @@ class StatsIosUsageReportCard extends StatelessWidget {
             const SizedBox(height: PauzaSpacing.medium),
             SizedBox(
               height: 280,
-              child: IOSUsageReportView(
-                reportContext: 'daily',
-                startDate: start,
-                endDate: end,
-                fallback: StatsInlineFallbackCard(
-                  title: context.l10n.statsIosReportUnavailableTitle,
-                  message: context.l10n.statsIosReportUnavailableBody,
-                ),
+              child: BlocSelector<StatsBloc, StatsState, DateTimeRange>(
+                selector: (state) {
+                  return state.window;
+                },
+                builder: (context, state) {
+                  return IOSUsageReportView(
+                    reportContext: 'daily',
+                    startDate: state.start,
+                    endDate: state.end,
+                    fallback: StatsInlineFallbackCard(
+                      title: context.l10n.statsIosReportUnavailableTitle,
+                      message: context.l10n.statsIosReportUnavailableBody,
+                    ),
+                  );
+                },
               ),
             ),
           ],

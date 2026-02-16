@@ -5,41 +5,42 @@ import 'package:pauza_ui_kit/src/theme/pauza_theme.dart';
 
 final class PauzaDateRangePickerCard extends StatelessWidget {
   const PauzaDateRangePickerCard({
-    required this.title,
     required this.selectedRange,
     required this.rangeTextBuilder,
     required this.onRangeChanged,
-    required this.minDate,
     required this.maxDate,
+    this.minDate,
     super.key,
   });
 
-  final String title;
   final DateTimeRange selectedRange;
   final String Function(DateTimeRange range) rangeTextBuilder;
   final ValueChanged<DateTimeRange> onRangeChanged;
-  final DateTime minDate;
+  final DateTime? minDate;
   final DateTime maxDate;
 
-  int get _rangeInclusiveDays =>
-      selectedRange.end.difference(selectedRange.start).inDays + 1;
-
   bool get _canShiftRight {
-    final shifted = _shift(1);
-    return !shifted.end.isAfter(maxDate);
+    final upperBound = maxDate.dayEnd;
+
+    return selectedRange.end.isBefore(upperBound);
   }
 
   bool get _canShiftLeft {
-    final shifted = _shift(-1);
-    return !shifted.start.isBefore(minDate);
+    final lowerBound = minDate?.dayStart;
+    if (lowerBound == null) {
+      return true;
+    }
+
+    return selectedRange.start.isAfter(lowerBound);
   }
 
-  DateTimeRange _shift(int direction) {
-    final delta = Duration(days: _rangeInclusiveDays * direction);
-    return DateTimeRange(
-      start: selectedRange.start.add(delta),
-      end: selectedRange.end.add(delta),
-    );
+  DateTime get _pickerFirstDate {
+    final lowerBound = minDate;
+    if (lowerBound != null) {
+      return lowerBound;
+    }
+
+    return DateTime.now().subtract(const Duration(days: 365));
   }
 
   @override
@@ -51,16 +52,14 @@ final class PauzaDateRangePickerCard extends StatelessWidget {
         border: Border.all(color: context.colorScheme.outlineVariant),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: PauzaSpacing.medium,
-          vertical: PauzaSpacing.medium,
-        ),
+        padding: const EdgeInsets.all(PauzaSpacing.medium),
         child: Row(
+          spacing: PauzaSpacing.small,
           children: <Widget>[
             _ArrowButton(
               icon: Icons.chevron_left,
               onPressed: _canShiftLeft
-                  ? () => onRangeChanged(_shift(-1))
+                  ? () => onRangeChanged(selectedRange.shiftLeftCapped(minDate))
                   : null,
             ),
             Expanded(
@@ -70,41 +69,24 @@ final class PauzaDateRangePickerCard extends StatelessWidget {
                   final picked = await showDateRangePicker(
                     context: context,
                     initialDateRange: selectedRange,
-                    firstDate: minDate,
+                    firstDate: _pickerFirstDate,
                     lastDate: maxDate,
                   );
                   if (picked != null) {
                     onRangeChanged(picked);
                   }
                 },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: PauzaSpacing.small,
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        title,
-                        style: context.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: PauzaSpacing.small),
-                      Text(
-                        rangeTextBuilder(selectedRange),
-                        style: context.textTheme.titleMedium?.copyWith(
-                          color: context.colorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
+                child: Text(
+                  rangeTextBuilder(selectedRange),
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.headlineSmall,
                 ),
               ),
             ),
             _ArrowButton(
               icon: Icons.chevron_right,
               onPressed: _canShiftRight
-                  ? () => onRangeChanged(_shift(1))
+                  ? () => onRangeChanged(selectedRange.shiftRightCapped(maxDate))
                   : null,
             ),
           ],
@@ -126,10 +108,51 @@ final class _ArrowButton extends StatelessWidget {
       onPressed: onPressed,
       iconSize: PauzaIconSizes.medium,
       color: context.colorScheme.primary,
-      disabledColor: context.colorScheme.onSurfaceVariant.withValues(
-        alpha: 0.3,
-      ),
+      disabledColor: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
       icon: Icon(icon),
     );
   }
+}
+
+extension DateRangeX on DateTimeRange {
+  int get inclusiveDays => end.difference(start).inDays + 1;
+
+  DateTimeRange shiftByInclusiveRange(int direction) {
+    final delta = Duration(days: inclusiveDays * direction);
+    return DateTimeRange(start: start.add(delta).dayStart, end: end.add(delta).dayEnd);
+  }
+
+  DateTimeRange shiftRightCapped(DateTime maxDate) {
+    final upperBound = maxDate.dayEnd;
+    final shifted = shiftByInclusiveRange(1);
+    if (!shifted.end.isAfter(upperBound)) {
+      return shifted;
+    }
+
+    final overflowDays = shifted.end.difference(upperBound).inDays;
+    return DateTimeRange(
+      start: shifted.start.subtract(Duration(days: overflowDays)).dayStart,
+      end: upperBound,
+    );
+  }
+
+  DateTimeRange shiftLeftCapped(DateTime? minDate) {
+    final lowerBound = minDate?.dayStart;
+    final shifted = shiftByInclusiveRange(-1);
+    if (lowerBound == null || !shifted.start.isBefore(lowerBound)) {
+      return shifted;
+    }
+
+    final overflowDays = lowerBound.difference(shifted.start).inDays;
+    return DateTimeRange(
+      start: lowerBound,
+      end: shifted.end.add(Duration(days: overflowDays)).dayEnd,
+    );
+  }
+}
+
+extension DateTimeX on DateTime {
+  DateTime get dayStart => DateTime(year, month, day);
+
+  DateTime get dayEnd => DateTime(year, month, day, 23, 59, 59, 999);
 }

@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
-import 'package:pauza/src/features/stats/model/usage_summary.dart';
+import 'package:pauza/src/features/stats/usage_stats/model/usage_summary.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class StatsUsageTrendCard extends StatelessWidget {
@@ -42,9 +42,7 @@ class StatsUsageTrendCard extends StatelessWidget {
                     horizontalInterval: 1,
                     getDrawingHorizontalLine: (value) {
                       return FlLine(
-                        color: context.colorScheme.outlineVariant.withValues(
-                          alpha: 0.5,
-                        ),
+                        color: context.colorScheme.outlineVariant.withValues(alpha: 0.5),
                         strokeWidth: 1,
                       );
                     },
@@ -80,17 +78,13 @@ class StatsUsageTrendCard extends StatelessWidget {
                       dotData: const FlDotData(show: false),
                       belowBarData: BarAreaData(
                         show: true,
-                        color: context.colorScheme.primary.withValues(
-                          alpha: 0.2,
-                        ),
+                        color: context.colorScheme.primary.withValues(alpha: 0.2),
                       ),
-                      spots: [
-                        for (var i = 0; i < points.length; i++)
-                          FlSpot(
-                            i.toDouble(),
-                            points[i].duration.inMinutes.toDouble(),
-                          ),
-                      ],
+                      spots: List.generate(
+                        points.length,
+                        (index) =>
+                            FlSpot(index.toDouble(), points[index].duration.inMinutes.toDouble()),
+                      ),
                     ),
                   ],
                 ),

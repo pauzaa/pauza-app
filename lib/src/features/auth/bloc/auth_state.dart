@@ -7,21 +7,17 @@ sealed class AuthState extends Equatable {
   List<Object?> get props => const <Object?>[];
 }
 
-final class AuthInitial extends AuthState {
-  const AuthInitial();
+final class AuthIdle extends AuthState {
+  const AuthIdle();
 }
 
-final class AuthLoading extends AuthState {
-  const AuthLoading({this.previous});
+final class AuthSubmitting extends AuthState {
+  const AuthSubmitting({this.previous});
 
   final AuthState? previous;
 
   @override
   List<Object?> get props => <Object?>[previous];
-}
-
-final class AuthUnauthenticated extends AuthState {
-  const AuthUnauthenticated();
 }
 
 final class AuthOtpRequired extends AuthState {
@@ -34,18 +30,12 @@ final class AuthOtpRequired extends AuthState {
   List<Object?> get props => <Object?>[challengeId, email];
 }
 
-final class AuthAuthenticated extends AuthState {
-  const AuthAuthenticated({required this.session, this.user});
-
-  final Session session;
-  final UserDto? user;
-
-  @override
-  List<Object?> get props => <Object?>[session, user];
+final class AuthFlowSuccess extends AuthState {
+  const AuthFlowSuccess();
 }
 
-final class AuthFailureState extends AuthState {
-  const AuthFailureState({required this.failure, this.message, this.previous});
+final class AuthFlowFailure extends AuthState {
+  const AuthFlowFailure({required this.failure, this.message, this.previous});
 
   final AuthFailure failure;
   final String? message;

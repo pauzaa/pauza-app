@@ -7,10 +7,6 @@ sealed class AuthEvent extends Equatable {
   List<Object?> get props => const <Object?>[];
 }
 
-final class AuthStarted extends AuthEvent {
-  const AuthStarted();
-}
-
 final class AuthSignInRequested extends AuthEvent {
   const AuthSignInRequested({required this.email, required this.password});
 
@@ -32,13 +28,4 @@ final class AuthOtpSubmitted extends AuthEvent {
 
 final class AuthSignOutRequested extends AuthEvent {
   const AuthSignOutRequested();
-}
-
-final class AuthSessionChanged extends AuthEvent {
-  const AuthSessionChanged({required this.session});
-
-  final Session session;
-
-  @override
-  List<Object?> get props => <Object?>[session];
 }

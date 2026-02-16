@@ -6,27 +6,22 @@ import 'package:pauza/src/features/auth/common/model/auth_credentials_dto.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
-import 'package:pauza/src/features/auth/common/model/user_dto.dart';
+import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 
 void main() {
   group('AuthBloc', () {
-    test('startup with empty session leads to AuthUnauthenticated', () async {
-      final repository = _FakeAuthRepository(
-        initialSession: const Session.empty(),
-      );
+    test('initial state is AuthIdle', () {
+      final repository = _FakeAuthRepository();
       final bloc = AuthBloc(authRepository: repository);
 
-      bloc.add(const AuthStarted());
-      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state, isA<AuthIdle>());
 
-      expect(bloc.state, isA<AuthUnauthenticated>());
-
-      await bloc.close();
+      bloc.close();
       repository.dispose();
     });
 
-    test('successful sign in emits AuthAuthenticated', () async {
+    test('successful sign in emits AuthFlowSuccess', () async {
       final repository = _FakeAuthRepository();
       final bloc = AuthBloc(authRepository: repository);
 
@@ -35,36 +30,33 @@ void main() {
       );
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
-      expect(bloc.state, isA<AuthAuthenticated>());
+      expect(bloc.state, isA<AuthFlowSuccess>());
 
       await bloc.close();
       repository.dispose();
     });
 
-    test(
-      'wrong credentials emit AuthFailureState invalidCredentials',
-      () async {
-        final repository = _FakeAuthRepository();
-        final bloc = AuthBloc(authRepository: repository);
+    test('wrong credentials emit AuthFlowFailure invalidCredentials', () async {
+      final repository = _FakeAuthRepository();
+      final bloc = AuthBloc(authRepository: repository);
 
-        bloc.add(
-          const AuthSignInRequested(
-            email: AuthRepositoryImpl.invalidCredentialsEmail,
-            password: '123456',
-          ),
-        );
-        await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(
+        const AuthSignInRequested(
+          email: AuthRepositoryImpl.invalidCredentialsEmail,
+          password: '123456',
+        ),
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-        expect(bloc.state, isA<AuthFailureState>());
-        expect(
-          (bloc.state as AuthFailureState).failure,
-          AuthFailure.invalidCredentials,
-        );
+      expect(bloc.state, isA<AuthFlowFailure>());
+      expect(
+        (bloc.state as AuthFlowFailure).failure,
+        AuthFailure.invalidCredentials,
+      );
 
-        await bloc.close();
-        repository.dispose();
-      },
-    );
+      await bloc.close();
+      repository.dispose();
+    });
 
     test('unknown email flow emits AuthOtpRequired', () async {
       final repository = _FakeAuthRepository();
@@ -84,7 +76,7 @@ void main() {
       repository.dispose();
     });
 
-    test('otp success emits AuthAuthenticated', () async {
+    test('otp success emits AuthFlowSuccess', () async {
       final repository = _FakeAuthRepository();
       final bloc = AuthBloc(authRepository: repository);
 
@@ -99,14 +91,14 @@ void main() {
       bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
-      expect(bloc.state, isA<AuthAuthenticated>());
+      expect(bloc.state, isA<AuthFlowSuccess>());
 
       await bloc.close();
       repository.dispose();
     });
 
     test(
-      'otp invalid emits AuthFailureState and keeps previous otp state',
+      'otp invalid emits AuthFlowFailure and keeps previous otp state',
       () async {
         final repository = _FakeAuthRepository();
         final bloc = AuthBloc(authRepository: repository);
@@ -122,8 +114,8 @@ void main() {
         bloc.add(const AuthOtpSubmitted(otp: '000000'));
         await Future<void>.delayed(const Duration(milliseconds: 20));
 
-        expect(bloc.state, isA<AuthFailureState>());
-        final failure = bloc.state as AuthFailureState;
+        expect(bloc.state, isA<AuthFlowFailure>());
+        final failure = bloc.state as AuthFlowFailure;
         expect(failure.failure, AuthFailure.invalidOtp);
         expect(failure.previous, isA<AuthOtpRequired>());
 
@@ -132,7 +124,24 @@ void main() {
       },
     );
 
-    test('sign out emits AuthUnauthenticated', () async {
+    test('otp submit without challenge emits otpChallengeMissing', () async {
+      final repository = _FakeAuthRepository();
+      final bloc = AuthBloc(authRepository: repository);
+
+      bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(bloc.state, isA<AuthFlowFailure>());
+      expect(
+        (bloc.state as AuthFlowFailure).failure,
+        AuthFailure.otpChallengeMissing,
+      );
+
+      await bloc.close();
+      repository.dispose();
+    });
+
+    test('sign out emits AuthIdle', () async {
       final repository = _FakeAuthRepository();
       final bloc = AuthBloc(authRepository: repository);
 
@@ -144,25 +153,7 @@ void main() {
       bloc.add(const AuthSignOutRequested());
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
-      expect(bloc.state, isA<AuthUnauthenticated>());
-
-      await bloc.close();
-      repository.dispose();
-    });
-
-    test('repository session changes drive bloc state', () async {
-      final repository = _FakeAuthRepository();
-      final bloc = AuthBloc(authRepository: repository);
-
-      repository.emitSession(
-        const Session(accessToken: 'a', refreshToken: 'b'),
-      );
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-      expect(bloc.state, isA<AuthAuthenticated>());
-
-      repository.emitSession(const Session.empty());
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-      expect(bloc.state, isA<AuthUnauthenticated>());
+      expect(bloc.state, isA<AuthIdle>());
 
       await bloc.close();
       repository.dispose();
@@ -244,11 +235,6 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<void> signOut() async {
     _currentSession = const Session.empty();
     _controller.add(_currentSession);
-  }
-
-  void emitSession(Session session) {
-    _currentSession = session;
-    _controller.add(session);
   }
 
   @override

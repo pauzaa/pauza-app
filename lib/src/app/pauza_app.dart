@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:appfuse/appfuse.dart';
 import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_dependencies.dart';
@@ -37,6 +35,7 @@ class _PauzaAppState extends State<PauzaApp> with RouterStateMixin<PauzaApp> {
   @override
   void initState() {
     context.changeAppLocale(PauzaApp.supportedLanguages.keys.first);
+    _dependencies = PauzaDependencies.of(context);
 
     super.initState();
   }
@@ -44,7 +43,6 @@ class _PauzaAppState extends State<PauzaApp> with RouterStateMixin<PauzaApp> {
   @override
   void dispose() {
     _dependencies.authGate.dispose();
-    unawaited(_dependencies.authBloc.close());
     _dependencies.authRepository.dispose();
     _dependencies.permissionGate.dispose();
     super.dispose();
@@ -63,7 +61,9 @@ class _PauzaAppState extends State<PauzaApp> with RouterStateMixin<PauzaApp> {
       builder: (context, child) {
         return MediaQuery(
           key: builderKey,
-          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.noScaling),
           child: RootScope(child: child ?? const SizedBox.shrink()),
         );
       },

@@ -83,6 +83,32 @@ void main() {
       expect(result.single.meta?.route, PauzaRoutes.stats);
       expect(authPending, isNull);
     });
+
+    test('authenticated navigation does not redirect to auth', () {
+      NavigationState? permissionPending;
+      NavigationState? authPending;
+
+      final guards = <NavigationGuard>[
+        normalizeNavigationToRootShell,
+        createPermissionGuard(
+          isReady: () => true,
+          normalize: normalizeNavigationToRootShell,
+          readPending: () => permissionPending,
+          writePending: (value) => permissionPending = value,
+        ),
+        createAuthGuard(
+          isAuthenticated: () => true,
+          normalize: normalizeNavigationToRootShell,
+          readPending: () => authPending,
+          writePending: (value) => authPending = value,
+        ),
+      ];
+
+      final result = _applyGuards(guards, [PauzaRoutes.profile.page()]);
+
+      expect(result.last.meta?.route, PauzaRoutes.profile);
+      expect(authPending, isNull);
+    });
   });
 }
 

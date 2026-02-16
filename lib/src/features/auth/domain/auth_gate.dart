@@ -14,28 +14,20 @@ abstract interface class PauzaAuthGate implements Listenable {
 
 final class PauzaAuthGateNotifier extends ChangeNotifier implements PauzaAuthGate {
   PauzaAuthGateNotifier({required AuthRepository authRepository})
-    : _authRepository = authRepository,
-      _session = authRepository.currentSession {
+    : _authRepository = authRepository {
     _subscription = _authRepository.sessionStream.listen(_onSessionChanged);
   }
 
   final AuthRepository _authRepository;
   late final StreamSubscription<Session> _subscription;
 
-  Session _session;
+  @override
+  Session get session => _authRepository.currentSession;
 
   @override
-  Session get session => _session;
-
-  @override
-  bool get isAuthenticated => _session.isAuthenticated;
+  bool get isAuthenticated => _authRepository.currentSession.isAuthenticated;
 
   void _onSessionChanged(Session session) {
-    if (_session == session) {
-      return;
-    }
-
-    _session = session;
     notifyListeners();
   }
 

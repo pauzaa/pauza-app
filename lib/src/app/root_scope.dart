@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common/pauza_dependencies.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
+import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
 
@@ -26,6 +28,7 @@ class RootScopeState extends State<RootScope> {
   late final InstalledAppsRepository installedAppsRepository;
   late final NfcRepository nfcRepository;
   late final StatsUsageRepository statsUsageRepository;
+  late final CurrentUserBloc currentUserBloc;
   late final RestrictionLifecycleSyncCoordinator
   restrictionLifecycleSyncCoordinator;
 
@@ -52,6 +55,16 @@ class RootScopeState extends State<RootScope> {
     );
 
     nfcRepository = PauzaDependencies.of(context).nfcRepository;
+    // UI-level session/profile composition lives in RootScope (runtime scope),
+    // not in infra dependencies.
+    currentUserBloc = CurrentUserBloc(
+      authRepository: PauzaDependencies.of(context).authRepository,
+      userProfileRepository: PauzaDependencies.of(
+        context,
+      ).userProfileRepository,
+      ttl: const Duration(minutes: 15),
+      nowUtc: () => DateTime.now().toUtc(),
+    );
 
     restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
       repository: PauzaDependencies.of(context).restrictionLifecycleRepository,
@@ -63,13 +76,18 @@ class RootScopeState extends State<RootScope> {
 
   @override
   void dispose() {
+    // Root-scoped runtime objects are disposed together with UI scope.
+    currentUserBloc.close();
     restrictionLifecycleSyncCoordinator.detach();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedRootScope(data: this, child: widget.child);
+    return BlocProvider<CurrentUserBloc>.value(
+      value: currentUserBloc,
+      child: _InheritedRootScope(data: this, child: widget.child),
+    );
   }
 }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
-import 'package:pauza/src/features/auth/common/model/user_dto.dart';
+import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 
 @immutable
 sealed class AuthResult {

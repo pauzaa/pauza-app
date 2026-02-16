@@ -1,15 +1,19 @@
 import 'dart:async';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:pauza/src/features/auth/common/model/auth_credentials_dto.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
-import 'package:pauza/src/features/auth/common/model/user_dto.dart';
+import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 
 abstract interface class AuthRepository {
   Session get currentSession;
 
+  /// Session updates stream.
+  ///
+  /// Implementations should replay the latest known value to new subscribers.
   Stream<Session> get sessionStream;
 
   Future<void> initialize();
@@ -36,8 +40,10 @@ final class AuthRepositoryImpl implements AuthRepository {
   static const String validOtp = '111111';
 
   final AuthSessionStorage _sessionStorage;
-  final StreamController<Session> _tokenController =
-      StreamController<Session>.broadcast();
+  // BehaviorSubject replays the latest session to late subscribers (for example, blocs
+  // created after app bootstrap).
+  final BehaviorSubject<Session> _sessionController =
+      BehaviorSubject<Session>.seeded(const Session.empty());
 
   Session _currentSession = const Session.empty();
   String? _pendingOtpChallengeId;
@@ -47,13 +53,16 @@ final class AuthRepositoryImpl implements AuthRepository {
   Session get currentSession => _currentSession;
 
   @override
-  Stream<Session> get sessionStream => _tokenController.stream;
+  Stream<Session> get sessionStream => _sessionController.stream;
 
   @override
   Future<void> initialize() async {
     try {
       final session = await _sessionStorage.readSession();
-      _emitSession(session);
+      // Avoid duplicate emission on initialize when seed/current already matches storage.
+      if (_currentSession != session) {
+        _emitSession(session);
+      }
     } on AuthException {
       rethrow;
     } on Object {
@@ -142,13 +151,13 @@ final class AuthRepositoryImpl implements AuthRepository {
 
   @override
   void dispose() {
-    _tokenController.close();
+    _sessionController.close();
   }
 
   void _emitSession(Session session) {
     _currentSession = session;
-    if (!_tokenController.isClosed) {
-      _tokenController.add(session);
+    if (!_sessionController.isClosed) {
+      _sessionController.add(session);
     }
   }
 

@@ -35,13 +35,17 @@ NavigationGuard createPermissionGuard({
       return pending ?? pages;
     }
 
-    final isOnPermissionsScreen = pages.any((page) => page.meta?.route == PauzaRoutes.permissions);
+    final isOnPermissionsScreen = pages.any(
+      (page) => page.meta?.route == PauzaRoutes.permissions,
+    );
 
     if (!isOnPermissionsScreen) {
       writePending(pages);
     }
 
-    return isOnPermissionsScreen ? pages : normalize([PauzaRoutes.permissions.page()]);
+    return isOnPermissionsScreen
+        ? pages
+        : normalize([PauzaRoutes.permissions.page()]);
   };
 }
 
@@ -52,7 +56,9 @@ NavigationGuard createAuthGuard({
   required void Function(NavigationState?) writePending,
 }) {
   return (pages) {
-    final isOnPermissionsScreen = pages.any((page) => page.meta?.route == PauzaRoutes.permissions);
+    final isOnPermissionsScreen = pages.any(
+      (page) => page.meta?.route == PauzaRoutes.permissions,
+    );
     if (isOnPermissionsScreen) {
       return pages;
     }

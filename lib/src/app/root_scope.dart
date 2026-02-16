@@ -33,7 +33,9 @@ class RootScopeState extends State<RootScope> {
   void initState() {
     blockingRepository = PauzaBlockingRepository(
       restrictions: PauzaDependencies.of(context).appRestrictionManager,
-      restrictionLifecycleRepository: PauzaDependencies.of(context).restrictionLifecycleRepository,
+      restrictionLifecycleRepository: PauzaDependencies.of(
+        context,
+      ).restrictionLifecycleRepository,
     );
 
     modesRepository = ModesRepositoryImpl(
@@ -79,7 +81,10 @@ class _InheritedRootScope extends InheritedWidget {
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
   /// For example: `SettingsScope.maybeOf(context)`.
-  static _InheritedRootScope? maybeOf(BuildContext context, {bool listen = true}) => listen
+  static _InheritedRootScope? maybeOf(
+    BuildContext context, {
+    bool listen = true,
+  }) => listen
       ? context.dependOnInheritedWidgetOfExactType<_InheritedRootScope>()
       : context.getInheritedWidgetOfExactType<_InheritedRootScope>();
 

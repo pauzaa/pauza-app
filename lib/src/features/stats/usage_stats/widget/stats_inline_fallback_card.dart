@@ -28,7 +28,12 @@ class StatsInlineFallbackCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+            Text(
+              title,
+              style: context.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             const SizedBox(height: PauzaSpacing.small),
             Text(
               message,

@@ -51,14 +51,20 @@ void main() {
         ],
       );
 
-      final bloc = StatsBloc(usageRepository: repo, platform: PauzaPlatform.android);
+      final bloc = StatsBloc(
+        usageRepository: repo,
+        platform: PauzaPlatform.android,
+      );
 
       bloc.add(const StatsStarted());
       await Future<void>.delayed(const Duration(milliseconds: 10));
 
       expect(bloc.state.summary, isNotNull);
       expect(bloc.state.summary!.totalDuration, const Duration(minutes: 180));
-      expect(bloc.state.summary!.buckets[UsageCategoryBucket.social], const Duration(minutes: 120));
+      expect(
+        bloc.state.summary!.buckets[UsageCategoryBucket.social],
+        const Duration(minutes: 120),
+      );
 
       await bloc.close();
     });
@@ -82,7 +88,10 @@ void main() {
 
     test('does not load android stats on iOS platform', () async {
       final repo = _FakeStatsUsageRepository();
-      final bloc = StatsBloc(usageRepository: repo, platform: PauzaPlatform.ios);
+      final bloc = StatsBloc(
+        usageRepository: repo,
+        platform: PauzaPlatform.ios,
+      );
 
       bloc.add(const StatsStarted());
       await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -105,7 +114,10 @@ class _FakeStatsUsageRepository implements StatsUsageRepository {
   var calls = 0;
 
   @override
-  Future<IList<UsageStats>> getUsageStats({required DateTime start, required DateTime end}) async {
+  Future<IList<UsageStats>> getUsageStats({
+    required DateTime start,
+    required DateTime end,
+  }) async {
     calls++;
     return calls.isOdd ? current.lock : previous.lock;
   }
@@ -117,7 +129,10 @@ class _ErrorStatsUsageRepository implements StatsUsageRepository {
   final Object error;
 
   @override
-  Future<IList<UsageStats>> getUsageStats({required DateTime start, required DateTime end}) {
+  Future<IList<UsageStats>> getUsageStats({
+    required DateTime start,
+    required DateTime end,
+  }) {
     return Future<IList<UsageStats>>.error(error);
   }
 }

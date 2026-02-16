@@ -16,7 +16,9 @@ abstract interface class NfcRepository {
 
   Future<bool> openSystemSettingsForNfc();
 
-  Future<NfcCardDto> scanSingleCard({Duration timeout = const Duration(seconds: 20)});
+  Future<NfcCardDto> scanSingleCard({
+    Duration timeout = const Duration(seconds: 20),
+  });
 
   Future<void> stopSession({String? alertMessage, String? errorMessage});
 }
@@ -33,7 +35,8 @@ final class NfcRepositoryImpl implements NfcRepository {
   bool get isScanInProgress => _managerClient.isSessionActive;
 
   @override
-  bool get canOpenSystemSettingsForNfc => _managerClient.canOpenSystemSettingsForNfc;
+  bool get canOpenSystemSettingsForNfc =>
+      _managerClient.canOpenSystemSettingsForNfc;
 
   @override
   Future<NfcChipAvailability> getAvailability() async {
@@ -55,7 +58,9 @@ final class NfcRepositoryImpl implements NfcRepository {
   }
 
   @override
-  Future<NfcCardDto> scanSingleCard({Duration timeout = const Duration(seconds: 20)}) async {
+  Future<NfcCardDto> scanSingleCard({
+    Duration timeout = const Duration(seconds: 20),
+  }) async {
     final availability = await getAvailability();
 
     if (availability == NfcChipAvailability.notSupported) {
@@ -98,6 +103,9 @@ final class NfcRepositoryImpl implements NfcRepository {
 
   @override
   Future<void> stopSession({String? alertMessage, String? errorMessage}) async {
-    await _managerClient.stopSession(alertMessage: alertMessage, errorMessage: errorMessage);
+    await _managerClient.stopSession(
+      alertMessage: alertMessage,
+      errorMessage: errorMessage,
+    );
   }
 }

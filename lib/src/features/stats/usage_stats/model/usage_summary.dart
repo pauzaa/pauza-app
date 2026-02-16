@@ -18,7 +18,9 @@ class UsageTrendPoint {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UsageTrendPoint && other.day == day && other.duration == duration;
+      other is UsageTrendPoint &&
+          other.day == day &&
+          other.duration == duration;
 
   @override
   int get hashCode => Object.hash(day, duration);
@@ -56,7 +58,8 @@ class UsageSummary {
 
     for (final item in current) {
       final bucket = UsageCategoryBucket.fromCategory(item.appInfo.category);
-      bucketTotals[bucket] = (bucketTotals[bucket] ?? Duration.zero) + item.totalDuration;
+      bucketTotals[bucket] =
+          (bucketTotals[bucket] ?? Duration.zero) + item.totalDuration;
     }
 
     final trendDurations = <DateTime, Duration>{};
@@ -71,12 +74,15 @@ class UsageSummary {
       if (!trendDurations.containsKey(key)) {
         continue;
       }
-      trendDurations[key] = (trendDurations[key] ?? Duration.zero) + item.totalDuration;
+      trendDurations[key] =
+          (trendDurations[key] ?? Duration.zero) + item.totalDuration;
     }
 
     final trend =
         trendDurations.entries
-            .map((entry) => UsageTrendPoint(day: entry.key, duration: entry.value))
+            .map(
+              (entry) => UsageTrendPoint(day: entry.key, duration: entry.value),
+            )
             .toList(growable: false)
           ..sort((a, b) => a.day.compareTo(b.day));
 

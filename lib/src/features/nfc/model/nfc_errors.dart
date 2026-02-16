@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_availability.dart';
 
-enum NfcErrorCode { unsupported, disabled, busy, permissionDenied, timeout, cancelled, unknown }
+enum NfcErrorCode {
+  unsupported,
+  disabled,
+  busy,
+  permissionDenied,
+  timeout,
+  cancelled,
+  unknown,
+}
 
 @immutable
 class NfcException implements Exception {
-  const NfcException({required this.code, required this.message, this.cause, this.nfcAvailability});
+  const NfcException({
+    required this.code,
+    required this.message,
+    this.cause,
+    this.nfcAvailability,
+  });
 
   factory NfcException.fromError(Object error) {
     if (error is NfcException) {
@@ -56,7 +69,11 @@ class NfcException implements Exception {
       );
     }
 
-    return NfcException(code: NfcErrorCode.unknown, message: 'Unexpected NFC error.', cause: error);
+    return NfcException(
+      code: NfcErrorCode.unknown,
+      message: 'Unexpected NFC error.',
+      cause: error,
+    );
   }
 
   final NfcErrorCode code;

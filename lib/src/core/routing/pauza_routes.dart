@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:helm/helm.dart';
+import 'package:pauza/src/features/auth/widget/auth_screen.dart';
+import 'package:pauza/src/features/auth/widget/otp_screen.dart';
 import 'package:pauza/src/features/leaderboard/widget/leaderboard_screen.dart';
 import 'package:pauza/src/features/navigation/widget/dashboard_tabs_shell.dart';
 import 'package:pauza/src/features/home/widget/home_screen.dart';
@@ -20,6 +22,8 @@ enum PauzaRoutes with Routable {
   modeEdit,
 
   permissions,
+  auth,
+  otp,
   notFound;
 
   @override
@@ -32,6 +36,8 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.modeCreate => '/modes/new',
     PauzaRoutes.modeEdit => '/modes/{midEdit}/edit',
     PauzaRoutes.permissions => '/permissions',
+    PauzaRoutes.auth => '/auth',
+    PauzaRoutes.otp => '/auth/otp',
     PauzaRoutes.notFound => '/404',
   };
 
@@ -45,6 +51,8 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.modeCreate ||
     PauzaRoutes.modeEdit ||
     PauzaRoutes.permissions ||
+    PauzaRoutes.auth ||
+    PauzaRoutes.otp ||
     PauzaRoutes.notFound => PageType.material,
   };
 
@@ -63,6 +71,8 @@ enum PauzaRoutes with Routable {
       modeId: pathParams['midEdit'] ?? '',
     ),
     PauzaRoutes.permissions => const PermissionsScreen(),
+    PauzaRoutes.auth => const AuthScreen(),
+    PauzaRoutes.otp => const OtpScreen(),
     PauzaRoutes.notFound => const NotFoundScreen(),
   };
 }

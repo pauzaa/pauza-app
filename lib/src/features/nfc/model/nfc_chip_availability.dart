@@ -49,7 +49,10 @@ enum NfcChipAvailability {
     };
   }
 
-  String? localizedActionLabel(AppLocalizations l10n, {required bool canOpenSettings}) {
+  String? localizedActionLabel(
+    AppLocalizations l10n, {
+    required bool canOpenSettings,
+  }) {
     return shouldShowOpenSettings(canOpenSettings: canOpenSettings)
         ? l10n.nfcOpenSettingsButton
         : null;

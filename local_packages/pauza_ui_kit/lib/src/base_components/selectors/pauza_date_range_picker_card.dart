@@ -86,7 +86,8 @@ final class PauzaDateRangePickerCard extends StatelessWidget {
             _ArrowButton(
               icon: Icons.chevron_right,
               onPressed: _canShiftRight
-                  ? () => onRangeChanged(selectedRange.shiftRightCapped(maxDate))
+                  ? () =>
+                        onRangeChanged(selectedRange.shiftRightCapped(maxDate))
                   : null,
             ),
           ],
@@ -108,7 +109,9 @@ final class _ArrowButton extends StatelessWidget {
       onPressed: onPressed,
       iconSize: PauzaIconSizes.medium,
       color: context.colorScheme.primary,
-      disabledColor: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+      disabledColor: context.colorScheme.onSurfaceVariant.withValues(
+        alpha: 0.3,
+      ),
       icon: Icon(icon),
     );
   }
@@ -119,7 +122,10 @@ extension DateRangeX on DateTimeRange {
 
   DateTimeRange shiftByInclusiveRange(int direction) {
     final delta = Duration(days: inclusiveDays * direction);
-    return DateTimeRange(start: start.add(delta).dayStart, end: end.add(delta).dayEnd);
+    return DateTimeRange(
+      start: start.add(delta).dayStart,
+      end: end.add(delta).dayEnd,
+    );
   }
 
   DateTimeRange shiftRightCapped(DateTime maxDate) {

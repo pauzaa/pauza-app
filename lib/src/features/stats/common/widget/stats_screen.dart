@@ -77,7 +77,9 @@ class _StatsScreenState extends State<StatsScreen> {
                 return switch (value) {
                   StatsTab.usage => BlocProvider(
                     create: (context) => StatsBloc(
-                      usageRepository: RootScope.of(context).statsUsageRepository,
+                      usageRepository: RootScope.of(
+                        context,
+                      ).statsUsageRepository,
                       platform: kPauzaPlatform,
                     )..add(const StatsStarted()),
                     child: const StatsUsageTabContent(),

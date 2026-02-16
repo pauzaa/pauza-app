@@ -51,7 +51,11 @@ class StatsTabs extends StatelessWidget {
 }
 
 final class _StatsTabButton extends StatelessWidget {
-  const _StatsTabButton({required this.title, required this.isSelected, required this.onTap});
+  const _StatsTabButton({
+    required this.title,
+    required this.isSelected,
+    required this.onTap,
+  });
 
   final String title;
   final bool isSelected;

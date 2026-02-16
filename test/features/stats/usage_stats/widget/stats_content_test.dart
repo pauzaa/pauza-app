@@ -26,6 +26,11 @@ void main() {
 
     // Verify the widget renders without crashing
     expect(find.byType(StatsUsageTabContent), findsOneWidget);
+    expect(find.text('APP USAGE'), findsOneWidget);
+    expect(find.text('App'), findsOneWidget);
+    expect(find.text('Usage'), findsOneWidget);
+    expect(find.text('Launches'), findsOneWidget);
+    expect(find.text('Last used'), findsOneWidget);
   });
 }
 

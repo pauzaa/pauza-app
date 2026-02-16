@@ -9,6 +9,7 @@ import 'package:pauza/src/features/stats/usage_stats/bloc/stats_bloc.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_event.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_state.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_inline_fallback_card.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_apps_table_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_ios_usage_report_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_total_time_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_trend_card.dart';
@@ -78,6 +79,7 @@ class StatsUsageTabContent extends StatelessWidget {
                   children: <Widget>[
                     StatsTotalTimeCard(summary: state.summary!),
                     StatsUsageTrendCard(summary: state.summary!),
+                    StatsUsageAppsTableCard(usageStats: state.usageStats),
                   ],
                 );
               } else {

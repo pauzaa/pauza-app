@@ -22,7 +22,10 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
     final usage = await _usageStatsManager.getUsageStats(startDate: start, endDate: end);
 
     // final apps = await _getAndroidAppsById();
-    return usage.lock;
+    return usage
+        .where((stat) => stat.totalDuration > Duration.zero)
+        .toIList()
+        .sort((a, b) => b.totalDuration.compareTo(a.totalDuration));
   }
 
   // Future<Map<AppIdentifier, AndroidAppInfo>> _getAndroidAppsById() async {

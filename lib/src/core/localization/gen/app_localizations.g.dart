@@ -839,6 +839,36 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get statsBucketOther;
 
+  /// No description provided for @statsAppUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'App Usage'**
+  String get statsAppUsage;
+
+  /// No description provided for @statsUsageTableAppColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get statsUsageTableAppColumn;
+
+  /// No description provided for @statsUsageTableUsageColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage'**
+  String get statsUsageTableUsageColumn;
+
+  /// No description provided for @statsUsageTableLaunchesColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Launches'**
+  String get statsUsageTableLaunchesColumn;
+
+  /// No description provided for @statsUsageTableLastUsedColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Last used'**
+  String get statsUsageTableLastUsedColumn;
+
   /// No description provided for @statsDeltaVsLastPeriod.
   ///
   /// In en, this message translates to:

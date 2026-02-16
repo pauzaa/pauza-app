@@ -72,7 +72,7 @@ final class _StatsTabButton extends StatelessWidget {
           child: Text(
             title,
             textAlign: TextAlign.center,
-            style: context.textTheme.headlineSmall?.copyWith(
+            style: context.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
               color: isSelected
                   ? context.colorScheme.onPrimary

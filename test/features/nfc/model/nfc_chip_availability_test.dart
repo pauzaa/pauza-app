@@ -270,6 +270,16 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get statsBucketOther => 'Other';
   @override
+  String get statsAppUsage => 'App Usage';
+  @override
+  String get statsUsageTableAppColumn => 'App';
+  @override
+  String get statsUsageTableUsageColumn => 'Usage';
+  @override
+  String get statsUsageTableLaunchesColumn => 'Launches';
+  @override
+  String get statsUsageTableLastUsedColumn => 'Last used';
+  @override
   String statsDeltaVsLastPeriod(String value) => '$value vs last period';
   @override
   String get statsPermissionRequiredTitle => 'Usage permission required';

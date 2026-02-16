@@ -493,6 +493,11 @@
   "statsBucketSocial": "Social",
   "statsBucketProductivity": "Productivity",
   "statsBucketOther": "Other",
+  "statsAppUsage": "App Usage",
+  "statsUsageTableAppColumn": "App",
+  "statsUsageTableUsageColumn": "Usage",
+  "statsUsageTableLaunchesColumn": "Launches",
+  "statsUsageTableLastUsedColumn": "Last used",
   "statsDeltaVsLastPeriod": "{value} vs last period",
   "@statsDeltaVsLastPeriod": {
     "placeholders": {

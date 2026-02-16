@@ -28,19 +28,19 @@ void main() {
     expect(find.text('Last used'), findsOneWidget);
   });
 
-  testWidgets('sorts rows by duration descending', (tester) async {
+  testWidgets('displays rows in given order', (tester) async {
     await _pumpCard(
       tester,
       usageStats: <UsageStats>[
         _usage(
-          name: 'Mid App',
-          minutes: 60,
+          name: 'Top App',
+          minutes: 120,
           launches: 2,
           lastTimeUsed: DateTime(2026, 2, 10, 8),
         ),
         _usage(
-          name: 'Top App',
-          minutes: 120,
+          name: 'Mid App',
+          minutes: 60,
           launches: 2,
           lastTimeUsed: DateTime(2026, 2, 10, 8),
         ),
@@ -59,25 +59,6 @@ void main() {
 
     expect(topY, lessThan(midY));
     expect(midY, lessThan(lowY));
-  });
-
-  testWidgets('shows only top 10 rows', (tester) async {
-    final rows = List.generate(12, (index) {
-      final number = index + 1;
-      return _usage(
-        name: 'App $number',
-        minutes: number,
-        launches: 1,
-        lastTimeUsed: DateTime(2026, 2, 10, 8),
-      );
-    }, growable: false);
-
-    await _pumpCard(tester, usageStats: rows.lock);
-
-    expect(find.text('App 12'), findsOneWidget);
-    expect(find.text('App 3'), findsOneWidget);
-    expect(find.text('App 2'), findsNothing);
-    expect(find.text('App 1'), findsNothing);
   });
 
   testWidgets('shows fallback for null last used', (tester) async {

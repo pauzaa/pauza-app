@@ -27,7 +27,7 @@ class StatsUsageTabContent extends StatelessWidget {
           children: <Widget>[
             PauzaDateRangePickerCard(
               title: l10n.thisWeek,
-              selectedRange: state.window.asDateTimeRange,
+              selectedRange: state.window,
               minDate: DateTime(2020),
               maxDate: state.maxDate,
               rangeTextBuilder: (range) =>

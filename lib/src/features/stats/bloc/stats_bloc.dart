@@ -1,9 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/stats/bloc/stats_event.dart';
 import 'package:pauza/src/features/stats/bloc/stats_state.dart';
 import 'package:pauza/src/features/stats/data/stats_usage_repository.dart';
-import 'package:pauza/src/features/stats/model/stats_date_window.dart';
+import 'package:pauza/src/features/stats/model/stats_date_range_extensions.dart';
 import 'package:pauza/src/features/stats/model/stats_tab.dart';
 import 'package:pauza/src/features/stats/model/usage_category_bucket.dart';
 import 'package:pauza/src/features/stats/model/usage_summary.dart';
@@ -20,8 +21,8 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
          StatsState(
            platform: platform ?? kPauzaPlatform,
            selectedTab: StatsTab.usage,
-           window: StatsDateWindow.currentIsoWeek((now ?? DateTime.now).call()),
-           maxDate: StatsDateWindow.atDayEnd((now ?? DateTime.now).call()),
+           window: currentIsoWeek((now ?? DateTime.now).call()),
+           maxDate: (now ?? DateTime.now).call().dayEnd,
          ),
        ) {
     on<StatsStarted>(_onStarted);
@@ -36,10 +37,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
   Future<void> _onStarted(StatsStarted event, Emitter<StatsState> emit) async {
     emit(
-      state.copyWith(
-        window: StatsDateWindow.currentIsoWeek(_now()),
-        maxDate: StatsDateWindow.atDayEnd(_now()),
-      ),
+      state.copyWith(window: currentIsoWeek(_now()), maxDate: _now().dayEnd),
     );
     await _loadUsage(emit);
   }
@@ -52,9 +50,9 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     StatsDateRangePicked event,
     Emitter<StatsState> emit,
   ) async {
-    final picked = StatsDateWindow(
-      start: StatsDateWindow.atDayStart(event.range.start),
-      end: StatsDateWindow.atDayEnd(event.range.end),
+    final picked = DateTimeRange(
+      start: event.range.start.dayStart,
+      end: event.range.end.dayEnd,
     );
     emit(state.copyWith(window: picked));
     await _loadUsage(emit);
@@ -131,7 +129,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   UsageSummary _buildSummary(
     List<UsageStats> current,
     List<UsageStats> previous,
-    StatsDateWindow window,
+    DateTimeRange window,
   ) {
     final currentTotal = current.fold<Duration>(
       Duration.zero,
@@ -156,15 +154,13 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
     final trendDurations = <DateTime, Duration>{};
     for (var i = 0; i < window.inclusiveDays; i++) {
-      final day = StatsDateWindow.atDayStart(
-        window.start.add(Duration(days: i)),
-      );
+      final day = window.start.add(Duration(days: i)).dayStart;
       trendDurations[day] = Duration.zero;
     }
 
     for (final item in current) {
       final basis = item.lastTimeUsed ?? item.bucketStart ?? window.start;
-      final key = StatsDateWindow.atDayStart(basis);
+      final key = basis.dayStart;
       if (!trendDurations.containsKey(key)) {
         continue;
       }

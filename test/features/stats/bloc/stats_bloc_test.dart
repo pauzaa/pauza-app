@@ -4,7 +4,7 @@ import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/stats/bloc/stats_bloc.dart';
 import 'package:pauza/src/features/stats/bloc/stats_event.dart';
 import 'package:pauza/src/features/stats/data/stats_usage_repository.dart';
-import 'package:pauza/src/features/stats/model/stats_date_window.dart';
+import 'package:pauza/src/features/stats/model/stats_date_range_extensions.dart';
 import 'package:pauza/src/features/stats/model/usage_category_bucket.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
@@ -174,8 +174,8 @@ UsageStats _usage({
     ),
     totalDuration: Duration(minutes: minutes),
     totalLaunchCount: 1,
-    bucketStart: StatsDateWindow.atDayStart(day),
-    bucketEnd: StatsDateWindow.atDayEnd(day),
+    bucketStart: day.dayStart,
+    bucketEnd: day.dayEnd,
     lastTimeUsed: day,
   );
 }

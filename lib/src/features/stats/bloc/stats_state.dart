@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
-import 'package:pauza/src/features/stats/model/stats_date_window.dart';
 import 'package:pauza/src/features/stats/model/stats_tab.dart';
 import 'package:pauza/src/features/stats/model/usage_summary.dart';
 
@@ -18,7 +18,7 @@ final class StatsState extends Equatable {
 
   final PauzaPlatform platform;
   final StatsTab selectedTab;
-  final StatsDateWindow window;
+  final DateTimeRange window;
   final DateTime maxDate;
   final bool isLoading;
   final UsageSummary? summary;
@@ -27,7 +27,7 @@ final class StatsState extends Equatable {
 
   StatsState copyWith({
     StatsTab? selectedTab,
-    StatsDateWindow? window,
+    DateTimeRange? window,
     DateTime? maxDate,
     bool? isLoading,
     UsageSummary? summary,

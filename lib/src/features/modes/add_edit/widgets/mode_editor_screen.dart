@@ -10,7 +10,7 @@ import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_allowed_pauses_tile.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_apps_selector_tile.dart';
-import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_icon_picker_tile.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_icon_picker.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_icon_picker_sheet.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_schedule_panel.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_section_label.dart';
@@ -29,8 +29,7 @@ class ModeEditorScreen extends StatelessWidget {
 
   factory ModeEditorScreen.create() => const ModeEditorScreen(modeId: null);
 
-  factory ModeEditorScreen.edit({required String modeId}) =>
-      ModeEditorScreen(modeId: modeId);
+  factory ModeEditorScreen.edit({required String modeId}) => ModeEditorScreen(modeId: modeId);
 
   static void show(BuildContext context, {String? modeId}) {
     if (modeId == null) {
@@ -51,8 +50,7 @@ class ModeEditorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final rootScope = RootScope.of(context);
     return BlocProvider(
-      create: (context) =>
-          ModeEditorBloc(modesRepository: rootScope.modesRepository),
+      create: (context) => ModeEditorBloc(modesRepository: rootScope.modesRepository),
       child: ModeEditorMainScreen(modeId: modeId),
     );
   }
@@ -85,9 +83,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
   }
 
   void _loadDraft() {
-    context.read<ModeEditorBloc>().add(
-      ModeEditorLoadRequested(modeId: widget.modeId),
-    );
+    context.read<ModeEditorBloc>().add(ModeEditorLoadRequested(modeId: widget.modeId));
   }
 
   @override
@@ -97,9 +93,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
       notifier: _draftNotifier,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            widget.modeId == null ? l10n.createModeTitle : l10n.editModeTitle,
-          ),
+          title: Text(widget.modeId == null ? l10n.createModeTitle : l10n.editModeTitle),
         ),
         body: BlocConsumer<ModeEditorBloc, ModeEditorState>(
           listener: (context, state) {
@@ -115,8 +109,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
               }
             }
 
-            if (state is ModeEditorSaveSuccess ||
-                state is ModeEditorDeleteSuccess) {
+            if (state is ModeEditorSaveSuccess || state is ModeEditorDeleteSuccess) {
               if (!mounted) {
                 return;
               }
@@ -139,14 +132,8 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                     mainAxisSize: MainAxisSize.min,
                     spacing: PauzaSpacing.medium,
                     children: <Widget>[
-                      Text(
-                        l10n.modeLoadFailedMessage,
-                        style: context.textTheme.bodyLarge,
-                      ),
-                      PauzaOutlinedButton(
-                        title: Text(l10n.retryButton),
-                        onPressed: _loadDraft,
-                      ),
+                      Text(l10n.modeLoadFailedMessage, style: context.textTheme.bodyLarge),
+                      PauzaOutlinedButton(title: Text(l10n.retryButton), onPressed: _loadDraft),
                     ],
                   ),
                   _ => const CircularProgressIndicator(),
@@ -171,218 +158,159 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                       PauzaSpacing.medium,
                       PauzaSpacing.large,
                     ),
-                    children:
-                        <Widget>[
-                              PauzaTextFormField(
-                                key: ValueKey<int>(draftNotifier.revision),
-                                initialValue: draft.title,
-                                onChanged: _draftNotifier.updateTitle,
-                                decoration: PauzaInputDecoration(
-                                  labelText: l10n.modeTitleFieldLabel
-                                      .toUpperCase(),
-                                  labelStyle: context.textTheme.labelLarge
-                                      ?.copyWith(
-                                        color: context.colorScheme.primary,
-                                        letterSpacing: 2,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                  hintText: l10n.modeTitleFieldLabel,
-                                  errorText: _errorForField(
-                                    context,
-                                    validation[ModeUpsertValidationField.title],
-                                  ),
+                    children: <Widget>[
+                      Row(
+                        spacing: PauzaSpacing.small,
+                        children: [
+                          ModeEditorIconPicker(
+                            selectedIcon: draft.icon,
+                            onTap: isBusy ? () {} : () => _onChooseIconPressed(context, draft.icon),
+                          ),
+                          Expanded(
+                            child: PauzaTextFormField(
+                              key: ValueKey<int>(draftNotifier.revision),
+                              initialValue: draft.title,
+                              onChanged: _draftNotifier.updateTitle,
+                              decoration: PauzaInputDecoration(
+                                labelText: l10n.modeTitleFieldLabel.toUpperCase(),
+                                labelStyle: context.textTheme.labelLarge?.copyWith(
+                                  color: context.colorScheme.primary,
+                                  letterSpacing: 2,
+                                  fontWeight: FontWeight.w700,
                                 ),
-                              ),
-
-                              PauzaTextFormField(
-                                initialValue: draft.textOnScreen,
-                                onChanged: _draftNotifier.updateTextOnScreen,
-                                decoration: PauzaInputDecoration(
-                                  labelText: l10n.modeTextOnScreenFieldLabel
-                                      .toUpperCase(),
-                                  labelStyle: context.textTheme.labelLarge
-                                      ?.copyWith(
-                                        color: context.colorScheme.primary,
-                                        letterSpacing: 2,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                  hintText: l10n.modeTextOnScreenFieldLabel,
-                                  errorText: _errorForField(
-                                    context,
-                                    validation[ModeUpsertValidationField
-                                        .textOnScreen],
-                                  ),
-                                ),
-                              ),
-
-                              PauzaTextFormField(
-                                initialValue: draft.description ?? '',
-                                onChanged: _draftNotifier.updateDescription,
-                                maxLines: 3,
-                                decoration: PauzaInputDecoration(
-                                  hintText: l10n.modeDescriptionFieldLabel,
-                                  labelText: l10n.modeDescriptionFieldLabel
-                                      .toUpperCase(),
-                                  labelStyle: context.textTheme.labelLarge
-                                      ?.copyWith(
-                                        color: context.colorScheme.primary,
-                                        letterSpacing: 2,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                ),
-                              ),
-
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  ModeEditorSectionLabel(
-                                    label: l10n.modeIconSectionTitle,
-                                  ),
-                                  ModeEditorIconPickerTile(
-                                    title: l10n.modeIconChooseButton,
-                                    subtitle: l10n.modeIconPickerSubtitle,
-                                    selectedIcon: draft.icon,
-                                    onTap: isBusy
-                                        ? () {}
-                                        : () => _onChooseIconPressed(
-                                            context,
-                                            draft.icon,
-                                          ),
-                                  ),
-                                ],
-                              ),
-
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  ModeEditorSectionLabel(
-                                    label: l10n.modeBlockedAppsSectionTitle,
-                                  ),
-                                  ModeEditorAppsSelectorTile(
-                                    title: l10n.modeBlockedAppsChooseButton,
-                                    subtitle: l10n.modeBlockedAppsSubtitle,
-                                    selectedCountLabel: l10n
-                                        .modeBlockedAppsSelectedCountLabel(
-                                          draft.blockedAppIds.length,
-                                        ),
-                                    errorText: _errorForField(
-                                      context,
-                                      validation[ModeUpsertValidationField
-                                          .blockedApps],
-                                    ),
-                                    onTap: isBusy
-                                        ? () {}
-                                        : () {
-                                            onChooseAppsPressed(
-                                              currentSelection:
-                                                  draft.blockedAppIds,
-                                              onChanged: _draftNotifier
-                                                  .updateBlockedApps,
-                                            );
-                                          },
-                                  ),
-                                ],
-                              ),
-
-                              ModeEditorSchedulePanel(
-                                title: l10n.modeScheduleTitle,
-                                enabled: isScheduleEnabled,
-                                onToggle: isBusy
-                                    ? (_) {}
-                                    : _draftNotifier.toggleScheduleEnabled,
-                                days: WeekDay.values
-                                    .map(
-                                      (day) => ModeEditorDayChipItem(
-                                        id: day.name,
-                                        label: day
-                                            .localizeShort(l10n)
-                                            .substring(0, 1),
-                                        isSelected:
-                                            schedule?.days.contains(day) ??
-                                            false,
-                                      ),
-                                    )
-                                    .toList(growable: false),
-                                onDayPressed: isBusy
-                                    ? (_) {}
-                                    : (dayName) {
-                                        _draftNotifier.toggleScheduleDay(
-                                          WeekDay.values.firstWhere(
-                                            (day) => day.name == dayName,
-                                          ),
-                                        );
-                                      },
-                                startTitle: l10n.modeScheduleStartTimeLabel,
-                                endTitle: l10n.modeScheduleEndTimeLabel,
-                                startValue: _formatTime(
-                                  context,
-                                  schedule?.start,
-                                ),
-                                endValue: _formatTime(context, schedule?.end),
-                                onStartPressed: isBusy
-                                    ? () {}
-                                    : () => _onPickStartTime(
-                                        context,
-                                        schedule?.start,
-                                        isStart: true,
-                                      ),
-                                onEndPressed: isBusy
-                                    ? () {}
-                                    : () => _onPickStartTime(
-                                        context,
-                                        schedule?.end,
-                                        isStart: false,
-                                      ),
+                                hintText: l10n.modeTitleFieldLabel,
                                 errorText: _errorForField(
                                   context,
-                                  validation[ModeUpsertValidationField
-                                      .scheduleDays],
+                                  validation[ModeUpsertValidationField.title],
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  ModeEditorSectionLabel(
-                                    label: l10n.modeStrictnessTitle,
-                                  ),
-                                  ModeEditorAllowedPausesTile(
-                                    title: l10n.modeAllowedPausesTitle,
-                                    subtitle: l10n.modeAllowedPausesSubtitle,
-                                    value: draft.allowedPausesCount,
-                                    canIncrement:
-                                        draft.allowedPausesCount <
-                                        ModeUpsertDraftNotifier
-                                            .maxAllowedPauses,
-                                    canDecrement:
-                                        draft.allowedPausesCount >
-                                        ModeUpsertDraftNotifier
-                                            .minAllowedPauses,
-                                    onIncrement: isBusy
-                                        ? null
-                                        : _draftNotifier.incrementPauses,
-                                    onDecrement: isBusy
-                                        ? null
-                                        : _draftNotifier.decrementPauses,
-                                  ),
-                                ],
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      PauzaTextFormField(
+                        initialValue: draft.textOnScreen,
+                        onChanged: _draftNotifier.updateTextOnScreen,
+                        decoration: PauzaInputDecoration(
+                          labelText: l10n.modeTextOnScreenFieldLabel.toUpperCase(),
+                          labelStyle: context.textTheme.labelLarge?.copyWith(
+                            color: context.colorScheme.primary,
+                            letterSpacing: 2,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          hintText: l10n.modeTextOnScreenFieldLabel,
+                          errorText: _errorForField(
+                            context,
+                            validation[ModeUpsertValidationField.textOnScreen],
+                          ),
+                        ),
+                      ),
+
+                      PauzaTextFormField(
+                        initialValue: draft.description ?? '',
+                        onChanged: _draftNotifier.updateDescription,
+                        maxLines: 3,
+                        decoration: PauzaInputDecoration(
+                          hintText: l10n.modeDescriptionFieldLabel,
+                          labelText: l10n.modeDescriptionFieldLabel.toUpperCase(),
+                          labelStyle: context.textTheme.labelLarge?.copyWith(
+                            color: context.colorScheme.primary,
+                            letterSpacing: 2,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ModeEditorSectionLabel(label: l10n.modeBlockedAppsSectionTitle),
+                          ModeEditorAppsSelectorTile(
+                            title: l10n.modeBlockedAppsChooseButton,
+                            subtitle: l10n.modeBlockedAppsSubtitle,
+                            selectedCountLabel: l10n.modeBlockedAppsSelectedCountLabel(
+                              draft.blockedAppIds.length,
+                            ),
+                            errorText: _errorForField(
+                              context,
+                              validation[ModeUpsertValidationField.blockedApps],
+                            ),
+                            onTap: isBusy
+                                ? () {}
+                                : () {
+                                    onChooseAppsPressed(
+                                      currentSelection: draft.blockedAppIds,
+                                      onChanged: _draftNotifier.updateBlockedApps,
+                                    );
+                                  },
+                          ),
+                        ],
+                      ),
+
+                      ModeEditorSchedulePanel(
+                        title: l10n.modeScheduleTitle,
+                        enabled: isScheduleEnabled,
+                        onToggle: isBusy ? (_) {} : _draftNotifier.toggleScheduleEnabled,
+                        days: WeekDay.values
+                            .map(
+                              (day) => ModeEditorDayChipItem(
+                                id: day.name,
+                                label: day.localizeShort(l10n).substring(0, 1),
+                                isSelected: schedule?.days.contains(day) ?? false,
                               ),
-                              if (widget.modeId != null)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: PauzaSpacing.medium,
-                                  ),
-                                  child: PauzaTextButton(
-                                    size: PauzaButtonSize.large,
-                                    disabled: isBusy,
-                                    onPressed: _onDeletePressed,
-                                    title: Text(l10n.modeDeleteFocusButton),
-                                  ),
-                                ),
-                            ]
-                            .interleaved(
-                              const SizedBox(height: PauzaSpacing.regular),
                             )
-                            .toList(),
+                            .toList(growable: false),
+                        onDayPressed: isBusy
+                            ? (_) {}
+                            : (dayName) {
+                                _draftNotifier.toggleScheduleDay(
+                                  WeekDay.values.firstWhere((day) => day.name == dayName),
+                                );
+                              },
+                        startTitle: l10n.modeScheduleStartTimeLabel,
+                        endTitle: l10n.modeScheduleEndTimeLabel,
+                        startValue: _formatTime(context, schedule?.start),
+                        endValue: _formatTime(context, schedule?.end),
+                        onStartPressed: isBusy
+                            ? () {}
+                            : () => _onPickStartTime(context, schedule?.start, isStart: true),
+                        onEndPressed: isBusy
+                            ? () {}
+                            : () => _onPickStartTime(context, schedule?.end, isStart: false),
+                        errorText: _errorForField(
+                          context,
+                          validation[ModeUpsertValidationField.scheduleDays],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ModeEditorSectionLabel(label: l10n.modeStrictnessTitle),
+                          ModeEditorAllowedPausesTile(
+                            title: l10n.modeAllowedPausesTitle,
+                            subtitle: l10n.modeAllowedPausesSubtitle,
+                            value: draft.allowedPausesCount,
+                            canIncrement:
+                                draft.allowedPausesCount < ModeUpsertDraftNotifier.maxAllowedPauses,
+                            canDecrement:
+                                draft.allowedPausesCount > ModeUpsertDraftNotifier.minAllowedPauses,
+                            onIncrement: isBusy ? null : _draftNotifier.incrementPauses,
+                            onDecrement: isBusy ? null : _draftNotifier.decrementPauses,
+                          ),
+                        ],
+                      ),
+                      if (widget.modeId != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: PauzaSpacing.medium),
+                          child: PauzaTextButton(
+                            size: PauzaButtonSize.large,
+                            disabled: isBusy,
+                            onPressed: _onDeletePressed,
+                            title: Text(l10n.modeDeleteFocusButton),
+                          ),
+                        ),
+                    ].interleaved(const SizedBox(height: PauzaSpacing.regular)).toList(),
                   ),
                 ),
                 ModeEditorStickyActionBar(
@@ -446,8 +374,9 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
       final preSelectedApps = currentSelection
           .map((token) => IOSAppInfo(applicationToken: token))
           .toList(growable: false);
-      final selectedApps = await rootScope.installedAppsRepository
-          .selectIOSApps(preSelectedApps: preSelectedApps);
+      final selectedApps = await rootScope.installedAppsRepository.selectIOSApps(
+        preSelectedApps: preSelectedApps,
+      );
       if (!mounted) {
         return;
       }
@@ -462,10 +391,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
     }
   }
 
-  Future<void> _onChooseIconPressed(
-    BuildContext context,
-    ModeIcon selectedIcon,
-  ) async {
+  Future<void> _onChooseIconPressed(BuildContext context, ModeIcon selectedIcon) async {
     final l10n = context.l10n;
     final nextIcon = await ModeIconPickerSheet.show(
       context,
@@ -479,17 +405,13 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
     _draftNotifier.updateIcon(nextIcon);
   }
 
-  
-
   Future<void> _onDeletePressed() async {
     final shouldDelete = await ConfirmDeleteModeDialog.show(context);
     if (!mounted || shouldDelete != true) {
       return;
     }
 
-    context.read<ModeEditorBloc>().add(
-      ModeEditorDeleteRequested(modeId: widget.modeId),
-    );
+    context.read<ModeEditorBloc>().add(ModeEditorDeleteRequested(modeId: widget.modeId));
   }
 
   void _onSavePressed(BuildContext context) {
@@ -499,32 +421,23 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
     }
 
     context.read<ModeEditorBloc>().add(
-      ModeEditorSaveRequested(
-        modeId: widget.modeId,
-        request: _draftNotifier.buildSubmitRequest(),
-      ),
+      ModeEditorSaveRequested(modeId: widget.modeId, request: _draftNotifier.buildSubmitRequest()),
     );
   }
 
-  String? _errorForField(
-    BuildContext context,
-    ModeUpsertValidationCode? error,
-  ) {
+  String? _errorForField(BuildContext context, ModeUpsertValidationCode? error) {
     if (error == null) {
       return null;
     }
     final l10n = context.l10n;
     return switch (error) {
       ModeUpsertValidationCode.required => l10n.modeRequiredFieldError,
-      ModeUpsertValidationCode.blockedAppsRequired =>
-        l10n.modeBlockedAppsRequiredError,
-      ModeUpsertValidationCode.allowedPausesOutOfRange =>
-        l10n.modeAllowedPausesOutOfRangeError(
-          ModeUpsertDraftNotifier.minAllowedPauses,
-          ModeUpsertDraftNotifier.maxAllowedPauses,
-        ),
-      ModeUpsertValidationCode.scheduleDaysRequired =>
-        l10n.modeScheduleDaysRequiredError,
+      ModeUpsertValidationCode.blockedAppsRequired => l10n.modeBlockedAppsRequiredError,
+      ModeUpsertValidationCode.allowedPausesOutOfRange => l10n.modeAllowedPausesOutOfRangeError(
+        ModeUpsertDraftNotifier.minAllowedPauses,
+        ModeUpsertDraftNotifier.maxAllowedPauses,
+      ),
+      ModeUpsertValidationCode.scheduleDaysRequired => l10n.modeScheduleDaysRequiredError,
     };
   }
 }

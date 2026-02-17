@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_icon_picker.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_screen.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
@@ -63,7 +64,7 @@ void main() {
     expect(find.text('This field is required'), findsAtLeastNWidgets(1));
   });
 
-  testWidgets('renders icon section controls', (tester) async {
+  testWidgets('renders icon picker at top', (tester) async {
     final bloc = ModeEditorBloc(modesRepository: _TestModesRepository());
     addTearDown(bloc.close);
     await tester.pumpWidget(
@@ -71,11 +72,8 @@ void main() {
     );
     await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.drag(find.byType(ListView), const Offset(0, -250));
-    await tester.pump();
-
-    expect(find.text('ICON'), findsOneWidget);
-    expect(find.text('Choose icon'), findsOneWidget);
+    // Icon picker is visible at the top (in the Row with title field)
+    expect(find.byType(ModeEditorIconPicker), findsOneWidget);
   });
 }
 

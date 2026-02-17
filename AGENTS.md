@@ -83,7 +83,10 @@ test/
 
 ### UI Kit ownership
 - This project consumes a local `pauza_ui_kit` package
-- All new UI widgets/components belong in that package (not directly in `lib/src`)
+- Feature-specific widgets should live in their respective feature folders under
+  `lib/src/features/...`.
+- Reusable widgets/components that can be shared across features should live in
+  `pauza_ui_kit`.
 
 ### UI Development Guidelines
 - **Widget Separation**: Avoid `_buildItem()` helper methods. Break complex UIs into standalone widgets.

@@ -511,5 +511,18 @@
   "statsLoadFailed": "Failed to load usage statistics.",
   "statsNoUsageData": "No usage data for the selected period.",
   "statsIosReportUnavailableTitle": "iOS report unavailable",
-  "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured."
+  "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured.",
+  "authTagline": "Focus & Wellbeing",
+  "authEmailAddress": "Email address",
+  "authEmailHint": "name@example.com",
+  "authPassword": "Password",
+  "authForgotPassword": "Forgot password?",
+  "authLogIn": "Log in",
+  "authValidationRequired": "This field is required",
+  "authValidationInvalidEmail": "Enter a valid email address",
+  "authFailureInvalidCredentials": "Invalid email or password.",
+  "authFailureInvalidOtp": "Invalid verification code.",
+  "authFailureOtpChallengeMissing": "Verification challenge expired. Try again.",
+  "authFailureStorage": "Could not access secure storage. Please try again.",
+  "authFailureUnknown": "Could not sign in. Please try again."
 }

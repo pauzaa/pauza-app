@@ -910,6 +910,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Make sure Screen Time permission and Device Activity Report extension are configured.'**
   String get statsIosReportUnavailableBody;
+
+  /// No description provided for @authTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus & Wellbeing'**
+  String get authTagline;
+
+  /// No description provided for @authEmailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address'**
+  String get authEmailAddress;
+
+  /// No description provided for @authEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'name@example.com'**
+  String get authEmailHint;
+
+  /// No description provided for @authPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPassword;
+
+  /// No description provided for @authForgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get authForgotPassword;
+
+  /// No description provided for @authLogIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get authLogIn;
+
+  /// No description provided for @authValidationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get authValidationRequired;
+
+  /// No description provided for @authValidationInvalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get authValidationInvalidEmail;
+
+  /// No description provided for @authFailureInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password.'**
+  String get authFailureInvalidCredentials;
+
+  /// No description provided for @authFailureInvalidOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid verification code.'**
+  String get authFailureInvalidOtp;
+
+  /// No description provided for @authFailureOtpChallengeMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification challenge expired. Try again.'**
+  String get authFailureOtpChallengeMissing;
+
+  /// No description provided for @authFailureStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not access secure storage. Please try again.'**
+  String get authFailureStorage;
+
+  /// No description provided for @authFailureUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sign in. Please try again.'**
+  String get authFailureUnknown;
 }
 
 class _AppLocalizationsDelegate

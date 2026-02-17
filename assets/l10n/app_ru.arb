@@ -204,5 +204,18 @@
   "statsLoadFailed": "Failed to load usage statistics.",
   "statsNoUsageData": "No usage data for the selected period.",
   "statsIosReportUnavailableTitle": "iOS report unavailable",
-  "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured."
+  "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured.",
+  "authTagline": "Фокус и благополучие",
+  "authEmailAddress": "Адрес электронной почты",
+  "authEmailHint": "name@example.com",
+  "authPassword": "Пароль",
+  "authForgotPassword": "Забыли пароль?",
+  "authLogIn": "Войти",
+  "authValidationRequired": "Это поле обязательно",
+  "authValidationInvalidEmail": "Введите корректный email",
+  "authFailureInvalidCredentials": "Неверный email или пароль.",
+  "authFailureInvalidOtp": "Неверный код подтверждения.",
+  "authFailureOtpChallengeMissing": "Сессия подтверждения истекла. Попробуйте снова.",
+  "authFailureStorage": "Не удалось получить доступ к защищенному хранилищу.",
+  "authFailureUnknown": "Не удалось войти. Попробуйте снова."
 }

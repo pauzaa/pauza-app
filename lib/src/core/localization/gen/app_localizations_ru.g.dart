@@ -497,4 +497,45 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get statsIosReportUnavailableBody =>
       'Make sure Screen Time permission and Device Activity Report extension are configured.';
+
+  @override
+  String get authTagline => 'Фокус и благополучие';
+
+  @override
+  String get authEmailAddress => 'Адрес электронной почты';
+
+  @override
+  String get authEmailHint => 'name@example.com';
+
+  @override
+  String get authPassword => 'Пароль';
+
+  @override
+  String get authForgotPassword => 'Забыли пароль?';
+
+  @override
+  String get authLogIn => 'Войти';
+
+  @override
+  String get authValidationRequired => 'Это поле обязательно';
+
+  @override
+  String get authValidationInvalidEmail => 'Введите корректный email';
+
+  @override
+  String get authFailureInvalidCredentials => 'Неверный email или пароль.';
+
+  @override
+  String get authFailureInvalidOtp => 'Неверный код подтверждения.';
+
+  @override
+  String get authFailureOtpChallengeMissing =>
+      'Сессия подтверждения истекла. Попробуйте снова.';
+
+  @override
+  String get authFailureStorage =>
+      'Не удалось получить доступ к защищенному хранилищу.';
+
+  @override
+  String get authFailureUnknown => 'Не удалось войти. Попробуйте снова.';
 }

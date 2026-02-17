@@ -497,6 +497,47 @@ class AppLocalizationsUz extends AppLocalizations {
   @override
   String get statsIosReportUnavailableBody =>
       'Make sure Screen Time permission and Device Activity Report extension are configured.';
+
+  @override
+  String get authTagline => 'Diqqat va farovonlik';
+
+  @override
+  String get authEmailAddress => 'Email manzili';
+
+  @override
+  String get authEmailHint => 'name@example.com';
+
+  @override
+  String get authPassword => 'Parol';
+
+  @override
+  String get authForgotPassword => 'Parolni unutdingizmi?';
+
+  @override
+  String get authLogIn => 'Kirish';
+
+  @override
+  String get authValidationRequired => 'Bu maydon majburiy';
+
+  @override
+  String get authValidationInvalidEmail => 'To\'g\'ri email manzilini kiriting';
+
+  @override
+  String get authFailureInvalidCredentials => 'Email yoki parol noto\'g\'ri.';
+
+  @override
+  String get authFailureInvalidOtp => 'Tasdiqlash kodi noto\'g\'ri.';
+
+  @override
+  String get authFailureOtpChallengeMissing =>
+      'Tasdiqlash sessiyasi tugagan. Qayta urinib ko\'ring.';
+
+  @override
+  String get authFailureStorage => 'Xavfsiz xotiraga kirib bo\'lmadi.';
+
+  @override
+  String get authFailureUnknown =>
+      'Kirish amalga oshmadi. Qayta urinib ko\'ring.';
 }
 
 /// The translations for Uzbek, using the Cyrillic script (`uz_Cyrl`).
@@ -946,4 +987,44 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   @override
   String get statsIosReportUnavailableBody =>
       'Make sure Screen Time permission and Device Activity Report extension are configured.';
+
+  @override
+  String get authTagline => 'Диққат ва фаровонлик';
+
+  @override
+  String get authEmailAddress => 'Email манзили';
+
+  @override
+  String get authEmailHint => 'name@example.com';
+
+  @override
+  String get authPassword => 'Парол';
+
+  @override
+  String get authForgotPassword => 'Паролни унутдингизми?';
+
+  @override
+  String get authLogIn => 'Кириш';
+
+  @override
+  String get authValidationRequired => 'Бу майдон мажбурий';
+
+  @override
+  String get authValidationInvalidEmail => 'Тўғри email манзилини киритинг';
+
+  @override
+  String get authFailureInvalidCredentials => 'Email ёки парол нотўғри.';
+
+  @override
+  String get authFailureInvalidOtp => 'Тасдиқлаш коди нотўғри.';
+
+  @override
+  String get authFailureOtpChallengeMissing =>
+      'Тасдиқлаш сессияси тугаган. Қайта уриниб кўринг.';
+
+  @override
+  String get authFailureStorage => 'Хавфсиз хотирага кириб бўлмади.';
+
+  @override
+  String get authFailureUnknown => 'Кириш амалга ошмади. Қайта уриниб кўринг.';
 }

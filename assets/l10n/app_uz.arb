@@ -204,5 +204,18 @@
   "statsLoadFailed": "Failed to load usage statistics.",
   "statsNoUsageData": "No usage data for the selected period.",
   "statsIosReportUnavailableTitle": "iOS report unavailable",
-  "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured."
+  "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured.",
+  "authTagline": "Diqqat va farovonlik",
+  "authEmailAddress": "Email manzili",
+  "authEmailHint": "name@example.com",
+  "authPassword": "Parol",
+  "authForgotPassword": "Parolni unutdingizmi?",
+  "authLogIn": "Kirish",
+  "authValidationRequired": "Bu maydon majburiy",
+  "authValidationInvalidEmail": "To'g'ri email manzilini kiriting",
+  "authFailureInvalidCredentials": "Email yoki parol noto'g'ri.",
+  "authFailureInvalidOtp": "Tasdiqlash kodi noto'g'ri.",
+  "authFailureOtpChallengeMissing": "Tasdiqlash sessiyasi tugagan. Qayta urinib ko'ring.",
+  "authFailureStorage": "Xavfsiz xotiraga kirib bo'lmadi.",
+  "authFailureUnknown": "Kirish amalga oshmadi. Qayta urinib ko'ring."
 }

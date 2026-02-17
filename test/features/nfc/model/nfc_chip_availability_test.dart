@@ -40,6 +40,33 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get appName => 'Pauza';
   @override
+  String get authTagline => 'Focus & Wellbeing';
+  @override
+  String get authEmailAddress => 'Email address';
+  @override
+  String get authEmailHint => 'name@example.com';
+  @override
+  String get authPassword => 'Password';
+  @override
+  String get authForgotPassword => 'Forgot password?';
+  @override
+  String get authLogIn => 'Log in';
+  @override
+  String get authValidationRequired => 'This field is required';
+  @override
+  String get authValidationInvalidEmail => 'Enter a valid email address';
+  @override
+  String get authFailureInvalidCredentials => 'Invalid email or password.';
+  @override
+  String get authFailureInvalidOtp => 'Invalid verification code.';
+  @override
+  String get authFailureOtpChallengeMissing =>
+      'Verification challenge expired. Try again.';
+  @override
+  String get authFailureStorage => 'Could not access secure storage.';
+  @override
+  String get authFailureUnknown => 'Could not sign in.';
+  @override
   String get homeTitle => 'Home';
   @override
   String get statsTitle => 'Stats';

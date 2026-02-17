@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
+import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 
 void main() {
@@ -56,6 +57,22 @@ void main() {
       await sub.cancel();
       await bloc.close();
     });
+
+    test('load maps mode icon token to request icon token', () async {
+      final repository = _FakeModesRepository();
+      final bloc = ModeEditorBloc(modesRepository: repository);
+      final emitted = <ModeEditorState>[];
+      final sub = bloc.stream.listen(emitted.add);
+
+      bloc.add(const ModeEditorLoadRequested(modeId: 'mode-1'));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      final ready = emitted.whereType<ModeEditorReady>().last;
+      expect(ready.request.icon, ModeIconCatalog.defaultIcon);
+
+      await sub.cancel();
+      await bloc.close();
+    });
   });
 }
 
@@ -81,6 +98,7 @@ class _FakeModesRepository implements ModesRepository {
       textOnScreen: 'Stay focused',
       description: null,
       allowedPausesCount: 2,
+      icon: ModeIconCatalog.defaultIcon,
       schedule: null,
       blockedAppIds: const ISet.empty(),
       createdAt: DateTime.now(),

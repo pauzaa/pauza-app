@@ -533,6 +533,102 @@ abstract class AppLocalizations {
   /// **'Description'**
   String get modeDescriptionFieldLabel;
 
+  /// Section title for mode icon selection.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get modeIconSectionTitle;
+
+  /// Button label to choose mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose icon'**
+  String get modeIconChooseButton;
+
+  /// Title for the mode icon picker sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick an icon'**
+  String get modeIconPickerTitle;
+
+  /// Subtitle shown in mode icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose one icon for this mode'**
+  String get modeIconPickerSubtitle;
+
+  /// Label for tune mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Tune'**
+  String get modeIconLabelTune;
+
+  /// Label for psychology mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Mind'**
+  String get modeIconLabelPsychology;
+
+  /// Label for timer mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get modeIconLabelTimer;
+
+  /// Label for bolt mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Bolt'**
+  String get modeIconLabelBolt;
+
+  /// Label for rocket launch mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Rocket'**
+  String get modeIconLabelRocketLaunch;
+
+  /// Label for self improvement mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Calm'**
+  String get modeIconLabelSelfImprovement;
+
+  /// Label for fitness center mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness'**
+  String get modeIconLabelFitnessCenter;
+
+  /// Label for school mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'School'**
+  String get modeIconLabelSchool;
+
+  /// Label for work mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get modeIconLabelWork;
+
+  /// Label for menu book mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get modeIconLabelMenuBook;
+
+  /// Label for music note mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Music'**
+  String get modeIconLabelMusicNote;
+
+  /// Label for nightlight mode icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Night'**
+  String get modeIconLabelNightlight;
+
   /// Label for the mode enabled toggle.
   ///
   /// In en, this message translates to:

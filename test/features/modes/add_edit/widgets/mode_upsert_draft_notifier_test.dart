@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
+import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
@@ -71,6 +72,7 @@ void main() {
               textOnScreen: 'Focus',
               description: null,
               allowedPausesCount: 2,
+              icon: ModeIconCatalog.defaultIcon,
               blockedAppIds: ISet<AppIdentifier>(const <AppIdentifier>[
                 AppIdentifier('app.one'),
               ]),
@@ -104,6 +106,20 @@ void main() {
         notifier.decrementPauses();
       }
       expect(notifier.value.allowedPausesCount, 0);
+    });
+
+    test('initial draft uses default icon', () {
+      final notifier = ModeUpsertDraftNotifier();
+
+      expect(notifier.value.icon, ModeIconCatalog.defaultIcon);
+    });
+
+    test('updateIcon normalizes invalid token to default', () {
+      final notifier = ModeUpsertDraftNotifier();
+
+      notifier.updateIcon(ModeIcon.fromToken('invalid'));
+
+      expect(notifier.value.icon, ModeIconCatalog.defaultIcon);
     });
   });
 }

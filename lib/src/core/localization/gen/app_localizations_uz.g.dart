@@ -267,6 +267,54 @@ class AppLocalizationsUz extends AppLocalizations {
   String get modeDescriptionFieldLabel => 'Tavsif';
 
   @override
+  String get modeIconSectionTitle => 'Icon';
+
+  @override
+  String get modeIconChooseButton => 'Choose icon';
+
+  @override
+  String get modeIconPickerTitle => 'Pick an icon';
+
+  @override
+  String get modeIconPickerSubtitle => 'Choose one icon for this mode';
+
+  @override
+  String get modeIconLabelTune => 'Tune';
+
+  @override
+  String get modeIconLabelPsychology => 'Mind';
+
+  @override
+  String get modeIconLabelTimer => 'Timer';
+
+  @override
+  String get modeIconLabelBolt => 'Bolt';
+
+  @override
+  String get modeIconLabelRocketLaunch => 'Rocket';
+
+  @override
+  String get modeIconLabelSelfImprovement => 'Calm';
+
+  @override
+  String get modeIconLabelFitnessCenter => 'Fitness';
+
+  @override
+  String get modeIconLabelSchool => 'School';
+
+  @override
+  String get modeIconLabelWork => 'Work';
+
+  @override
+  String get modeIconLabelMenuBook => 'Read';
+
+  @override
+  String get modeIconLabelMusicNote => 'Music';
+
+  @override
+  String get modeIconLabelNightlight => 'Night';
+
+  @override
   String get modeEnabledLabel => 'Yoqilgan';
 
   @override

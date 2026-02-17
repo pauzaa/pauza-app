@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
@@ -15,8 +16,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
   bool _isEditMode = false;
   bool _hadInitialSchedule = false;
   bool _submitted = false;
-  ModeUpsertValidationResult _validation =
-      const ModeUpsertValidationResult.valid();
+  ModeUpsertValidationResult _validation = const ModeUpsertValidationResult.valid();
 
   int get revision => _revision;
   bool get isEditMode => _isEditMode;
@@ -30,10 +30,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
     }
   }
 
-  void configureForMode({
-    required ModeUpsertDTO initialDraft,
-    required bool isEditMode,
-  }) {
+  void configureForMode({required ModeUpsertDTO initialDraft, required bool isEditMode}) {
     _isEditMode = isEditMode;
     _hadInitialSchedule = initialDraft.schedule != null;
     replace(initialDraft);
@@ -60,10 +57,12 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
     update((current) => current.copyWith(description: description));
   }
 
+  void updateIcon(ModeIcon icon) {
+    update((current) => current.copyWith(icon: icon));
+  }
+
   void updateBlockedApps(ISet<AppIdentifier> blockedAppIds) {
-    update(
-      (current) => current.copyWith(blockedAppIds: blockedAppIds.toISet()),
-    );
+    update((current) => current.copyWith(blockedAppIds: blockedAppIds.toISet()));
   }
 
   void incrementPauses() {
@@ -138,9 +137,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
 
   void updateScheduleStart(TimeOfDay start) {
     final schedule = value.schedule ?? const Schedule.initial();
-    update(
-      (draft) => draft.copyWith(schedule: schedule.copyWith(start: start)),
-    );
+    update((draft) => draft.copyWith(schedule: schedule.copyWith(start: start)));
   }
 
   void updateScheduleEnd(TimeOfDay end) {
@@ -163,6 +160,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
       textOnScreen: current.textOnScreen.trim(),
       description: current.description?.trim(),
       allowedPausesCount: current.allowedPausesCount,
+      icon: current.icon,
       schedule: normalizedSchedule,
       blockedAppIds: current.blockedAppIds,
     );
@@ -172,16 +170,13 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
     final errors = <ModeUpsertValidationField, ModeUpsertValidationCode>{};
 
     if (draft.title.trim().isEmpty) {
-      errors[ModeUpsertValidationField.title] =
-          ModeUpsertValidationCode.required;
+      errors[ModeUpsertValidationField.title] = ModeUpsertValidationCode.required;
     }
     if (draft.textOnScreen.trim().isEmpty) {
-      errors[ModeUpsertValidationField.textOnScreen] =
-          ModeUpsertValidationCode.required;
+      errors[ModeUpsertValidationField.textOnScreen] = ModeUpsertValidationCode.required;
     }
     if (draft.blockedAppIds.isEmpty) {
-      errors[ModeUpsertValidationField.blockedApps] =
-          ModeUpsertValidationCode.blockedAppsRequired;
+      errors[ModeUpsertValidationField.blockedApps] = ModeUpsertValidationCode.blockedAppsRequired;
     }
     if (draft.allowedPausesCount < minAllowedPauses ||
         draft.allowedPausesCount > maxAllowedPauses) {
@@ -203,12 +198,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
       return null;
     }
     if (schedule.enabled) {
-      return Schedule(
-        days: schedule.days,
-        start: schedule.start,
-        end: schedule.end,
-        enabled: true,
-      );
+      return Schedule(days: schedule.days, start: schedule.start, end: schedule.end, enabled: true);
     }
 
     if (_isEditMode && _hadInitialSchedule) {
@@ -223,15 +213,13 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
     return null;
   }
 
-  ModeUpsertDTO _copyWithSchedule({
-    required ModeUpsertDTO draft,
-    required Schedule? schedule,
-  }) {
+  ModeUpsertDTO _copyWithSchedule({required ModeUpsertDTO draft, required Schedule? schedule}) {
     return ModeUpsertDTO(
       title: draft.title,
       textOnScreen: draft.textOnScreen,
       description: draft.description,
       allowedPausesCount: draft.allowedPausesCount,
+      icon: draft.icon,
       blockedAppIds: draft.blockedAppIds,
       schedule: schedule,
     );
@@ -239,11 +227,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
 }
 
 class ModeUpsertScope extends InheritedNotifier<ModeUpsertDraftNotifier> {
-  const ModeUpsertScope({
-    required super.notifier,
-    required super.child,
-    super.key,
-  });
+  const ModeUpsertScope({required super.notifier, required super.child, super.key});
 
   static ModeUpsertDraftNotifier watch(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<ModeUpsertScope>();

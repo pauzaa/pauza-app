@@ -10,6 +10,8 @@ CREATE TABLE modes (
   description TEXT,
   allowed_pauses_count INTEGER NOT NULL DEFAULT 0
     CHECK (allowed_pauses_count >= 0),
+  icon_token TEXT NOT NULL DEFAULT 'ms:v1:tune'
+    CHECK (length(trim(icon_token)) > 0),
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );

@@ -131,6 +131,30 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profileTitle;
 
+  /// Fallback display name for profile screen when current user data is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown User'**
+  String get profileDisplayNameFallback;
+
+  /// Fallback username for profile screen when current user data is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'username'**
+  String get profileUsernameFallback;
+
+  /// Navigation item title for editing profile details.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Info'**
+  String get profileEditInfoNavTitle;
+
+  /// Navigation item title for profile settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get profileSettingsNavTitle;
+
   /// Title shown when a page is not found.
   ///
   /// In en, this message translates to:

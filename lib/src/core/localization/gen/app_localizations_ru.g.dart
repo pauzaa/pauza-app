@@ -24,6 +24,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileTitle => 'Профиль';
 
   @override
+  String get profileDisplayNameFallback => 'Неизвестный пользователь';
+
+  @override
+  String get profileUsernameFallback => 'username';
+
+  @override
+  String get profileEditInfoNavTitle => 'Изменить профиль';
+
+  @override
+  String get profileSettingsNavTitle => 'Настройки';
+
+  @override
   String get notFoundTitle => 'Страница не найдена';
 
   @override

@@ -9,6 +9,7 @@ final class PauzaDashboardAppBar extends StatelessWidget {
     required this.title,
     super.key,
     this.showSettingsButton = true,
+    this.showGreeting = true,
     this.onSettingsPressed,
     this.padding = const EdgeInsets.symmetric(horizontal: PauzaSpacing.large),
   });
@@ -16,6 +17,7 @@ final class PauzaDashboardAppBar extends StatelessWidget {
   final String greeting;
   final String title;
   final bool showSettingsButton;
+  final bool showGreeting;
   final VoidCallback? onSettingsPressed;
   final EdgeInsetsGeometry padding;
 
@@ -30,15 +32,17 @@ final class PauzaDashboardAppBar extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  greeting.toUpperCase(),
-                  style: context.textTheme.labelLarge?.copyWith(
-                    color: context.colorScheme.primary,
-                    letterSpacing: 4,
-                    fontWeight: FontWeight.w700,
+                if (showGreeting) ...<Widget>[
+                  Text(
+                    greeting.toUpperCase(),
+                    style: context.textTheme.labelLarge?.copyWith(
+                      color: context.colorScheme.primary,
+                      letterSpacing: 4,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                const SizedBox(height: PauzaSpacing.small),
+                  const SizedBox(height: PauzaSpacing.small),
+                ],
                 Text(
                   title,
                   style: context.textTheme.headlineMedium?.copyWith(

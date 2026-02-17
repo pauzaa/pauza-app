@@ -29,3 +29,13 @@ final class PauzaIconSizes {
   static const double xLarge = 48;
   static const double xxLarge = 64;
 }
+
+final class PauzaAvatarSizes {
+  PauzaAvatarSizes._();
+
+  static const double small = 32;
+  static const double medium = 48;
+  static const double large = 64;
+  static const double xLarge = 90;
+  static const double xxLarge = 120;
+}

@@ -13,10 +13,7 @@ abstract interface class ModesRepository {
 
   Future<void> createMode(ModeUpsertDTO request);
 
-  Future<void> updateMode({
-    required String modeId,
-    required ModeUpsertDTO request,
-  });
+  Future<void> updateMode({required String modeId, required ModeUpsertDTO request});
 
   Future<void> deleteMode(String modeId);
 }
@@ -45,6 +42,7 @@ SELECT
   m.text_on_screen,
   m.description,
   m.allowed_pauses_count,
+  m.icon_token,
   m.created_at,
   m.updated_at,
   s.days AS schedule_days,
@@ -79,6 +77,7 @@ SELECT
   m.text_on_screen,
   m.description,
   m.allowed_pauses_count,
+  m.icon_token,
   m.created_at,
   m.updated_at,
   s.days AS schedule_days,
@@ -121,11 +120,12 @@ INSERT INTO modes (
   id,
   title,
   text_on_screen,
-  description,
-  allowed_pauses_count,
-  created_at,
-  updated_at
-) VALUES (?, ?, ?, ?, ?, ?, ?)
+          description,
+          allowed_pauses_count,
+          icon_token,
+          created_at,
+          updated_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 ''',
         [
           modeId,
@@ -133,6 +133,7 @@ INSERT INTO modes (
           request.textOnScreen,
           request.description,
           request.allowedPausesCount,
+          request.icon.token,
           now,
           now,
         ],
@@ -188,10 +189,7 @@ INSERT INTO mode_blocked_apps (
   }
 
   @override
-  Future<void> updateMode({
-    required String modeId,
-    required ModeUpsertDTO request,
-  }) async {
+  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {
     final now = DateTime.now().toUtc().millisecondsSinceEpoch;
 
     await _localDatabase.transaction((transaction) async {
@@ -212,9 +210,7 @@ INSERT INTO mode_blocked_apps (
           .map((row) => row['app_identifier'])
           .whereType<String>()
           .toSet();
-      final requestedBlocked = request.blockedAppIds
-          .map((id) => id.raw)
-          .toSet();
+      final requestedBlocked = request.blockedAppIds.map((id) => id.raw).toSet();
       final removedBlocked = existingBlocked.difference(requestedBlocked);
       final addedBlocked = requestedBlocked.difference(existingBlocked);
 
@@ -227,6 +223,7 @@ SET
   text_on_screen = ?,
   description = ?,
   allowed_pauses_count = ?,
+  icon_token = ?,
   updated_at = ?
 WHERE id = ?
 ''',
@@ -235,6 +232,7 @@ WHERE id = ?
           request.textOnScreen,
           request.description,
           request.allowedPausesCount,
+          request.icon.token,
           now,
           modeId,
         ],

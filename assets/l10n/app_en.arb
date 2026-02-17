@@ -304,6 +304,70 @@
   "@modeDescriptionFieldLabel": {
     "description": "Label for the mode description input field."
   },
+  "modeIconSectionTitle": "Icon",
+  "@modeIconSectionTitle": {
+    "description": "Section title for mode icon selection."
+  },
+  "modeIconChooseButton": "Choose icon",
+  "@modeIconChooseButton": {
+    "description": "Button label to choose mode icon."
+  },
+  "modeIconPickerTitle": "Pick an icon",
+  "@modeIconPickerTitle": {
+    "description": "Title for the mode icon picker sheet."
+  },
+  "modeIconPickerSubtitle": "Choose one icon for this mode",
+  "@modeIconPickerSubtitle": {
+    "description": "Subtitle shown in mode icon picker."
+  },
+  "modeIconLabelTune": "Tune",
+  "@modeIconLabelTune": {
+    "description": "Label for tune mode icon."
+  },
+  "modeIconLabelPsychology": "Mind",
+  "@modeIconLabelPsychology": {
+    "description": "Label for psychology mode icon."
+  },
+  "modeIconLabelTimer": "Timer",
+  "@modeIconLabelTimer": {
+    "description": "Label for timer mode icon."
+  },
+  "modeIconLabelBolt": "Bolt",
+  "@modeIconLabelBolt": {
+    "description": "Label for bolt mode icon."
+  },
+  "modeIconLabelRocketLaunch": "Rocket",
+  "@modeIconLabelRocketLaunch": {
+    "description": "Label for rocket launch mode icon."
+  },
+  "modeIconLabelSelfImprovement": "Calm",
+  "@modeIconLabelSelfImprovement": {
+    "description": "Label for self improvement mode icon."
+  },
+  "modeIconLabelFitnessCenter": "Fitness",
+  "@modeIconLabelFitnessCenter": {
+    "description": "Label for fitness center mode icon."
+  },
+  "modeIconLabelSchool": "School",
+  "@modeIconLabelSchool": {
+    "description": "Label for school mode icon."
+  },
+  "modeIconLabelWork": "Work",
+  "@modeIconLabelWork": {
+    "description": "Label for work mode icon."
+  },
+  "modeIconLabelMenuBook": "Read",
+  "@modeIconLabelMenuBook": {
+    "description": "Label for menu book mode icon."
+  },
+  "modeIconLabelMusicNote": "Music",
+  "@modeIconLabelMusicNote": {
+    "description": "Label for music note mode icon."
+  },
+  "modeIconLabelNightlight": "Night",
+  "@modeIconLabelNightlight": {
+    "description": "Label for nightlight mode icon."
+  },
   "modeEnabledLabel": "Enabled",
   "@modeEnabledLabel": {
     "description": "Label for the mode enabled toggle."

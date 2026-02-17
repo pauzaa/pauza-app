@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -12,6 +13,7 @@ class Mode {
     required this.textOnScreen,
     required this.description,
     required this.allowedPausesCount,
+    required this.icon,
     required this.schedule,
     required this.blockedAppIds,
     required this.createdAt,
@@ -23,6 +25,7 @@ class Mode {
   final String textOnScreen;
   final String? description;
   final int allowedPausesCount;
+  final ModeIcon icon;
   final DateTime createdAt;
   final DateTime updatedAt;
   final Schedule? schedule;
@@ -33,6 +36,7 @@ class Mode {
     String? textOnScreen,
     String? description,
     int? allowedPausesCount,
+    ModeIcon? icon,
     bool? isEnabled,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -44,6 +48,7 @@ class Mode {
     textOnScreen: textOnScreen ?? this.textOnScreen,
     description: description ?? this.description,
     allowedPausesCount: allowedPausesCount ?? this.allowedPausesCount,
+    icon: icon ?? this.icon,
     schedule: schedule ?? this.schedule,
     blockedAppIds: blockedAppIds ?? this.blockedAppIds,
     createdAt: createdAt ?? this.createdAt,
@@ -80,6 +85,7 @@ class Mode {
 
     final blockedAppsRaw = row['blocked_apps'] as String?;
     final blockedAppIds = _parseBlockedApps(blockedAppsRaw);
+    final rawIconToken = row['icon_token'] as String?;
 
     return Mode(
       id: row['id'] as String,
@@ -87,16 +93,11 @@ class Mode {
       textOnScreen: row['text_on_screen'] as String,
       description: row['description'] as String?,
       allowedPausesCount: row['allowed_pauses_count'] as int,
+      icon: ModeIcon.fromToken(ModeIconCatalog.normalizeToken(rawIconToken)),
       schedule: schedule,
       blockedAppIds: blockedAppIds,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-        createdAtMillis,
-        isUtc: true,
-      ),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(
-        updatedAtMillis,
-        isUtc: true,
-      ),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(createdAtMillis, isUtc: true),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(updatedAtMillis, isUtc: true),
     );
   }
 
@@ -120,7 +121,8 @@ class Mode {
   String toString() =>
       'Mode(id: $id, title: $title, textOnScreen: $textOnScreen, '
       'description: $description, allowedPausesCount: $allowedPausesCount, '
-      'schedule: $schedule, blockedAppIds: $blockedAppIds, createdAt: $createdAt, updatedAt: $updatedAt'
+      'icon: $icon, schedule: $schedule, blockedAppIds: $blockedAppIds, '
+      'createdAt: $createdAt, updatedAt: $updatedAt'
       ')';
 
   @override
@@ -133,6 +135,7 @@ class Mode {
           textOnScreen == other.textOnScreen &&
           description == other.description &&
           allowedPausesCount == other.allowedPausesCount &&
+          icon == other.icon &&
           schedule == other.schedule &&
           blockedAppIds == other.blockedAppIds &&
           createdAt == other.createdAt &&
@@ -145,6 +148,7 @@ class Mode {
     textOnScreen,
     description,
     allowedPausesCount,
+    icon,
     schedule,
     Object.hashAllUnordered(blockedAppIds),
     createdAt,

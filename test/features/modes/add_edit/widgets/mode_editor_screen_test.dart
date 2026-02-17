@@ -8,6 +8,7 @@ import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_screen.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
+import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
@@ -61,6 +62,21 @@ void main() {
 
     expect(find.text('This field is required'), findsAtLeastNWidgets(1));
   });
+
+  testWidgets('renders icon section controls', (tester) async {
+    final bloc = ModeEditorBloc(modesRepository: _TestModesRepository());
+    addTearDown(bloc.close);
+    await tester.pumpWidget(
+      _TestApp(bloc: bloc, child: const ModeEditorMainScreen(modeId: null)),
+    );
+    await tester.pump(const Duration(milliseconds: 300));
+
+    await tester.drag(find.byType(ListView), const Offset(0, -250));
+    await tester.pump();
+
+    expect(find.text('ICON'), findsOneWidget);
+    expect(find.text('Choose icon'), findsOneWidget);
+  });
 }
 
 class _TestApp extends StatelessWidget {
@@ -101,6 +117,7 @@ class _TestModesRepository implements ModesRepository {
       textOnScreen: 'Stay focused',
       description: 'desc',
       allowedPausesCount: 2,
+      icon: ModeIconCatalog.defaultIcon,
       schedule: null,
       blockedAppIds: const ISet.empty(),
       createdAt: DateTime.now(),

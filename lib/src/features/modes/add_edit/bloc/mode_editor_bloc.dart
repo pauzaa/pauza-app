@@ -24,9 +24,7 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
     emit(const ModeEditorLoading());
 
     if (event.modeId == null) {
-      emit(
-        const ModeEditorReady(modeId: null, request: ModeUpsertDTO.initial()),
-      );
+      emit(const ModeEditorReady(modeId: null, request: ModeUpsertDTO.initial()));
       return;
     }
 
@@ -41,6 +39,7 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
             textOnScreen: mode.textOnScreen,
             description: mode.description,
             allowedPausesCount: mode.allowedPausesCount,
+            icon: mode.icon,
             blockedAppIds: mode.blockedAppIds,
             schedule: mode.schedule,
           ),
@@ -61,10 +60,7 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
       if (event.modeId == null) {
         await _modesRepository.createMode(event.request);
       } else {
-        await _modesRepository.updateMode(
-          modeId: event.modeId!,
-          request: event.request,
-        );
+        await _modesRepository.updateMode(modeId: event.modeId!, request: event.request);
       }
       emit(ModeEditorSaveSuccess(modeId: event.modeId, request: event.request));
     } on Object catch (error) {

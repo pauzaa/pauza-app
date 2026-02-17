@@ -10,10 +10,13 @@ import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_allowed_pauses_tile.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_apps_selector_tile.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_icon_picker_tile.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_icon_picker_sheet.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_schedule_panel.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_section_label.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_sticky_action_bar.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
+import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza/src/features/modes/list/widget/confirm_delete_mode_dialog.dart';
@@ -233,6 +236,26 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   ModeEditorSectionLabel(
+                                    label: l10n.modeIconSectionTitle,
+                                  ),
+                                  ModeEditorIconPickerTile(
+                                    title: l10n.modeIconChooseButton,
+                                    subtitle: l10n.modeIconPickerSubtitle,
+                                    selectedIcon: draft.icon,
+                                    onTap: isBusy
+                                        ? () {}
+                                        : () => _onChooseIconPressed(
+                                            context,
+                                            draft.icon,
+                                          ),
+                                  ),
+                                ],
+                              ),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  ModeEditorSectionLabel(
                                     label: l10n.modeBlockedAppsSectionTitle,
                                   ),
                                   ModeEditorAppsSelectorTile(
@@ -438,6 +461,25 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
         ..showSnackBar(SnackBar(content: Text(l10n.modeAppsLoadFailedMessage)));
     }
   }
+
+  Future<void> _onChooseIconPressed(
+    BuildContext context,
+    ModeIcon selectedIcon,
+  ) async {
+    final l10n = context.l10n;
+    final nextIcon = await ModeIconPickerSheet.show(
+      context,
+      title: l10n.modeIconPickerTitle,
+      subtitle: l10n.modeIconPickerSubtitle,
+      selectedIcon: selectedIcon,
+    );
+    if (!mounted || nextIcon == null) {
+      return;
+    }
+    _draftNotifier.updateIcon(nextIcon);
+  }
+
+  
 
   Future<void> _onDeletePressed() async {
     final shouldDelete = await ConfirmDeleteModeDialog.show(context);

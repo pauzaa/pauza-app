@@ -20,6 +20,22 @@
   "@profileTitle": {
     "description": "Title for the profile screen and navigation destination."
   },
+  "profileDisplayNameFallback": "Unknown User",
+  "@profileDisplayNameFallback": {
+    "description": "Fallback display name for profile screen when current user data is unavailable."
+  },
+  "profileUsernameFallback": "username",
+  "@profileUsernameFallback": {
+    "description": "Fallback username for profile screen when current user data is unavailable."
+  },
+  "profileEditInfoNavTitle": "Edit Info",
+  "@profileEditInfoNavTitle": {
+    "description": "Navigation item title for editing profile details."
+  },
+  "profileSettingsNavTitle": "Settings",
+  "@profileSettingsNavTitle": {
+    "description": "Navigation item title for profile settings."
+  },
   "notFoundTitle": "Page not found",
   "@notFoundTitle": {
     "description": "Title shown when a page is not found."

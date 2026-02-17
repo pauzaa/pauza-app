@@ -24,6 +24,18 @@ class AppLocalizationsUz extends AppLocalizations {
   String get profileTitle => 'Profil';
 
   @override
+  String get profileDisplayNameFallback => 'Noma\'lum foydalanuvchi';
+
+  @override
+  String get profileUsernameFallback => 'username';
+
+  @override
+  String get profileEditInfoNavTitle => 'Profilni tahrirlash';
+
+  @override
+  String get profileSettingsNavTitle => 'Sozlamalar';
+
+  @override
   String get notFoundTitle => 'Sahifa topilmadi';
 
   @override
@@ -606,6 +618,18 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get profileTitle => 'Профил';
+
+  @override
+  String get profileDisplayNameFallback => 'Номаълум фойдаланувчи';
+
+  @override
+  String get profileUsernameFallback => 'username';
+
+  @override
+  String get profileEditInfoNavTitle => 'Профилни таҳрирлаш';
+
+  @override
+  String get profileSettingsNavTitle => 'Созламалар';
 
   @override
   String get notFoundTitle => 'Саҳифа топилмади';

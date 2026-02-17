@@ -75,6 +75,14 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get profileTitle => 'Profile';
   @override
+  String get profileDisplayNameFallback => 'Unknown User';
+  @override
+  String get profileUsernameFallback => 'username';
+  @override
+  String get profileEditInfoNavTitle => 'Edit Info';
+  @override
+  String get profileSettingsNavTitle => 'Settings';
+  @override
   String get notFoundTitle => 'Page not found';
   @override
   String get confirmButton => 'Confirm';

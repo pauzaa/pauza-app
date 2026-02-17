@@ -60,7 +60,6 @@ final class _FakeAuthRepository implements AuthRepository {
 
   @override
   Future<AuthResult> verifyOtp({
-    required String challengeId,
     required String otp,
   }) {
     throw UnimplementedError();
@@ -68,6 +67,9 @@ final class _FakeAuthRepository implements AuthRepository {
 
   @override
   Future<void> signOut() async {}
+
+  @override
+  Future<void> clearPendingOtpChallenge() async {}
 
   void emitSession(Session session) {
     _currentSession = session;

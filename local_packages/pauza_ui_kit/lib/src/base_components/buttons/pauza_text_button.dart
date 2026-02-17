@@ -26,9 +26,6 @@ final class PauzaTextButton extends PauzaButtonBase {
   @override
   WidgetStateProperty<Color?> backgroundColorProperty(BuildContext context) {
     return WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-      if (states.contains(WidgetState.disabled)) {
-        return context.themeData.disabledColor;
-      }
       if (selected) {
         return backgroundColor ?? context.colorScheme.primary;
       }
@@ -40,7 +37,7 @@ final class PauzaTextButton extends PauzaButtonBase {
   WidgetStateProperty<Color?> foregroundColorProperty(BuildContext context) {
     return WidgetStateProperty.resolveWith((Set<WidgetState> states) {
       if (states.contains(WidgetState.disabled)) {
-        return context.colorScheme.onSurface.withValues(alpha: 0.38);
+        return context.themeData.disabledColor;
       }
       if (selected) {
         return foregroundColor ?? context.colorScheme.onPrimary;

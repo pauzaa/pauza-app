@@ -1067,6 +1067,48 @@ abstract class AppLocalizations {
   /// **'Log in'**
   String get authLogIn;
 
+  /// No description provided for @authOtpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Your Email'**
+  String get authOtpTitle;
+
+  /// No description provided for @authOtpSubtitlePrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code we sent to your email address '**
+  String get authOtpSubtitlePrefix;
+
+  /// No description provided for @authOtpSubtitleSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'.'**
+  String get authOtpSubtitleSuffix;
+
+  /// No description provided for @authOtpVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get authOtpVerifyButton;
+
+  /// No description provided for @authOtpDidNotReceiveCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t receive a code?'**
+  String get authOtpDidNotReceiveCode;
+
+  /// No description provided for @authOtpResendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Code'**
+  String get authOtpResendCode;
+
+  /// No description provided for @authOtpAvailableInLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Available in {minutes}:{seconds}'**
+  String authOtpAvailableInLabel(String minutes, String seconds);
+
   /// No description provided for @authValidationRequired.
   ///
   /// In en, this message translates to:

@@ -52,6 +52,22 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get authLogIn => 'Log in';
   @override
+  String get authOtpTitle => 'Verify Your Email';
+  @override
+  String get authOtpSubtitlePrefix =>
+      'Enter the 6-digit code we sent to your email address ';
+  @override
+  String get authOtpSubtitleSuffix => '.';
+  @override
+  String get authOtpVerifyButton => 'Verify';
+  @override
+  String get authOtpDidNotReceiveCode => "Didn't receive a code?";
+  @override
+  String get authOtpResendCode => 'Resend Code';
+  @override
+  String authOtpAvailableInLabel(String minutes, String seconds) =>
+      'Available in $minutes:$seconds';
+  @override
   String get authValidationRequired => 'This field is required';
   @override
   String get authValidationInvalidEmail => 'Enter a valid email address';

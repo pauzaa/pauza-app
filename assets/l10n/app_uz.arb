@@ -215,6 +215,23 @@
   "authPassword": "Parol",
   "authForgotPassword": "Parolni unutdingizmi?",
   "authLogIn": "Kirish",
+  "authOtpTitle": "Emailni tasdiqlang",
+  "authOtpSubtitlePrefix": "Email manzilingizga yuborgan 6 xonali kodni kiriting ",
+  "authOtpSubtitleSuffix": ".",
+  "authOtpVerifyButton": "Tasdiqlash",
+  "authOtpDidNotReceiveCode": "Kod kelmadimi?",
+  "authOtpResendCode": "Kodni qayta yuborish",
+  "authOtpAvailableInLabel": "{minutes}:{seconds} dan keyin mavjud",
+  "@authOtpAvailableInLabel": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "authValidationRequired": "Bu maydon majburiy",
   "authValidationInvalidEmail": "To'g'ri email manzilini kiriting",
   "authFailureInvalidCredentials": "Email yoki parol noto'g'ri.",

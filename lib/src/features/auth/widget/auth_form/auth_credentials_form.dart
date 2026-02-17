@@ -87,7 +87,9 @@ class AuthCredentialsForm extends StatelessWidget {
             width: double.infinity,
             disabled: isSubmitting,
             onPressed: onLoginTap,
-            textStyle: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+            textStyle: context.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
             title: Text(l10n.authLogIn.toUpperCase()),
             radius: PauzaCornerRadius.large,
           ),

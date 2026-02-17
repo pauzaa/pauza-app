@@ -12,35 +12,38 @@ final class AuthIdle extends AuthState {
 }
 
 final class AuthSubmitting extends AuthState {
-  const AuthSubmitting({this.previous});
+  const AuthSubmitting({required this.email});
 
-  final AuthState? previous;
+  final String? email;
 
   @override
-  List<Object?> get props => <Object?>[previous];
+  List<Object?> get props => <Object?>[email];
 }
 
 final class AuthOtpRequired extends AuthState {
-  const AuthOtpRequired({required this.challengeId, required this.email});
+  const AuthOtpRequired({required this.email});
 
-  final String challengeId;
   final String email;
 
   @override
-  List<Object?> get props => <Object?>[challengeId, email];
+  List<Object?> get props => <Object?>[email];
 }
 
 final class AuthFlowSuccess extends AuthState {
-  const AuthFlowSuccess();
+  const AuthFlowSuccess({required this.email});
+  final String email;
+
+  @override
+  List<Object?> get props => <Object?>[email];
 }
 
 final class AuthFlowFailure extends AuthState {
-  const AuthFlowFailure({required this.failure, this.message, this.previous});
+  const AuthFlowFailure({required this.failure, required this.email, this.message});
 
   final AuthFailure failure;
+  final String? email;
   final String? message;
-  final AuthState? previous;
 
   @override
-  List<Object?> get props => <Object?>[failure, message, previous];
+  List<Object?> get props => <Object?>[failure, email, message];
 }

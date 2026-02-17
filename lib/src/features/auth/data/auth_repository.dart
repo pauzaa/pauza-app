@@ -20,10 +20,9 @@ abstract interface class AuthRepository {
 
   Future<AuthResult> signIn(AuthCredentialsDto credentials);
 
-  Future<AuthResult> verifyOtp({
-    required String challengeId,
-    required String otp,
-  });
+  Future<AuthResult> verifyOtp({required String otp});
+
+  Future<void> clearPendingOtpChallenge();
 
   Future<void> signOut();
 
@@ -42,8 +41,9 @@ final class AuthRepositoryImpl implements AuthRepository {
   final AuthSessionStorage _sessionStorage;
   // BehaviorSubject replays the latest session to late subscribers (for example, blocs
   // created after app bootstrap).
-  final BehaviorSubject<Session> _sessionController =
-      BehaviorSubject<Session>.seeded(const Session.empty());
+  final BehaviorSubject<Session> _sessionController = BehaviorSubject<Session>.seeded(
+    const Session.empty(),
+  );
 
   Session _currentSession = const Session.empty();
   String? _pendingOtpChallengeId;
@@ -79,10 +79,7 @@ final class AuthRepositoryImpl implements AuthRepository {
     if (credentials.email == otpRequiredEmail) {
       _pendingOtpChallengeId = otpChallengeId;
       _pendingOtpEmail = credentials.email;
-      return const AuthOtpRequiredResult(
-        challengeId: otpChallengeId,
-        email: otpRequiredEmail,
-      );
+      return const AuthOtpRequiredResult(challengeId: otpChallengeId, email: otpRequiredEmail);
     }
 
     final session = _buildDummySession(email: credentials.email);
@@ -100,18 +97,11 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthResult> verifyOtp({
-    required String challengeId,
-    required String otp,
-  }) async {
+  Future<AuthResult> verifyOtp({required String otp}) async {
     final pendingChallengeId = _pendingOtpChallengeId;
     final pendingEmail = _pendingOtpEmail;
 
     if (pendingChallengeId == null || pendingEmail == null) {
-      throw const AuthException(failure: AuthFailure.otpChallengeMissing);
-    }
-
-    if (challengeId != pendingChallengeId) {
       throw const AuthException(failure: AuthFailure.otpChallengeMissing);
     }
 
@@ -140,13 +130,18 @@ final class AuthRepositoryImpl implements AuthRepository {
     try {
       await _sessionStorage.deleteSession();
       _emitSession(const Session.empty());
-      _pendingOtpChallengeId = null;
-      _pendingOtpEmail = null;
+      await clearPendingOtpChallenge();
     } on AuthException {
       rethrow;
     } on Object {
       throw const AuthException(failure: AuthFailure.unknown);
     }
+  }
+
+  @override
+  Future<void> clearPendingOtpChallenge() async {
+    _pendingOtpChallengeId = null;
+    _pendingOtpEmail = null;
   }
 
   @override

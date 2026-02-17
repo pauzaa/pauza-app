@@ -577,6 +577,30 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authLogIn => 'Войти';
 
   @override
+  String get authOtpTitle => 'Подтвердите Email';
+
+  @override
+  String get authOtpSubtitlePrefix =>
+      'Введите 6-значный код, который мы отправили на ваш email ';
+
+  @override
+  String get authOtpSubtitleSuffix => '.';
+
+  @override
+  String get authOtpVerifyButton => 'Подтвердить';
+
+  @override
+  String get authOtpDidNotReceiveCode => 'Не получили код?';
+
+  @override
+  String get authOtpResendCode => 'Отправить код снова';
+
+  @override
+  String authOtpAvailableInLabel(String minutes, String seconds) {
+    return 'Доступно через $minutes:$seconds';
+  }
+
+  @override
   String get authValidationRequired => 'Это поле обязательно';
 
   @override

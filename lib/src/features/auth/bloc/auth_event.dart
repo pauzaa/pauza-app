@@ -29,3 +29,7 @@ final class AuthOtpSubmitted extends AuthEvent {
 final class AuthSignOutRequested extends AuthEvent {
   const AuthSignOutRequested();
 }
+
+final class AuthFlowResetRequested extends AuthEvent {
+  const AuthFlowResetRequested();
+}

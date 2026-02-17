@@ -7,8 +7,8 @@ import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
-import 'package:pauza/src/features/auth/widget/auth_credentials_form.dart';
-import 'package:pauza/src/features/auth/widget/auth_header_section.dart';
+import 'package:pauza/src/features/auth/widget/auth_form/auth_credentials_form.dart';
+import 'package:pauza/src/features/auth/widget/auth_form/auth_header_section.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 typedef LocaleSelectionHandler = Future<void> Function(BuildContext context, Locale locale);
@@ -61,7 +61,7 @@ class _AuthScreenContentState extends State<AuthScreenContent> {
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.only(
                     bottom: PauzaSpacing.large,
-                    top: PauzaSpacing.giant,
+                    top: PauzaSpacing.xxLarge,
                     left: PauzaSpacing.large,
                     right: PauzaSpacing.large,
                   ),

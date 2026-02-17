@@ -30,13 +30,16 @@ class RootScopeState extends State<RootScope> {
   late final StatsUsageRepository statsUsageRepository;
   late final CurrentUserBloc currentUserBloc;
   late final AuthBloc authBloc;
-  late final RestrictionLifecycleSyncCoordinator restrictionLifecycleSyncCoordinator;
+  late final RestrictionLifecycleSyncCoordinator
+  restrictionLifecycleSyncCoordinator;
 
   @override
   void initState() {
     blockingRepository = PauzaBlockingRepository(
       restrictions: PauzaDependencies.of(context).appRestrictionManager,
-      restrictionLifecycleRepository: PauzaDependencies.of(context).restrictionLifecycleRepository,
+      restrictionLifecycleRepository: PauzaDependencies.of(
+        context,
+      ).restrictionLifecycleRepository,
     );
 
     modesRepository = ModesRepositoryImpl(
@@ -57,12 +60,16 @@ class RootScopeState extends State<RootScope> {
     // not in infra dependencies.
     currentUserBloc = CurrentUserBloc(
       authRepository: PauzaDependencies.of(context).authRepository,
-      userProfileRepository: PauzaDependencies.of(context).userProfileRepository,
+      userProfileRepository: PauzaDependencies.of(
+        context,
+      ).userProfileRepository,
       ttl: const Duration(minutes: 15),
       nowUtc: () => DateTime.now().toUtc(),
     );
 
-    authBloc = AuthBloc(authRepository: PauzaDependencies.of(context).authRepository);
+    authBloc = AuthBloc(
+      authRepository: PauzaDependencies.of(context).authRepository,
+    );
 
     restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
       repository: PauzaDependencies.of(context).restrictionLifecycleRepository,
@@ -78,6 +85,7 @@ class RootScopeState extends State<RootScope> {
     currentUserBloc.close();
     authBloc.close();
     restrictionLifecycleSyncCoordinator.detach();
+    modesRepository.dispose();
     super.dispose();
   }
 
@@ -95,7 +103,10 @@ class _InheritedRootScope extends InheritedWidget {
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
   /// For example: `SettingsScope.maybeOf(context)`.
-  static _InheritedRootScope? maybeOf(BuildContext context, {bool listen = true}) => listen
+  static _InheritedRootScope? maybeOf(
+    BuildContext context, {
+    bool listen = true,
+  }) => listen
       ? context.dependOnInheritedWidgetOfExactType<_InheritedRootScope>()
       : context.getInheritedWidgetOfExactType<_InheritedRootScope>();
 

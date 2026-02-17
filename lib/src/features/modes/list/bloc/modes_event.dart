@@ -31,3 +31,10 @@ final class ModesSelectionRequested extends ModesListEvent {
   @override
   List<Object?> get props => <Object?>[modeId];
 }
+
+final class ModesListUpdated extends ModesListEvent {
+  const ModesListUpdated();
+
+  @override
+  List<Object?> get props => const <Object?>[];
+}

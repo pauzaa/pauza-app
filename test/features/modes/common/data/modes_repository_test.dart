@@ -85,6 +85,40 @@ void main() {
       expect(modes, hasLength(1));
       expect(modes.first.icon, ModeIconCatalog.defaultIcon);
     });
+
+    test('watchModes emits on changes', () async {
+      final database = _FakeLocalDatabase();
+      final repository = ModesRepositoryImpl(
+        localDatabase: database,
+        platform: PauzaPlatform.android,
+      );
+
+      final request = const ModeUpsertDTO.initial().copyWith(
+        title: 'Focus',
+        textOnScreen: 'Stay focused',
+        blockedAppIds: const ISet<AppIdentifier>.empty(),
+      );
+
+      final stream = repository.watchModes();
+
+      // Expect 3 emissions: create, update, delete
+      final expectation = expectLater(
+        stream,
+        emitsInOrder(<dynamic>[
+          null, // After create
+          null, // After update
+          null, // After delete
+        ]),
+      );
+
+      // Trigger operations
+      await repository.createMode(request);
+      await repository.updateMode(modeId: 'mode-1', request: request);
+      await repository.deleteMode('mode-1');
+
+      await expectation;
+      repository.dispose();
+    });
   });
 }
 

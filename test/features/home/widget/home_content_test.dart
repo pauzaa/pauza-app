@@ -213,6 +213,12 @@ class _NoopModesRepository implements ModesRepository {
     createdAt: DateTime.now().toUtc(),
     updatedAt: DateTime.now().toUtc(),
   );
+
+  @override
+  Stream<void> watchModes() => const Stream.empty();
+
+  @override
+  void dispose() {}
 }
 
 class _NoopBlockingRepository implements BlockingRepository {

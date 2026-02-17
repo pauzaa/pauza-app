@@ -114,4 +114,10 @@ class _FakeModesRepository implements ModesRepository {
     required String modeId,
     required ModeUpsertDTO request,
   }) async {}
+
+  @override
+  Stream<void> watchModes() => const Stream.empty();
+
+  @override
+  void dispose() {}
 }

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:pauza/src/core/common/disposable.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
@@ -6,31 +9,36 @@ import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:uuid/uuid.dart';
 
-abstract interface class ModesRepository {
+abstract interface class ModesRepository implements Disposable {
   Future<List<Mode>> getModes();
 
   Future<Mode> getMode(String modeId);
 
   Future<void> createMode(ModeUpsertDTO request);
 
-  Future<void> updateMode({required String modeId, required ModeUpsertDTO request});
+  Future<void> updateMode({
+    required String modeId,
+    required ModeUpsertDTO request,
+  });
 
   Future<void> deleteMode(String modeId);
+
+  Stream<void> watchModes();
 }
 
 class ModesRepositoryImpl implements ModesRepository {
-  const ModesRepositoryImpl({
+  ModesRepositoryImpl({
     required LocalDatabase localDatabase,
     required this.platform,
     Uuid? uuid,
   }) : _localDatabase = localDatabase,
        _uuid = uuid ?? const Uuid();
 
-  // ignore: unused_field
   final LocalDatabase _localDatabase;
-  // ignore: unused_field
   final Uuid _uuid;
   final PauzaPlatform platform;
+
+  StreamController<void>? _streamController;
 
   @override
   Future<List<Mode>> getModes() async {
@@ -105,6 +113,7 @@ GROUP BY m.id;
   @override
   Future<void> deleteMode(String modeId) async {
     await _localDatabase.rawDelete('DELETE FROM modes WHERE id = ?', [modeId]);
+    await _notifyListeners();
   }
 
   @override
@@ -186,10 +195,14 @@ INSERT INTO mode_blocked_apps (
 
       await batch.commit(noResult: true);
     });
+    await _notifyListeners();
   }
 
   @override
-  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {
+  Future<void> updateMode({
+    required String modeId,
+    required ModeUpsertDTO request,
+  }) async {
     final now = DateTime.now().toUtc().millisecondsSinceEpoch;
 
     await _localDatabase.transaction((transaction) async {
@@ -210,7 +223,9 @@ INSERT INTO mode_blocked_apps (
           .map((row) => row['app_identifier'])
           .whereType<String>()
           .toSet();
-      final requestedBlocked = request.blockedAppIds.map((id) => id.raw).toSet();
+      final requestedBlocked = request.blockedAppIds
+          .map((id) => id.raw)
+          .toSet();
       final removedBlocked = existingBlocked.difference(requestedBlocked);
       final addedBlocked = requestedBlocked.difference(existingBlocked);
 
@@ -314,5 +329,26 @@ INSERT INTO mode_blocked_apps (
 
       await batch.commit(noResult: true);
     });
+    await _notifyListeners();
+  }
+
+  @override
+  Stream<void> watchModes() {
+    _streamController ??= StreamController<void>.broadcast();
+    return _streamController!.stream;
+  }
+
+  Future<void> _notifyListeners() async {
+    final controller = _streamController;
+    if (controller == null || controller.isClosed) {
+      return;
+    }
+    controller.add(null);
+  }
+
+  @override
+  void dispose() {
+    _streamController?.close();
+    _streamController = null;
   }
 }

@@ -27,18 +27,17 @@ final class PauzaDashboardAppBar extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: PauzaSpacing.small,
               children: <Widget>[
-                if (greeting case final greeting?) ...<Widget>[
-                  Text(
-                    greeting.toUpperCase(),
-                    style: context.textTheme.labelLarge?.copyWith(
-                      color: context.colorScheme.primary,
-                      letterSpacing: 4,
-                      fontWeight: FontWeight.w700,
-                    ),
+                Text(
+                  greeting?.toUpperCase() ?? '',
+                  style: context.textTheme.labelLarge?.copyWith(
+                    color: context.colorScheme.primary,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w700,
                   ),
-                  const SizedBox(height: PauzaSpacing.small),
-                ],
+                ),
+
                 Text(
                   title,
                   style: context.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w700),

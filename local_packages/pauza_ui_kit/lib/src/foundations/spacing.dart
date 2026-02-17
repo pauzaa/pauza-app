@@ -8,4 +8,5 @@ final class PauzaSpacing {
   static const double extraLarge = 36;
   static const double xLarge = 48;
   static const double giant = 72;
+  static const double xxLarge = 96;
 }

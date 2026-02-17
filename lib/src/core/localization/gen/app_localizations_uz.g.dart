@@ -565,6 +565,30 @@ class AppLocalizationsUz extends AppLocalizations {
   String get authLogIn => 'Kirish';
 
   @override
+  String get authOtpTitle => 'Emailni tasdiqlang';
+
+  @override
+  String get authOtpSubtitlePrefix =>
+      'Email manzilingizga yuborgan 6 xonali kodni kiriting ';
+
+  @override
+  String get authOtpSubtitleSuffix => '.';
+
+  @override
+  String get authOtpVerifyButton => 'Tasdiqlash';
+
+  @override
+  String get authOtpDidNotReceiveCode => 'Kod kelmadimi?';
+
+  @override
+  String get authOtpResendCode => 'Kodni qayta yuborish';
+
+  @override
+  String authOtpAvailableInLabel(String minutes, String seconds) {
+    return '$minutes:$seconds dan keyin mavjud';
+  }
+
+  @override
   String get authValidationRequired => 'Bu maydon majburiy';
 
   @override
@@ -1053,6 +1077,30 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get authLogIn => 'Кириш';
+
+  @override
+  String get authOtpTitle => 'Emailни тасдиқланг';
+
+  @override
+  String get authOtpSubtitlePrefix =>
+      'Email манзилингизга юборган 6 хонали кодни киритинг ';
+
+  @override
+  String get authOtpSubtitleSuffix => '.';
+
+  @override
+  String get authOtpVerifyButton => 'Тасдиқлаш';
+
+  @override
+  String get authOtpDidNotReceiveCode => 'Код келмадими?';
+
+  @override
+  String get authOtpResendCode => 'Кодни қайта юбориш';
+
+  @override
+  String authOtpAvailableInLabel(String minutes, String seconds) {
+    return '$minutes:$seconds дан кейин мавжуд';
+  }
 
   @override
   String get authValidationRequired => 'Бу майдон мажбурий';

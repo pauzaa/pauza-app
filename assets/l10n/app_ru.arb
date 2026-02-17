@@ -211,6 +211,23 @@
   "authPassword": "Пароль",
   "authForgotPassword": "Забыли пароль?",
   "authLogIn": "Войти",
+  "authOtpTitle": "Подтвердите Email",
+  "authOtpSubtitlePrefix": "Введите 6-значный код, который мы отправили на ваш email ",
+  "authOtpSubtitleSuffix": ".",
+  "authOtpVerifyButton": "Подтвердить",
+  "authOtpDidNotReceiveCode": "Не получили код?",
+  "authOtpResendCode": "Отправить код снова",
+  "authOtpAvailableInLabel": "Доступно через {minutes}:{seconds}",
+  "@authOtpAvailableInLabel": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "authValidationRequired": "Это поле обязательно",
   "authValidationInvalidEmail": "Введите корректный email",
   "authFailureInvalidCredentials": "Неверный email или пароль.",

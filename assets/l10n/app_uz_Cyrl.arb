@@ -211,6 +211,23 @@
   "authPassword": "Парол",
   "authForgotPassword": "Паролни унутдингизми?",
   "authLogIn": "Кириш",
+  "authOtpTitle": "Emailни тасдиқланг",
+  "authOtpSubtitlePrefix": "Email манзилингизга юборган 6 хонали кодни киритинг ",
+  "authOtpSubtitleSuffix": ".",
+  "authOtpVerifyButton": "Тасдиқлаш",
+  "authOtpDidNotReceiveCode": "Код келмадими?",
+  "authOtpResendCode": "Кодни қайта юбориш",
+  "authOtpAvailableInLabel": "{minutes}:{seconds} дан кейин мавжуд",
+  "@authOtpAvailableInLabel": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "authValidationRequired": "Бу майдон мажбурий",
   "authValidationInvalidEmail": "Тўғри email манзилини киритинг",
   "authFailureInvalidCredentials": "Email ёки парол нотўғри.",

@@ -117,7 +117,7 @@ void main() {
         expect(bloc.state, isA<AuthFlowFailure>());
         final failure = bloc.state as AuthFlowFailure;
         expect(failure.failure, AuthFailure.invalidOtp);
-        expect(failure.previous, isA<AuthOtpRequired>());
+        expect(failure.email, AuthRepositoryImpl.otpRequiredEmail);
 
         await bloc.close();
         repository.dispose();
@@ -158,6 +158,31 @@ void main() {
       await bloc.close();
       repository.dispose();
     });
+
+    test(
+      'reset flow emits AuthIdle and clears pending OTP challenge',
+      () async {
+        final repository = _FakeAuthRepository();
+        final bloc = AuthBloc(authRepository: repository);
+
+        bloc.add(
+          const AuthSignInRequested(
+            email: AuthRepositoryImpl.otpRequiredEmail,
+            password: '123456',
+          ),
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+
+        bloc.add(const AuthFlowResetRequested());
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+
+        expect(bloc.state, isA<AuthIdle>());
+        expect(repository.clearPendingOtpChallengeCallCount, 1);
+
+        await bloc.close();
+        repository.dispose();
+      },
+    );
   });
 }
 
@@ -170,6 +195,7 @@ final class _FakeAuthRepository implements AuthRepository {
 
   Session _currentSession;
   String? _pendingChallenge;
+  int clearPendingOtpChallengeCallCount = 0;
 
   @override
   Session get currentSession => _currentSession;
@@ -208,11 +234,8 @@ final class _FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AuthResult> verifyOtp({
-    required String challengeId,
-    required String otp,
-  }) async {
-    if (_pendingChallenge == null || _pendingChallenge != challengeId) {
+  Future<AuthResult> verifyOtp({required String otp}) async {
+    if (_pendingChallenge == null) {
       throw const AuthException(failure: AuthFailure.otpChallengeMissing);
     }
 
@@ -235,6 +258,12 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<void> signOut() async {
     _currentSession = const Session.empty();
     _controller.add(_currentSession);
+  }
+
+  @override
+  Future<void> clearPendingOtpChallenge() async {
+    clearPendingOtpChallengeCallCount += 1;
+    _pendingChallenge = null;
   }
 
   @override

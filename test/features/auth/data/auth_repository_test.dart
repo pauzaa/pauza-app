@@ -106,10 +106,7 @@ void main() {
       );
 
       await expectLater(
-        () => repository.verifyOtp(
-          challengeId: AuthRepositoryImpl.otpChallengeId,
-          otp: '000000',
-        ),
+        () => repository.verifyOtp(otp: '000000'),
         throwsA(
           isA<AuthException>().having(
             (error) => error.failure,
@@ -138,7 +135,6 @@ void main() {
         );
 
         final result = await repository.verifyOtp(
-          challengeId: AuthRepositoryImpl.otpChallengeId,
           otp: AuthRepositoryImpl.validOtp,
         );
         await Future<void>.delayed(Duration.zero);

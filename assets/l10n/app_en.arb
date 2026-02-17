@@ -582,6 +582,23 @@
   "authPassword": "Password",
   "authForgotPassword": "Forgot password?",
   "authLogIn": "Log in",
+  "authOtpTitle": "Verify Your Email",
+  "authOtpSubtitlePrefix": "Enter the 6-digit code we sent to your email address ",
+  "authOtpSubtitleSuffix": ".",
+  "authOtpVerifyButton": "Verify",
+  "authOtpDidNotReceiveCode": "Didn't receive a code?",
+  "authOtpResendCode": "Resend Code",
+  "authOtpAvailableInLabel": "Available in {minutes}:{seconds}",
+  "@authOtpAvailableInLabel": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "authValidationRequired": "This field is required",
   "authValidationInvalidEmail": "Enter a valid email address",
   "authFailureInvalidCredentials": "Invalid email or password.",

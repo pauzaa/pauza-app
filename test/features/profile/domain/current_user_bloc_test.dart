@@ -261,10 +261,7 @@ final class _FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AuthResult> verifyOtp({
-    required String challengeId,
-    required String otp,
-  }) {
+  Future<AuthResult> verifyOtp({required String otp}) {
     throw UnimplementedError();
   }
 
@@ -274,6 +271,9 @@ final class _FakeAuthRepository implements AuthRepository {
     _currentSession = const Session.empty();
     _controller.add(_currentSession);
   }
+
+  @override
+  Future<void> clearPendingOtpChallenge() async {}
 
   void emitSession(Session session) {
     _currentSession = session;

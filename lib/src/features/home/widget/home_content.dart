@@ -53,8 +53,6 @@ class HomeContent extends StatelessWidget {
                         DateTime.now().hour.toString(),
                       ),
                       title: l10n.homeDashboardTitle,
-                      showSettingsButton: false,
-                      padding: EdgeInsets.zero,
                     ),
                     if (isActiveSession) ...<Widget>[
                       const SizedBox(height: PauzaSpacing.extraLarge),

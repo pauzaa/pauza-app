@@ -55,8 +55,6 @@ class _StatsScreenState extends State<StatsScreen> {
             PauzaDashboardAppBar(
               greeting: l10n.deviceUsage,
               title: l10n.homeDashboardTitle,
-              showSettingsButton: false,
-              padding: EdgeInsets.zero,
             ),
             ValueListenableBuilder(
               valueListenable: _selectedTab,

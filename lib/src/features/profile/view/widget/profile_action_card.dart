@@ -26,20 +26,20 @@ class ProfileActionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: PauzaSpacing.medium,
-            vertical: PauzaSpacing.medium,
+            horizontal: PauzaSpacing.regular,
+            vertical: PauzaSpacing.regular,
           ),
           child: Row(
             children: <Widget>[
-              SizedBox.square(
-                dimension: PauzaFormSizes.medium,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      PauzaCornerRadius.medium,
-                    ),
-                    color: context.colorScheme.primaryContainer,
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    PauzaCornerRadius.medium,
                   ),
+                  color: context.colorScheme.primary.withValues(alpha: 0.1),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
                   child: Icon(icon, color: context.colorScheme.primary),
                 ),
               ),
@@ -48,7 +48,7 @@ class ProfileActionCard extends StatelessWidget {
                 child: Text(
                   title,
                   style: context.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),

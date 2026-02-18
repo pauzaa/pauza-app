@@ -11,14 +11,7 @@ void main() {
   testWidgets('renders localized headers', (tester) async {
     await _pumpCard(
       tester,
-      usageStats: <UsageStats>[
-        _usage(
-          name: 'Alpha',
-          minutes: 20,
-          launches: 2,
-          lastTimeUsed: DateTime(2026, 2, 10, 8),
-        ),
-      ].lock,
+      usageStats: <UsageStats>[_usage(name: 'Alpha', minutes: 20, launches: 2, lastTimeUsed: DateTime(2026, 2, 10, 8))].lock,
     );
 
     expect(find.text('APP USAGE'), findsOneWidget);
@@ -32,24 +25,9 @@ void main() {
     await _pumpCard(
       tester,
       usageStats: <UsageStats>[
-        _usage(
-          name: 'Top App',
-          minutes: 120,
-          launches: 2,
-          lastTimeUsed: DateTime(2026, 2, 10, 8),
-        ),
-        _usage(
-          name: 'Mid App',
-          minutes: 60,
-          launches: 2,
-          lastTimeUsed: DateTime(2026, 2, 10, 8),
-        ),
-        _usage(
-          name: 'Low App',
-          minutes: 30,
-          launches: 2,
-          lastTimeUsed: DateTime(2026, 2, 10, 8),
-        ),
+        _usage(name: 'Top App', minutes: 120, launches: 2, lastTimeUsed: DateTime(2026, 2, 10, 8)),
+        _usage(name: 'Mid App', minutes: 60, launches: 2, lastTimeUsed: DateTime(2026, 2, 10, 8)),
+        _usage(name: 'Low App', minutes: 30, launches: 2, lastTimeUsed: DateTime(2026, 2, 10, 8)),
       ].lock,
     );
 
@@ -62,26 +40,13 @@ void main() {
   });
 
   testWidgets('shows fallback for null last used', (tester) async {
-    await _pumpCard(
-      tester,
-      usageStats: <UsageStats>[
-        _usage(
-          name: 'No Last Used',
-          minutes: 15,
-          launches: 1,
-          lastTimeUsed: null,
-        ),
-      ].lock,
-    );
+    await _pumpCard(tester, usageStats: <UsageStats>[_usage(name: 'No Last Used', minutes: 15, launches: 1, lastTimeUsed: null)].lock);
 
     expect(find.text('-'), findsOneWidget);
   });
 }
 
-Future<void> _pumpCard(
-  WidgetTester tester, {
-  required IList<UsageStats> usageStats,
-}) async {
+Future<void> _pumpCard(WidgetTester tester, {required IList<UsageStats> usageStats}) async {
   await tester.pumpWidget(
     MaterialApp(
       locale: const Locale('en'),
@@ -94,27 +59,16 @@ Future<void> _pumpCard(
       supportedLocales: AppLocalizations.supportedLocales,
       theme: PauzaTheme.dark,
       home: Scaffold(
-        body: SingleChildScrollView(
-          child: StatsUsageAppsTableCard(usageStats: usageStats),
-        ),
+        body: SingleChildScrollView(child: StatsUsageAppsTableCard(usageStats: usageStats)),
       ),
     ),
   );
   await tester.pump();
 }
 
-UsageStats _usage({
-  required String name,
-  required int minutes,
-  required int launches,
-  required DateTime? lastTimeUsed,
-}) {
+UsageStats _usage({required String name, required int minutes, required int launches, required DateTime? lastTimeUsed}) {
   return UsageStats(
-    appInfo: AndroidAppInfo(
-      packageId: AppIdentifier.android(name.toLowerCase().replaceAll(' ', '.')),
-      name: name,
-      category: 'Other',
-    ),
+    appInfo: AndroidAppInfo(packageId: AppIdentifier.android(name.toLowerCase().replaceAll(' ', '.')), name: name, category: 'Other'),
     totalDuration: Duration(minutes: minutes),
     totalLaunchCount: launches,
     bucketStart: DateTime(2026, 2, 10),

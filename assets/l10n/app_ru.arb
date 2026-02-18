@@ -9,6 +9,23 @@
   "profileUsernameFallback": "username",
   "profileEditInfoNavTitle": "Изменить профиль",
   "profileSettingsNavTitle": "Настройки",
+  "settingsTitle": "Настройки",
+  "settingsGeneralSectionTitle": "Общие",
+  "settingsNotifications": "Уведомления",
+  "settingsLanguage": "Язык",
+  "settingsLanguagePickerTitle": "Выберите язык",
+  "settingsNfcChipConfiguring": "Настройка NFC-чипа",
+  "settingsQrCodeConfiguring": "Настройка QR-кода",
+  "settingsSignOut": "Выйти",
+  "settingsVersionFallback": "Pauza",
+  "settingsVersionLabel": "Pauza v{version}",
+  "@settingsVersionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "notFoundTitle": "Страница не найдена",
   "confirmButton": "Подтвердить",
   "cancelButton": "Отмена",

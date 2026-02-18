@@ -13,8 +13,7 @@ abstract interface class UserProfileCacheStorage {
 }
 
 final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
-  const AppFuseUserProfileCacheStorage({required IAppFuseStorage storage})
-    : _storage = storage;
+  const AppFuseUserProfileCacheStorage({required IAppFuseStorage storage}) : _storage = storage;
 
   static const String cacheKey = 'auth.user_profile.cache.v1';
 
@@ -30,25 +29,16 @@ final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
 
       final decoded = jsonDecode(raw);
       if (decoded is! Map<String, Object?>) {
-        throw const UserProfileException(
-          code: UserProfileFailureCode.storage,
-          message: 'Invalid cached user payload shape.',
-        );
+        throw const UserProfileException(code: UserProfileFailureCode.storage, message: 'Invalid cached user payload shape.');
       }
 
       return CachedUserProfile.fromJson(decoded);
     } on UserProfileException {
       rethrow;
     } on FormatException {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.storage,
-        message: 'Invalid cached user payload.',
-      );
+      throw const UserProfileException(code: UserProfileFailureCode.storage, message: 'Invalid cached user payload.');
     } on Object {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.storage,
-        message: 'Failed to read cached user payload.',
-      );
+      throw const UserProfileException(code: UserProfileFailureCode.storage, message: 'Failed to read cached user payload.');
     }
   }
 
@@ -58,18 +48,12 @@ final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
       final raw = jsonEncode(cached.toJson());
       final saved = await _storage.setValue<String>(cacheKey, raw);
       if (!saved) {
-        throw const UserProfileException(
-          code: UserProfileFailureCode.storage,
-          message: 'Failed to write cached user payload.',
-        );
+        throw const UserProfileException(code: UserProfileFailureCode.storage, message: 'Failed to write cached user payload.');
       }
     } on UserProfileException {
       rethrow;
     } on Object {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.storage,
-        message: 'Failed to write cached user payload.',
-      );
+      throw const UserProfileException(code: UserProfileFailureCode.storage, message: 'Failed to write cached user payload.');
     }
   }
 
@@ -78,18 +62,12 @@ final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
     try {
       final deleted = await _storage.setValue<String>(cacheKey, '');
       if (!deleted) {
-        throw const UserProfileException(
-          code: UserProfileFailureCode.storage,
-          message: 'Failed to delete cached user payload.',
-        );
+        throw const UserProfileException(code: UserProfileFailureCode.storage, message: 'Failed to delete cached user payload.');
       }
     } on UserProfileException {
       rethrow;
     } on Object {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.storage,
-        message: 'Failed to delete cached user payload.',
-      );
+      throw const UserProfileException(code: UserProfileFailureCode.storage, message: 'Failed to delete cached user payload.');
     }
   }
 }

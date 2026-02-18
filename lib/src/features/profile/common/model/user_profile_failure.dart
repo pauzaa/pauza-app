@@ -1,10 +1,4 @@
-enum UserProfileFailureCode {
-  unauthorized,
-  forbidden,
-  network,
-  storage,
-  unknown,
-}
+enum UserProfileFailureCode { unauthorized, forbidden, network, storage, unknown }
 
 final class UserProfileException implements Exception {
   const UserProfileException({required this.code, this.message});

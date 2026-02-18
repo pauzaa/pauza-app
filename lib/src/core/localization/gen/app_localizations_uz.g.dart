@@ -36,6 +36,41 @@ class AppLocalizationsUz extends AppLocalizations {
   String get profileSettingsNavTitle => 'Sozlamalar';
 
   @override
+  String get settingsTitle => 'Sozlamalar';
+
+  @override
+  String get settingsGeneralSectionTitle => 'Umumiy';
+
+  @override
+  String get settingsNotifications => 'Bildirishnomalar';
+
+  @override
+  String get settingsLanguage => 'Til';
+
+  @override
+  String get settingsLanguagePickerTitle => 'Tilni tanlang';
+
+  @override
+  String get settingsSessionEndingConfSectionTitle => 'Session Ending';
+
+  @override
+  String get settingsNfcChipConfiguring => 'NFC chipini sozlash';
+
+  @override
+  String get settingsQrCodeConfiguring => 'QR kodni sozlash';
+
+  @override
+  String get settingsSignOut => 'Chiqish';
+
+  @override
+  String get settingsVersionFallback => 'Pauza';
+
+  @override
+  String settingsVersionLabel(String version) {
+    return 'Pauza v$version';
+  }
+
+  @override
   String get notFoundTitle => 'Sahifa topilmadi';
 
   @override
@@ -654,6 +689,38 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get profileSettingsNavTitle => 'Созламалар';
+
+  @override
+  String get settingsTitle => 'Созламалар';
+
+  @override
+  String get settingsGeneralSectionTitle => 'Умумий';
+
+  @override
+  String get settingsNotifications => 'Билдиришномалар';
+
+  @override
+  String get settingsLanguage => 'Тил';
+
+  @override
+  String get settingsLanguagePickerTitle => 'Тилни танланг';
+
+  @override
+  String get settingsNfcChipConfiguring => 'NFC чипини созлаш';
+
+  @override
+  String get settingsQrCodeConfiguring => 'QR кодни созлаш';
+
+  @override
+  String get settingsSignOut => 'Чиқиш';
+
+  @override
+  String get settingsVersionFallback => 'Pauza';
+
+  @override
+  String settingsVersionLabel(String version) {
+    return 'Pauza v$version';
+  }
 
   @override
   String get notFoundTitle => 'Саҳифа топилмади';

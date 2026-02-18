@@ -9,6 +9,23 @@
   "profileUsernameFallback": "username",
   "profileEditInfoNavTitle": "Profilni tahrirlash",
   "profileSettingsNavTitle": "Sozlamalar",
+  "settingsTitle": "Sozlamalar",
+  "settingsGeneralSectionTitle": "Umumiy",
+  "settingsNotifications": "Bildirishnomalar",
+  "settingsLanguage": "Til",
+  "settingsLanguagePickerTitle": "Tilni tanlang",
+  "settingsNfcChipConfiguring": "NFC chipini sozlash",
+  "settingsQrCodeConfiguring": "QR kodni sozlash",
+  "settingsSignOut": "Chiqish",
+  "settingsVersionFallback": "Pauza",
+  "settingsVersionLabel": "Pauza v{version}",
+  "@settingsVersionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "notFoundTitle": "Sahifa topilmadi",
   "confirmButton": "Tasdiqlash",
   "cancelButton": "Bekor qilish",

@@ -11,13 +11,8 @@ part 'modes_event.dart';
 part 'modes_state.dart';
 
 class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
-  ModesListBloc({required ModesRepository modesRepository})
-    : _modesRepository = modesRepository,
-      super(const ModesListState()) {
-    _modesSubscription = _modesRepository.watchModes().listen(
-      (_) => add(const ModesListUpdated()),
-      onError: (_) {},
-    );
+  ModesListBloc({required ModesRepository modesRepository}) : _modesRepository = modesRepository, super(const ModesListState()) {
+    _modesSubscription = _modesRepository.watchModes().listen((_) => add(const ModesListUpdated()), onError: (_) {});
     on<ModesListRequested>(_onModesRequested);
     on<ModesDeleteRequested>(_onModesDeleteRequested);
     on<ModesSelectionRequested>(_onModesSelectionRequested);
@@ -31,10 +26,7 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
     await _load(emit: emit);
   }
 
-  Future<void> _onModesDeleteRequested(
-    ModesDeleteRequested event,
-    Emitter<ModesListState> emit,
-  ) async {
+  Future<void> _onModesDeleteRequested(ModesDeleteRequested event, Emitter<ModesListState> emit) async {
     try {
       emit(state.loading());
       await _modesRepository.deleteMode(event.modeId);

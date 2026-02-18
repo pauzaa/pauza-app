@@ -32,10 +32,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     });
     on<CurrentUserSessionChanged>(_onSessionChanged);
     // Prevent overlapping refreshes; latest duplicate refresh intent is dropped while one runs.
-    on<CurrentUserRefreshRequested>(
-      _onRefreshRequested,
-      transformer: droppable(),
-    );
+    on<CurrentUserRefreshRequested>(_onRefreshRequested, transformer: droppable());
   }
 
   final AuthRepository _authRepository;
@@ -50,10 +47,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     add(CurrentUserRefreshRequested(forceRemote: forceRemote));
   }
 
-  Future<void> _onSessionChanged(
-    CurrentUserSessionChanged event,
-    Emitter<CurrentUserState> emit,
-  ) async {
+  Future<void> _onSessionChanged(CurrentUserSessionChanged event, Emitter<CurrentUserState> emit) async {
     final session = event.session;
     if (!session.isAuthenticated) {
       // Keep profile cache scoped to active auth session.
@@ -76,18 +70,8 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     if (cached != null) {
       // Show cached profile immediately for fast UI, then sync in background.
       final nowUtc = _nowUtc();
-      final freshness = cached.isFresh(nowUtc: nowUtc, ttl: _ttl)
-          ? UserFreshness.fresh
-          : UserFreshness.stale;
-      _emit(
-        emit,
-        CurrentUserState.available(
-          user: cached.user,
-          freshness: freshness,
-          cachedAtUtc: cached.cachedAtUtc,
-          isSyncing: true,
-        ),
-      );
+      final freshness = cached.isFresh(nowUtc: nowUtc, ttl: _ttl) ? UserFreshness.fresh : UserFreshness.stale;
+      _emit(emit, CurrentUserState.available(user: cached.user, freshness: freshness, cachedAtUtc: cached.cachedAtUtc, isSyncing: true));
     } else {
       _emit(emit, const CurrentUserState.loading());
     }
@@ -96,10 +80,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     add(const CurrentUserRefreshRequested(forceRemote: true));
   }
 
-  Future<void> _onRefreshRequested(
-    CurrentUserRefreshRequested event,
-    Emitter<CurrentUserState> emit,
-  ) async {
+  Future<void> _onRefreshRequested(CurrentUserRefreshRequested event, Emitter<CurrentUserState> emit) async {
     final session = _authRepository.currentSession;
     if (!session.isAuthenticated) {
       _emit(emit, const CurrentUserState.unauthenticated());
@@ -108,9 +89,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
 
     if (!event.forceRemote) {
       // Skip redundant refresh if we already have a non-syncing fresh profile.
-      if (state.status == CurrentUserStatus.available &&
-          state.freshness == UserFreshness.fresh &&
-          !state.isSyncing) {
+      if (state.status == CurrentUserStatus.available && state.freshness == UserFreshness.fresh && !state.isSyncing) {
         return;
       }
     }
@@ -118,29 +97,12 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     final previous = state;
     if (previous.status == CurrentUserStatus.available && !previous.isSyncing) {
       // Preserve visible profile while showing in-flight sync indicator.
-      _emit(
-        emit,
-        previous.copyWith(
-          isSyncing: true,
-          clearReason: true,
-          clearMessage: true,
-        ),
-      );
+      _emit(emit, previous.copyWith(isSyncing: true, clearReason: true, clearMessage: true));
     }
 
     try {
-      final user = await _userProfileRepository.fetchAndCacheProfile(
-        session: session,
-      );
-      _emit(
-        emit,
-        CurrentUserState.available(
-          user: user,
-          freshness: UserFreshness.fresh,
-          cachedAtUtc: _nowUtc(),
-          isSyncing: false,
-        ),
-      );
+      final user = await _userProfileRepository.fetchAndCacheProfile(session: session);
+      _emit(emit, CurrentUserState.available(user: user, freshness: UserFreshness.fresh, cachedAtUtc: _nowUtc(), isSyncing: false));
     } on UserProfileException catch (error) {
       await _handleRefreshFailure(error: error, previous: previous, emit: emit);
     } on Object {
@@ -167,32 +129,21 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
         if (previous.status == CurrentUserStatus.available) {
           _emit(emit, previous.copyWith(isSyncing: false));
         } else {
-          _emit(
-            emit,
-            const CurrentUserState.unavailable(
-              reason: UserProfileFailureCode.network,
-            ),
-          );
+          _emit(emit, const CurrentUserState.unavailable(reason: UserProfileFailureCode.network));
         }
         return;
       case UserProfileFailureCode.storage:
         if (previous.status == CurrentUserStatus.available) {
           _emit(emit, previous.copyWith(isSyncing: false));
         } else {
-          _emit(
-            emit,
-            CurrentUserState.error(reason: error.code, message: error.message),
-          );
+          _emit(emit, CurrentUserState.error(reason: error.code, message: error.message));
         }
         return;
       case UserProfileFailureCode.unknown:
         if (previous.status == CurrentUserStatus.available) {
           _emit(emit, previous.copyWith(isSyncing: false));
         } else {
-          _emit(
-            emit,
-            CurrentUserState.error(reason: error.code, message: error.message),
-          );
+          _emit(emit, CurrentUserState.error(reason: error.code, message: error.message));
         }
         return;
     }

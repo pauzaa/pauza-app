@@ -3,12 +3,7 @@ import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class OtpActionsSection extends StatelessWidget {
-  const OtpActionsSection({
-    required this.countdownStream,
-    required this.initialRemainingSeconds,
-    required this.onResendTap,
-    super.key,
-  });
+  const OtpActionsSection({required this.countdownStream, required this.initialRemainingSeconds, required this.onResendTap, super.key});
 
   final Stream<int> countdownStream;
   final int initialRemainingSeconds;
@@ -17,10 +12,7 @@ class OtpActionsSection extends StatelessWidget {
   String _countdownLabel(BuildContext context, int remainingSeconds) {
     final minutes = remainingSeconds ~/ 60;
     final seconds = remainingSeconds % 60;
-    return context.l10n.authOtpAvailableInLabel(
-      minutes.toString().padLeft(2, '0'),
-      seconds.toString().padLeft(2, '0'),
-    );
+    return context.l10n.authOtpAvailableInLabel(minutes.toString().padLeft(2, '0'), seconds.toString().padLeft(2, '0'));
   }
 
   @override
@@ -34,9 +26,7 @@ class OtpActionsSection extends StatelessWidget {
         Text(
           l10n.authOtpDidNotReceiveCode,
           textAlign: TextAlign.center,
-          style: context.textTheme.headlineSmall?.copyWith(
-            color: context.colorScheme.onSurfaceVariant,
-          ),
+          style: context.textTheme.headlineSmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
         ),
         StreamBuilder<int>(
           stream: countdownStream,
@@ -58,9 +48,7 @@ class OtpActionsSection extends StatelessWidget {
                   Text(
                     _countdownLabel(context, remainingSeconds),
                     textAlign: TextAlign.center,
-                    style: context.textTheme.titleLarge?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-                    ),
+                    style: context.textTheme.titleLarge?.copyWith(color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.5)),
                   ),
                 ],
               ],

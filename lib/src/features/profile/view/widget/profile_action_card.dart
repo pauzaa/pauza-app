@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class ProfileActionCard extends StatelessWidget {
-  const ProfileActionCard({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-    super.key,
-  });
+  const ProfileActionCard({required this.icon, required this.title, required this.onTap, super.key});
 
   final IconData icon;
   final String title;
@@ -25,17 +20,12 @@ class ProfileActionCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: PauzaSpacing.regular,
-            vertical: PauzaSpacing.regular,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.regular, vertical: PauzaSpacing.regular),
           child: Row(
             children: <Widget>[
               DecoratedBox(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    PauzaCornerRadius.medium,
-                  ),
+                  borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
                   color: context.colorScheme.primary.withValues(alpha: 0.1),
                 ),
                 child: Padding(
@@ -45,17 +35,9 @@ class ProfileActionCard extends StatelessWidget {
               ),
               const SizedBox(width: PauzaSpacing.medium),
               Expanded(
-                child: Text(
-                  title,
-                  style: context.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
               ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: context.colorScheme.primary,
-              ),
+              Icon(Icons.chevron_right_rounded, color: context.colorScheme.primary),
             ],
           ),
         ),

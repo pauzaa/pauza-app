@@ -14,154 +14,116 @@ import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 
 void main() {
   group('CurrentUserBloc', () {
-    test(
-      'authenticated startup with fresh cache emits cache then fresh user',
-      () async {
-        final authRepository = _FakeAuthRepository(
-          initialSession: const Session(accessToken: 'a', refreshToken: 'b'),
-        );
-        final repository = _FakeUserProfileRepository(
-          cachedProfile: CachedUserProfile(
-            user: const UserDto(
-              profilePicture: 'https://example.com/avatar/john.png',
-              username: 'john',
-              name: 'John',
-            ),
-            cachedAtUtc: DateTime.utc(2026, 2, 16, 10),
-          ),
-          remoteUser: const UserDto(
-            profilePicture: 'https://example.com/avatar/john.png',
-            username: 'john',
-            name: 'John',
-          ),
-        );
-        final bloc = CurrentUserBloc(
-          authRepository: authRepository,
-          userProfileRepository: repository,
-          ttl: const Duration(minutes: 15),
-          nowUtc: () => DateTime.utc(2026, 2, 16, 10, 5),
-        );
-        final states = <CurrentUserState>[];
-        final subscription = bloc.stream.listen(states.add);
+    test('authenticated startup with fresh cache emits cache then fresh user', () async {
+      final authRepository = _FakeAuthRepository(
+        initialSession: const Session(accessToken: 'a', refreshToken: 'b'),
+      );
+      final repository = _FakeUserProfileRepository(
+        cachedProfile: CachedUserProfile(
+          user: const UserDto(profilePicture: 'https://example.com/avatar/john.png', username: 'john', name: 'John'),
+          cachedAtUtc: DateTime.utc(2026, 2, 16, 10),
+        ),
+        remoteUser: const UserDto(profilePicture: 'https://example.com/avatar/john.png', username: 'john', name: 'John'),
+      );
+      final bloc = CurrentUserBloc(
+        authRepository: authRepository,
+        userProfileRepository: repository,
+        ttl: const Duration(minutes: 15),
+        nowUtc: () => DateTime.utc(2026, 2, 16, 10, 5),
+      );
+      final states = <CurrentUserState>[];
+      final subscription = bloc.stream.listen(states.add);
 
-        await _flushAsync();
+      await _flushAsync();
 
-        expect(states.first.status, CurrentUserStatus.available);
-        expect(states.first.isSyncing, isTrue);
-        expect(bloc.state.status, CurrentUserStatus.available);
-        expect(bloc.state.freshness, UserFreshness.fresh);
-        expect(bloc.state.isSyncing, isFalse);
+      expect(states.first.status, CurrentUserStatus.available);
+      expect(states.first.isSyncing, isTrue);
+      expect(bloc.state.status, CurrentUserStatus.available);
+      expect(bloc.state.freshness, UserFreshness.fresh);
+      expect(bloc.state.isSyncing, isFalse);
 
-        await subscription.cancel();
-        await bloc.close();
-        authRepository.dispose();
-      },
-    );
+      await subscription.cancel();
+      await bloc.close();
+      authRepository.dispose();
+    });
 
-    test(
-      'startup with stale cache then remote success updates fresh state',
-      () async {
-        final authRepository = _FakeAuthRepository(
-          initialSession: const Session(accessToken: 'a', refreshToken: 'b'),
-        );
-        final repository = _FakeUserProfileRepository(
-          cachedProfile: CachedUserProfile(
-            user: const UserDto(
-              profilePicture: 'https://example.com/avatar/jane.png',
-              username: 'jane',
-              name: 'Jane',
-            ),
-            cachedAtUtc: DateTime.utc(2026, 2, 16, 8),
-          ),
-          remoteUser: const UserDto(
-            profilePicture: 'https://example.com/avatar/jane.png',
-            username: 'jane',
-            name: 'Jane',
-          ),
-        );
-        final bloc = CurrentUserBloc(
-          authRepository: authRepository,
-          userProfileRepository: repository,
-          ttl: const Duration(minutes: 15),
-          nowUtc: () => DateTime.utc(2026, 2, 16, 10),
-        );
+    test('startup with stale cache then remote success updates fresh state', () async {
+      final authRepository = _FakeAuthRepository(
+        initialSession: const Session(accessToken: 'a', refreshToken: 'b'),
+      );
+      final repository = _FakeUserProfileRepository(
+        cachedProfile: CachedUserProfile(
+          user: const UserDto(profilePicture: 'https://example.com/avatar/jane.png', username: 'jane', name: 'Jane'),
+          cachedAtUtc: DateTime.utc(2026, 2, 16, 8),
+        ),
+        remoteUser: const UserDto(profilePicture: 'https://example.com/avatar/jane.png', username: 'jane', name: 'Jane'),
+      );
+      final bloc = CurrentUserBloc(
+        authRepository: authRepository,
+        userProfileRepository: repository,
+        ttl: const Duration(minutes: 15),
+        nowUtc: () => DateTime.utc(2026, 2, 16, 10),
+      );
 
-        await _flushAsync();
+      await _flushAsync();
 
-        expect(bloc.state.status, CurrentUserStatus.available);
-        expect(bloc.state.freshness, UserFreshness.fresh);
-        expect(bloc.state.isSyncing, isFalse);
+      expect(bloc.state.status, CurrentUserStatus.available);
+      expect(bloc.state.freshness, UserFreshness.fresh);
+      expect(bloc.state.isSyncing, isFalse);
 
-        await bloc.close();
-        authRepository.dispose();
-      },
-    );
+      await bloc.close();
+      authRepository.dispose();
+    });
 
-    test(
-      'offline with cache keeps cached user and does not sign out',
-      () async {
-        final authRepository = _FakeAuthRepository(
-          initialSession: const Session(accessToken: 'a', refreshToken: 'b'),
-        );
-        final repository = _FakeUserProfileRepository(
-          cachedProfile: CachedUserProfile(
-            user: const UserDto(
-              profilePicture: 'https://example.com/avatar/jane.png',
-              username: 'jane',
-              name: 'Jane',
-            ),
-            cachedAtUtc: DateTime.utc(2026, 2, 16, 8),
-          ),
-          remoteError: const UserProfileException(
-            code: UserProfileFailureCode.network,
-          ),
-        );
-        final bloc = CurrentUserBloc(
-          authRepository: authRepository,
-          userProfileRepository: repository,
-          ttl: const Duration(minutes: 15),
-          nowUtc: () => DateTime.utc(2026, 2, 16, 10),
-        );
+    test('offline with cache keeps cached user and does not sign out', () async {
+      final authRepository = _FakeAuthRepository(
+        initialSession: const Session(accessToken: 'a', refreshToken: 'b'),
+      );
+      final repository = _FakeUserProfileRepository(
+        cachedProfile: CachedUserProfile(
+          user: const UserDto(profilePicture: 'https://example.com/avatar/jane.png', username: 'jane', name: 'Jane'),
+          cachedAtUtc: DateTime.utc(2026, 2, 16, 8),
+        ),
+        remoteError: const UserProfileException(code: UserProfileFailureCode.network),
+      );
+      final bloc = CurrentUserBloc(
+        authRepository: authRepository,
+        userProfileRepository: repository,
+        ttl: const Duration(minutes: 15),
+        nowUtc: () => DateTime.utc(2026, 2, 16, 10),
+      );
 
-        await _flushAsync();
+      await _flushAsync();
 
-        expect(bloc.state.status, CurrentUserStatus.available);
-        expect(bloc.state.isSyncing, isFalse);
-        expect(authRepository.signOutCallCount, 0);
+      expect(bloc.state.status, CurrentUserStatus.available);
+      expect(bloc.state.isSyncing, isFalse);
+      expect(authRepository.signOutCallCount, 0);
 
-        await bloc.close();
-        authRepository.dispose();
-      },
-    );
+      await bloc.close();
+      authRepository.dispose();
+    });
 
-    test(
-      'offline with no cache emits unavailable and preserves session',
-      () async {
-        final authRepository = _FakeAuthRepository(
-          initialSession: const Session(accessToken: 'a', refreshToken: 'b'),
-        );
-        final repository = _FakeUserProfileRepository(
-          remoteError: const UserProfileException(
-            code: UserProfileFailureCode.network,
-          ),
-        );
-        final bloc = CurrentUserBloc(
-          authRepository: authRepository,
-          userProfileRepository: repository,
-          ttl: const Duration(minutes: 15),
-          nowUtc: () => DateTime.utc(2026, 2, 16, 10),
-        );
+    test('offline with no cache emits unavailable and preserves session', () async {
+      final authRepository = _FakeAuthRepository(
+        initialSession: const Session(accessToken: 'a', refreshToken: 'b'),
+      );
+      final repository = _FakeUserProfileRepository(remoteError: const UserProfileException(code: UserProfileFailureCode.network));
+      final bloc = CurrentUserBloc(
+        authRepository: authRepository,
+        userProfileRepository: repository,
+        ttl: const Duration(minutes: 15),
+        nowUtc: () => DateTime.utc(2026, 2, 16, 10),
+      );
 
-        await _flushAsync();
+      await _flushAsync();
 
-        expect(bloc.state.status, CurrentUserStatus.unavailable);
-        expect(authRepository.currentSession.isAuthenticated, isTrue);
-        expect(authRepository.signOutCallCount, 0);
+      expect(bloc.state.status, CurrentUserStatus.unavailable);
+      expect(authRepository.currentSession.isAuthenticated, isTrue);
+      expect(authRepository.signOutCallCount, 0);
 
-        await bloc.close();
-        authRepository.dispose();
-      },
-    );
+      await bloc.close();
+      authRepository.dispose();
+    });
 
     test('401 and 403 trigger sign out', () async {
       for (final error in <UserProfileException>[
@@ -195,18 +157,10 @@ void main() {
       );
       final repository = _FakeUserProfileRepository(
         cachedProfile: CachedUserProfile(
-          user: const UserDto(
-            profilePicture: 'https://example.com/avatar/john.png',
-            username: 'john',
-            name: 'John',
-          ),
+          user: const UserDto(profilePicture: 'https://example.com/avatar/john.png', username: 'john', name: 'John'),
           cachedAtUtc: DateTime.utc(2026, 2, 16, 10),
         ),
-        remoteUser: const UserDto(
-          profilePicture: 'https://example.com/avatar/john.png',
-          username: 'john',
-          name: 'John',
-        ),
+        remoteUser: const UserDto(profilePicture: 'https://example.com/avatar/john.png', username: 'john', name: 'John'),
       );
       final bloc = CurrentUserBloc(
         authRepository: authRepository,
@@ -234,11 +188,9 @@ Future<void> _flushAsync() async {
 }
 
 final class _FakeAuthRepository implements AuthRepository {
-  _FakeAuthRepository({required Session initialSession})
-    : _currentSession = initialSession;
+  _FakeAuthRepository({required Session initialSession}) : _currentSession = initialSession;
 
-  final StreamController<Session> _controller =
-      StreamController<Session>.broadcast();
+  final StreamController<Session> _controller = StreamController<Session>.broadcast();
 
   Session _currentSession;
   int signOutCallCount = 0;
@@ -287,11 +239,7 @@ final class _FakeAuthRepository implements AuthRepository {
 }
 
 final class _FakeUserProfileRepository implements UserProfileRepository {
-  _FakeUserProfileRepository({
-    this.cachedProfile,
-    this.remoteUser,
-    this.remoteError,
-  });
+  _FakeUserProfileRepository({this.cachedProfile, this.remoteUser, this.remoteError});
 
   CachedUserProfile? cachedProfile;
   UserDto? remoteUser;
@@ -314,10 +262,7 @@ final class _FakeUserProfileRepository implements UserProfileRepository {
       throw const UserProfileException(code: UserProfileFailureCode.unknown);
     }
 
-    cachedProfile = CachedUserProfile(
-      user: user,
-      cachedAtUtc: DateTime.utc(2026, 2, 16, 10),
-    );
+    cachedProfile = CachedUserProfile(user: user, cachedAtUtc: DateTime.utc(2026, 2, 16, 10));
     return user;
   }
 

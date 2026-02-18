@@ -18,13 +18,11 @@ final class ModesListState extends Equatable {
   final Object? error;
 
   bool get hasError => error != null;
-  Mode? get selectedMode =>
-      items.firstWhereOrNull((summary) => summary.id == selectedModeId);
+  Mode? get selectedMode => items.firstWhereOrNull((summary) => summary.id == selectedModeId);
 
   ModesListState loading() => copyWith(isLoading: true);
 
-  ModesListState setError(Object error) =>
-      copyWith(error: error, isLoading: false);
+  ModesListState setError(Object error) => copyWith(error: error, isLoading: false);
 
   ModesListState copyWith({
     bool? isLoading,
@@ -44,11 +42,5 @@ final class ModesListState extends Equatable {
   }
 
   @override
-  List<Object?> get props => <Object?>[
-    isLoading,
-    platform,
-    items,
-    selectedModeId,
-    error,
-  ];
+  List<Object?> get props => <Object?>[isLoading, platform, items, selectedModeId, error];
 }

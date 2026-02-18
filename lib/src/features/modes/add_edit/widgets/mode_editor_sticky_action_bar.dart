@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 final class ModeEditorStickyActionBar extends StatelessWidget {
-  const ModeEditorStickyActionBar({
-    required this.buttonLabel,
-    required this.onPressed,
-    super.key,
-    this.isBusy = false,
-  });
+  const ModeEditorStickyActionBar({required this.buttonLabel, required this.onPressed, super.key, this.isBusy = false});
 
   final String buttonLabel;
   final VoidCallback onPressed;
@@ -18,9 +13,7 @@ final class ModeEditorStickyActionBar extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
-        border: Border(
-          top: BorderSide(color: context.colorScheme.outlineVariant),
-        ),
+        border: Border(top: BorderSide(color: context.colorScheme.outlineVariant)),
       ),
       child: SafeArea(
         minimum: const EdgeInsets.all(PauzaSpacing.medium),
@@ -30,19 +23,10 @@ final class ModeEditorStickyActionBar extends StatelessWidget {
           disabled: isBusy,
           width: double.infinity,
           size: PauzaButtonSize.large,
-          textStyle: context.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          textStyle: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
           radius: PauzaCornerRadius.large,
           title: isBusy
-              ? SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: CircularProgressIndicator(
-                    color: context.colorScheme.onPrimary,
-                    strokeWidth: 2.3,
-                  ),
-                )
+              ? SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: context.colorScheme.onPrimary, strokeWidth: 2.3))
               : Text(buttonLabel),
         ),
       ),

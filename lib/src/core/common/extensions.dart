@@ -16,9 +16,7 @@ extension IterableX<A> on Iterable<A> {
 extension DateTimeX on DateTime {
   DateTimeRange get thisWeek {
     final dayStart = this.dayStart;
-    final monday = dayStart.subtract(
-      Duration(days: dayStart.weekday - DateTime.monday),
-    );
+    final monday = dayStart.subtract(Duration(days: dayStart.weekday - DateTime.monday));
     final sunday = monday.add(const Duration(days: 6));
 
     return DateTimeRange(start: monday, end: sunday.dayEnd);

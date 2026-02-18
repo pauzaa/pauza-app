@@ -105,9 +105,7 @@ class _AuthScreenContentState extends State<AuthScreenContent> {
       return;
     }
 
-    context.read<AuthBloc>().add(
-      AuthSignInRequested(email: _emailController.text.trim(), password: _passwordController.text),
-    );
+    context.read<AuthBloc>().add(AuthSignInRequested(email: _emailController.text.trim(), password: _passwordController.text));
   }
 
   void _onForgotPasswordTap() {

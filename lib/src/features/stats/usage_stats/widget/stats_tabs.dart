@@ -3,13 +3,7 @@ import 'package:pauza/src/features/stats/common/model/stats_tab.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class StatsTabs extends StatelessWidget {
-  const StatsTabs({
-    required this.usageLabel,
-    required this.blockingLabel,
-    required this.selectedTab,
-    required this.onChanged,
-    super.key,
-  });
+  const StatsTabs({required this.usageLabel, required this.blockingLabel, required this.selectedTab, required this.onChanged, super.key});
 
   final String usageLabel;
   final String blockingLabel;
@@ -29,11 +23,7 @@ class StatsTabs extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Expanded(
-              child: _StatsTabButton(
-                title: usageLabel,
-                onTap: () => onChanged(StatsTab.usage),
-                isSelected: selectedTab == StatsTab.usage,
-              ),
+              child: _StatsTabButton(title: usageLabel, onTap: () => onChanged(StatsTab.usage), isSelected: selectedTab == StatsTab.usage),
             ),
             const SizedBox(width: PauzaSpacing.small),
             Expanded(
@@ -51,11 +41,7 @@ class StatsTabs extends StatelessWidget {
 }
 
 final class _StatsTabButton extends StatelessWidget {
-  const _StatsTabButton({
-    required this.title,
-    required this.isSelected,
-    required this.onTap,
-  });
+  const _StatsTabButton({required this.title, required this.isSelected, required this.onTap});
 
   final String title;
   final bool isSelected;
@@ -78,9 +64,7 @@ final class _StatsTabButton extends StatelessWidget {
             textAlign: TextAlign.center,
             style: context.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
-              color: isSelected
-                  ? context.colorScheme.onPrimary
-                  : context.colorScheme.onSurfaceVariant,
+              color: isSelected ? context.colorScheme.onPrimary : context.colorScheme.onSurfaceVariant,
             ),
           ),
         ),

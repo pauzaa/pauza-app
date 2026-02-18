@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/profile/common/bloc/current_user_state.dart';
+import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 
 void main() {
   testWidgets('descendant rebuilds when bloc state changes', (tester) async {
@@ -28,11 +28,7 @@ void main() {
 
     bloc.emit(
       CurrentUserState.available(
-        user: const UserDto(
-          profilePicture: 'https://example.com/avatar/john.png',
-          username: 'john',
-          name: 'John',
-        ),
+        user: const UserDto(profilePicture: 'https://example.com/avatar/john.png', username: 'john', name: 'John'),
         freshness: UserFreshness.fresh,
         cachedAtUtc: DateTime.utc(2026, 2, 16, 10),
         isSyncing: false,

@@ -4,30 +4,19 @@ import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 final class ModeIconPickerSheet extends StatelessWidget {
-  const ModeIconPickerSheet({
-    required this.title,
-    required this.subtitle,
-    required this.selectedIcon,
-    super.key,
-  });
+  const ModeIconPickerSheet({required this.title, required this.subtitle, required this.selectedIcon, super.key});
 
   final String title;
   final String subtitle;
   final ModeIcon selectedIcon;
 
-  static Future<ModeIcon?> show(
-    BuildContext context, {
-    required String title,
-    required String subtitle,
-    required ModeIcon selectedIcon,
-  }) {
+  static Future<ModeIcon?> show(BuildContext context, {required String title, required String subtitle, required ModeIcon selectedIcon}) {
     return showModalBottomSheet<ModeIcon>(
       context: context,
       useRootNavigator: true,
       useSafeArea: true,
       isScrollControlled: true,
-      builder: (context) =>
-          ModeIconPickerSheet(title: title, subtitle: subtitle, selectedIcon: selectedIcon),
+      builder: (context) => ModeIconPickerSheet(title: title, subtitle: subtitle, selectedIcon: selectedIcon),
     );
   }
 
@@ -37,19 +26,11 @@ final class ModeIconPickerSheet extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
       child: BottomSheetScaffold(
         title: Text(title),
-        bodyPadding: const EdgeInsets.symmetric(
-          horizontal: PauzaSpacing.medium,
-          vertical: PauzaSpacing.small,
-        ),
+        bodyPadding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.small),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              subtitle,
-              style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
-              ),
-            ),
+            Text(subtitle, style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant)),
             const SizedBox(height: PauzaSpacing.medium),
             Expanded(
               child: GridView.builder(
@@ -62,12 +43,8 @@ final class ModeIconPickerSheet extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final entry = ModeIconCatalog.entries[index];
                   final isSelected = entry == selectedIcon;
-                  final borderColor = isSelected
-                      ? context.colorScheme.primary
-                      : context.colorScheme.outlineVariant;
-                  final foregroundColor = isSelected
-                      ? context.colorScheme.primary
-                      : context.colorScheme.onSurfaceVariant;
+                  final borderColor = isSelected ? context.colorScheme.primary : context.colorScheme.outlineVariant;
+                  final foregroundColor = isSelected ? context.colorScheme.primary : context.colorScheme.onSurfaceVariant;
                   return Material(
                     color: context.colorScheme.surfaceContainerLowest,
                     shape: RoundedRectangleBorder(

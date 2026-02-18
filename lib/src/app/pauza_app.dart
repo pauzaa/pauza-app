@@ -1,6 +1,7 @@
 import 'package:appfuse/appfuse.dart';
 import 'package:flutter/material.dart';
-import 'package:pauza/src/core/common/pauza_dependencies.dart';
+import 'package:pauza/src/core/init/config.dart';
+import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_router.dart';
@@ -9,10 +10,9 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 class PauzaApp extends StatefulWidget {
   const PauzaApp({super.key});
 
-  static final themes = <Brightness, ThemeData>{
-    Brightness.light: PauzaTheme.light,
-    Brightness.dark: PauzaTheme.dark,
-  };
+  static final themes = <Brightness, ThemeData>{Brightness.light: PauzaTheme.light, Brightness.dark: PauzaTheme.dark};
+
+  static final configs = [TestConfig(), ProdConfig()];
 
   static const localizationsDelegates = AppLocalizations.localizationsDelegates;
 
@@ -61,9 +61,7 @@ class _PauzaAppState extends State<PauzaApp> with RouterStateMixin<PauzaApp> {
       builder: (context, child) {
         return MediaQuery(
           key: builderKey,
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.noScaling),
+          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
           child: RootScope(child: child ?? const SizedBox.shrink()),
         );
       },

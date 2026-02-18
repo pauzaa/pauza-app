@@ -8,13 +8,7 @@ void main() {
   group('NfcCardDto', () {
     test('serializes and deserializes JSON', () {
       final detectedAt = DateTime.utc(2026, 1, 1, 10, 30);
-      const record = NfcNdefRecordDto(
-        tnf: 'wellKnown',
-        typeHex: '54',
-        identifierHex: '01',
-        payloadHex: '02656e4869',
-        payloadText: 'Hi',
-      );
+      const record = NfcNdefRecordDto(tnf: 'wellKnown', typeHex: '54', identifierHex: '01', payloadHex: '02656e4869', payloadText: 'Hi');
 
       final dto = NfcCardDto(
         id: 'card-id-1',

@@ -2,12 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class LocalDatabaseConfig {
-  const LocalDatabaseConfig({
-    this.name = 'pauza.db',
-    this.version = 1,
-    this.enableForeignKeys = true,
-    this.logSql = false,
-  });
+  const LocalDatabaseConfig({this.name = 'pauza.db', this.version = 1, this.enableForeignKeys = true, this.logSql = false});
 
   final String name;
   final int version;

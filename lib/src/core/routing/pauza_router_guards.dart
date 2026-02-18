@@ -10,14 +10,9 @@ NavigationState normalizeNavigationToRootShell(NavigationState pages) {
     return pages;
   }
 
-  final rootPage = pages.firstWhere(
-    (page) => page.meta?.route == PauzaRoutes.root,
-    orElse: () => PauzaRoutes.root.page(),
-  );
+  final rootPage = pages.firstWhere((page) => page.meta?.route == PauzaRoutes.root, orElse: () => PauzaRoutes.root.page());
 
-  final topLevelPages = pages
-      .where((page) => page.meta?.route != PauzaRoutes.root)
-      .toList(growable: false);
+  final topLevelPages = pages.where((page) => page.meta?.route != PauzaRoutes.root).toList(growable: false);
 
   return [rootPage, ...topLevelPages];
 }
@@ -35,17 +30,13 @@ NavigationGuard createPermissionGuard({
       return pending ?? pages;
     }
 
-    final isOnPermissionsScreen = pages.any(
-      (page) => page.meta?.route == PauzaRoutes.permissions,
-    );
+    final isOnPermissionsScreen = pages.any((page) => page.meta?.route == PauzaRoutes.permissions);
 
     if (!isOnPermissionsScreen) {
       writePending(pages);
     }
 
-    return isOnPermissionsScreen
-        ? pages
-        : normalize([PauzaRoutes.permissions.page()]);
+    return isOnPermissionsScreen ? pages : normalize([PauzaRoutes.permissions.page()]);
   };
 }
 
@@ -56,9 +47,7 @@ NavigationGuard createAuthGuard({
   required void Function(NavigationState?) writePending,
 }) {
   return (pages) {
-    final isOnPermissionsScreen = pages.any(
-      (page) => page.meta?.route == PauzaRoutes.permissions,
-    );
+    final isOnPermissionsScreen = pages.any((page) => page.meta?.route == PauzaRoutes.permissions);
     if (isOnPermissionsScreen) {
       return pages;
     }
@@ -89,8 +78,6 @@ NavigationGuard createAuthGuard({
 bool _containsStandaloneRoute(NavigationState pages) {
   return pages.any((page) {
     final route = page.meta?.route;
-    return route == PauzaRoutes.permissions ||
-        route == PauzaRoutes.auth ||
-        route == PauzaRoutes.otp;
+    return route == PauzaRoutes.permissions || route == PauzaRoutes.auth || route == PauzaRoutes.otp;
   });
 }

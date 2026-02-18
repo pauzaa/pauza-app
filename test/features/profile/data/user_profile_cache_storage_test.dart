@@ -8,9 +8,7 @@ import 'package:pauza/src/features/profile/data/user_profile_cache_storage.dart'
 void main() {
   group('AppFuseUserProfileCacheStorage', () {
     test('read returns null when cache is absent', () async {
-      final storage = AppFuseUserProfileCacheStorage(
-        storage: _FakeAppFuseStorage(),
-      );
+      final storage = AppFuseUserProfileCacheStorage(storage: _FakeAppFuseStorage());
 
       final cached = await storage.read();
 
@@ -22,11 +20,7 @@ void main() {
       final storage = AppFuseUserProfileCacheStorage(storage: kv);
       final now = DateTime.utc(2026, 2, 16, 8);
       final cached = CachedUserProfile(
-        user: const UserDto(
-          profilePicture: 'https://example.com/avatar/john.png',
-          username: 'john',
-          name: 'John',
-        ),
+        user: const UserDto(profilePicture: 'https://example.com/avatar/john.png', username: 'john', name: 'John'),
         cachedAtUtc: now,
       );
 
@@ -40,11 +34,7 @@ void main() {
       final kv = _FakeAppFuseStorage();
       final storage = AppFuseUserProfileCacheStorage(storage: kv);
       final cached = CachedUserProfile(
-        user: const UserDto(
-          profilePicture: 'https://example.com/avatar/jane.png',
-          username: 'jane',
-          name: 'Jane',
-        ),
+        user: const UserDto(profilePicture: 'https://example.com/avatar/jane.png', username: 'jane', name: 'Jane'),
         cachedAtUtc: DateTime.utc(2026, 2, 16, 9),
       );
 
@@ -56,22 +46,12 @@ void main() {
     });
 
     test('read throws storage failure for malformed payload', () async {
-      final kv = _FakeAppFuseStorage(
-        values: <String, Object?>{
-          AppFuseUserProfileCacheStorage.cacheKey: 'not-json',
-        },
-      );
+      final kv = _FakeAppFuseStorage(values: <String, Object?>{AppFuseUserProfileCacheStorage.cacheKey: 'not-json'});
       final storage = AppFuseUserProfileCacheStorage(storage: kv);
 
       await expectLater(
         storage.read,
-        throwsA(
-          isA<UserProfileException>().having(
-            (error) => error.code,
-            'code',
-            UserProfileFailureCode.storage,
-          ),
-        ),
+        throwsA(isA<UserProfileException>().having((error) => error.code, 'code', UserProfileFailureCode.storage)),
       );
     });
 
@@ -82,31 +62,18 @@ void main() {
       await expectLater(
         () => storage.write(
           CachedUserProfile(
-            user: const UserDto(
-              profilePicture: 'https://example.com/avatar/jane.png',
-              username: 'jane',
-              name: 'Jane',
-            ),
+            user: const UserDto(profilePicture: 'https://example.com/avatar/jane.png', username: 'jane', name: 'Jane'),
             cachedAtUtc: DateTime.utc(2026, 2, 16, 9),
           ),
         ),
-        throwsA(
-          isA<UserProfileException>().having(
-            (error) => error.code,
-            'code',
-            UserProfileFailureCode.storage,
-          ),
-        ),
+        throwsA(isA<UserProfileException>().having((error) => error.code, 'code', UserProfileFailureCode.storage)),
       );
     });
   });
 }
 
 final class _FakeAppFuseStorage implements IAppFuseStorage {
-  _FakeAppFuseStorage({
-    Map<String, Object?>? values,
-    this.setValueResult = true,
-  }) : _values = values ?? <String, Object?>{};
+  _FakeAppFuseStorage({Map<String, Object?>? values, this.setValueResult = true}) : _values = values ?? <String, Object?>{};
 
   final Map<String, Object?> _values;
   final bool setValueResult;

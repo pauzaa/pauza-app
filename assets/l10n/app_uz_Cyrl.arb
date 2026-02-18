@@ -9,6 +9,23 @@
   "profileUsernameFallback": "username",
   "profileEditInfoNavTitle": "Профилни таҳрирлаш",
   "profileSettingsNavTitle": "Созламалар",
+  "settingsTitle": "Созламалар",
+  "settingsGeneralSectionTitle": "Умумий",
+  "settingsNotifications": "Билдиришномалар",
+  "settingsLanguage": "Тил",
+  "settingsLanguagePickerTitle": "Тилни танланг",
+  "settingsNfcChipConfiguring": "NFC чипини созлаш",
+  "settingsQrCodeConfiguring": "QR кодни созлаш",
+  "settingsSignOut": "Чиқиш",
+  "settingsVersionFallback": "Pauza",
+  "settingsVersionLabel": "Pauza v{version}",
+  "@settingsVersionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "notFoundTitle": "Саҳифа топилмади",
   "confirmButton": "Тасдиқлаш",
   "cancelButton": "Бекор қилиш",

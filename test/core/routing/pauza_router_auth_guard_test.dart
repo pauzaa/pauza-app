@@ -112,9 +112,6 @@ void main() {
   });
 }
 
-NavigationState _applyGuards(
-  List<NavigationGuard> guards,
-  NavigationState state,
-) {
+NavigationState _applyGuards(List<NavigationGuard> guards, NavigationState state) {
   return guards.fold<NavigationState>(state, (pages, guard) => guard(pages));
 }

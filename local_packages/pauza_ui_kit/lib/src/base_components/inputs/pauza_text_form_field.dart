@@ -108,38 +108,39 @@ final class PauzaTextFormField extends StatefulWidget {
   }) {
     return _PauzaPasswordField(
       key: key,
-      builder: (BuildContext context, bool obscure, ValueSetter<bool> setObscure) {
-        return PauzaTextFormField(
-          onChanged: onChanged,
-          controller: controller,
-          initialValue: initialValue,
-          focusNode: focusNode,
-          decoration: decoration.copyWith(
-            suffixIcon: obscureIconBuilder(context, obscure, setObscure),
-          ),
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
-          style: style,
-          textAlign: textAlign,
-          textCapitalization: textCapitalization,
-          autofocus: autofocus,
-          readOnly: readOnly,
-          obscureText: obscure,
-          maxLines: maxLines,
-          minLines: minLines,
-          expands: expands,
-          maxLength: maxLength,
-          inputFormatters: inputFormatters,
-          enabled: enabled,
-          validator: validator,
-          onFieldSubmitted: onFieldSubmitted,
-          onEditingComplete: onEditingComplete,
-          onTap: onTap,
-          autovalidateMode: autovalidateMode,
-          extraWidget: extraWidget,
-          allowInteractionOnDisabled: allowInteractionOnDisabled,
-        );
-      },
+      builder:
+          (BuildContext context, bool obscure, ValueSetter<bool> setObscure) {
+            return PauzaTextFormField(
+              onChanged: onChanged,
+              controller: controller,
+              initialValue: initialValue,
+              focusNode: focusNode,
+              decoration: decoration.copyWith(
+                suffixIcon: obscureIconBuilder(context, obscure, setObscure),
+              ),
+              keyboardType: keyboardType,
+              textInputAction: textInputAction,
+              style: style,
+              textAlign: textAlign,
+              textCapitalization: textCapitalization,
+              autofocus: autofocus,
+              readOnly: readOnly,
+              obscureText: obscure,
+              maxLines: maxLines,
+              minLines: minLines,
+              expands: expands,
+              maxLength: maxLength,
+              inputFormatters: inputFormatters,
+              enabled: enabled,
+              validator: validator,
+              onFieldSubmitted: onFieldSubmitted,
+              onEditingComplete: onEditingComplete,
+              onTap: onTap,
+              autovalidateMode: autovalidateMode,
+              extraWidget: extraWidget,
+              allowInteractionOnDisabled: allowInteractionOnDisabled,
+            );
+          },
       obscure: obscureText,
     );
   }
@@ -152,13 +153,16 @@ final class _PauzaTextFormFieldState extends State<PauzaTextFormField> {
   late final TextEditingController _internalController;
   late final FocusNode _internalFocusNode;
 
-  TextEditingController get _controller => widget.controller ?? _internalController;
+  TextEditingController get _controller =>
+      widget.controller ?? _internalController;
   FocusNode get _focusNode => widget.focusNode ?? _internalFocusNode;
 
   @override
   void initState() {
     super.initState();
-    _internalController = TextEditingController(text: widget.initialValue ?? '');
+    _internalController = TextEditingController(
+      text: widget.initialValue ?? '',
+    );
     _internalFocusNode = FocusNode();
     _focusNode.addListener(_handleFocusChanged);
   }
@@ -189,16 +193,20 @@ final class _PauzaTextFormFieldState extends State<PauzaTextFormField> {
   @override
   Widget build(BuildContext context) {
     final inputDecorationTheme = Theme.of(context).inputDecorationTheme;
-    final effectivePauzaDecoration = widget.decoration.applyDefaults(inputDecorationTheme);
-    final effectiveDecoration = effectivePauzaDecoration.configureInputDecoration(
-      context,
-      hasFocus: _focusNode.hasFocus,
-      isEnabled: widget.enabled,
-      controller: _controller,
-      onChanged: widget.onChanged,
+    final effectivePauzaDecoration = widget.decoration.applyDefaults(
+      inputDecorationTheme,
     );
+    final effectiveDecoration = effectivePauzaDecoration
+        .configureInputDecoration(
+          context,
+          hasFocus: _focusNode.hasFocus,
+          isEnabled: widget.enabled,
+          controller: _controller,
+          onChanged: widget.onChanged,
+        );
 
-    final effectiveReadOnly = widget.allowInteractionOnDisabled && !widget.enabled
+    final effectiveReadOnly =
+        widget.allowInteractionOnDisabled && !widget.enabled
         ? true
         : widget.readOnly;
 
@@ -242,14 +250,19 @@ final class _PauzaTextFormFieldState extends State<PauzaTextFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        if (effectivePauzaDecoration.labelText case final labelText? when labelText.isNotEmpty)
+        if (effectivePauzaDecoration.labelText case final labelText?
+            when labelText.isNotEmpty)
           Text(
             labelText,
-            style: effectivePauzaDecoration.labelStyle ?? context.textTheme.labelLarge,
+            style:
+                effectivePauzaDecoration.labelStyle ??
+                context.textTheme.labelLarge,
           )
         else if (effectivePauzaDecoration.label case final label?)
           DefaultTextStyle.merge(
-            style: effectivePauzaDecoration.labelStyle ?? context.textTheme.labelLarge,
+            style:
+                effectivePauzaDecoration.labelStyle ??
+                context.textTheme.labelLarge,
             child: label,
           ),
         textField,
@@ -259,10 +272,19 @@ final class _PauzaTextFormFieldState extends State<PauzaTextFormField> {
 }
 
 final class _PauzaPasswordField extends StatefulWidget {
-  const _PauzaPasswordField({required this.builder, required this.obscure, super.key});
+  const _PauzaPasswordField({
+    required this.builder,
+    required this.obscure,
+    super.key,
+  });
 
   final bool obscure;
-  final Widget Function(BuildContext context, bool obscure, ValueSetter<bool> setObscure) builder;
+  final Widget Function(
+    BuildContext context,
+    bool obscure,
+    ValueSetter<bool> setObscure,
+  )
+  builder;
 
   @override
   State<_PauzaPasswordField> createState() => _PauzaPasswordFieldState();

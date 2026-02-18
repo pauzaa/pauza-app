@@ -11,7 +11,9 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: PauzaTheme.dark,
-        home: Scaffold(body: PauzaPinCodeField(controller: controller, length: 6)),
+        home: Scaffold(
+          body: PauzaPinCodeField(controller: controller, length: 6),
+        ),
       ),
     );
 
@@ -28,7 +30,9 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: PauzaTheme.dark,
-        home: Scaffold(body: PauzaPinCodeField(controller: controller, length: 6)),
+        home: Scaffold(
+          body: PauzaPinCodeField(controller: controller, length: 6),
+        ),
       ),
     );
 
@@ -79,7 +83,11 @@ void main() {
       MaterialApp(
         theme: PauzaTheme.dark,
         home: Scaffold(
-          body: PauzaPinCodeField(controller: controller, enabled: false, length: 6),
+          body: PauzaPinCodeField(
+            controller: controller,
+            enabled: false,
+            length: 6,
+          ),
         ),
       ),
     );

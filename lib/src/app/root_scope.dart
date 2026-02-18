@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pauza/src/core/common/pauza_dependencies.dart';
+import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
@@ -18,8 +18,7 @@ class RootScope extends StatefulWidget {
   @override
   State<RootScope> createState() => RootScopeState();
 
-  static RootScopeState of(BuildContext context, {bool listen = false}) =>
-      _InheritedRootScope.of(context, listen: listen).data;
+  static RootScopeState of(BuildContext context, {bool listen = false}) => _InheritedRootScope.of(context, listen: listen).data;
 }
 
 class RootScopeState extends State<RootScope> {
@@ -30,22 +29,16 @@ class RootScopeState extends State<RootScope> {
   late final StatsUsageRepository statsUsageRepository;
   late final CurrentUserBloc currentUserBloc;
   late final AuthBloc authBloc;
-  late final RestrictionLifecycleSyncCoordinator
-  restrictionLifecycleSyncCoordinator;
+  late final RestrictionLifecycleSyncCoordinator restrictionLifecycleSyncCoordinator;
 
   @override
   void initState() {
     blockingRepository = PauzaBlockingRepository(
       restrictions: PauzaDependencies.of(context).appRestrictionManager,
-      restrictionLifecycleRepository: PauzaDependencies.of(
-        context,
-      ).restrictionLifecycleRepository,
+      restrictionLifecycleRepository: PauzaDependencies.of(context).restrictionLifecycleRepository,
     );
 
-    modesRepository = ModesRepositoryImpl(
-      localDatabase: PauzaDependencies.of(context).localDatabase,
-      platform: kPauzaPlatform,
-    );
+    modesRepository = ModesRepositoryImpl(localDatabase: PauzaDependencies.of(context).localDatabase, platform: kPauzaPlatform);
 
     installedAppsRepository = PauzaScreenTimeInstalledAppsRepository(
       installedAppsManager: PauzaDependencies.of(context).installedAppsManager,
@@ -60,16 +53,12 @@ class RootScopeState extends State<RootScope> {
     // not in infra dependencies.
     currentUserBloc = CurrentUserBloc(
       authRepository: PauzaDependencies.of(context).authRepository,
-      userProfileRepository: PauzaDependencies.of(
-        context,
-      ).userProfileRepository,
+      userProfileRepository: PauzaDependencies.of(context).userProfileRepository,
       ttl: const Duration(minutes: 15),
       nowUtc: () => DateTime.now().toUtc(),
     );
 
-    authBloc = AuthBloc(
-      authRepository: PauzaDependencies.of(context).authRepository,
-    );
+    authBloc = AuthBloc(authRepository: PauzaDependencies.of(context).authRepository);
 
     restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
       repository: PauzaDependencies.of(context).restrictionLifecycleRepository,
@@ -103,10 +92,7 @@ class _InheritedRootScope extends InheritedWidget {
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
   /// For example: `SettingsScope.maybeOf(context)`.
-  static _InheritedRootScope? maybeOf(
-    BuildContext context, {
-    bool listen = true,
-  }) => listen
+  static _InheritedRootScope? maybeOf(BuildContext context, {bool listen = true}) => listen
       ? context.dependOnInheritedWidgetOfExactType<_InheritedRootScope>()
       : context.getInheritedWidgetOfExactType<_InheritedRootScope>();
 

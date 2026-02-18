@@ -24,13 +24,9 @@ class ModeListItem extends StatelessWidget {
     final l10n = context.l10n;
     final colorScheme = context.colorScheme;
     final description = mode.description?.trim();
-    final subtitle = description == null || description.isEmpty
-        ? l10n.blockedAppsCountLabel(mode.blockedAppIds.length)
-        : description;
+    final subtitle = description == null || description.isEmpty ? l10n.blockedAppsCountLabel(mode.blockedAppIds.length) : description;
 
-    final borderColor = isSelected
-        ? colorScheme.primary.withValues(alpha: 0.9)
-        : colorScheme.outlineVariant.withValues(alpha: 0.75);
+    final borderColor = isSelected ? colorScheme.primary.withValues(alpha: 0.9) : colorScheme.outlineVariant.withValues(alpha: 0.75);
     final backgroundColor = isSelected
         ? colorScheme.primary.withValues(alpha: 0.08)
         : colorScheme.surfaceContainerLowest.withValues(alpha: 0.45);
@@ -48,13 +44,7 @@ class ModeListItem extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
             boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: colorScheme.primary.withValues(alpha: 0.28),
-                      blurRadius: 22,
-                      offset: const Offset(0, 10),
-                    ),
-                  ]
+                ? [BoxShadow(color: colorScheme.primary.withValues(alpha: 0.28), blurRadius: 22, offset: const Offset(0, 10))]
                 : null,
           ),
           child: Padding(
@@ -91,17 +81,13 @@ class ModeListItem extends StatelessWidget {
                         mode.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: context.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       Text(
                         subtitle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: context.textTheme.bodyLarge?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
+                        style: context.textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
                       ),
                     ],
                   ),
@@ -119,10 +105,7 @@ class ModeListItem extends StatelessWidget {
                       onPressed: onDelete,
                       icon: const Icon(Icons.delete_outline),
                       color: colorScheme.error,
-                      style: IconButton.styleFrom(
-                        foregroundColor: colorScheme.error,
-                        backgroundColor: colorScheme.surfaceContainerHigh,
-                      ),
+                      style: IconButton.styleFrom(foregroundColor: colorScheme.error, backgroundColor: colorScheme.surfaceContainerHigh),
                       visualDensity: VisualDensity.compact,
                       iconSize: PauzaIconSizes.small,
                     ),

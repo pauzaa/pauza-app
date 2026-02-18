@@ -20,24 +20,15 @@ import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 void main() {
   group('HomeContent', () {
-    testWidgets('renders active session UI when blocking is active', (
-      tester,
-    ) async {
+    testWidgets('renders active session UI when blocking is active', (tester) async {
       await tester.binding.setSurfaceSize(const Size(1200, 3000));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
       final modesBloc = _TestModesListBloc();
       final blockingBloc = _TestBlockingBloc();
-      blockingBloc.emitForTest(
-        BlockingState(
-          activeModeId: 'mode-1',
-          sessionStartedAt: DateTime.now().subtract(const Duration(hours: 1)),
-        ),
-      );
+      blockingBloc.emitForTest(BlockingState(activeModeId: 'mode-1', sessionStartedAt: DateTime.now().subtract(const Duration(hours: 1))));
 
-      await tester.pumpWidget(
-        _TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc),
-      );
+      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
       await tester.pump();
 
       expect(find.byType(HomeStatsPill), findsNothing);
@@ -47,19 +38,9 @@ void main() {
       expect(find.text('5m'), findsOneWidget);
       expect(find.text('10m'), findsOneWidget);
       expect(find.text('RESUME'), findsNothing);
+      expect(tester.widget<HomeStartSessionButton>(find.byType(HomeStartSessionButton)).isActiveSession, isTrue);
       expect(
-        tester
-            .widget<HomeStartSessionButton>(find.byType(HomeStartSessionButton))
-            .isActiveSession,
-        isTrue,
-      );
-      expect(
-        find.byWidgetPredicate(
-          (widget) =>
-              widget is Text &&
-              widget.data != null &&
-              RegExp(r'^\d{2}:\d{2}:\d{2}$').hasMatch(widget.data!),
-        ),
+        find.byWidgetPredicate((widget) => widget is Text && widget.data != null && RegExp(r'^\d{2}:\d{2}:\d{2}$').hasMatch(widget.data!)),
         findsOneWidget,
       );
 
@@ -67,65 +48,51 @@ void main() {
       addTearDown(blockingBloc.close);
     });
 
-    testWidgets(
-      'renders resume button and hides quick pause pills when paused',
-      (tester) async {
-        await tester.binding.setSurfaceSize(const Size(1200, 3000));
-        addTearDown(() => tester.binding.setSurfaceSize(null));
+    testWidgets('renders resume button and hides quick pause pills when paused', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 3000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
 
-        final modesBloc = _TestModesListBloc();
-        final blockingBloc = _TestBlockingBloc();
-        blockingBloc.emitForTest(
-          BlockingState(
-            activeModeId: 'mode-1',
-            sessionStartedAt: DateTime.now().subtract(const Duration(hours: 1)),
-            pausedUntil: DateTime.now().add(const Duration(minutes: 1)),
-          ),
-        );
+      final modesBloc = _TestModesListBloc();
+      final blockingBloc = _TestBlockingBloc();
+      blockingBloc.emitForTest(
+        BlockingState(
+          activeModeId: 'mode-1',
+          sessionStartedAt: DateTime.now().subtract(const Duration(hours: 1)),
+          pausedUntil: DateTime.now().add(const Duration(minutes: 1)),
+        ),
+      );
 
-        await tester.pumpWidget(
-          _TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc),
-        );
-        await tester.pump();
+      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
+      await tester.pump();
 
-        expect(find.text('RESUME'), findsOneWidget);
-        expect(find.text('1m'), findsNothing);
-        expect(find.text('5m'), findsNothing);
-        expect(find.text('10m'), findsNothing);
+      expect(find.text('RESUME'), findsOneWidget);
+      expect(find.text('1m'), findsNothing);
+      expect(find.text('5m'), findsNothing);
+      expect(find.text('10m'), findsNothing);
 
-        await tester.tap(find.text('RESUME'));
-        await tester.pump();
-        expect(blockingBloc.lastEvent, isA<BlockingResumeRequested>());
+      await tester.tap(find.text('RESUME'));
+      await tester.pump();
+      expect(blockingBloc.lastEvent, isA<BlockingResumeRequested>());
 
-        addTearDown(modesBloc.close);
-        addTearDown(blockingBloc.close);
-      },
-    );
+      addTearDown(modesBloc.close);
+      addTearDown(blockingBloc.close);
+    });
 
-    testWidgets('renders default home body when session is not active', (
-      tester,
-    ) async {
+    testWidgets('renders default home body when session is not active', (tester) async {
       await tester.binding.setSurfaceSize(const Size(1200, 3000));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
       final modesBloc = _TestModesListBloc();
       final blockingBloc = _TestBlockingBloc();
 
-      await tester.pumpWidget(
-        _TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc),
-      );
+      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
       await tester.pump();
 
       expect(find.byType(HomeStatsPill), findsOneWidget);
       expect(find.byType(HomeCurrentModeCard), findsOneWidget);
       expect(find.byType(HomeStartSessionButton), findsOneWidget);
       expect(find.text('1m'), findsNothing);
-      expect(
-        tester
-            .widget<HomeStartSessionButton>(find.byType(HomeStartSessionButton))
-            .isActiveSession,
-        isFalse,
-      );
+      expect(tester.widget<HomeStartSessionButton>(find.byType(HomeStartSessionButton)).isActiveSession, isFalse);
 
       addTearDown(modesBloc.close);
       addTearDown(blockingBloc.close);
@@ -196,10 +163,7 @@ class _NoopModesRepository implements ModesRepository {
   Future<List<Mode>> getModes() async => <Mode>[_mode];
 
   @override
-  Future<void> updateMode({
-    required String modeId,
-    required ModeUpsertDTO request,
-  }) async {}
+  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {}
 
   static final Mode _mode = Mode(
     id: 'mode-1',
@@ -241,10 +205,7 @@ class _NoopBlockingRepository implements BlockingRepository {
   Future<void> resumeBlocking() async {}
 
   @override
-  Future<void> startBlocking({
-    required Mode mode,
-    required ShieldConfiguration? shield,
-  }) async {}
+  Future<void> startBlocking({required Mode mode, required ShieldConfiguration? shield}) async {}
 
   @override
   Future<void> stopBlocking() async {}

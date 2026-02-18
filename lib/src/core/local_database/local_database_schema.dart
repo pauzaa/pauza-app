@@ -18,9 +18,5 @@ class EmptyLocalDatabaseSchema implements LocalDatabaseSchema {
   Future<void> onCreate(Database database, int version) async {}
 
   @override
-  Future<void> onUpgrade(
-    Database database,
-    int oldVersion,
-    int newVersion,
-  ) async {}
+  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {}
 }

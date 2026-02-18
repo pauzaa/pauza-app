@@ -28,40 +28,21 @@ class StatsTotalTimeCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     context.l10n.totalTime.toUpperCase(),
-                    style: context.textTheme.headlineSmall?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant,
-                      letterSpacing: 2,
-                    ),
+                    style: context.textTheme.headlineSmall?.copyWith(color: context.colorScheme.onSurfaceVariant, letterSpacing: 2),
                   ),
                 ),
                 if (summary.deltaPercent case final deltaPercent?)
                   DecoratedBox(
                     decoration: BoxDecoration(
-                      color: context.colorScheme.primary.withValues(
-                        alpha: 0.15,
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        PauzaCornerRadius.small,
-                      ),
-                      border: Border.all(
-                        color: context.colorScheme.primary.withValues(
-                          alpha: 0.5,
-                        ),
-                      ),
+                      color: context.colorScheme.primary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(PauzaCornerRadius.small),
+                      border: Border.all(color: context.colorScheme.primary.withValues(alpha: 0.5)),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: PauzaSpacing.medium,
-                        vertical: PauzaSpacing.small,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.small),
                       child: Text(
-                        context.l10n.statsDeltaVsLastPeriod(
-                          _formatDelta(deltaPercent),
-                        ),
-                        style: context.textTheme.titleMedium?.copyWith(
-                          color: context.colorScheme.primary,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        context.l10n.statsDeltaVsLastPeriod(_formatDelta(deltaPercent)),
+                        style: context.textTheme.titleMedium?.copyWith(color: context.colorScheme.primary, fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),
@@ -76,15 +57,11 @@ class StatsTotalTimeCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       summary.dailyAverage.formatDurationLabel(context.l10n),
-                      style: context.textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: context.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),
                     ),
                     Text(
                       context.l10n.statsDailyAverage,
-                      style: context.textTheme.headlineSmall?.copyWith(
-                        color: context.colorScheme.onSurfaceVariant,
-                      ),
+                      style: context.textTheme.headlineSmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
                     ),
                   ],
                 ),
@@ -93,18 +70,9 @@ class StatsTotalTimeCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                _LegendItem(
-                  color: context.colorScheme.primary,
-                  label: context.l10n.statsBucketSocial,
-                ),
-                _LegendItem(
-                  color: context.colorScheme.onSurfaceVariant,
-                  label: context.l10n.statsBucketProductivity,
-                ),
-                _LegendItem(
-                  color: context.colorScheme.outline,
-                  label: context.l10n.statsBucketOther,
-                ),
+                _LegendItem(color: context.colorScheme.primary, label: context.l10n.statsBucketSocial),
+                _LegendItem(color: context.colorScheme.onSurfaceVariant, label: context.l10n.statsBucketProductivity),
+                _LegendItem(color: context.colorScheme.outline, label: context.l10n.statsBucketOther),
               ],
             ),
           ],

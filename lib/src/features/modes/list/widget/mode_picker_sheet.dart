@@ -14,11 +14,7 @@ class ModePickerSheet extends StatelessWidget {
   final List<Mode> modes;
   final String? activeModeId;
 
-  static Future<Mode?> show(
-    BuildContext context, {
-    required List<Mode> modes,
-    String? activeModeId,
-  }) {
+  static Future<Mode?> show(BuildContext context, {required List<Mode> modes, String? activeModeId}) {
     return showModalBottomSheet<Mode>(
       context: context,
       isScrollControlled: true,
@@ -44,9 +40,7 @@ class ModePickerSheet extends StatelessWidget {
             if (modes.isEmpty)
               Padding(
                 padding: const EdgeInsets.all(PauzaSpacing.large),
-                child: Center(
-                  child: Text(l10n.noModesEmptyState, style: context.textTheme.bodyLarge),
-                ),
+                child: Center(child: Text(l10n.noModesEmptyState, style: context.textTheme.bodyLarge)),
               )
             else
               Flexible(
@@ -54,8 +48,7 @@ class ModePickerSheet extends StatelessWidget {
                   shrinkWrap: true,
                   padding: const EdgeInsets.symmetric(vertical: PauzaSpacing.medium),
                   itemCount: modes.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: PauzaSpacing.regular),
+                  separatorBuilder: (context, index) => const SizedBox(height: PauzaSpacing.regular),
                   itemBuilder: (context, index) {
                     final mode = modes[index];
                     return ModeListItem(

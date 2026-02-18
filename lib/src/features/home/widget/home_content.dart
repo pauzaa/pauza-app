@@ -21,10 +21,7 @@ class HomeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    const metrics = HomeDashboardMetrics(
-      streakDays: 5,
-      focusedDuration: Duration(hours: 2, minutes: 15),
-    );
+    const metrics = HomeDashboardMetrics(streakDays: 5, focusedDuration: Duration(hours: 2, minutes: 15));
 
     return Scaffold(
       body: SafeArea(
@@ -32,10 +29,7 @@ class HomeContent extends StatelessWidget {
           builder: (context, modesState) {
             return BlocBuilder<BlockingBloc, BlockingState>(
               builder: (context, blockingState) {
-                final effectiveMode = resolve(
-                  modesState: modesState,
-                  blockingState: blockingState,
-                );
+                final effectiveMode = resolve(modesState: modesState, blockingState: blockingState);
 
                 final isBusy = modesState.isLoading || blockingState.isLoading;
                 final isActiveSession = blockingState.isBlocking;
@@ -43,17 +37,9 @@ class HomeContent extends StatelessWidget {
                 return ListView(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: PauzaSpacing.large,
-                    horizontal: PauzaSpacing.large,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: PauzaSpacing.large, horizontal: PauzaSpacing.large),
                   children: <Widget>[
-                    PauzaDashboardAppBar(
-                      greeting: l10n.homeGreeting(
-                        DateTime.now().hour.toString(),
-                      ),
-                      title: l10n.homeDashboardTitle,
-                    ),
+                    PauzaDashboardAppBar(greeting: l10n.homeGreeting(DateTime.now().hour.toString()), title: l10n.homeDashboardTitle),
                     if (isActiveSession) ...<Widget>[
                       const SizedBox(height: PauzaSpacing.extraLarge),
                       Text(
@@ -67,21 +53,14 @@ class HomeContent extends StatelessWidget {
                       ),
                       const SizedBox(height: PauzaSpacing.medium),
                       StreamBuilder<DateTime>(
-                        stream: Stream<DateTime>.periodic(
-                          const Duration(seconds: 1),
-                          (_) => DateTime.now(),
-                        ),
+                        stream: Stream<DateTime>.periodic(const Duration(seconds: 1), (_) => DateTime.now()),
                         initialData: DateTime.now(),
                         builder: (context, snapshot) {
                           final now = snapshot.data ?? DateTime.now();
-                          final duration =
-                              switch (blockingState.sessionStartedAt) {
-                                final startedAt? =>
-                                  now.isAfter(startedAt)
-                                      ? now.difference(startedAt)
-                                      : Duration.zero,
-                                null => Duration.zero,
-                              };
+                          final duration = switch (blockingState.sessionStartedAt) {
+                            final startedAt? => now.isAfter(startedAt) ? now.difference(startedAt) : Duration.zero,
+                            null => Duration.zero,
+                          };
 
                           return Text(
                             duration.formatTimerHhMmSs(),
@@ -101,9 +80,7 @@ class HomeContent extends StatelessWidget {
                           onTap: isBusy
                               ? null
                               : () {
-                                  context.read<BlockingBloc>().add(
-                                    const BlockingStopRequested(),
-                                  );
+                                  context.read<BlockingBloc>().add(const BlockingStopRequested());
                                 },
                         ),
                       ),
@@ -113,9 +90,7 @@ class HomeContent extends StatelessWidget {
                           onPressed: isBusy
                               ? null
                               : () {
-                                  context.read<BlockingBloc>().add(
-                                    const BlockingResumeRequested(),
-                                  );
+                                  context.read<BlockingBloc>().add(const BlockingResumeRequested());
                                 },
                           child: Text(l10n.homeResumeButtonLabel.toUpperCase()),
                         ),
@@ -123,10 +98,7 @@ class HomeContent extends StatelessWidget {
                         Text(
                           l10n.homeQuickPauseLabel.toUpperCase(),
                           textAlign: TextAlign.center,
-                          style: context.textTheme.titleMedium?.copyWith(
-                            color: context.colorScheme.onSurfaceVariant,
-                            letterSpacing: 3,
-                          ),
+                          style: context.textTheme.titleMedium?.copyWith(color: context.colorScheme.onSurfaceVariant, letterSpacing: 3),
                         ),
                         const SizedBox(height: PauzaSpacing.medium),
                         Row(
@@ -137,11 +109,7 @@ class HomeContent extends StatelessWidget {
                                 onPressed: isBusy
                                     ? null
                                     : () {
-                                        context.read<BlockingBloc>().add(
-                                          const BlockingQuickPauseRequested(
-                                            Duration(minutes: 1),
-                                          ),
-                                        );
+                                        context.read<BlockingBloc>().add(const BlockingQuickPauseRequested(Duration(minutes: 1)));
                                       },
                                 child: const Text('1m'),
                               ),
@@ -151,11 +119,7 @@ class HomeContent extends StatelessWidget {
                                 onPressed: isBusy
                                     ? null
                                     : () {
-                                        context.read<BlockingBloc>().add(
-                                          const BlockingQuickPauseRequested(
-                                            Duration(minutes: 5),
-                                          ),
-                                        );
+                                        context.read<BlockingBloc>().add(const BlockingQuickPauseRequested(Duration(minutes: 5)));
                                       },
                                 child: const Text('5m'),
                               ),
@@ -165,11 +129,7 @@ class HomeContent extends StatelessWidget {
                                 onPressed: isBusy
                                     ? null
                                     : () {
-                                        context.read<BlockingBloc>().add(
-                                          const BlockingQuickPauseRequested(
-                                            Duration(minutes: 10),
-                                          ),
-                                        );
+                                        context.read<BlockingBloc>().add(const BlockingQuickPauseRequested(Duration(minutes: 10)));
                                       },
                                 child: const Text('10m'),
                               ),
@@ -185,22 +145,11 @@ class HomeContent extends StatelessWidget {
                         onTap: isBusy
                             ? null
                             : () {
-                                _onStartPressed(
-                                  context: context,
-                                  mode: effectiveMode,
-                                  isBlocking: blockingState.isBlocking,
-                                );
+                                _onStartPressed(context: context, mode: effectiveMode, isBlocking: blockingState.isBlocking);
                               },
                       ),
                       const SizedBox(height: PauzaSpacing.extraLarge),
-                      HomeCurrentModeCard(
-                        effectiveMode,
-                        onTap: () => _onCurrentModePressed(
-                          context,
-                          modesState.items,
-                          effectiveMode,
-                        ),
-                      ),
+                      HomeCurrentModeCard(effectiveMode, onTap: () => _onCurrentModePressed(context, modesState.items, effectiveMode)),
                     ],
                   ],
                 );
@@ -212,30 +161,16 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  Future<void> _onCurrentModePressed(
-    BuildContext context,
-    List<Mode> modes,
-    Mode? selectedMode,
-  ) async {
-    final pickedMode = await ModePickerSheet.show(
-      context,
-      modes: modes,
-      activeModeId: selectedMode?.id,
-    );
+  Future<void> _onCurrentModePressed(BuildContext context, List<Mode> modes, Mode? selectedMode) async {
+    final pickedMode = await ModePickerSheet.show(context, modes: modes, activeModeId: selectedMode?.id);
     if (pickedMode == null || !context.mounted) {
       return;
     }
 
-    context.read<ModesListBloc>().add(
-      ModesSelectionRequested(modeId: pickedMode.id),
-    );
+    context.read<ModesListBloc>().add(ModesSelectionRequested(modeId: pickedMode.id));
   }
 
-  void _onStartPressed({
-    required BuildContext context,
-    required Mode? mode,
-    required bool isBlocking,
-  }) {
+  void _onStartPressed({required BuildContext context, required Mode? mode, required bool isBlocking}) {
     if (isBlocking) {
       context.showToast(context.l10n.alreadyBlocking);
       return;
@@ -248,10 +183,7 @@ class HomeContent extends StatelessWidget {
     context.read<BlockingBloc>().add(BlockingStartRequested(mode));
   }
 
-  Mode? resolve({
-    required ModesListState modesState,
-    required BlockingState blockingState,
-  }) {
+  Mode? resolve({required ModesListState modesState, required BlockingState blockingState}) {
     if (modesState.selectedMode case final selected?) {
       return selected;
     }

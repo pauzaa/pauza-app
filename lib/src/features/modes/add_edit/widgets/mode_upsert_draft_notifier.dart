@@ -66,25 +66,11 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
   }
 
   void incrementPauses() {
-    update(
-      (current) => current.copyWith(
-        allowedPausesCount: (current.allowedPausesCount + 1).clamp(
-          minAllowedPauses,
-          maxAllowedPauses,
-        ),
-      ),
-    );
+    update((current) => current.copyWith(allowedPausesCount: (current.allowedPausesCount + 1).clamp(minAllowedPauses, maxAllowedPauses)));
   }
 
   void decrementPauses() {
-    update(
-      (current) => current.copyWith(
-        allowedPausesCount: (current.allowedPausesCount - 1).clamp(
-          minAllowedPauses,
-          maxAllowedPauses,
-        ),
-      ),
-    );
+    update((current) => current.copyWith(allowedPausesCount: (current.allowedPausesCount - 1).clamp(minAllowedPauses, maxAllowedPauses)));
   }
 
   void toggleScheduleEnabled(bool enabled) {
@@ -94,12 +80,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
       final baseSchedule = schedule ?? const Schedule.initial();
       update(
         (draft) => draft.copyWith(
-          schedule: Schedule(
-            days: baseSchedule.days,
-            start: baseSchedule.start,
-            end: baseSchedule.end,
-            enabled: true,
-          ),
+          schedule: Schedule(days: baseSchedule.days, start: baseSchedule.start, end: baseSchedule.end, enabled: true),
         ),
       );
       return;
@@ -109,12 +90,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
       final baseSchedule = schedule ?? const Schedule.initial();
       update(
         (draft) => draft.copyWith(
-          schedule: Schedule(
-            days: baseSchedule.days,
-            start: baseSchedule.start,
-            end: baseSchedule.end,
-            enabled: false,
-          ),
+          schedule: Schedule(days: baseSchedule.days, start: baseSchedule.start, end: baseSchedule.end, enabled: false),
         ),
       );
       return;
@@ -178,16 +154,13 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
     if (draft.blockedAppIds.isEmpty) {
       errors[ModeUpsertValidationField.blockedApps] = ModeUpsertValidationCode.blockedAppsRequired;
     }
-    if (draft.allowedPausesCount < minAllowedPauses ||
-        draft.allowedPausesCount > maxAllowedPauses) {
-      errors[ModeUpsertValidationField.allowedPausesCount] =
-          ModeUpsertValidationCode.allowedPausesOutOfRange;
+    if (draft.allowedPausesCount < minAllowedPauses || draft.allowedPausesCount > maxAllowedPauses) {
+      errors[ModeUpsertValidationField.allowedPausesCount] = ModeUpsertValidationCode.allowedPausesOutOfRange;
     }
 
     final schedule = draft.schedule;
     if (schedule != null && schedule.enabled && schedule.days.isEmpty) {
-      errors[ModeUpsertValidationField.scheduleDays] =
-          ModeUpsertValidationCode.scheduleDaysRequired;
+      errors[ModeUpsertValidationField.scheduleDays] = ModeUpsertValidationCode.scheduleDaysRequired;
     }
 
     return ModeUpsertValidationResult(fieldErrors: errors.toIMap());
@@ -202,12 +175,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
     }
 
     if (_isEditMode && _hadInitialSchedule) {
-      return Schedule(
-        days: schedule.days,
-        start: schedule.start,
-        end: schedule.end,
-        enabled: false,
-      );
+      return Schedule(days: schedule.days, start: schedule.start, end: schedule.end, enabled: false);
     }
 
     return null;

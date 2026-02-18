@@ -24,68 +24,44 @@ void main() {
       repository.dispose();
     });
 
-    test(
-      'signIn with regular email returns success and emits session',
-      () async {
-        final storage = _FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
-        final emitted = <Session>[];
-        final sub = repository.sessionStream.listen(emitted.add);
+    test('signIn with regular email returns success and emits session', () async {
+      final storage = _FakeAuthSessionStorage();
+      final repository = AuthRepositoryImpl(sessionStorage: storage);
+      final emitted = <Session>[];
+      final sub = repository.sessionStream.listen(emitted.add);
 
-        final result = await repository.signIn(
-          const AuthCredentialsDto(email: 'john@doe.com', password: '123456'),
-        );
-        await Future<void>.delayed(Duration.zero);
+      final result = await repository.signIn(const AuthCredentialsDto(email: 'john@doe.com', password: '123456'));
+      await Future<void>.delayed(Duration.zero);
 
-        expect(result, isA<AuthSuccess>());
-        expect(repository.currentSession.isAuthenticated, isTrue);
-        expect(storage.writtenSession?.isAuthenticated, isTrue);
-        expect(emitted.last.isAuthenticated, isTrue);
+      expect(result, isA<AuthSuccess>());
+      expect(repository.currentSession.isAuthenticated, isTrue);
+      expect(storage.writtenSession?.isAuthenticated, isTrue);
+      expect(emitted.last.isAuthenticated, isTrue);
 
-        await sub.cancel();
-        repository.dispose();
-      },
-    );
+      await sub.cancel();
+      repository.dispose();
+    });
 
-    test(
-      'signIn throws invalidCredentials for wrong@credentials.com',
-      () async {
-        final storage = _FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+    test('signIn throws invalidCredentials for wrong@credentials.com', () async {
+      final storage = _FakeAuthSessionStorage();
+      final repository = AuthRepositoryImpl(sessionStorage: storage);
 
-        await expectLater(
-          () => repository.signIn(
-            const AuthCredentialsDto(
-              email: AuthRepositoryImpl.invalidCredentialsEmail,
-              password: 'secret',
-            ),
-          ),
-          throwsA(
-            isA<AuthException>().having(
-              (error) => error.failure,
-              'failure',
-              AuthFailure.invalidCredentials,
-            ),
-          ),
-        );
+      await expectLater(
+        () => repository.signIn(const AuthCredentialsDto(email: AuthRepositoryImpl.invalidCredentialsEmail, password: 'secret')),
+        throwsA(isA<AuthException>().having((error) => error.failure, 'failure', AuthFailure.invalidCredentials)),
+      );
 
-        expect(repository.currentSession, const Session.empty());
-        expect(storage.writtenSession, isNull);
+      expect(repository.currentSession, const Session.empty());
+      expect(storage.writtenSession, isNull);
 
-        repository.dispose();
-      },
-    );
+      repository.dispose();
+    });
 
     test('signIn returns otp required for new@account.com', () async {
       final storage = _FakeAuthSessionStorage();
       final repository = AuthRepositoryImpl(sessionStorage: storage);
 
-      final result = await repository.signIn(
-        const AuthCredentialsDto(
-          email: AuthRepositoryImpl.otpRequiredEmail,
-          password: 'secret',
-        ),
-      );
+      final result = await repository.signIn(const AuthCredentialsDto(email: AuthRepositoryImpl.otpRequiredEmail, password: 'secret'));
 
       expect(result, isA<AuthOtpRequiredResult>());
       expect(repository.currentSession, const Session.empty());
@@ -98,56 +74,35 @@ void main() {
       final storage = _FakeAuthSessionStorage();
       final repository = AuthRepositoryImpl(sessionStorage: storage);
 
-      await repository.signIn(
-        const AuthCredentialsDto(
-          email: AuthRepositoryImpl.otpRequiredEmail,
-          password: 'secret',
-        ),
-      );
+      await repository.signIn(const AuthCredentialsDto(email: AuthRepositoryImpl.otpRequiredEmail, password: 'secret'));
 
       await expectLater(
         () => repository.verifyOtp(otp: '000000'),
-        throwsA(
-          isA<AuthException>().having(
-            (error) => error.failure,
-            'failure',
-            AuthFailure.invalidOtp,
-          ),
-        ),
+        throwsA(isA<AuthException>().having((error) => error.failure, 'failure', AuthFailure.invalidOtp)),
       );
 
       repository.dispose();
     });
 
-    test(
-      'verifyOtp succeeds with 111111 and emits authenticated session',
-      () async {
-        final storage = _FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
-        final emitted = <Session>[];
-        final sub = repository.sessionStream.listen(emitted.add);
+    test('verifyOtp succeeds with 111111 and emits authenticated session', () async {
+      final storage = _FakeAuthSessionStorage();
+      final repository = AuthRepositoryImpl(sessionStorage: storage);
+      final emitted = <Session>[];
+      final sub = repository.sessionStream.listen(emitted.add);
 
-        await repository.signIn(
-          const AuthCredentialsDto(
-            email: AuthRepositoryImpl.otpRequiredEmail,
-            password: 'secret',
-          ),
-        );
+      await repository.signIn(const AuthCredentialsDto(email: AuthRepositoryImpl.otpRequiredEmail, password: 'secret'));
 
-        final result = await repository.verifyOtp(
-          otp: AuthRepositoryImpl.validOtp,
-        );
-        await Future<void>.delayed(Duration.zero);
+      final result = await repository.verifyOtp(otp: AuthRepositoryImpl.validOtp);
+      await Future<void>.delayed(Duration.zero);
 
-        expect(result, isA<AuthSuccess>());
-        expect(repository.currentSession.isAuthenticated, isTrue);
-        expect(storage.writtenSession?.isAuthenticated, isTrue);
-        expect(emitted.last.isAuthenticated, isTrue);
+      expect(result, isA<AuthSuccess>());
+      expect(repository.currentSession.isAuthenticated, isTrue);
+      expect(storage.writtenSession?.isAuthenticated, isTrue);
+      expect(emitted.last.isAuthenticated, isTrue);
 
-        await sub.cancel();
-        repository.dispose();
-      },
-    );
+      await sub.cancel();
+      repository.dispose();
+    });
 
     test('signOut deletes session and emits Session.empty()', () async {
       final storage = _FakeAuthSessionStorage();
@@ -155,9 +110,7 @@ void main() {
       final emitted = <Session>[];
       final sub = repository.sessionStream.listen(emitted.add);
 
-      await repository.signIn(
-        const AuthCredentialsDto(email: 'john@doe.com', password: '123456'),
-      );
+      await repository.signIn(const AuthCredentialsDto(email: 'john@doe.com', password: '123456'));
       await repository.signOut();
       await Future<void>.delayed(Duration.zero);
 
@@ -176,9 +129,7 @@ void main() {
       final sub = repository.sessionStream.listen(emitted.add);
 
       await repository.initialize();
-      await repository.signIn(
-        const AuthCredentialsDto(email: 'john@doe.com', password: '123456'),
-      );
+      await repository.signIn(const AuthCredentialsDto(email: 'john@doe.com', password: '123456'));
       await repository.signOut();
       await Future<void>.delayed(Duration.zero);
 

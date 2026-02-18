@@ -35,12 +35,7 @@ class ModeEditorScreen extends StatelessWidget {
     if (modeId == null) {
       HelmRouter.push(context, PauzaRoutes.modeCreate, rootNavigator: true);
     } else {
-      HelmRouter.push(
-        context,
-        PauzaRoutes.modeEdit,
-        pathParams: <String, String>{'midEdit': modeId},
-        rootNavigator: true,
-      );
+      HelmRouter.push(context, PauzaRoutes.modeEdit, pathParams: <String, String>{'midEdit': modeId}, rootNavigator: true);
     }
   }
 
@@ -92,16 +87,11 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
     return ModeUpsertScope(
       notifier: _draftNotifier,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.modeId == null ? l10n.createModeTitle : l10n.editModeTitle),
-        ),
+        appBar: AppBar(title: Text(widget.modeId == null ? l10n.createModeTitle : l10n.editModeTitle)),
         body: BlocConsumer<ModeEditorBloc, ModeEditorState>(
           listener: (context, state) {
             if (state is ModeEditorReady) {
-              _draftNotifier.configureForMode(
-                initialDraft: state.request,
-                isEditMode: state.modeId != null,
-              );
+              _draftNotifier.configureForMode(initialDraft: state.request, isEditMode: state.modeId != null);
               if (!_initialized && mounted) {
                 setState(() {
                   _initialized = true;
@@ -152,12 +142,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
               children: <Widget>[
                 Expanded(
                   child: ListView(
-                    padding: const EdgeInsets.fromLTRB(
-                      PauzaSpacing.medium,
-                      PauzaSpacing.medium,
-                      PauzaSpacing.medium,
-                      PauzaSpacing.large,
-                    ),
+                    padding: const EdgeInsets.fromLTRB(PauzaSpacing.medium, PauzaSpacing.medium, PauzaSpacing.medium, PauzaSpacing.large),
                     children: <Widget>[
                       Row(
                         spacing: PauzaSpacing.small,
@@ -179,10 +164,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                                   fontWeight: FontWeight.w700,
                                 ),
                                 hintText: l10n.modeTitleFieldLabel,
-                                errorText: _errorForField(
-                                  context,
-                                  validation[ModeUpsertValidationField.title],
-                                ),
+                                errorText: _errorForField(context, validation[ModeUpsertValidationField.title]),
                               ),
                             ),
                           ),
@@ -200,10 +182,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                             fontWeight: FontWeight.w700,
                           ),
                           hintText: l10n.modeTextOnScreenFieldLabel,
-                          errorText: _errorForField(
-                            context,
-                            validation[ModeUpsertValidationField.textOnScreen],
-                          ),
+                          errorText: _errorForField(context, validation[ModeUpsertValidationField.textOnScreen]),
                         ),
                       ),
 
@@ -229,20 +208,12 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                           ModeEditorAppsSelectorTile(
                             title: l10n.modeBlockedAppsChooseButton,
                             subtitle: l10n.modeBlockedAppsSubtitle,
-                            selectedCountLabel: l10n.modeBlockedAppsSelectedCountLabel(
-                              draft.blockedAppIds.length,
-                            ),
-                            errorText: _errorForField(
-                              context,
-                              validation[ModeUpsertValidationField.blockedApps],
-                            ),
+                            selectedCountLabel: l10n.modeBlockedAppsSelectedCountLabel(draft.blockedAppIds.length),
+                            errorText: _errorForField(context, validation[ModeUpsertValidationField.blockedApps]),
                             onTap: isBusy
                                 ? () {}
                                 : () {
-                                    onChooseAppsPressed(
-                                      currentSelection: draft.blockedAppIds,
-                                      onChanged: _draftNotifier.updateBlockedApps,
-                                    );
+                                    onChooseAppsPressed(currentSelection: draft.blockedAppIds, onChanged: _draftNotifier.updateBlockedApps);
                                   },
                           ),
                         ],
@@ -264,24 +235,15 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                         onDayPressed: isBusy
                             ? (_) {}
                             : (dayName) {
-                                _draftNotifier.toggleScheduleDay(
-                                  WeekDay.values.firstWhere((day) => day.name == dayName),
-                                );
+                                _draftNotifier.toggleScheduleDay(WeekDay.values.firstWhere((day) => day.name == dayName));
                               },
                         startTitle: l10n.modeScheduleStartTimeLabel,
                         endTitle: l10n.modeScheduleEndTimeLabel,
                         startValue: _formatTime(context, schedule?.start),
                         endValue: _formatTime(context, schedule?.end),
-                        onStartPressed: isBusy
-                            ? () {}
-                            : () => _onPickStartTime(context, schedule?.start, isStart: true),
-                        onEndPressed: isBusy
-                            ? () {}
-                            : () => _onPickStartTime(context, schedule?.end, isStart: false),
-                        errorText: _errorForField(
-                          context,
-                          validation[ModeUpsertValidationField.scheduleDays],
-                        ),
+                        onStartPressed: isBusy ? () {} : () => _onPickStartTime(context, schedule?.start, isStart: true),
+                        onEndPressed: isBusy ? () {} : () => _onPickStartTime(context, schedule?.end, isStart: false),
+                        errorText: _errorForField(context, validation[ModeUpsertValidationField.scheduleDays]),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -291,10 +253,8 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                             title: l10n.modeAllowedPausesTitle,
                             subtitle: l10n.modeAllowedPausesSubtitle,
                             value: draft.allowedPausesCount,
-                            canIncrement:
-                                draft.allowedPausesCount < ModeUpsertDraftNotifier.maxAllowedPauses,
-                            canDecrement:
-                                draft.allowedPausesCount > ModeUpsertDraftNotifier.minAllowedPauses,
+                            canIncrement: draft.allowedPausesCount < ModeUpsertDraftNotifier.maxAllowedPauses,
+                            canDecrement: draft.allowedPausesCount > ModeUpsertDraftNotifier.minAllowedPauses,
                             onIncrement: isBusy ? null : _draftNotifier.incrementPauses,
                             onDecrement: isBusy ? null : _draftNotifier.decrementPauses,
                           ),
@@ -313,11 +273,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                     ].interleaved(const SizedBox(height: PauzaSpacing.regular)).toList(),
                   ),
                 ),
-                ModeEditorStickyActionBar(
-                  buttonLabel: l10n.modeSaveButton,
-                  isBusy: isBusy,
-                  onPressed: () => _onSavePressed(context),
-                ),
+                ModeEditorStickyActionBar(buttonLabel: l10n.modeSaveButton, isBusy: isBusy, onPressed: () => _onSavePressed(context)),
               ],
             );
           },
@@ -331,16 +287,8 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
     return MaterialLocalizations.of(context).formatTimeOfDay(resolvedTime);
   }
 
-  Future<void> _onPickStartTime(
-    BuildContext context,
-    TimeOfDay? initial, {
-    required bool isStart,
-  }) async {
-    final picked = await showCupertinoTimePicker(
-      context,
-      doneButtonLabel: context.l10n.doneButton,
-      initialTime: initial,
-    );
+  Future<void> _onPickStartTime(BuildContext context, TimeOfDay? initial, {required bool isStart}) async {
+    final picked = await showCupertinoTimePicker(context, doneButtonLabel: context.l10n.doneButton, initialTime: initial);
     if (!mounted || picked == null) {
       return;
     }
@@ -360,10 +308,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
 
     try {
       if (kPauzaPlatform == PauzaPlatform.android) {
-        final selectedIds = await AndroidAppsBottomSheet.show(
-          context,
-          initialSelectedAppIds: currentSelection,
-        );
+        final selectedIds = await AndroidAppsBottomSheet.show(context, initialSelectedAppIds: currentSelection);
         if (!mounted || selectedIds == null) {
           return;
         }
@@ -371,12 +316,8 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
         return;
       }
 
-      final preSelectedApps = currentSelection
-          .map((token) => IOSAppInfo(applicationToken: token))
-          .toList(growable: false);
-      final selectedApps = await rootScope.installedAppsRepository.selectIOSApps(
-        preSelectedApps: preSelectedApps,
-      );
+      final preSelectedApps = currentSelection.map((token) => IOSAppInfo(applicationToken: token)).toList(growable: false);
+      final selectedApps = await rootScope.installedAppsRepository.selectIOSApps(preSelectedApps: preSelectedApps);
       if (!mounted) {
         return;
       }
@@ -420,9 +361,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
       return;
     }
 
-    context.read<ModeEditorBloc>().add(
-      ModeEditorSaveRequested(modeId: widget.modeId, request: _draftNotifier.buildSubmitRequest()),
-    );
+    context.read<ModeEditorBloc>().add(ModeEditorSaveRequested(modeId: widget.modeId, request: _draftNotifier.buildSubmitRequest()));
   }
 
   String? _errorForField(BuildContext context, ModeUpsertValidationCode? error) {

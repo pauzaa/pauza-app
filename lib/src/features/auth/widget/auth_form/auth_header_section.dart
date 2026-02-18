@@ -8,9 +8,6 @@ class AuthHeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return PauzaAppLogo(
-      appName: l10n.appName.toUpperCase(),
-      tagline: l10n.authTagline.toUpperCase(),
-    );
+    return PauzaAppLogo(appName: l10n.appName.toUpperCase(), tagline: l10n.authTagline.toUpperCase());
   }
 }

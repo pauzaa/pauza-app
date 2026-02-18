@@ -4,9 +4,7 @@ import 'package:pauza/src/features/nfc/data/nfc_system_settings_launcher.dart';
 void main() {
   group('AndroidIntentNfcSystemSettingsLauncher', () {
     test('is unsupported on non-Android platforms', () async {
-      final launcher = AndroidIntentNfcSystemSettingsLauncher(
-        isAndroidPlatform: false,
-      );
+      final launcher = AndroidIntentNfcSystemSettingsLauncher(isAndroidPlatform: false);
 
       expect(launcher.isSupported, isFalse);
       expect(await launcher.openNfcSettings(), isFalse);

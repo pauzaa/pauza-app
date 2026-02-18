@@ -27,10 +27,7 @@ class StatsUsageAppsTableCard extends StatelessWidget {
           children: <Widget>[
             Text(
               context.l10n.statsAppUsage.toUpperCase(),
-              style: context.textTheme.headlineSmall?.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
-                letterSpacing: 2,
-              ),
+              style: context.textTheme.headlineSmall?.copyWith(color: context.colorScheme.onSurfaceVariant, letterSpacing: 2),
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -48,13 +45,7 @@ class StatsUsageAppsTableCard extends StatelessWidget {
                           DataCell(Text(stat.appInfo.name)),
                           DataCell(Text(stat.totalDuration.formatDurationLabel(context.l10n))),
                           DataCell(Text('${stat.totalLaunchCount}')),
-                          DataCell(
-                            Text(
-                              stat.lastTimeUsed == null
-                                  ? '-'
-                                  : DateFormat('MMM d, HH:mm').format(stat.lastTimeUsed!),
-                            ),
-                          ),
+                          DataCell(Text(stat.lastTimeUsed == null ? '-' : DateFormat('MMM d, HH:mm').format(stat.lastTimeUsed!))),
                         ],
                       );
                     })

@@ -32,18 +32,8 @@ final class ModeEditorAllowedPausesTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: PauzaSpacing.small,
               children: <Widget>[
-                Text(
-                  title,
-                  style: context.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  subtitle,
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
-                ),
+                Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+                Text(subtitle, style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant)),
               ],
             ),
           ),
@@ -58,25 +48,12 @@ final class ModeEditorAllowedPausesTile extends StatelessWidget {
               child: Row(
                 spacing: PauzaSpacing.medium,
                 children: <Widget>[
-                  PauzaIconButton.outlined(
-                    onPressed: onDecrement,
-                    disabled: !canDecrement,
-                    icon: const Icon(Icons.remove),
-                  ),
+                  PauzaIconButton.outlined(onPressed: onDecrement, disabled: !canDecrement, icon: const Icon(Icons.remove)),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Text(
-                      '$value',
-                      style: context.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    child: Text('$value', style: context.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w700)),
                   ),
-                  PauzaIconButton.filled(
-                    onPressed: onIncrement,
-                    disabled: !canIncrement,
-                    icon: const Icon(Icons.add),
-                  ),
+                  PauzaIconButton.filled(onPressed: onIncrement, disabled: !canIncrement, icon: const Icon(Icons.add)),
                 ],
               ),
             ),

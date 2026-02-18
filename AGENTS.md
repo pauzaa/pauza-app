@@ -33,7 +33,7 @@ flutter analyze
 flutter fix --apply
 
 # Format code
-dart format .
+make format .
 
 # Format with line length
 dart format --line-length=80 .

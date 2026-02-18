@@ -6,17 +6,14 @@ abstract interface class UserProfileRemoteDataSource {
   Future<UserDto> fetchMe({required Session session});
 }
 
-final class UserProfileRemoteDataSourceImpl
-    implements UserProfileRemoteDataSource {
+final class UserProfileRemoteDataSourceImpl implements UserProfileRemoteDataSource {
   const UserProfileRemoteDataSourceImpl();
 
   @override
   Future<UserDto> fetchMe({required Session session}) async {
     final accessToken = session.accessToken.trim();
     if (accessToken.isEmpty) {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.unauthorized,
-      );
+      throw const UserProfileException(code: UserProfileFailureCode.unauthorized);
     }
 
     // Placeholder backend behavior for local/offline iteration.
@@ -24,23 +21,16 @@ final class UserProfileRemoteDataSourceImpl
       throw const UserProfileException(code: UserProfileFailureCode.forbidden);
     }
     if (accessToken.contains('unauthorized')) {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.unauthorized,
-      );
+      throw const UserProfileException(code: UserProfileFailureCode.unauthorized);
     }
-    if (accessToken.contains('offline') ||
-        accessToken.contains('network_error')) {
+    if (accessToken.contains('offline') || accessToken.contains('network_error')) {
       throw const UserProfileException(code: UserProfileFailureCode.network);
     }
 
     final normalized = _extractNormalizedIdentity(accessToken);
     final username = _extractUsername(normalized);
 
-    return UserDto(
-      profilePicture: 'https://example.com/avatar/$username.png',
-      username: username,
-      name: _toDisplayName(username),
-    );
+    return UserDto(profilePicture: 'https://example.com/avatar/$username.png', username: username, name: _toDisplayName(username));
   }
 
   String _extractNormalizedIdentity(String accessToken) {

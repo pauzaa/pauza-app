@@ -23,17 +23,9 @@ class PauzaErrorWidget extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
+              style: theme.textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
             ),
-            if (onRetry != null) ...[
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: onRetry,
-                child: Text(context.l10n.retryButton),
-              ),
-            ],
+            if (onRetry != null) ...[const SizedBox(height: 24), ElevatedButton(onPressed: onRetry, child: Text(context.l10n.retryButton))],
           ],
         ),
       ),

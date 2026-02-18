@@ -23,8 +23,7 @@ final class InstalledAppsState extends Equatable {
 
   InstalledAppsState loading() => copyWith(isLoading: true, clearError: true);
 
-  InstalledAppsState setError(Object nextError) =>
-      copyWith(error: nextError, isLoading: false);
+  InstalledAppsState setError(Object nextError) => copyWith(error: nextError, isLoading: false);
 
   InstalledAppsState copyWith({
     bool? isLoading,
@@ -41,11 +40,8 @@ final class InstalledAppsState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       allApps: allApps ?? this.allApps,
       searchQuery: searchQuery ?? this.searchQuery,
-      selectedCategoryKey: clearSelectedCategoryKey
-          ? null
-          : selectedCategoryKey ?? this.selectedCategoryKey,
-      availableCategoryKeys:
-          availableCategoryKeys ?? this.availableCategoryKeys,
+      selectedCategoryKey: clearSelectedCategoryKey ? null : selectedCategoryKey ?? this.selectedCategoryKey,
+      availableCategoryKeys: availableCategoryKeys ?? this.availableCategoryKeys,
       visibleGroupedApps: visibleGroupedApps ?? this.visibleGroupedApps,
       error: clearError ? null : (error ?? this.error),
     );

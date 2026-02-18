@@ -1,6 +1,7 @@
 import 'package:appfuse/appfuse.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/widgets.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
@@ -14,11 +15,7 @@ import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecy
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
-    show
-        AppRestrictionManager,
-        InstalledAppsManager,
-        PermissionManager,
-        UsageStatsManager;
+    show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
 
 class PauzaDependencies with AppFuseInitialization {
   late final LocalDatabase localDatabase;
@@ -37,38 +34,33 @@ class PauzaDependencies with AppFuseInitialization {
   late final UserProfileCacheStorage userProfileCacheStorage;
   late final UserProfileRemoteDataSource userProfileRemoteDataSource;
   late final UserProfileRepository userProfileRepository;
+  late final PackageInfo packageInfo;
 
-  static PauzaDependencies of(BuildContext context) =>
-      AppFuseScope.of(context).init as PauzaDependencies;
+  static PauzaDependencies of(BuildContext context) => AppFuseScope.of(context).init as PauzaDependencies;
 
   @override
   Map<String, InitializationStep> get steps => <String, InitializationStep>{
     'init local database': (_) async {
-      localDatabase = SqfliteLocalDatabase(
-        schema: const PauzaLocalDatabaseSchemaV1(),
-      );
+      localDatabase = SqfliteLocalDatabase(schema: const PauzaLocalDatabaseSchemaV1());
       await localDatabase.open();
+    },
+    'init package info': (_) async {
+      packageInfo = await PackageInfo.fromPlatform();
     },
     'init permissions': (_) async {
       permissionManager = PermissionManager();
-      permissionGate = PauzaPermissionGateNotifier(
-        permissionManager: permissionManager,
-      );
+      permissionGate = PauzaPermissionGateNotifier(permissionManager: permissionManager);
       await permissionGate.refresh(force: true);
     },
     'init auth': (_) async {
       secureStorage = const FlutterSecureStorage();
-      authSessionStorage = SecureAuthSessionStorage(
-        secureStorage: secureStorage,
-      );
+      authSessionStorage = SecureAuthSessionStorage(secureStorage: secureStorage);
       authRepository = AuthRepositoryImpl(sessionStorage: authSessionStorage);
       await authRepository.initialize();
       authGate = PauzaAuthGateNotifier(authRepository: authRepository);
 
       appFuseStorage = await AppFuseShPrStorage.init();
-      userProfileCacheStorage = AppFuseUserProfileCacheStorage(
-        storage: appFuseStorage,
-      );
+      userProfileCacheStorage = AppFuseUserProfileCacheStorage(storage: appFuseStorage);
       userProfileRemoteDataSource = const UserProfileRemoteDataSourceImpl();
       userProfileRepository = UserProfileRepositoryImpl(
         cacheStorage: userProfileCacheStorage,
@@ -85,9 +77,7 @@ class PauzaDependencies with AppFuseInitialization {
     'init restriction lifecycle sync coordinator': (_) async {
       restrictionLifecycleRepository = RestrictionLifecycleRepositoryImpl(
         localDatabase: localDatabase,
-        pluginClient: RestrictionLifecyclePluginClientImpl(
-          restrictions: appRestrictionManager,
-        ),
+        pluginClient: RestrictionLifecyclePluginClientImpl(restrictions: appRestrictionManager),
       );
       try {
         await restrictionLifecycleRepository.syncFromPluginQueue();

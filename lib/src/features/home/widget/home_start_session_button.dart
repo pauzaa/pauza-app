@@ -3,11 +3,7 @@ import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class HomeStartSessionButton extends StatelessWidget {
-  const HomeStartSessionButton({
-    required this.onTap,
-    this.isActiveSession = false,
-    super.key,
-  });
+  const HomeStartSessionButton({required this.onTap, this.isActiveSession = false, super.key});
 
   final VoidCallback? onTap;
   final bool isActiveSession;
@@ -15,9 +11,7 @@ class HomeStartSessionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final title = isActiveSession
-        ? l10n.stopButton.toUpperCase()
-        : l10n.startButton.toUpperCase();
+    final title = isActiveSession ? l10n.stopButton.toUpperCase() : l10n.startButton.toUpperCase();
 
     const buttonSize = 320.0;
 
@@ -32,10 +26,7 @@ class HomeStartSessionButton extends StatelessWidget {
             height: buttonSize + 30,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: context.colorScheme.primary,
-                width: 2.5,
-              ),
+              border: Border.all(color: context.colorScheme.primary, width: 2.5),
             ),
           ),
           Container(
@@ -43,19 +34,13 @@ class HomeStartSessionButton extends StatelessWidget {
             height: buttonSize + 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: context.colorScheme.primary,
-                width: 2.5,
-              ),
+              border: Border.all(color: context.colorScheme.primary, width: 2.5),
             ),
           ),
           Ink(
             width: buttonSize,
             height: buttonSize,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.colorScheme.primary,
-            ),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: context.colorScheme.primary),
             child: isActiveSession
                 ? Center(
                     child: Text(
@@ -71,19 +56,10 @@ class HomeStartSessionButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       DecoratedBox(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: context.colorScheme.surface,
-                        ),
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: context.colorScheme.surface),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.lock,
-                            size: PauzaIconSizes.xxLarge,
-                            color: context.colorScheme.primary.withValues(
-                              alpha: 0.85,
-                            ),
-                          ),
+                          child: Icon(Icons.lock, size: PauzaIconSizes.xxLarge, color: context.colorScheme.primary.withValues(alpha: 0.85)),
                         ),
                       ),
                       const SizedBox(height: PauzaSpacing.large),
@@ -98,10 +74,7 @@ class HomeStartSessionButton extends StatelessWidget {
                       const SizedBox(height: PauzaSpacing.small),
                       Text(
                         l10n.homePauzaSessionLabel.toUpperCase(),
-                        style: context.textTheme.labelLarge?.copyWith(
-                          letterSpacing: 4,
-                          color: context.colorScheme.onPrimary,
-                        ),
+                        style: context.textTheme.labelLarge?.copyWith(letterSpacing: 4, color: context.colorScheme.onPrimary),
                       ),
                     ],
                   ),

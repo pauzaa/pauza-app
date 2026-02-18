@@ -8,10 +8,7 @@ part 'blocking_event.dart';
 part 'blocking_state.dart';
 
 class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
-  BlockingBloc({required BlockingRepository blockingRepository})
-    : _blockingRepository = blockingRepository,
-
-      super(const BlockingState()) {
+  BlockingBloc({required BlockingRepository blockingRepository}) : _blockingRepository = blockingRepository, super(const BlockingState()) {
     on<BlockingSyncRequested>(_onSyncRequested);
     on<BlockingStartRequested>(_onStartRequested);
     on<BlockingStopRequested>(_onStopRequested);
@@ -21,10 +18,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
 
   final BlockingRepository _blockingRepository;
 
-  Future<void> _onSyncRequested(
-    BlockingSyncRequested event,
-    Emitter<BlockingState> emit,
-  ) async {
+  Future<void> _onSyncRequested(BlockingSyncRequested event, Emitter<BlockingState> emit) async {
     try {
       await _blockingRepository.syncRestrictionLifecycleEvents();
       await _syncSessionState(emit: emit);
@@ -33,10 +27,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     }
   }
 
-  Future<void> _onStartRequested(
-    BlockingStartRequested event,
-    Emitter<BlockingState> emit,
-  ) async {
+  Future<void> _onStartRequested(BlockingStartRequested event, Emitter<BlockingState> emit) async {
     try {
       emit(state.loading());
 
@@ -45,10 +36,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
         throw StateError('No blocked apps configured for this mode');
       }
 
-      final shield = ShieldConfiguration(
-        title: event.mode.textOnScreen,
-        subtitle: event.mode.title,
-      );
+      final shield = ShieldConfiguration(title: event.mode.textOnScreen, subtitle: event.mode.title);
 
       await _blockingRepository.startBlocking(mode: event.mode, shield: shield);
       await _syncSessionState(emit: emit);
@@ -57,10 +45,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     }
   }
 
-  Future<void> _onStopRequested(
-    BlockingStopRequested event,
-    Emitter<BlockingState> emit,
-  ) async {
+  Future<void> _onStopRequested(BlockingStopRequested event, Emitter<BlockingState> emit) async {
     try {
       emit(state.loading());
 
@@ -72,10 +57,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     }
   }
 
-  Future<void> _onQuickPauseRequested(
-    BlockingQuickPauseRequested event,
-    Emitter<BlockingState> emit,
-  ) async {
+  Future<void> _onQuickPauseRequested(BlockingQuickPauseRequested event, Emitter<BlockingState> emit) async {
     try {
       emit(state.loading());
       await _blockingRepository.pauseBlocking(event.duration);
@@ -85,10 +67,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     }
   }
 
-  Future<void> _onResumeRequested(
-    BlockingResumeRequested event,
-    Emitter<BlockingState> emit,
-  ) async {
+  Future<void> _onResumeRequested(BlockingResumeRequested event, Emitter<BlockingState> emit) async {
     try {
       emit(state.loading());
       await _blockingRepository.resumeBlocking();
@@ -99,8 +78,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
   }
 
   Future<void> _syncSessionState({required Emitter<BlockingState> emit}) async {
-    final restrictionSession = await _blockingRepository
-        .getRestrictionSession();
+    final restrictionSession = await _blockingRepository.getRestrictionSession();
     final activeModeId = restrictionSession.activeMode?.modeId;
     if (activeModeId == null) {
       emit(state.clearActiveModeId(isLoading: false));

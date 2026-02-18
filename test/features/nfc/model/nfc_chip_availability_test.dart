@@ -9,29 +9,25 @@ class _FakeAppLocalizations extends AppLocalizations {
   String get nfcGuidanceAvailableTitle => 'NFC is ready';
 
   @override
-  String get nfcGuidanceAvailableBody =>
-      'Your device is ready to scan NFC tags.';
+  String get nfcGuidanceAvailableBody => 'Your device is ready to scan NFC tags.';
 
   @override
   String get nfcGuidanceDisabledTitle => 'Turn on NFC';
 
   @override
-  String get nfcGuidanceDisabledBody =>
-      'NFC is turned off on this device. Enable it in system settings to continue.';
+  String get nfcGuidanceDisabledBody => 'NFC is turned off on this device. Enable it in system settings to continue.';
 
   @override
   String get nfcGuidanceNotSupportedTitle => 'NFC is not supported';
 
   @override
-  String get nfcGuidanceNotSupportedBody =>
-      'This device does not support NFC scanning.';
+  String get nfcGuidanceNotSupportedBody => 'This device does not support NFC scanning.';
 
   @override
   String get nfcGuidanceUnknownTitle => 'NFC status unavailable';
 
   @override
-  String get nfcGuidanceUnknownBody =>
-      'We could not determine NFC availability right now. Try again in a moment.';
+  String get nfcGuidanceUnknownBody => 'We could not determine NFC availability right now. Try again in a moment.';
 
   @override
   String get nfcOpenSettingsButton => 'Open settings';
@@ -54,8 +50,7 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get authOtpTitle => 'Verify Your Email';
   @override
-  String get authOtpSubtitlePrefix =>
-      'Enter the 6-digit code we sent to your email address ';
+  String get authOtpSubtitlePrefix => 'Enter the 6-digit code we sent to your email address ';
   @override
   String get authOtpSubtitleSuffix => '.';
   @override
@@ -65,8 +60,7 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get authOtpResendCode => 'Resend Code';
   @override
-  String authOtpAvailableInLabel(String minutes, String seconds) =>
-      'Available in $minutes:$seconds';
+  String authOtpAvailableInLabel(String minutes, String seconds) => 'Available in $minutes:$seconds';
   @override
   String get authValidationRequired => 'This field is required';
   @override
@@ -76,8 +70,7 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get authFailureInvalidOtp => 'Invalid verification code.';
   @override
-  String get authFailureOtpChallengeMissing =>
-      'Verification challenge expired. Try again.';
+  String get authFailureOtpChallengeMissing => 'Verification challenge expired. Try again.';
   @override
   String get authFailureStorage => 'Could not access secure storage.';
   @override
@@ -98,6 +91,26 @@ class _FakeAppLocalizations extends AppLocalizations {
   String get profileEditInfoNavTitle => 'Edit Info';
   @override
   String get profileSettingsNavTitle => 'Settings';
+  @override
+  String get settingsTitle => 'Settings';
+  @override
+  String get settingsGeneralSectionTitle => 'General';
+  @override
+  String get settingsNotifications => 'Notifications';
+  @override
+  String get settingsLanguage => 'Language';
+  @override
+  String get settingsLanguagePickerTitle => 'Select language';
+  @override
+  String get settingsNfcChipConfiguring => 'NFC Chip Configuring';
+  @override
+  String get settingsQrCodeConfiguring => 'QR Code Configuring';
+  @override
+  String get settingsSignOut => 'Sign Out';
+  @override
+  String get settingsVersionFallback => 'Pauza';
+  @override
+  String settingsVersionLabel(String version, String buildNumber) => 'Pauza v$version (Build $buildNumber)';
   @override
   String get notFoundTitle => 'Page not found';
   @override
@@ -259,8 +272,7 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get modeBlockedAppsRequiredError => 'Select at least one app';
   @override
-  String modeBlockedAppsSelectedCountLabel(int count) =>
-      'Selected apps: $count';
+  String modeBlockedAppsSelectedCountLabel(int count) => 'Selected apps: $count';
   @override
   String get modeScheduleTitle => 'Schedule (Optional)';
   @override
@@ -276,8 +288,7 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get modeAllowedPausesSubtitle => 'Short breaks during session';
   @override
-  String modeAllowedPausesOutOfRangeError(int min, int max) =>
-      'Allowed pauses must be between $min and $max';
+  String modeAllowedPausesOutOfRangeError(int min, int max) => 'Allowed pauses must be between $min and $max';
   @override
   String get modeDeleteFocusButton => 'Delete Focus Mode';
   @override
@@ -329,8 +340,7 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String homeDayStreakLabel(int count) => '$count Day Streak';
   @override
-  String homeDurationHoursMinutesLabel(int hours, int minutes) =>
-      '${hours}h ${minutes}m';
+  String homeDurationHoursMinutesLabel(int hours, int minutes) => '${hours}h ${minutes}m';
 
   @override
   String get deviceUsage => 'Device Usage';
@@ -375,8 +385,9 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get statsIosReportUnavailableTitle => 'iOS report unavailable';
   @override
-  String get statsIosReportUnavailableBody =>
-      'Ensure iOS report extension is configured.';
+  String get statsIosReportUnavailableBody => 'Ensure iOS report extension is configured.';
+  @override
+  String get settingsSessionEndingConfSectionTitle => 'Session Ending';
 }
 
 void main() {
@@ -407,106 +418,56 @@ void main() {
       });
 
       test('notSupported does not show open settings action', () {
-        expect(
-          NfcChipAvailability.notSupported.showOpenSettingsAction,
-          isFalse,
-        );
+        expect(NfcChipAvailability.notSupported.showOpenSettingsAction, isFalse);
       });
     });
 
     group('severity', () {
       test('available has info severity', () {
-        expect(
-          NfcChipAvailability.available.severity,
-          NfcAvailabilitySeverity.info,
-        );
+        expect(NfcChipAvailability.available.severity, NfcAvailabilitySeverity.info);
       });
 
       test('disabled has warning severity', () {
-        expect(
-          NfcChipAvailability.disabled.severity,
-          NfcAvailabilitySeverity.warning,
-        );
+        expect(NfcChipAvailability.disabled.severity, NfcAvailabilitySeverity.warning);
       });
 
       test('notSupported has error severity', () {
-        expect(
-          NfcChipAvailability.notSupported.severity,
-          NfcAvailabilitySeverity.error,
-        );
+        expect(NfcChipAvailability.notSupported.severity, NfcAvailabilitySeverity.error);
       });
     });
 
     group('shouldShowOpenSettings', () {
       test('disabled with canOpenSettings=true shows open settings action', () {
-        expect(
-          NfcChipAvailability.disabled.shouldShowOpenSettings(
-            canOpenSettings: true,
-          ),
-          isTrue,
-        );
+        expect(NfcChipAvailability.disabled.shouldShowOpenSettings(canOpenSettings: true), isTrue);
       });
 
-      test(
-        'disabled with canOpenSettings=false hides open settings action',
-        () {
-          expect(
-            NfcChipAvailability.disabled.shouldShowOpenSettings(
-              canOpenSettings: false,
-            ),
-            isFalse,
-          );
-        },
-      );
+      test('disabled with canOpenSettings=false hides open settings action', () {
+        expect(NfcChipAvailability.disabled.shouldShowOpenSettings(canOpenSettings: false), isFalse);
+      });
 
-      test(
-        'other values always return false regardless of canOpenSettings',
-        () {
-          expect(
-            NfcChipAvailability.available.shouldShowOpenSettings(
-              canOpenSettings: true,
-            ),
-            isFalse,
-          );
-          expect(
-            NfcChipAvailability.notSupported.shouldShowOpenSettings(
-              canOpenSettings: true,
-            ),
-            isFalse,
-          );
-        },
-      );
+      test('other values always return false regardless of canOpenSettings', () {
+        expect(NfcChipAvailability.available.shouldShowOpenSettings(canOpenSettings: true), isFalse);
+        expect(NfcChipAvailability.notSupported.shouldShowOpenSettings(canOpenSettings: true), isFalse);
+      });
     });
 
     group('localizedTitle', () {
       test('available returns correct title', () {
-        expect(
-          NfcChipAvailability.available.localizedTitle(l10n),
-          'NFC is ready',
-        );
+        expect(NfcChipAvailability.available.localizedTitle(l10n), 'NFC is ready');
       });
 
       test('disabled returns correct title', () {
-        expect(
-          NfcChipAvailability.disabled.localizedTitle(l10n),
-          'Turn on NFC',
-        );
+        expect(NfcChipAvailability.disabled.localizedTitle(l10n), 'Turn on NFC');
       });
 
       test('notSupported returns correct title', () {
-        expect(
-          NfcChipAvailability.notSupported.localizedTitle(l10n),
-          'NFC is not supported',
-        );
+        expect(NfcChipAvailability.notSupported.localizedTitle(l10n), 'NFC is not supported');
       });
     });
 
     group('localizedBody', () {
       test('available returns correct body', () {
-        expect(
-          NfcChipAvailability.available.localizedBody(l10n),
-          'Your device is ready to scan NFC tags.',
-        );
+        expect(NfcChipAvailability.available.localizedBody(l10n), 'Your device is ready to scan NFC tags.');
       });
 
       test('disabled returns correct body', () {
@@ -517,52 +478,25 @@ void main() {
       });
 
       test('notSupported returns correct body', () {
-        expect(
-          NfcChipAvailability.notSupported.localizedBody(l10n),
-          'This device does not support NFC scanning.',
-        );
+        expect(NfcChipAvailability.notSupported.localizedBody(l10n), 'This device does not support NFC scanning.');
       });
     });
 
     group('localizedActionLabel', () {
       test('available returns null', () {
-        expect(
-          NfcChipAvailability.available.localizedActionLabel(
-            l10n,
-            canOpenSettings: true,
-          ),
-          isNull,
-        );
+        expect(NfcChipAvailability.available.localizedActionLabel(l10n, canOpenSettings: true), isNull);
       });
 
       test('disabled with canOpenSettings=true returns action label', () {
-        expect(
-          NfcChipAvailability.disabled.localizedActionLabel(
-            l10n,
-            canOpenSettings: true,
-          ),
-          'Open settings',
-        );
+        expect(NfcChipAvailability.disabled.localizedActionLabel(l10n, canOpenSettings: true), 'Open settings');
       });
 
       test('disabled with canOpenSettings=false returns null', () {
-        expect(
-          NfcChipAvailability.disabled.localizedActionLabel(
-            l10n,
-            canOpenSettings: false,
-          ),
-          isNull,
-        );
+        expect(NfcChipAvailability.disabled.localizedActionLabel(l10n, canOpenSettings: false), isNull);
       });
 
       test('notSupported returns null', () {
-        expect(
-          NfcChipAvailability.notSupported.localizedActionLabel(
-            l10n,
-            canOpenSettings: true,
-          ),
-          isNull,
-        );
+        expect(NfcChipAvailability.notSupported.localizedActionLabel(l10n, canOpenSettings: true), isNull);
       });
     });
   });
@@ -572,11 +506,7 @@ void main() {
       expect(NfcAvailabilitySeverity.values, hasLength(3));
       expect(
         NfcAvailabilitySeverity.values,
-        containsAll([
-          NfcAvailabilitySeverity.info,
-          NfcAvailabilitySeverity.warning,
-          NfcAvailabilitySeverity.error,
-        ]),
+        containsAll([NfcAvailabilitySeverity.info, NfcAvailabilitySeverity.warning, NfcAvailabilitySeverity.error]),
       );
     });
   });

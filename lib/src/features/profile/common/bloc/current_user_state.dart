@@ -47,13 +47,7 @@ final class CurrentUserState extends Equatable {
     required UserFreshness freshness,
     required DateTime cachedAtUtc,
     required bool isSyncing,
-  }) : this(
-         status: CurrentUserStatus.available,
-         user: user,
-         freshness: freshness,
-         cachedAtUtc: cachedAtUtc,
-         isSyncing: isSyncing,
-       );
+  }) : this(status: CurrentUserStatus.available, user: user, freshness: freshness, cachedAtUtc: cachedAtUtc, isSyncing: isSyncing);
 
   const CurrentUserState.unavailable({required UserProfileFailureCode reason})
     : this(status: CurrentUserStatus.unavailable, reason: reason);
@@ -99,13 +93,5 @@ final class CurrentUserState extends Equatable {
   }
 
   @override
-  List<Object?> get props => <Object?>[
-    status,
-    user,
-    freshness,
-    cachedAtUtc,
-    isSyncing,
-    reason,
-    message,
-  ];
+  List<Object?> get props => <Object?>[status, user, freshness, cachedAtUtc, isSyncing, reason, message];
 }

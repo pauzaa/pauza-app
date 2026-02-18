@@ -5,12 +5,7 @@ import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 @immutable
 class Schedule {
-  const Schedule({
-    required this.days,
-    required this.start,
-    required this.end,
-    required this.enabled,
-  });
+  const Schedule({required this.days, required this.start, required this.end, required this.enabled});
 
   const Schedule.initial()
     : this(
@@ -31,21 +26,11 @@ class Schedule {
     endMinutes: end.toMinutesFromMidnight,
   );
 
-  Schedule copyWith({
-    ISet<WeekDay>? days,
-    bool? enabled,
-    TimeOfDay? start,
-    TimeOfDay? end,
-  }) => Schedule(
-    days: days ?? this.days,
-    enabled: enabled ?? this.enabled,
-    start: start ?? this.start,
-    end: end ?? this.end,
-  );
+  Schedule copyWith({ISet<WeekDay>? days, bool? enabled, TimeOfDay? start, TimeOfDay? end}) =>
+      Schedule(days: days ?? this.days, enabled: enabled ?? this.enabled, start: start ?? this.start, end: end ?? this.end);
 
   @override
-  String toString() =>
-      'Schedule(days: $days, enabled: $enabled, start: $start, end: $end)';
+  String toString() => 'Schedule(days: $days, enabled: $enabled, start: $start, end: $end)';
 }
 
 extension TimeOfDayX on TimeOfDay {

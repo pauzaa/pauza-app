@@ -12,11 +12,8 @@ class HomeStatsPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final streakLabel = metrics.streakDays == null
-        ? '--'
-        : l10n.homeDayStreakLabel(metrics.streakDays!);
-    final durationLabel =
-        metrics.focusedDuration?.formatDurationLabel(l10n) ?? '--';
+    final streakLabel = metrics.streakDays == null ? '--' : l10n.homeDayStreakLabel(metrics.streakDays!);
+    final durationLabel = metrics.focusedDuration?.formatDurationLabel(l10n) ?? '--';
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -25,35 +22,17 @@ class HomeStatsPill extends StatelessWidget {
         border: Border.all(color: context.colorScheme.outlineVariant),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: PauzaSpacing.large,
-          vertical: PauzaSpacing.regular,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large, vertical: PauzaSpacing.regular),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           spacing: PauzaSpacing.small,
           children: <Widget>[
-            Icon(
-              Icons.local_fire_department,
-              size: PauzaIconSizes.small,
-              color: context.colorScheme.primary,
-            ),
+            Icon(Icons.local_fire_department, size: PauzaIconSizes.small, color: context.colorScheme.primary),
 
             Text(streakLabel, style: context.textTheme.titleMedium),
 
-            SizedBox(
-              height: 16,
-              child: VerticalDivider(
-                width: 20,
-                thickness: 1,
-                color: context.colorScheme.outlineVariant,
-              ),
-            ),
-            Icon(
-              Icons.timer_outlined,
-              size: PauzaIconSizes.small,
-              color: context.colorScheme.primary,
-            ),
+            SizedBox(height: 16, child: VerticalDivider(width: 20, thickness: 1, color: context.colorScheme.outlineVariant)),
+            Icon(Icons.timer_outlined, size: PauzaIconSizes.small, color: context.colorScheme.primary),
 
             Text(durationLabel, style: context.textTheme.titleMedium),
           ],

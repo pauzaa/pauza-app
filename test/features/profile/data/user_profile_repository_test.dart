@@ -12,11 +12,7 @@ void main() {
     test('fetchAndCacheProfile writes cache and returns user', () async {
       final cache = _FakeUserProfileCacheStorage();
       final remote = _FakeUserProfileRemoteDataSource(
-        user: const UserDto(
-          profilePicture: 'https://example.com/avatar/john.png',
-          username: 'john',
-          name: 'John',
-        ),
+        user: const UserDto(profilePicture: 'https://example.com/avatar/john.png', username: 'john', name: 'John'),
       );
       final repository = UserProfileRepositoryImpl(
         cacheStorage: cache,
@@ -36,26 +32,14 @@ void main() {
     test('readCachedProfile delegates to cache storage', () async {
       final cache = _FakeUserProfileCacheStorage(
         cached: CachedUserProfile(
-          user: const UserDto(
-            profilePicture: 'https://example.com/avatar/jane.png',
-            username: 'jane',
-            name: 'Jane',
-          ),
+          user: const UserDto(profilePicture: 'https://example.com/avatar/jane.png', username: 'jane', name: 'Jane'),
           cachedAtUtc: DateTime.utc(2026, 2, 16, 11),
         ),
       );
       final remote = _FakeUserProfileRemoteDataSource(
-        user: const UserDto(
-          profilePicture: 'https://example.com/avatar/jane.png',
-          username: 'jane',
-          name: 'Jane',
-        ),
+        user: const UserDto(profilePicture: 'https://example.com/avatar/jane.png', username: 'jane', name: 'Jane'),
       );
-      final repository = UserProfileRepositoryImpl(
-        cacheStorage: cache,
-        remoteDataSource: remote,
-        nowUtc: DateTime.now,
-      );
+      final repository = UserProfileRepositoryImpl(cacheStorage: cache, remoteDataSource: remote, nowUtc: DateTime.now);
 
       final cached = await repository.readCachedProfile();
 
@@ -64,26 +48,14 @@ void main() {
 
     test('fetchAndCacheProfile propagates typed remote errors', () async {
       final cache = _FakeUserProfileCacheStorage();
-      final remote = _FakeUserProfileRemoteDataSource(
-        error: const UserProfileException(code: UserProfileFailureCode.network),
-      );
-      final repository = UserProfileRepositoryImpl(
-        cacheStorage: cache,
-        remoteDataSource: remote,
-        nowUtc: DateTime.now,
-      );
+      final remote = _FakeUserProfileRemoteDataSource(error: const UserProfileException(code: UserProfileFailureCode.network));
+      final repository = UserProfileRepositoryImpl(cacheStorage: cache, remoteDataSource: remote, nowUtc: DateTime.now);
 
       await expectLater(
         () => repository.fetchAndCacheProfile(
           session: const Session(accessToken: 'a', refreshToken: 'b'),
         ),
-        throwsA(
-          isA<UserProfileException>().having(
-            (error) => error.code,
-            'code',
-            UserProfileFailureCode.network,
-          ),
-        ),
+        throwsA(isA<UserProfileException>().having((error) => error.code, 'code', UserProfileFailureCode.network)),
       );
       expect(cache.cached, isNull);
     });
@@ -111,8 +83,7 @@ final class _FakeUserProfileCacheStorage implements UserProfileCacheStorage {
   }
 }
 
-final class _FakeUserProfileRemoteDataSource
-    implements UserProfileRemoteDataSource {
+final class _FakeUserProfileRemoteDataSource implements UserProfileRemoteDataSource {
   _FakeUserProfileRemoteDataSource({this.user, this.error});
 
   final UserDto? user;

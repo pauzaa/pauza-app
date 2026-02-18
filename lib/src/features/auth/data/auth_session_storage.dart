@@ -13,8 +13,7 @@ abstract interface class AuthSessionStorage {
 }
 
 final class SecureAuthSessionStorage implements AuthSessionStorage {
-  SecureAuthSessionStorage({FlutterSecureStorage? secureStorage})
-    : _secureStorage = secureStorage ?? const FlutterSecureStorage();
+  SecureAuthSessionStorage({FlutterSecureStorage? secureStorage}) : _secureStorage = secureStorage ?? const FlutterSecureStorage();
 
   static const String _sessionKey = 'auth.session';
 

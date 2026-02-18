@@ -30,9 +30,7 @@ class NfcCardDto {
       'uidHex': uidHex,
       'techTypes': techTypes.map((tech) => tech.name).toList(growable: false),
       'isNdefFormatted': isNdefFormatted,
-      'ndefRecords': ndefRecords
-          .map((record) => record.toJson())
-          .toList(growable: false),
+      'ndefRecords': ndefRecords.map((record) => record.toJson()).toList(growable: false),
       'rawSnapshot': rawSnapshot.unlock,
     };
   }
@@ -58,12 +56,7 @@ class NfcCardDto {
       for (final record in ndefRecordsRaw) {
         if (record is Map<Object?, Object?>) {
           ndefRecordValues.add(
-            NfcNdefRecordDto.fromJson(
-              record.map(
-                (key, value) =>
-                    MapEntry(key is String ? key : key.toString(), value),
-              ),
-            ),
+            NfcNdefRecordDto.fromJson(record.map((key, value) => MapEntry(key is String ? key : key.toString(), value))),
           );
         }
       }
@@ -73,20 +66,13 @@ class NfcCardDto {
 
     return NfcCardDto(
       id: json['id'] as String? ?? '',
-      detectedAt:
-          DateTime.tryParse(json['detectedAt'] as String? ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+      detectedAt: DateTime.tryParse(json['detectedAt'] as String? ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
       uidHex: json['uidHex'] as String?,
       techTypes: techTypeValues.lock,
       isNdefFormatted: json['isNdefFormatted'] as bool? ?? false,
       ndefRecords: ndefRecordValues.lock,
       rawSnapshot: rawSnapshot is Map<Object?, Object?>
-          ? rawSnapshot
-                .map(
-                  (key, value) =>
-                      MapEntry(key is String ? key : key.toString(), value),
-                )
-                .lock
+          ? rawSnapshot.map((key, value) => MapEntry(key is String ? key : key.toString(), value)).lock
           : const <String, Object?>{}.lock,
     );
   }
@@ -122,14 +108,6 @@ class NfcCardDto {
 
   @override
   int get hashCode {
-    return Object.hash(
-      id,
-      detectedAt,
-      uidHex,
-      techTypes,
-      isNdefFormatted,
-      ndefRecords,
-      rawSnapshot,
-    );
+    return Object.hash(id, detectedAt, uidHex, techTypes, isNdefFormatted, ndefRecords, rawSnapshot);
   }
 }

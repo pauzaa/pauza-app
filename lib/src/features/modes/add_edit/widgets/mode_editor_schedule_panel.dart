@@ -4,11 +4,7 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 @immutable
 class ModeEditorDayChipItem {
-  const ModeEditorDayChipItem({
-    required this.id,
-    required this.label,
-    required this.isSelected,
-  });
+  const ModeEditorDayChipItem({required this.id, required this.label, required this.isSelected});
 
   final String id;
   final String label;
@@ -54,27 +50,16 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
       spacing: PauzaSpacing.small,
       children: <Widget>[
         ModeEditorCard(
-          borderColor: hasError
-              ? context.colorScheme.error.withValues(alpha: 0.8)
-              : context.colorScheme.outlineVariant,
+          borderColor: hasError ? context.colorScheme.error.withValues(alpha: 0.8) : context.colorScheme.outlineVariant,
           child: Column(
             spacing: PauzaSpacing.medium,
             children: <Widget>[
               Row(
                 spacing: PauzaSpacing.regular,
                 children: <Widget>[
-                  Icon(
-                    Icons.calendar_today_outlined,
-                    color: context.colorScheme.primary,
-                    size: PauzaIconSizes.small,
-                  ),
+                  Icon(Icons.calendar_today_outlined, color: context.colorScheme.primary, size: PauzaIconSizes.small),
                   Expanded(
-                    child: Text(
-                      title,
-                      style: context.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    child: Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
                   ),
                   PauzaSwitch(value: enabled, onChanged: onToggle),
                 ],
@@ -84,30 +69,17 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
                   spacing: PauzaSpacing.small,
                   runSpacing: PauzaSpacing.small,
                   children: days
-                      .map(
-                        (item) => _ModeEditorDayChip(
-                          item: item,
-                          onPressed: () => onDayPressed(item.id),
-                        ),
-                      )
+                      .map((item) => _ModeEditorDayChip(item: item, onPressed: () => onDayPressed(item.id)))
                       .toList(growable: false),
                 ),
                 Row(
                   spacing: PauzaSpacing.medium,
                   children: <Widget>[
                     Expanded(
-                      child: _ModeEditorTimeField(
-                        title: startTitle,
-                        value: startValue,
-                        onPressed: onStartPressed,
-                      ),
+                      child: _ModeEditorTimeField(title: startTitle, value: startValue, onPressed: onStartPressed),
                     ),
                     Expanded(
-                      child: _ModeEditorTimeField(
-                        title: endTitle,
-                        value: endValue,
-                        onPressed: onEndPressed,
-                      ),
+                      child: _ModeEditorTimeField(title: endTitle, value: endValue, onPressed: onEndPressed),
                     ),
                   ],
                 ),
@@ -115,13 +87,7 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
             ],
           ),
         ),
-        if (hasError)
-          Text(
-            errorText!,
-            style: context.textTheme.bodySmall?.copyWith(
-              color: context.colorScheme.error,
-            ),
-          ),
+        if (hasError) Text(errorText!, style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.error)),
       ],
     );
   }
@@ -140,27 +106,16 @@ final class _ModeEditorDayChip extends StatelessWidget {
       borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: item.isSelected
-              ? context.colorScheme.primary
-              : context.colorScheme.surfaceContainer,
+          color: item.isSelected ? context.colorScheme.primary : context.colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
-          border: Border.all(
-            color: item.isSelected
-                ? context.colorScheme.primary
-                : context.colorScheme.outlineVariant,
-          ),
+          border: Border.all(color: item.isSelected ? context.colorScheme.primary : context.colorScheme.outlineVariant),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: PauzaSpacing.medium,
-            vertical: PauzaSpacing.small,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.small),
           child: Text(
             item.label,
             style: context.textTheme.labelLarge?.copyWith(
-              color: item.isSelected
-                  ? context.colorScheme.onPrimary
-                  : context.colorScheme.onSurfaceVariant,
+              color: item.isSelected ? context.colorScheme.onPrimary : context.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -171,11 +126,7 @@ final class _ModeEditorDayChip extends StatelessWidget {
 }
 
 final class _ModeEditorTimeField extends StatelessWidget {
-  const _ModeEditorTimeField({
-    required this.title,
-    required this.value,
-    required this.onPressed,
-  });
+  const _ModeEditorTimeField({required this.title, required this.value, required this.onPressed});
 
   final String title;
   final String value;
@@ -193,27 +144,16 @@ final class _ModeEditorTimeField extends StatelessWidget {
           border: Border.all(color: context.colorScheme.outlineVariant),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: PauzaSpacing.medium,
-            vertical: PauzaSpacing.regular,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.regular),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: PauzaSpacing.small,
             children: <Widget>[
               Text(
                 title.toUpperCase(),
-                style: context.textTheme.labelSmall?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant,
-                  letterSpacing: 1.2,
-                ),
+                style: context.textTheme.labelSmall?.copyWith(color: context.colorScheme.onSurfaceVariant, letterSpacing: 1.2),
               ),
-              Text(
-                value,
-                style: context.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              Text(value, style: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700)),
             ],
           ),
         ),

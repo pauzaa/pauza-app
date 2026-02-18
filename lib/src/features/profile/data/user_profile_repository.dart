@@ -35,9 +35,7 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   Future<UserDto> fetchAndCacheProfile({required Session session}) async {
     try {
       final user = await _remoteDataSource.fetchMe(session: session);
-      await _cacheStorage.write(
-        CachedUserProfile(user: user, cachedAtUtc: _nowUtc()),
-      );
+      await _cacheStorage.write(CachedUserProfile(user: user, cachedAtUtc: _nowUtc()));
       return user;
     } on UserProfileException {
       rethrow;

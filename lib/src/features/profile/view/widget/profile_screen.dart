@@ -21,10 +21,7 @@ class ProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(
-            horizontal: PauzaSpacing.large,
-            vertical: PauzaSpacing.large,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large, vertical: PauzaSpacing.large),
           children: <Widget>[
             PauzaDashboardAppBar(title: l10n.profileTitle),
             const SizedBox(height: PauzaSpacing.extraLarge),
@@ -44,11 +41,7 @@ class ProfileScreen extends StatelessWidget {
                   CurrentUserStatus.available => user?.profilePicture,
                   _ => null,
                 };
-                return ProfileHeaderSection(
-                  profilePictureUrl: profilePictureUrl,
-                  displayName: displayName,
-                  username: username,
-                );
+                return ProfileHeaderSection(profilePictureUrl: profilePictureUrl, displayName: displayName, username: username);
               },
             ),
             const SizedBox(height: PauzaSpacing.xLarge),

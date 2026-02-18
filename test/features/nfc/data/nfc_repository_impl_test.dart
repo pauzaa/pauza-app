@@ -12,11 +12,7 @@ import 'package:uuid/uuid.dart';
 void main() {
   group('NfcRepositoryImpl', () {
     test('returns disabled when manager availability is false', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(
-          availability: NfcAvailability.disabled,
-        ),
-      );
+      final repository = NfcRepositoryImpl(managerClient: _FakeNfcManagerClient(availability: NfcAvailability.disabled));
 
       final availability = await repository.getAvailability();
 
@@ -28,23 +24,12 @@ void main() {
         managerClient: _FakeNfcManagerClient(
           scanResult: NfcTagSnapshot(
             uidHex: '01020304',
-            techTypes: IList(const <NfcTagTech>[
-              NfcTagTech.ndef,
-              NfcTagTech.nfcA,
-            ]),
+            techTypes: IList(const <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA]),
             isNdefFormatted: true,
             ndefRecords: IList(const <NfcNdefRecordDto>[
-              NfcNdefRecordDto(
-                tnf: 'wellKnown',
-                typeHex: '54',
-                identifierHex: '01',
-                payloadHex: '02656e4869',
-                payloadText: 'Hi',
-              ),
+              NfcNdefRecordDto(tnf: 'wellKnown', typeHex: '54', identifierHex: '01', payloadHex: '02656e4869', payloadText: 'Hi'),
             ]),
-            rawSnapshot: IMap(const <String, Object?>{
-              'nfca': <String, Object?>{},
-            }),
+            rawSnapshot: IMap(const <String, Object?>{'nfca': <String, Object?>{}}),
           ),
         ),
         uuid: const Uuid(),
@@ -56,28 +41,16 @@ void main() {
       expect(card.techTypes, <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA]);
       expect(card.isNdefFormatted, isTrue);
       expect(card.ndefRecords.length, 1);
-      expect(card.rawSnapshot.unlock, const <String, Object?>{
-        'nfca': <String, Object?>{},
-      });
+      expect(card.rawSnapshot.unlock, const <String, Object?>{'nfca': <String, Object?>{}});
       expect(card.id, isNotEmpty);
     });
 
     test('throws unsupported when availability is not supported', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(
-          checkAvailabilityError: UnsupportedError('unsupported'),
-        ),
-      );
+      final repository = NfcRepositoryImpl(managerClient: _FakeNfcManagerClient(checkAvailabilityError: UnsupportedError('unsupported')));
 
       expect(
         repository.scanSingleCard,
-        throwsA(
-          isA<NfcException>().having(
-            (exception) => exception.code,
-            'code',
-            NfcErrorCode.unsupported,
-          ),
-        ),
+        throwsA(isA<NfcException>().having((exception) => exception.code, 'code', NfcErrorCode.unsupported)),
       );
     });
 
@@ -89,18 +62,14 @@ void main() {
     });
 
     test('forwards NFC system settings support', () async {
-      final managerClient = _FakeNfcManagerClient(
-        canOpenSystemSettingsForNfc: true,
-      );
+      final managerClient = _FakeNfcManagerClient(canOpenSystemSettingsForNfc: true);
       final repository = NfcRepositoryImpl(managerClient: managerClient);
 
       expect(repository.canOpenSystemSettingsForNfc, isTrue);
     });
 
     test('forwards opening NFC system settings', () async {
-      final managerClient = _FakeNfcManagerClient(
-        openSystemSettingsResult: true,
-      );
+      final managerClient = _FakeNfcManagerClient(openSystemSettingsResult: true);
       final repository = NfcRepositoryImpl(managerClient: managerClient);
 
       final opened = await repository.openSystemSettingsForNfc();
@@ -154,8 +123,5 @@ final class _FakeNfcManagerClient implements NfcOperations {
   Future<bool> openSystemSettingsForNfc() async => openSystemSettingsResult;
 
   @override
-  Future<void> stopSession({
-    String? alertMessage,
-    String? errorMessage,
-  }) async {}
+  Future<void> stopSession({String? alertMessage, String? errorMessage}) async {}
 }

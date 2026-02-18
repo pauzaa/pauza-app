@@ -56,27 +56,16 @@ final class RestrictionSessionLog {
       sessionId: row['session_id'] as String,
       modeId: row['mode_id'] as String,
       source: RestrictionLifecycleSource.fromWire(row['source'] as String),
-      startedAt: DateTime.fromMillisecondsSinceEpoch(
-        row['started_at'] as int,
-        isUtc: true,
-      ),
+      startedAt: DateTime.fromMillisecondsSinceEpoch(row['started_at'] as int, isUtc: true),
       endedAt: _readNullableUtcDateTime(row['ended_at']),
       pauseCount: row['pause_count'] as int,
       totalPausedMs: row['total_paused_ms'] as int,
       lastPausedAt: _readNullableUtcDateTime(row['last_paused_at']),
-      integrityStatus: SessionIntegrityStatus.fromDbValue(
-        row['integrity_status'] as String,
-      ),
+      integrityStatus: SessionIntegrityStatus.fromDbValue(row['integrity_status'] as String),
       lastAnomalyReason: row['last_anomaly_reason'] as String?,
       lastEventId: row['last_event_id'] as String,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-        row['created_at'] as int,
-        isUtc: true,
-      ),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(
-        row['updated_at'] as int,
-        isUtc: true,
-      ),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(row['created_at'] as int, isUtc: true),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(row['updated_at'] as int, isUtc: true),
     );
   }
 
@@ -106,13 +95,9 @@ final class RestrictionSessionLog {
       endedAt: clearEndedAt ? null : (endedAt ?? this.endedAt),
       pauseCount: pauseCount ?? this.pauseCount,
       totalPausedMs: totalPausedMs ?? this.totalPausedMs,
-      lastPausedAt: clearLastPausedAt
-          ? null
-          : (lastPausedAt ?? this.lastPausedAt),
+      lastPausedAt: clearLastPausedAt ? null : (lastPausedAt ?? this.lastPausedAt),
       integrityStatus: integrityStatus ?? this.integrityStatus,
-      lastAnomalyReason: clearLastAnomalyReason
-          ? null
-          : (lastAnomalyReason ?? this.lastAnomalyReason),
+      lastAnomalyReason: clearLastAnomalyReason ? null : (lastAnomalyReason ?? this.lastAnomalyReason),
       lastEventId: lastEventId ?? this.lastEventId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,

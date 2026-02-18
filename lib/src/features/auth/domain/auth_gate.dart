@@ -12,7 +12,8 @@ abstract interface class PauzaAuthGate implements Listenable {
   void dispose();
 }
 
-final class PauzaAuthGateNotifier extends ChangeNotifier implements PauzaAuthGate {
+final class PauzaAuthGateNotifier extends ChangeNotifier
+    implements PauzaAuthGate {
   PauzaAuthGateNotifier({required AuthRepository authRepository})
     : _authRepository = authRepository {
     _subscription = _authRepository.sessionStream.listen(_onSessionChanged);

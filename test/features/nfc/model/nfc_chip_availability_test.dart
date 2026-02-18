@@ -99,6 +99,27 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get profileSettingsNavTitle => 'Settings';
   @override
+  String get settingsTitle => 'Settings';
+  @override
+  String get settingsGeneralSectionTitle => 'General';
+  @override
+  String get settingsNotifications => 'Notifications';
+  @override
+  String get settingsLanguage => 'Language';
+  @override
+  String get settingsLanguagePickerTitle => 'Select language';
+  @override
+  String get settingsNfcChipConfiguring => 'NFC Chip Configuring';
+  @override
+  String get settingsQrCodeConfiguring => 'QR Code Configuring';
+  @override
+  String get settingsSignOut => 'Sign Out';
+  @override
+  String get settingsVersionFallback => 'Pauza';
+  @override
+  String settingsVersionLabel(String version, String buildNumber) =>
+      'Pauza v$version (Build $buildNumber)';
+  @override
   String get notFoundTitle => 'Page not found';
   @override
   String get confirmButton => 'Confirm';
@@ -377,6 +398,8 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get statsIosReportUnavailableBody =>
       'Ensure iOS report extension is configured.';
+  @override
+  String get settingsSessionEndingConfSectionTitle => 'Session Ending';
 }
 
 void main() {

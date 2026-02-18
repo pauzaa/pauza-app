@@ -68,16 +68,22 @@ class ModeListItem extends StatelessWidget {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: colorScheme.surface,
-                      borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
+                      borderRadius: BorderRadius.circular(
+                        PauzaCornerRadius.medium,
+                      ),
                       border: Border.all(
                         color: isSelected
                             ? colorScheme.primary.withValues(alpha: 0.45)
-                            : colorScheme.outlineVariant.withValues(alpha: 0.55),
+                            : colorScheme.outlineVariant.withValues(
+                                alpha: 0.55,
+                              ),
                       ),
                     ),
                     child: Icon(
                       mode.icon.icon,
-                      color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                      color: isSelected
+                          ? colorScheme.primary
+                          : colorScheme.onSurfaceVariant,
                       size: PauzaIconSizes.small,
                     ),
                   ),

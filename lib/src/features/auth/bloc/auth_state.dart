@@ -38,7 +38,11 @@ final class AuthFlowSuccess extends AuthState {
 }
 
 final class AuthFlowFailure extends AuthState {
-  const AuthFlowFailure({required this.failure, required this.email, this.message});
+  const AuthFlowFailure({
+    required this.failure,
+    required this.email,
+    this.message,
+  });
 
   final AuthFailure failure;
   final String? email;

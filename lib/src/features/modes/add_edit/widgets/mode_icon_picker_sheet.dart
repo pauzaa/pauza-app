@@ -26,15 +26,20 @@ final class ModeIconPickerSheet extends StatelessWidget {
       useRootNavigator: true,
       useSafeArea: true,
       isScrollControlled: true,
-      builder: (context) =>
-          ModeIconPickerSheet(title: title, subtitle: subtitle, selectedIcon: selectedIcon),
+      builder: (context) => ModeIconPickerSheet(
+        title: title,
+        subtitle: subtitle,
+        selectedIcon: selectedIcon,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.9,
+      ),
       child: BottomSheetScaffold(
         title: Text(title),
         bodyPadding: const EdgeInsets.symmetric(
@@ -71,11 +76,18 @@ final class ModeIconPickerSheet extends StatelessWidget {
                   return Material(
                     color: context.colorScheme.surfaceContainerLowest,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
-                      side: BorderSide(color: borderColor, width: isSelected ? 1.6 : 1),
+                      borderRadius: BorderRadius.circular(
+                        PauzaCornerRadius.medium,
+                      ),
+                      side: BorderSide(
+                        color: borderColor,
+                        width: isSelected ? 1.6 : 1,
+                      ),
                     ),
                     child: InkWell(
-                      borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
+                      borderRadius: BorderRadius.circular(
+                        PauzaCornerRadius.medium,
+                      ),
                       onTap: () => Navigator.of(context).pop(entry),
                       child: Padding(
                         padding: const EdgeInsets.all(PauzaSpacing.small),
@@ -83,7 +95,11 @@ final class ModeIconPickerSheet extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: PauzaSpacing.small,
                           children: <Widget>[
-                            Icon(entry.icon, color: foregroundColor, size: PauzaIconSizes.medium),
+                            Icon(
+                              entry.icon,
+                              color: foregroundColor,
+                              size: PauzaIconSizes.medium,
+                            ),
                             Text(
                               entry.localizedLabel(context.l10n),
                               maxLines: 2,
@@ -91,7 +107,9 @@ final class ModeIconPickerSheet extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: context.textTheme.labelMedium?.copyWith(
                                 color: foregroundColor,
-                                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                                fontWeight: isSelected
+                                    ? FontWeight.w700
+                                    : FontWeight.w500,
                               ),
                             ),
                           ],

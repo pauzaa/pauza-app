@@ -19,7 +19,9 @@ class OtpHeaderText extends StatelessWidget {
       children: <Widget>[
         Text(
           l10n.authOtpTitle,
-          style: context.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600),
+          style: context.textTheme.displaySmall?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
         ),
         RichText(
           text: TextSpan(

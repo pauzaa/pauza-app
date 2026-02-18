@@ -36,6 +36,58 @@
   "@profileSettingsNavTitle": {
     "description": "Navigation item title for profile settings."
   },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Title shown in the settings screen app bar."
+  },
+  "settingsGeneralSectionTitle": "General",
+  "@settingsGeneralSectionTitle": {
+    "description": "Section title for general settings."
+  },
+  "settingsNotifications": "Notifications",
+  "@settingsNotifications": {
+    "description": "Label for settings notifications row."
+  },
+  "settingsLanguage": "Language",
+  "@settingsLanguage": {
+    "description": "Label for settings language row."
+  },
+  "settingsLanguagePickerTitle": "Select language",
+  "@settingsLanguagePickerTitle": {
+    "description": "Title for language selection dialog in settings."
+  },
+  "settingsSessionEndingConfSectionTitle": "Session Ending",
+  "@settingsSessionEndingConfSectionTitle": {
+    "description": "Section title for session ending confirmation settings."
+  },
+  "settingsNfcChipConfiguring": "NFC Chip Configuring",
+  "@settingsNfcChipConfiguring": {
+    "description": "Label for NFC chip configuring settings row."
+  },
+  "settingsQrCodeConfiguring": "QR Code Configuring",
+  "@settingsQrCodeConfiguring": {
+    "description": "Label for QR code configuring settings row."
+  },
+  "settingsSignOut": "Sign Out",
+  "@settingsSignOut": {
+    "description": "Label for sign out button in settings."
+  },
+  "settingsVersionFallback": "Pauza",
+  "@settingsVersionFallback": {
+    "description": "Fallback label in settings footer when app version is unavailable."
+  },
+  "settingsVersionLabel": "Pauza v{version} (Build {buildNumber})",
+  "@settingsVersionLabel": {
+    "description": "Formatted app version label shown in settings footer.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "notFoundTitle": "Page not found",
   "@notFoundTitle": {
     "description": "Title shown when a page is not found."
@@ -539,11 +591,29 @@
     }
   },
   "homeDashboardTitle": "Pauza Dashboard",
+  "@homeDashboardTitle": {
+    "description": "Title for the home dashboard screen."
+  },
   "homePauzaSessionLabel": "Pauza Session",
+  "@homePauzaSessionLabel": {
+    "description": "Label indicating an active Pauza session."
+  },
   "homeSessionDurationLabel": "Session Duration",
+  "@homeSessionDurationLabel": {
+    "description": "Label for the session duration display."
+  },
   "homeQuickPauseLabel": "Quick Pause",
+  "@homeQuickPauseLabel": {
+    "description": "Label for the quick pause feature."
+  },
   "homeResumeButtonLabel": "Resume",
+  "@homeResumeButtonLabel": {
+    "description": "Label for the resume button."
+  },
   "homeCurrentModeLabel": "Current mode",
+  "@homeCurrentModeLabel": {
+    "description": "Label indicating the currently active mode."
+  },
   "homeDayStreakLabel": "{count} Day Streak",
   "@homeDayStreakLabel": {
     "placeholders": {
@@ -564,20 +634,65 @@
     }
   },
   "deviceUsage": "Device Usage",
+  "@deviceUsage": {
+    "description": "Title for device usage statistics section."
+  },
   "usageStatsTab": "Usage Stats",
+  "@usageStatsTab": {
+    "description": "Tab label for usage statistics."
+  },
   "blockingStatsTab": "Blocking Stats",
+  "@blockingStatsTab": {
+    "description": "Tab label for blocking statistics."
+  },
   "thisWeek": "This Week",
+  "@thisWeek": {
+    "description": "Label for current week time period."
+  },
   "totalTime": "Total Time",
+  "@totalTime": {
+    "description": "Label for total time display."
+  },
   "usageTrend": "Usage Trend",
+  "@usageTrend": {
+    "description": "Label for usage trend indicator."
+  },
   "statsDailyAverage": "Daily Average",
+  "@statsDailyAverage": {
+    "description": "Label for daily average usage statistic."
+  },
   "statsBucketSocial": "Social",
+  "@statsBucketSocial": {
+    "description": "Category label for social media apps."
+  },
   "statsBucketProductivity": "Productivity",
+  "@statsBucketProductivity": {
+    "description": "Category label for productivity apps."
+  },
   "statsBucketOther": "Other",
+  "@statsBucketOther": {
+    "description": "Category label for other uncategorized apps."
+  },
   "statsAppUsage": "App Usage",
+  "@statsAppUsage": {
+    "description": "Title for app usage statistics section."
+  },
   "statsUsageTableAppColumn": "App",
+  "@statsUsageTableAppColumn": {
+    "description": "Column header for app name in usage table."
+  },
   "statsUsageTableUsageColumn": "Usage",
+  "@statsUsageTableUsageColumn": {
+    "description": "Column header for usage time in usage table."
+  },
   "statsUsageTableLaunchesColumn": "Launches",
+  "@statsUsageTableLaunchesColumn": {
+    "description": "Column header for app launch count in usage table."
+  },
   "statsUsageTableLastUsedColumn": "Last used",
+  "@statsUsageTableLastUsedColumn": {
+    "description": "Column header for last used time in usage table."
+  },
   "statsDeltaVsLastPeriod": "{value} vs last period",
   "@statsDeltaVsLastPeriod": {
     "placeholders": {
@@ -587,23 +702,77 @@
     }
   },
   "statsPermissionRequiredTitle": "Usage permission required",
+  "@statsPermissionRequiredTitle": {
+    "description": "Title for usage permission required dialog."
+  },
   "statsPermissionRequiredBody": "Allow Usage Access to view Android usage statistics.",
+  "@statsPermissionRequiredBody": {
+    "description": "Body text for usage permission required dialog."
+  },
   "statsLoadFailed": "Failed to load usage statistics.",
+  "@statsLoadFailed": {
+    "description": "Error message when stats fail to load."
+  },
   "statsNoUsageData": "No usage data for the selected period.",
+  "@statsNoUsageData": {
+    "description": "Message shown when no usage data is available."
+  },
   "statsIosReportUnavailableTitle": "iOS report unavailable",
+  "@statsIosReportUnavailableTitle": {
+    "description": "Title for iOS report unavailable message."
+  },
   "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured.",
+  "@statsIosReportUnavailableBody": {
+    "description": "Body text for iOS report unavailable message."
+  },
   "authTagline": "Focus & Wellbeing",
+  "@authTagline": {
+    "description": "Tagline displayed on authentication screens."
+  },
   "authEmailAddress": "Email address",
+  "@authEmailAddress": {
+    "description": "Label for email address input field."
+  },
   "authEmailHint": "name@example.com",
+  "@authEmailHint": {
+    "description": "Hint text for email input field."
+  },
   "authPassword": "Password",
+  "@authPassword": {
+    "description": "Label for password input field."
+  },
   "authForgotPassword": "Forgot password?",
+  "@authForgotPassword": {
+    "description": "Link text for password recovery."
+  },
   "authLogIn": "Log in",
+  "@authLogIn": {
+    "description": "Button label for login action."
+  },
   "authOtpTitle": "Verify Your Email",
+  "@authOtpTitle": {
+    "description": "Title for OTP verification screen."
+  },
   "authOtpSubtitlePrefix": "Enter the 6-digit code we sent to your email address ",
+  "@authOtpSubtitlePrefix": {
+    "description": "First part of OTP screen subtitle before email address."
+  },
   "authOtpSubtitleSuffix": ".",
+  "@authOtpSubtitleSuffix": {
+    "description": "Second part of OTP screen subtitle after email address."
+  },
   "authOtpVerifyButton": "Verify",
+  "@authOtpVerifyButton": {
+    "description": "Button label for OTP verification."
+  },
   "authOtpDidNotReceiveCode": "Didn't receive a code?",
+  "@authOtpDidNotReceiveCode": {
+    "description": "Prompt asking if user didn't receive OTP code."
+  },
   "authOtpResendCode": "Resend Code",
+  "@authOtpResendCode": {
+    "description": "Button label to resend OTP code."
+  },
   "authOtpAvailableInLabel": "Available in {minutes}:{seconds}",
   "@authOtpAvailableInLabel": {
     "placeholders": {
@@ -616,10 +785,31 @@
     }
   },
   "authValidationRequired": "This field is required",
+  "@authValidationRequired": {
+    "description": "Validation error when required field is empty."
+  },
   "authValidationInvalidEmail": "Enter a valid email address",
+  "@authValidationInvalidEmail": {
+    "description": "Validation error for invalid email format."
+  },
   "authFailureInvalidCredentials": "Invalid email or password.",
+  "@authFailureInvalidCredentials": {
+    "description": "Error message for invalid login credentials."
+  },
   "authFailureInvalidOtp": "Invalid verification code.",
+  "@authFailureInvalidOtp": {
+    "description": "Error message for invalid OTP code."
+  },
   "authFailureOtpChallengeMissing": "Verification challenge expired. Try again.",
+  "@authFailureOtpChallengeMissing": {
+    "description": "Error when OTP challenge is missing or expired."
+  },
   "authFailureStorage": "Could not access secure storage. Please try again.",
-  "authFailureUnknown": "Could not sign in. Please try again."
+  "@authFailureStorage": {
+    "description": "Error when secure storage is inaccessible."
+  },
+  "authFailureUnknown": "Could not sign in. Please try again.",
+  "@authFailureUnknown": {
+    "description": "Generic authentication failure message."
+  }
 }

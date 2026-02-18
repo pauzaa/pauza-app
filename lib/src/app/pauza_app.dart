@@ -1,6 +1,7 @@
 import 'package:appfuse/appfuse.dart';
 import 'package:flutter/material.dart';
-import 'package:pauza/src/core/common/pauza_dependencies.dart';
+import 'package:pauza/src/core/init/config.dart';
+import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_router.dart';
@@ -13,6 +14,8 @@ class PauzaApp extends StatefulWidget {
     Brightness.light: PauzaTheme.light,
     Brightness.dark: PauzaTheme.dark,
   };
+
+  static final configs = [TestConfig(), ProdConfig()];
 
   static const localizationsDelegates = AppLocalizations.localizationsDelegates;
 

@@ -41,8 +41,7 @@ void main() {
 
     final icon = tester.widget<Icon>(
       find.byWidgetPredicate(
-        (widget) =>
-            widget is Icon && widget.icon == mode.icon.icon,
+        (widget) => widget is Icon && widget.icon == mode.icon.icon,
       ),
     );
 

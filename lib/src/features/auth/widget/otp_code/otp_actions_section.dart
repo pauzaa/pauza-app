@@ -59,7 +59,9 @@ class OtpActionsSection extends StatelessWidget {
                     _countdownLabel(context, remainingSeconds),
                     textAlign: TextAlign.center,
                     style: context.textTheme.titleLarge?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                      color: context.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.5,
+                      ),
                     ),
                   ),
                 ],

@@ -36,6 +36,41 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileSettingsNavTitle => 'Настройки';
 
   @override
+  String get settingsTitle => 'Настройки';
+
+  @override
+  String get settingsGeneralSectionTitle => 'Общие';
+
+  @override
+  String get settingsNotifications => 'Уведомления';
+
+  @override
+  String get settingsLanguage => 'Язык';
+
+  @override
+  String get settingsLanguagePickerTitle => 'Выберите язык';
+
+  @override
+  String get settingsSessionEndingConfSectionTitle => 'Session Ending';
+
+  @override
+  String get settingsNfcChipConfiguring => 'Настройка NFC-чипа';
+
+  @override
+  String get settingsQrCodeConfiguring => 'Настройка QR-кода';
+
+  @override
+  String get settingsSignOut => 'Выйти';
+
+  @override
+  String get settingsVersionFallback => 'Pauza';
+
+  @override
+  String settingsVersionLabel(String version, String buildNumber) {
+    return 'Pauza v$version (Build $buildNumber)';
+  }
+
+  @override
   String get notFoundTitle => 'Страница не найдена';
 
   @override

@@ -33,9 +33,7 @@ class ProfileActionCard extends StatelessWidget {
             children: <Widget>[
               DecoratedBox(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    PauzaCornerRadius.medium,
-                  ),
+                  borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
                   color: context.colorScheme.primary.withValues(alpha: 0.1),
                 ),
                 child: Padding(

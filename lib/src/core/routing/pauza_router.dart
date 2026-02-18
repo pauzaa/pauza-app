@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:helm/helm.dart';
-import 'package:pauza/src/core/common/pauza_dependencies.dart';
+import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/routing/pauza_router_guards.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/auth/domain/auth_gate.dart';

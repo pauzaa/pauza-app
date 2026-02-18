@@ -1,6 +1,7 @@
 import 'package:appfuse/appfuse.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/widgets.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
@@ -37,6 +38,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final UserProfileCacheStorage userProfileCacheStorage;
   late final UserProfileRemoteDataSource userProfileRemoteDataSource;
   late final UserProfileRepository userProfileRepository;
+  late final PackageInfo packageInfo;
 
   static PauzaDependencies of(BuildContext context) =>
       AppFuseScope.of(context).init as PauzaDependencies;
@@ -48,6 +50,9 @@ class PauzaDependencies with AppFuseInitialization {
         schema: const PauzaLocalDatabaseSchemaV1(),
       );
       await localDatabase.open();
+    },
+    'init package info': (_) async {
+      packageInfo = await PackageInfo.fromPlatform();
     },
     'init permissions': (_) async {
       permissionManager = PermissionManager();

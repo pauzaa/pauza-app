@@ -20,7 +20,10 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   final AuthRepository _authRepository;
 
-  Future<void> _onSignInRequested(AuthSignInRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onSignInRequested(
+    AuthSignInRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthSubmitting(email: event.email));
 
     try {
@@ -36,12 +39,19 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } on Object catch (error) {
       emit(
-        AuthFlowFailure(failure: _mapFailure(error), email: event.email, message: error.toString()),
+        AuthFlowFailure(
+          failure: _mapFailure(error),
+          email: event.email,
+          message: error.toString(),
+        ),
       );
     }
   }
 
-  Future<void> _onOtpSubmitted(AuthOtpSubmitted event, Emitter<AuthState> emit) async {
+  Future<void> _onOtpSubmitted(
+    AuthOtpSubmitted event,
+    Emitter<AuthState> emit,
+  ) async {
     switch (state) {
       case AuthFlowFailure(email: null):
       case AuthIdle():
@@ -78,29 +88,51 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
         } on Object catch (error) {
           emit(
-            AuthFlowFailure(failure: _mapFailure(error), message: error.toString(), email: email),
+            AuthFlowFailure(
+              failure: _mapFailure(error),
+              message: error.toString(),
+              email: email,
+            ),
           );
         }
     }
   }
 
-  Future<void> _onSignOutRequested(AuthSignOutRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onSignOutRequested(
+    AuthSignOutRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(const AuthSubmitting(email: null));
 
     try {
       await _authRepository.signOut();
       emit(const AuthIdle());
     } on Object catch (error) {
-      emit(AuthFlowFailure(failure: _mapFailure(error), message: error.toString(), email: null));
+      emit(
+        AuthFlowFailure(
+          failure: _mapFailure(error),
+          message: error.toString(),
+          email: null,
+        ),
+      );
     }
   }
 
-  Future<void> _onFlowResetRequested(AuthFlowResetRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onFlowResetRequested(
+    AuthFlowResetRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     try {
       await _authRepository.clearPendingOtpChallenge();
       emit(const AuthIdle());
     } on Object catch (error) {
-      emit(AuthFlowFailure(failure: _mapFailure(error), message: error.toString(), email: null));
+      emit(
+        AuthFlowFailure(
+          failure: _mapFailure(error),
+          message: error.toString(),
+          email: null,
+        ),
+      );
     }
   }
 

@@ -147,7 +147,9 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
       return;
     }
 
-    context.read<AuthBloc>().add(AuthOtpSubmitted(otp: _otpController.text.trim()));
+    context.read<AuthBloc>().add(
+      AuthOtpSubmitted(otp: _otpController.text.trim()),
+    );
   }
 
   void _onResendTap() {

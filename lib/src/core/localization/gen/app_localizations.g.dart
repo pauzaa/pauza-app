@@ -155,6 +155,72 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get profileSettingsNavTitle;
 
+  /// Title shown in the settings screen app bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// Section title for general settings.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get settingsGeneralSectionTitle;
+
+  /// Label for settings notifications row.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settingsNotifications;
+
+  /// Label for settings language row.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguage;
+
+  /// Title for language selection dialog in settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Select language'**
+  String get settingsLanguagePickerTitle;
+
+  /// Section title for session ending confirmation settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Session Ending'**
+  String get settingsSessionEndingConfSectionTitle;
+
+  /// Label for NFC chip configuring settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC Chip Configuring'**
+  String get settingsNfcChipConfiguring;
+
+  /// Label for QR code configuring settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'QR Code Configuring'**
+  String get settingsQrCodeConfiguring;
+
+  /// Label for sign out button in settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get settingsSignOut;
+
+  /// Fallback label in settings footer when app version is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Pauza'**
+  String get settingsVersionFallback;
+
+  /// Formatted app version label shown in settings footer.
+  ///
+  /// In en, this message translates to:
+  /// **'Pauza v{version} (Build {buildNumber})'**
+  String settingsVersionLabel(String version, String buildNumber);
+
   /// Title shown when a page is not found.
   ///
   /// In en, this message translates to:
@@ -851,37 +917,37 @@ abstract class AppLocalizations {
   /// **'{hour, select, 0{Good Night} 1{Good Night} 2{Good Night} 3{Good Night} 4{Good Night} 5{Good Morning} 6{Good Morning} 7{Good Morning} 8{Good Morning} 9{Good Morning} 10{Good Morning} 11{Good Morning} 12{Good Afternoon} 13{Good Afternoon} 14{Good Afternoon} 15{Good Afternoon} 16{Good Afternoon} 17{Good Evening} 18{Good Evening} 19{Good Evening} 20{Good Evening} 21{Good Evening} 22{Good Night} 23{Good Night} other{Good Night}}'**
   String homeGreeting(String hour);
 
-  /// No description provided for @homeDashboardTitle.
+  /// Title for the home dashboard screen.
   ///
   /// In en, this message translates to:
   /// **'Pauza Dashboard'**
   String get homeDashboardTitle;
 
-  /// No description provided for @homePauzaSessionLabel.
+  /// Label indicating an active Pauza session.
   ///
   /// In en, this message translates to:
   /// **'Pauza Session'**
   String get homePauzaSessionLabel;
 
-  /// No description provided for @homeSessionDurationLabel.
+  /// Label for the session duration display.
   ///
   /// In en, this message translates to:
   /// **'Session Duration'**
   String get homeSessionDurationLabel;
 
-  /// No description provided for @homeQuickPauseLabel.
+  /// Label for the quick pause feature.
   ///
   /// In en, this message translates to:
   /// **'Quick Pause'**
   String get homeQuickPauseLabel;
 
-  /// No description provided for @homeResumeButtonLabel.
+  /// Label for the resume button.
   ///
   /// In en, this message translates to:
   /// **'Resume'**
   String get homeResumeButtonLabel;
 
-  /// No description provided for @homeCurrentModeLabel.
+  /// Label indicating the currently active mode.
   ///
   /// In en, this message translates to:
   /// **'Current mode'**
@@ -899,91 +965,91 @@ abstract class AppLocalizations {
   /// **'{hours}h {minutes}m'**
   String homeDurationHoursMinutesLabel(int hours, int minutes);
 
-  /// No description provided for @deviceUsage.
+  /// Title for device usage statistics section.
   ///
   /// In en, this message translates to:
   /// **'Device Usage'**
   String get deviceUsage;
 
-  /// No description provided for @usageStatsTab.
+  /// Tab label for usage statistics.
   ///
   /// In en, this message translates to:
   /// **'Usage Stats'**
   String get usageStatsTab;
 
-  /// No description provided for @blockingStatsTab.
+  /// Tab label for blocking statistics.
   ///
   /// In en, this message translates to:
   /// **'Blocking Stats'**
   String get blockingStatsTab;
 
-  /// No description provided for @thisWeek.
+  /// Label for current week time period.
   ///
   /// In en, this message translates to:
   /// **'This Week'**
   String get thisWeek;
 
-  /// No description provided for @totalTime.
+  /// Label for total time display.
   ///
   /// In en, this message translates to:
   /// **'Total Time'**
   String get totalTime;
 
-  /// No description provided for @usageTrend.
+  /// Label for usage trend indicator.
   ///
   /// In en, this message translates to:
   /// **'Usage Trend'**
   String get usageTrend;
 
-  /// No description provided for @statsDailyAverage.
+  /// Label for daily average usage statistic.
   ///
   /// In en, this message translates to:
   /// **'Daily Average'**
   String get statsDailyAverage;
 
-  /// No description provided for @statsBucketSocial.
+  /// Category label for social media apps.
   ///
   /// In en, this message translates to:
   /// **'Social'**
   String get statsBucketSocial;
 
-  /// No description provided for @statsBucketProductivity.
+  /// Category label for productivity apps.
   ///
   /// In en, this message translates to:
   /// **'Productivity'**
   String get statsBucketProductivity;
 
-  /// No description provided for @statsBucketOther.
+  /// Category label for other uncategorized apps.
   ///
   /// In en, this message translates to:
   /// **'Other'**
   String get statsBucketOther;
 
-  /// No description provided for @statsAppUsage.
+  /// Title for app usage statistics section.
   ///
   /// In en, this message translates to:
   /// **'App Usage'**
   String get statsAppUsage;
 
-  /// No description provided for @statsUsageTableAppColumn.
+  /// Column header for app name in usage table.
   ///
   /// In en, this message translates to:
   /// **'App'**
   String get statsUsageTableAppColumn;
 
-  /// No description provided for @statsUsageTableUsageColumn.
+  /// Column header for usage time in usage table.
   ///
   /// In en, this message translates to:
   /// **'Usage'**
   String get statsUsageTableUsageColumn;
 
-  /// No description provided for @statsUsageTableLaunchesColumn.
+  /// Column header for app launch count in usage table.
   ///
   /// In en, this message translates to:
   /// **'Launches'**
   String get statsUsageTableLaunchesColumn;
 
-  /// No description provided for @statsUsageTableLastUsedColumn.
+  /// Column header for last used time in usage table.
   ///
   /// In en, this message translates to:
   /// **'Last used'**
@@ -995,109 +1061,109 @@ abstract class AppLocalizations {
   /// **'{value} vs last period'**
   String statsDeltaVsLastPeriod(String value);
 
-  /// No description provided for @statsPermissionRequiredTitle.
+  /// Title for usage permission required dialog.
   ///
   /// In en, this message translates to:
   /// **'Usage permission required'**
   String get statsPermissionRequiredTitle;
 
-  /// No description provided for @statsPermissionRequiredBody.
+  /// Body text for usage permission required dialog.
   ///
   /// In en, this message translates to:
   /// **'Allow Usage Access to view Android usage statistics.'**
   String get statsPermissionRequiredBody;
 
-  /// No description provided for @statsLoadFailed.
+  /// Error message when stats fail to load.
   ///
   /// In en, this message translates to:
   /// **'Failed to load usage statistics.'**
   String get statsLoadFailed;
 
-  /// No description provided for @statsNoUsageData.
+  /// Message shown when no usage data is available.
   ///
   /// In en, this message translates to:
   /// **'No usage data for the selected period.'**
   String get statsNoUsageData;
 
-  /// No description provided for @statsIosReportUnavailableTitle.
+  /// Title for iOS report unavailable message.
   ///
   /// In en, this message translates to:
   /// **'iOS report unavailable'**
   String get statsIosReportUnavailableTitle;
 
-  /// No description provided for @statsIosReportUnavailableBody.
+  /// Body text for iOS report unavailable message.
   ///
   /// In en, this message translates to:
   /// **'Make sure Screen Time permission and Device Activity Report extension are configured.'**
   String get statsIosReportUnavailableBody;
 
-  /// No description provided for @authTagline.
+  /// Tagline displayed on authentication screens.
   ///
   /// In en, this message translates to:
   /// **'Focus & Wellbeing'**
   String get authTagline;
 
-  /// No description provided for @authEmailAddress.
+  /// Label for email address input field.
   ///
   /// In en, this message translates to:
   /// **'Email address'**
   String get authEmailAddress;
 
-  /// No description provided for @authEmailHint.
+  /// Hint text for email input field.
   ///
   /// In en, this message translates to:
   /// **'name@example.com'**
   String get authEmailHint;
 
-  /// No description provided for @authPassword.
+  /// Label for password input field.
   ///
   /// In en, this message translates to:
   /// **'Password'**
   String get authPassword;
 
-  /// No description provided for @authForgotPassword.
+  /// Link text for password recovery.
   ///
   /// In en, this message translates to:
   /// **'Forgot password?'**
   String get authForgotPassword;
 
-  /// No description provided for @authLogIn.
+  /// Button label for login action.
   ///
   /// In en, this message translates to:
   /// **'Log in'**
   String get authLogIn;
 
-  /// No description provided for @authOtpTitle.
+  /// Title for OTP verification screen.
   ///
   /// In en, this message translates to:
   /// **'Verify Your Email'**
   String get authOtpTitle;
 
-  /// No description provided for @authOtpSubtitlePrefix.
+  /// First part of OTP screen subtitle before email address.
   ///
   /// In en, this message translates to:
   /// **'Enter the 6-digit code we sent to your email address '**
   String get authOtpSubtitlePrefix;
 
-  /// No description provided for @authOtpSubtitleSuffix.
+  /// Second part of OTP screen subtitle after email address.
   ///
   /// In en, this message translates to:
   /// **'.'**
   String get authOtpSubtitleSuffix;
 
-  /// No description provided for @authOtpVerifyButton.
+  /// Button label for OTP verification.
   ///
   /// In en, this message translates to:
   /// **'Verify'**
   String get authOtpVerifyButton;
 
-  /// No description provided for @authOtpDidNotReceiveCode.
+  /// Prompt asking if user didn't receive OTP code.
   ///
   /// In en, this message translates to:
   /// **'Didn\'t receive a code?'**
   String get authOtpDidNotReceiveCode;
 
-  /// No description provided for @authOtpResendCode.
+  /// Button label to resend OTP code.
   ///
   /// In en, this message translates to:
   /// **'Resend Code'**
@@ -1109,43 +1175,43 @@ abstract class AppLocalizations {
   /// **'Available in {minutes}:{seconds}'**
   String authOtpAvailableInLabel(String minutes, String seconds);
 
-  /// No description provided for @authValidationRequired.
+  /// Validation error when required field is empty.
   ///
   /// In en, this message translates to:
   /// **'This field is required'**
   String get authValidationRequired;
 
-  /// No description provided for @authValidationInvalidEmail.
+  /// Validation error for invalid email format.
   ///
   /// In en, this message translates to:
   /// **'Enter a valid email address'**
   String get authValidationInvalidEmail;
 
-  /// No description provided for @authFailureInvalidCredentials.
+  /// Error message for invalid login credentials.
   ///
   /// In en, this message translates to:
   /// **'Invalid email or password.'**
   String get authFailureInvalidCredentials;
 
-  /// No description provided for @authFailureInvalidOtp.
+  /// Error message for invalid OTP code.
   ///
   /// In en, this message translates to:
   /// **'Invalid verification code.'**
   String get authFailureInvalidOtp;
 
-  /// No description provided for @authFailureOtpChallengeMissing.
+  /// Error when OTP challenge is missing or expired.
   ///
   /// In en, this message translates to:
   /// **'Verification challenge expired. Try again.'**
   String get authFailureOtpChallengeMissing;
 
-  /// No description provided for @authFailureStorage.
+  /// Error when secure storage is inaccessible.
   ///
   /// In en, this message translates to:
   /// **'Could not access secure storage. Please try again.'**
   String get authFailureStorage;
 
-  /// No description provided for @authFailureUnknown.
+  /// Generic authentication failure message.
   ///
   /// In en, this message translates to:
   /// **'Could not sign in. Please try again.'**

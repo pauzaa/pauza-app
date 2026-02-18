@@ -49,8 +49,7 @@ void main() {
 
     expect(
       find.byWidgetPredicate(
-        (widget) =>
-            widget is Icon && widget.icon == mode.icon.icon,
+        (widget) => widget is Icon && widget.icon == mode.icon.icon,
       ),
       findsOneWidget,
     );

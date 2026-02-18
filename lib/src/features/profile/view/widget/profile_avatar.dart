@@ -3,7 +3,10 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({
-    required this.profilePictureUrl, required this.displayName, required this.username, super.key,
+    required this.profilePictureUrl,
+    required this.displayName,
+    required this.username,
+    super.key,
   });
 
   final String? profilePictureUrl;

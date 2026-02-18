@@ -41,9 +41,8 @@ final class AuthRepositoryImpl implements AuthRepository {
   final AuthSessionStorage _sessionStorage;
   // BehaviorSubject replays the latest session to late subscribers (for example, blocs
   // created after app bootstrap).
-  final BehaviorSubject<Session> _sessionController = BehaviorSubject<Session>.seeded(
-    const Session.empty(),
-  );
+  final BehaviorSubject<Session> _sessionController =
+      BehaviorSubject<Session>.seeded(const Session.empty());
 
   Session _currentSession = const Session.empty();
   String? _pendingOtpChallengeId;
@@ -79,7 +78,10 @@ final class AuthRepositoryImpl implements AuthRepository {
     if (credentials.email == otpRequiredEmail) {
       _pendingOtpChallengeId = otpChallengeId;
       _pendingOtpEmail = credentials.email;
-      return const AuthOtpRequiredResult(challengeId: otpChallengeId, email: otpRequiredEmail);
+      return const AuthOtpRequiredResult(
+        challengeId: otpChallengeId,
+        email: otpRequiredEmail,
+      );
     }
 
     final session = _buildDummySession(email: credentials.email);

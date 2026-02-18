@@ -47,9 +47,7 @@ class HomeCurrentModeCard extends StatelessWidget {
                     ),
                   ),
                   child: Icon(
-                    mode == null
-                        ? Icons.psychology
-                        : mode!.icon.icon,
+                    mode == null ? Icons.psychology : mode!.icon.icon,
                     color: context.colorScheme.primary,
                   ),
                 ),

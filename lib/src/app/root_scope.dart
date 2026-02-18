@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pauza/src/core/common/pauza_dependencies.dart';
+import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';

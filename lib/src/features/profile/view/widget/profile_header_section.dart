@@ -15,6 +15,10 @@ class ProfileHeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProfileAvatar(profilePictureUrl: profilePictureUrl, displayName: displayName, username: username);
+    return ProfileAvatar(
+      profilePictureUrl: profilePictureUrl,
+      displayName: displayName,
+      username: username,
+    );
   }
 }

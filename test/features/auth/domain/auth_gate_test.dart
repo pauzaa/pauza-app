@@ -59,9 +59,7 @@ final class _FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AuthResult> verifyOtp({
-    required String otp,
-  }) {
+  Future<AuthResult> verifyOtp({required String otp}) {
     throw UnimplementedError();
   }
 

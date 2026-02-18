@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:pauza_ui_kit/pauza_ui_kit.dart';
+
+final class SettingsFooter extends StatelessWidget {
+  const SettingsFooter({
+    required this.signOutLabel,
+    required this.packageInfo,
+    required this.versionLabel,
+    required this.onSignOutTap,
+    super.key,
+  });
+
+  final String signOutLabel;
+  final PackageInfo packageInfo;
+  final String Function(String version, String buildNumber) versionLabel;
+  final VoidCallback onSignOutTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: PauzaSpacing.large,
+      children: <Widget>[
+        PauzaFilledButton(
+          title: Text(signOutLabel),
+          onPressed: onSignOutTap,
+          icon: const Icon(Icons.logout_rounded),
+        ),
+        Text(
+          versionLabel(packageInfo.version, packageInfo.buildNumber),
+          style: context.textTheme.titleLarge?.copyWith(
+            color: context.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+}

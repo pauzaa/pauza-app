@@ -35,7 +35,10 @@ final class ModeIcon {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ModeIcon && runtimeType == other.runtimeType && id == other.id && icon == other.icon;
+      other is ModeIcon &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          icon == other.icon;
 
   @override
   int get hashCode => Object.hash(id, icon);

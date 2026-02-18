@@ -74,11 +74,16 @@ class ModeUpsertValidationResult {
   const ModeUpsertValidationResult({required this.fieldErrors});
 
   const ModeUpsertValidationResult.valid()
-    : fieldErrors = const IMap<ModeUpsertValidationField, ModeUpsertValidationCode>.empty();
+    : fieldErrors =
+          const IMap<
+            ModeUpsertValidationField,
+            ModeUpsertValidationCode
+          >.empty();
 
   final IMap<ModeUpsertValidationField, ModeUpsertValidationCode> fieldErrors;
 
   bool get isValid => fieldErrors.isEmpty;
 
-  ModeUpsertValidationCode? operator [](ModeUpsertValidationField field) => fieldErrors[field];
+  ModeUpsertValidationCode? operator [](ModeUpsertValidationField field) =>
+      fieldErrors[field];
 }

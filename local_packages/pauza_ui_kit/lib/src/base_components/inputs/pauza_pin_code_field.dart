@@ -68,7 +68,11 @@ class _PauzaPinCodeFieldState extends State<PauzaPinCodeField> {
                 focusNode: _internalFocus,
                 controller: _controller,
                 cursorColor: Colors.transparent,
-                style: const TextStyle(fontSize: 12, height: 1, color: Colors.transparent),
+                style: const TextStyle(
+                  fontSize: 12,
+                  height: 1,
+                  color: Colors.transparent,
+                ),
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 enableInteractiveSelection: false,
@@ -104,7 +108,9 @@ class _PauzaPinCodeFieldState extends State<PauzaPinCodeField> {
                   final boxWidth = box.constraints.maxWidth / widget.length;
                   final index = (details.localPosition.dx / boxWidth).floor();
                   final offset = index.clamp(0, _controller.text.length);
-                  _controller.selection = TextSelection.fromPosition(TextPosition(offset: offset));
+                  _controller.selection = TextSelection.fromPosition(
+                    TextPosition(offset: offset),
+                  );
                 }
                 _internalFocus.requestFocus();
               },
@@ -152,7 +158,10 @@ class _PinCodeSquares extends StatelessWidget {
           listenable: listenable,
           builder: (context, child) {
             final focusedOffset = controller.selection.baseOffset;
-            final maxSize = math.min(constraints.maxHeight, constraints.maxWidth / (length + 1));
+            final maxSize = math.min(
+              constraints.maxHeight,
+              constraints.maxWidth / (length + 1),
+            );
 
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -204,7 +213,9 @@ class _PinCodeSquare extends StatelessWidget {
         ? colorScheme.primary
         : colorScheme.outline;
 
-    final textColor = enabled ? colorScheme.onSurface : colorScheme.onSurfaceVariant;
+    final textColor = enabled
+        ? colorScheme.onSurface
+        : colorScheme.onSurfaceVariant;
     final backgroundColor = enabled
         ? colorScheme.surfaceContainerLow
         : colorScheme.surfaceContainer;
@@ -219,7 +230,12 @@ class _PinCodeSquare extends StatelessWidget {
         ),
         child: Center(
           child: switch ((hasFocus, symbol)) {
-            (true, _) => VerticalDivider(color: textColor, thickness: 2, endIndent: 14, indent: 14),
+            (true, _) => VerticalDivider(
+              color: textColor,
+              thickness: 2,
+              endIndent: 14,
+              indent: 14,
+            ),
             (_, final String value) => Text(
               value,
               style: context.textTheme.displaySmall?.copyWith(

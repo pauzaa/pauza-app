@@ -47,29 +47,28 @@ void main() {
     },
   );
 
-  testWidgets(
-    'resend callback is triggered when countdown is zero',
-    (WidgetTester tester) async {
-      var resendTapCount = 0;
+  testWidgets('resend callback is triggered when countdown is zero', (
+    WidgetTester tester,
+  ) async {
+    var resendTapCount = 0;
 
-      await tester.pumpWidget(
-        _buildApp(
-          child: OtpActionsSection(
-            countdownStream: Stream.value(0),
-            initialRemainingSeconds: 0,
-            onResendTap: () {
-              resendTapCount += 1;
-            },
-          ),
+    await tester.pumpWidget(
+      _buildApp(
+        child: OtpActionsSection(
+          countdownStream: Stream.value(0),
+          initialRemainingSeconds: 0,
+          onResendTap: () {
+            resendTapCount += 1;
+          },
         ),
-      );
+      ),
+    );
 
-      await tester.tap(find.text('Resend Code'));
-      await tester.pump();
+    await tester.tap(find.text('Resend Code'));
+    await tester.pump();
 
-      expect(resendTapCount, 1);
-    },
-  );
+    expect(resendTapCount, 1);
+  });
 
   testWidgets('resend button is enabled when countdown is zero', (
     WidgetTester tester,
@@ -93,7 +92,6 @@ void main() {
 
     expect(resendButton.disabled, isFalse);
   });
-
 }
 
 Widget _buildApp({required Widget child}) {

@@ -20,10 +20,7 @@ void main() {
     });
 
     test('resolves known token to icon', () {
-      expect(
-        ModeIcon.fromToken('ms:v1:timer').icon,
-        Symbols.timer,
-      );
+      expect(ModeIcon.fromToken('ms:v1:timer').icon, Symbols.timer);
     });
   });
 }

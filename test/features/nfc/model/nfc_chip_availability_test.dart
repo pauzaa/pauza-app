@@ -110,7 +110,7 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get settingsVersionFallback => 'Pauza';
   @override
-  String settingsVersionLabel(String version, String buildNumber) => 'Pauza v$version (Build $buildNumber)';
+  String settingsVersionLabel(String version) => 'Pauza v$version';
   @override
   String get notFoundTitle => 'Page not found';
   @override

@@ -7,9 +7,6 @@ import 'package:pauza/src/features/auth/domain/auth_gate.dart';
 import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
 
 mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
-  NavigationState? _pendingAfterPermissions;
-  NavigationState? _pendingAfterAuth;
-
   late final HelmRouter router;
 
   @override
@@ -23,7 +20,7 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
     router = HelmRouter(
       routes: PauzaRoutes.values,
       refresh: Listenable.merge(<Listenable>[permissionGate, authGate]),
-      guards: <NavigationGuard>[_emptyPageGuard, _normalizeToRootShell, _permissionGuard(permissionGate), _authGuard(authGate)],
+      guards: <NavigationGuard>[_emptyPageGuard, _authGuard(authGate), _permissionGuard(permissionGate, authGate)],
     );
   }
 
@@ -31,29 +28,11 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
     return pages.isEmpty ? [PauzaRoutes.notFound.page()] : pages;
   }
 
-  NavigationState _normalizeToRootShell(NavigationState pages) {
-    return normalizeNavigationToRootShell(pages);
-  }
-
-  NavigationGuard _permissionGuard(PauzaPermissionGate permissionGate) {
-    return createPermissionGuard(
-      isReady: () => permissionGate.state.isReady,
-      normalize: _normalizeToRootShell,
-      readPending: () => _pendingAfterPermissions,
-      writePending: (pending) {
-        _pendingAfterPermissions = pending;
-      },
-    );
+  NavigationGuard _permissionGuard(PauzaPermissionGate permissionGate, PauzaAuthGate authGate) {
+    return createPermissionGuard(isAuthenticated: () => authGate.isAuthenticated, isReady: () => permissionGate.state.isReady);
   }
 
   NavigationGuard _authGuard(PauzaAuthGate authGate) {
-    return createAuthGuard(
-      isAuthenticated: () => authGate.isAuthenticated,
-      normalize: _normalizeToRootShell,
-      readPending: () => _pendingAfterAuth,
-      writePending: (pending) {
-        _pendingAfterAuth = pending;
-      },
-    );
+    return createAuthGuard(isAuthenticated: () => authGate.isAuthenticated);
   }
 }

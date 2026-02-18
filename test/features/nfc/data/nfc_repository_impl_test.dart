@@ -1,7 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nfc_manager/nfc_manager.dart';
-import 'package:pauza/src/features/nfc/data/nfc_manager_client.dart';
+import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
+import 'package:pauza/src/features/nfc/model/nfc_platform_types.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_availability.dart';
 import 'package:pauza/src/features/nfc/model/nfc_errors.dart';
@@ -12,11 +12,17 @@ import 'package:uuid/uuid.dart';
 void main() {
   group('NfcRepositoryImpl', () {
     test('returns disabled when manager availability is false', () async {
-      final repository = NfcRepositoryImpl(managerClient: _FakeNfcManagerClient(availability: NfcAvailability.disabled));
+      final repository = NfcRepositoryImpl(managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.disabled));
 
       final availability = await repository.getAvailability();
 
       expect(availability, NfcChipAvailability.disabled);
+    });
+
+    test('throws unknown when availability cannot be determined', () async {
+      final repository = NfcRepositoryImpl(managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.unknown));
+
+      expect(repository.getAvailability, throwsA(isA<NfcException>().having((exception) => exception.code, 'code', NfcErrorCode.unknown)));
     });
 
     test('maps discovered tag snapshot to NFC card DTO', () async {
@@ -81,7 +87,7 @@ void main() {
 
 final class _FakeNfcManagerClient implements NfcOperations {
   _FakeNfcManagerClient({
-    this.availability = NfcAvailability.enabled,
+    this.availability = NfcPlatformAvailability.available,
     this.isSessionActive = false,
     this.scanResult,
     this.checkAvailabilityError,
@@ -89,7 +95,7 @@ final class _FakeNfcManagerClient implements NfcOperations {
     this.openSystemSettingsResult = false,
   });
 
-  final NfcAvailability availability;
+  final NfcPlatformAvailability availability;
   @override
   bool isSessionActive;
   final NfcTagSnapshot? scanResult;
@@ -99,7 +105,7 @@ final class _FakeNfcManagerClient implements NfcOperations {
   final bool openSystemSettingsResult;
 
   @override
-  Future<NfcAvailability> checkAvailability() async {
+  Future<NfcPlatformAvailability> checkAvailability() async {
     if (checkAvailabilityError case final error?) {
       throw error;
     }

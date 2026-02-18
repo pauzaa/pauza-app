@@ -20,14 +20,14 @@ void main() {
             body: SettingsFooter(
               signOutLabel: 'Sign Out',
               packageInfo: packageInfo,
-              versionLabel: (version, buildNumber) => 'v$version ($buildNumber)',
+              versionLabel: (version) => 'v$version',
               onSignOutTap: () {},
             ),
           ),
         ),
       );
 
-      expect(find.text('v1.2.3 (45)'), findsOneWidget);
+      expect(find.text('v1.2.3'), findsOneWidget);
       expect(find.text('Sign Out'), findsOneWidget);
     });
   });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nfc_util/nfc_util.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_availability.dart';
 
 enum NfcErrorCode { unsupported, disabled, busy, permissionDenied, timeout, cancelled, unknown }
@@ -35,6 +36,18 @@ class NfcException implements Exception {
     }
 
     return NfcException(code: NfcErrorCode.unknown, message: 'Unexpected NFC error.', cause: error);
+  }
+
+  factory NfcException.fromNfcError(NfcError error) {
+    return switch (error.type) {
+      NfcErrorType.sessionTimeout => const NfcException(
+        code: NfcErrorCode.timeout,
+        message: 'NFC scan timed out before a tag was discovered.',
+      ),
+      NfcErrorType.systemIsBusy => const NfcException(code: NfcErrorCode.busy, message: 'Another NFC session is already active.'),
+      NfcErrorType.userCanceled => const NfcException(code: NfcErrorCode.cancelled, message: 'NFC scan session was cancelled.'),
+      NfcErrorType.unknown => NfcException(code: NfcErrorCode.unknown, message: error.message, cause: error),
+    };
   }
 
   final NfcErrorCode code;

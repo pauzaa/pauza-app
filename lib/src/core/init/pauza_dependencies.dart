@@ -1,19 +1,19 @@
 import 'package:appfuse/appfuse.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 import 'package:pauza/src/features/auth/domain/auth_gate.dart';
-import 'package:pauza/src/features/nfc/data/nfc_manager_client.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
+import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
+import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
+import 'package:pauza/src/features/profile/data/user_profile_cache_storage.dart';
 import 'package:pauza/src/features/profile/data/user_profile_remote_data_source.dart';
 import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
-import 'package:pauza/src/features/profile/data/user_profile_cache_storage.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_plugin_client.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
-import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
     show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
 
@@ -72,7 +72,7 @@ class PauzaDependencies with AppFuseInitialization {
       installedAppsManager = InstalledAppsManager();
       appRestrictionManager = AppRestrictionManager();
       usageStatsManager = UsageStatsManager();
-      nfcRepository = NfcRepositoryImpl(managerClient: NfcManagerClient());
+      nfcRepository = NfcRepositoryImpl(managerClient: NfcUtilClient());
     },
     'init restriction lifecycle sync coordinator': (_) async {
       restrictionLifecycleRepository = RestrictionLifecycleRepositoryImpl(

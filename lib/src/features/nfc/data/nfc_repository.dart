@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:nfc_manager/nfc_manager.dart';
-import 'package:pauza/src/features/nfc/data/nfc_manager_client.dart';
+import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
 import 'package:pauza/src/features/nfc/model/nfc_card_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_availability.dart';
 import 'package:pauza/src/features/nfc/model/nfc_errors.dart';
+import 'package:pauza/src/features/nfc/model/nfc_platform_types.dart';
 import 'package:uuid/uuid.dart';
 
 abstract interface class NfcRepository {
@@ -38,9 +38,13 @@ final class NfcRepositoryImpl implements NfcRepository {
     try {
       final availability = await _managerClient.checkAvailability();
       return switch (availability) {
-        NfcAvailability.enabled => NfcChipAvailability.available,
-        NfcAvailability.disabled => NfcChipAvailability.disabled,
-        NfcAvailability.unsupported => NfcChipAvailability.notSupported,
+        NfcPlatformAvailability.available => NfcChipAvailability.available,
+        NfcPlatformAvailability.disabled => NfcChipAvailability.disabled,
+        NfcPlatformAvailability.notSupported => NfcChipAvailability.notSupported,
+        NfcPlatformAvailability.unknown => throw const NfcException(
+          code: NfcErrorCode.unknown,
+          message: 'Could not determine NFC availability.',
+        ),
       };
     } on Object catch (error) {
       throw NfcException.fromError(error);

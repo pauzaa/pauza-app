@@ -1,83 +1,118 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:helm/helm.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 
-NavigationState normalizeNavigationToRootShell(NavigationState pages) {
-  if (pages.isEmpty) {
-    return [PauzaRoutes.notFound.page()];
-  }
-
-  if (_containsStandaloneRoute(pages)) {
-    return pages;
-  }
-
-  final rootPage = pages.firstWhere((page) => page.meta?.route == PauzaRoutes.root, orElse: () => PauzaRoutes.root.page());
-
-  final topLevelPages = pages.where((page) => page.meta?.route != PauzaRoutes.root).toList(growable: false);
-
-  return [rootPage, ...topLevelPages];
-}
-
-NavigationGuard createPermissionGuard({
-  required bool Function() isReady,
-  required NavigationState Function(NavigationState pages) normalize,
-  required NavigationState? Function() readPending,
-  required void Function(NavigationState?) writePending,
-}) {
+NavigationGuard createPermissionGuard({required bool Function() isAuthenticated, required bool Function() isReady}) {
   return (pages) {
+    if (!isAuthenticated()) {
+      return _dedupeState(pages);
+    }
+
+    final normalizedPages = _normalizeAuthenticatedStack(pages);
+    final withoutPermissions = _removeRouteAll(normalizedPages, PauzaRoutes.permissions);
+
     if (isReady()) {
-      final pending = readPending();
-      writePending(null);
-      return pending ?? pages;
+      return _dedupeState(withoutPermissions);
     }
 
-    final isOnPermissionsScreen = pages.any((page) => page.meta?.route == PauzaRoutes.permissions);
-
-    if (!isOnPermissionsScreen) {
-      writePending(pages);
-    }
-
-    return isOnPermissionsScreen ? pages : normalize([PauzaRoutes.permissions.page()]);
+    return _dedupeState(<Page<Object?>>[...withoutPermissions, PauzaRoutes.permissions.page()]);
   };
 }
 
-NavigationGuard createAuthGuard({
-  required bool Function() isAuthenticated,
-  required NavigationState Function(NavigationState pages) normalize,
-  required NavigationState? Function() readPending,
-  required void Function(NavigationState?) writePending,
-}) {
+NavigationGuard createAuthGuard({required bool Function() isAuthenticated}) {
   return (pages) {
-    final isOnPermissionsScreen = pages.any((page) => page.meta?.route == PauzaRoutes.permissions);
-    if (isOnPermissionsScreen) {
-      return pages;
+    final dedupedPages = _dedupeState(pages);
+
+    if (!isAuthenticated()) {
+      return _authOnlyStack(dedupedPages);
     }
 
-    final isOnAuthFlow = pages.any((page) {
-      final route = page.meta?.route;
-      return route == PauzaRoutes.auth || route == PauzaRoutes.otp;
-    });
-
-    if (isAuthenticated()) {
-      if (isOnAuthFlow) {
-        final pending = readPending();
-        writePending(null);
-        return pending ?? normalize([PauzaRoutes.home.page()]);
-      }
-      return pages;
+    final isOnAuthFlow = _containsRoute(dedupedPages, PauzaRoutes.auth) || _containsRoute(dedupedPages, PauzaRoutes.otp);
+    if (isOnAuthFlow) {
+      return <Page<Object?>>[PauzaRoutes.root.page()];
     }
 
-    if (!isOnAuthFlow) {
-      writePending(pages);
-      return normalize([PauzaRoutes.auth.page()]);
-    }
-
-    return pages;
+    return _normalizeAuthenticatedStack(dedupedPages);
   };
 }
 
-bool _containsStandaloneRoute(NavigationState pages) {
-  return pages.any((page) {
-    final route = page.meta?.route;
-    return route == PauzaRoutes.permissions || route == PauzaRoutes.auth || route == PauzaRoutes.otp;
-  });
+NavigationState _normalizeAuthenticatedStack(NavigationState pages) {
+  var normalizedPages = _removeRouteAll(pages, PauzaRoutes.auth);
+  normalizedPages = _removeRouteAll(normalizedPages, PauzaRoutes.otp);
+  normalizedPages = _dedupeState(normalizedPages);
+
+  final rootPage = normalizedPages.firstWhere((page) => _routeOf(page) == PauzaRoutes.root, orElse: () => PauzaRoutes.root.page());
+  final topLevelPages = normalizedPages.where((page) => _routeOf(page) != PauzaRoutes.root).toList(growable: false);
+  return _dedupeState(<Page<Object?>>[rootPage, ...topLevelPages]);
+}
+
+NavigationState _authOnlyStack(NavigationState pages) {
+  final authFlowPages = pages.where((page) => _isAuthFlowRoute(_routeOf(page))).toList(growable: false);
+  if (authFlowPages.isEmpty) {
+    return <Page<Object?>>[PauzaRoutes.auth.page()];
+  }
+  return _dedupeState(authFlowPages);
+}
+
+NavigationState _removeRouteAll(NavigationState pages, PauzaRoutes route) {
+  return pages.removeAllByRoute(route, recursive: true);
+}
+
+NavigationState _dedupeState(NavigationState pages) {
+  final pagesWithDedupedChildren = pages.map(_withDedupedChildren).toList(growable: false);
+
+  final signatures = <String>{};
+  final deduped = <Page<Object?>>[];
+  for (var i = pagesWithDedupedChildren.length - 1; i >= 0; i--) {
+    final page = pagesWithDedupedChildren[i];
+    final signature = _pageSignature(page);
+    if (signatures.add(signature)) {
+      deduped.insert(0, page);
+    }
+  }
+
+  return deduped;
+}
+
+Page<Object?> _withDedupedChildren(Page<Object?> page) {
+  final meta = page.meta;
+  final children = meta?.children;
+  if (meta == null || children == null || children.isEmpty) {
+    return page;
+  }
+
+  final dedupedChildren = _dedupeState(children);
+  if (listEquals(children, dedupedChildren)) {
+    return page;
+  }
+
+  final nextMeta = meta.copyWith(children: () => dedupedChildren);
+  return meta.route.build(page.key, page.name ?? meta.route.path, nextMeta);
+}
+
+bool _containsRoute(NavigationState pages, PauzaRoutes route) {
+  return pages.any((page) => _routeOf(page) == route);
+}
+
+bool _isAuthFlowRoute(PauzaRoutes? route) {
+  return route == PauzaRoutes.auth || route == PauzaRoutes.otp;
+}
+
+PauzaRoutes? _routeOf(Page<Object?> page) {
+  return page.meta?.route as PauzaRoutes?;
+}
+
+String _pageSignature(Page<Object?> page) {
+  final meta = page.meta;
+  if (meta == null) {
+    return 'unknown:${page.runtimeType}:${page.name ?? ''}';
+  }
+
+  final route = meta.route;
+  if (route is! PauzaRoutes) {
+    return 'unknown-route:${route.path}:${page.name ?? ''}';
+  }
+
+  return route.name;
 }

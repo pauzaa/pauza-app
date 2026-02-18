@@ -36,8 +36,8 @@ dependencies:
   bloc_concurrency: ^0.3.0
   rxdart: ^0.28.0
   material_symbols_icons: ^4.2906.0
-  nfc_manager: ^4.0.3
   android_intent_plus: ^6.0.0
+  nfc_util: 1.0.3
 
 workspace:
   - local_packages/pauza_ui_kit

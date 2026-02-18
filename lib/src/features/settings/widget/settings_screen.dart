@@ -29,41 +29,47 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
-      body: SafeArea(
-        top: false,
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large, vertical: PauzaSpacing.large),
-          children: <Widget>[
-            SettingsSectionTitle(title: l10n.settingsGeneralSectionTitle),
-            SettingsNotificationsTile(title: l10n.settingsNotifications),
-            SettingsLanguageTile(
-              title: l10n.settingsLanguage,
-              currentLocale: currentLocale,
-              supportedLanguages: PauzaApp.supportedLanguages,
-              dialogTitle: l10n.settingsLanguagePickerTitle,
-              dialogCancelLabel: l10n.cancelButton,
-              onLocaleChanged: (locale) async {
-                context.changeAppLocale(locale);
-              },
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverToBoxAdapter(child: SettingsSectionTitle(title: l10n.settingsGeneralSectionTitle)),
+          SliverToBoxAdapter(child: SettingsNotificationsTile(title: l10n.settingsNotifications)),
+          SliverToBoxAdapter(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: SettingsLanguageTile(
+                title: l10n.settingsLanguage,
+                currentLocale: currentLocale,
+                supportedLanguages: PauzaApp.supportedLanguages,
+                dialogTitle: l10n.settingsLanguagePickerTitle,
+                dialogCancelLabel: l10n.cancelButton,
+                onLocaleChanged: (locale) async => context.changeAppLocale(locale),
+              ),
             ),
-            SettingsSectionTitle(title: l10n.settingsSessionEndingConfSectionTitle),
-            SettingsNavigationTile(
+          ),
+          SliverToBoxAdapter(child: SettingsSectionTitle(title: l10n.settingsSessionEndingConfSectionTitle)),
+          SliverToBoxAdapter(
+            child: SettingsNavigationTile(
               icon: Icons.nfc_rounded,
               title: l10n.settingsNfcChipConfiguring,
               onTap: () {
                 HelmRouter.push(context, PauzaRoutes.nfcChipConfig);
               },
             ),
-            SettingsNavigationTile(
+          ),
+          SliverToBoxAdapter(
+            child: SettingsNavigationTile(
               icon: Icons.qr_code_scanner_rounded,
               title: l10n.settingsQrCodeConfiguring,
               onTap: () {
                 HelmRouter.push(context, PauzaRoutes.qrCodeConfig);
               },
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: PauzaSpacing.xxLarge),
+          ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Align(
+              alignment: Alignment.bottomCenter,
               child: SettingsFooter(
                 signOutLabel: l10n.settingsSignOut,
                 packageInfo: PauzaDependencies.of(context).packageInfo,
@@ -73,8 +79,8 @@ class SettingsScreen extends StatelessWidget {
                 },
               ),
             ),
-          ].interleaved(const SizedBox(height: PauzaSpacing.medium)).toList(),
-        ),
+          ),
+        ].interleaved(const SliverToBoxAdapter(child: SizedBox(height: PauzaSpacing.medium))).toList(),
       ),
     );
   }

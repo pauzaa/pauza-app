@@ -21,13 +21,13 @@ final class SettingsFooter extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      spacing: PauzaSpacing.large,
+      spacing: PauzaSpacing.regular,
       children: <Widget>[
         PauzaFilledButton(title: Text(signOutLabel), onPressed: onSignOutTap, icon: const Icon(Icons.logout_rounded)),
         Text(
           versionLabel(packageInfo.version),
           textAlign: TextAlign.center,
-          style: context.textTheme.titleLarge?.copyWith(color: context.colorScheme.onSurfaceVariant),
+          style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onSurfaceVariant),
         ),
       ],
     );

@@ -1,59 +1,84 @@
-import 'package:pauza/src/features/auth/common/model/session.dart';
+import 'dart:typed_data';
+
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/profile/common/model/user_profile_failure.dart';
 
 abstract interface class UserProfileRemoteDataSource {
-  Future<UserDto> fetchMe({required Session session});
+  Future<UserDto> fetchMe();
+
+  Future<UserDto> updateMe({required String name, required String username, String? profilePictureUrl, Uint8List? profilePictureBytes});
+
+  Future<bool> isUsernameAvailable({required String username});
+
+  Future<String> uploadProfilePhoto({required String localFilePath});
 }
 
 final class UserProfileRemoteDataSourceImpl implements UserProfileRemoteDataSource {
   const UserProfileRemoteDataSourceImpl();
 
   @override
-  Future<UserDto> fetchMe({required Session session}) async {
-    final accessToken = session.accessToken.trim();
-    if (accessToken.isEmpty) {
-      throw const UserProfileException(code: UserProfileFailureCode.unauthorized);
-    }
-
-    // Placeholder backend behavior for local/offline iteration.
-    if (accessToken.contains('forbidden')) {
-      throw const UserProfileException(code: UserProfileFailureCode.forbidden);
-    }
-    if (accessToken.contains('unauthorized')) {
-      throw const UserProfileException(code: UserProfileFailureCode.unauthorized);
-    }
-    if (accessToken.contains('offline') || accessToken.contains('network_error')) {
-      throw const UserProfileException(code: UserProfileFailureCode.network);
-    }
-
-    final normalized = _extractNormalizedIdentity(accessToken);
-    final username = _extractUsername(normalized);
-
-    return UserDto(profilePicture: 'https://example.com/avatar/$username.png', username: username, name: _toDisplayName(username));
+  Future<UserDto> fetchMe() async {
+    return const UserDto(
+      profilePicture:
+          'https://media.istockphoto.com/id/500593190/photo/composition-finger-frame-mans-hands-capture-the-sunset.jpg?s=612x612&w=0&k=20&c=S7cuvvC_hlu39Fj5jon6__3DD0j265aAsqvYX4C0lEM=',
+      username: 'john',
+      name: 'John',
+    );
   }
 
-  String _extractNormalizedIdentity(String accessToken) {
-    const prefix = 'access_token_';
-    if (accessToken.startsWith(prefix) && accessToken.length > prefix.length) {
-      return accessToken.substring(prefix.length);
+  @override
+  Future<UserDto> updateMe({
+    required String name,
+    required String username,
+    String? profilePictureUrl,
+    Uint8List? profilePictureBytes,
+  }) async {
+    final normalizedUsername = _normalizeUsername(username);
+    final normalizedName = name.trim();
+    if (normalizedUsername.isEmpty || normalizedName.isEmpty) {
+      throw const UserProfileException(code: UserProfileFailureCode.validation);
     }
-    return accessToken;
+
+    final available = await isUsernameAvailable(username: normalizedUsername);
+    if (!available) {
+      throw const UserProfileException(code: UserProfileFailureCode.usernameTaken);
+    }
+
+    final resolvedProfilePicture = profilePictureBytes == null ? profilePictureUrl : 'memory://profile';
+    final user = UserDto(profilePicture: resolvedProfilePicture ?? '', username: normalizedUsername, name: normalizedName);
+    return user;
   }
 
-  String _extractUsername(String normalizedIdentity) {
-    final email = normalizedIdentity.replaceAll('_at_', '@');
-    final localPart = email.split('@').first.trim();
-    if (localPart.isEmpty) {
-      return 'user';
+  @override
+  Future<bool> isUsernameAvailable({required String username}) async {
+    final normalizedUsername = _normalizeUsername(username);
+    if (normalizedUsername.isEmpty) {
+      throw const UserProfileException(code: UserProfileFailureCode.validation);
     }
-    return localPart;
+
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+
+    if (username == 'alreadytaken') {
+      return false;
+    }
+    return true;
   }
 
-  String _toDisplayName(String username) {
-    if (username.isEmpty) {
-      return 'User';
+  @override
+  Future<String> uploadProfilePhoto({required String localFilePath}) async {
+    if (localFilePath.trim().isEmpty) {
+      throw const UserProfileException(code: UserProfileFailureCode.validation);
     }
-    return '${username[0].toUpperCase()}${username.substring(1)}';
+
+    final photoUrl = 'https://example.com/avatar/john-$localFilePath';
+    return photoUrl;
+  }
+
+  String _normalizeUsername(String username) {
+    final trimmed = username.trim();
+    if (trimmed.startsWith('@')) {
+      return trimmed.substring(1).toLowerCase();
+    }
+    return trimmed.toLowerCase();
   }
 }

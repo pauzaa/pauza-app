@@ -6,6 +6,7 @@ import 'package:pauza/src/features/auth/common/model/session.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/profile/common/bloc/current_user_state.dart';
 import 'package:pauza/src/features/profile/common/model/cached_user_profile.dart';
+import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/profile/common/model/user_profile_failure.dart';
 import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 
@@ -30,7 +31,11 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     _sessionSubscription = _authRepository.sessionStream.listen((session) {
       add(CurrentUserSessionChanged(session: session));
     });
+    _profileChangesSubscription = _userProfileRepository.watchProfileChanges().listen((user) {
+      add(CurrentUserProfileUpdatedFromRepository(user: user));
+    });
     on<CurrentUserSessionChanged>(_onSessionChanged);
+    on<CurrentUserProfileUpdatedFromRepository>(_onProfileUpdatedFromRepository);
     // Prevent overlapping refreshes; latest duplicate refresh intent is dropped while one runs.
     on<CurrentUserRefreshRequested>(_onRefreshRequested, transformer: droppable());
   }
@@ -41,6 +46,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   final DateTime Function() _nowUtc;
 
   StreamSubscription<Session>? _sessionSubscription;
+  StreamSubscription<UserDto>? _profileChangesSubscription;
 
   /// Public trigger for user-initiated refresh actions.
   void refresh({bool forceRemote = false}) {
@@ -101,7 +107,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     }
 
     try {
-      final user = await _userProfileRepository.fetchAndCacheProfile(session: session);
+      final user = await _userProfileRepository.fetchAndCacheProfile();
       _emit(emit, CurrentUserState.available(user: user, freshness: UserFreshness.fresh, cachedAtUtc: _nowUtc(), isSyncing: false));
     } on UserProfileException catch (error) {
       await _handleRefreshFailure(error: error, previous: previous, emit: emit);
@@ -112,6 +118,15 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
         emit: emit,
       );
     }
+  }
+
+  void _onProfileUpdatedFromRepository(CurrentUserProfileUpdatedFromRepository event, Emitter<CurrentUserState> emit) {
+    final session = _authRepository.currentSession;
+    if (!session.isAuthenticated) {
+      return;
+    }
+
+    _emit(emit, CurrentUserState.available(user: event.user, freshness: UserFreshness.fresh, cachedAtUtc: _nowUtc(), isSyncing: false));
   }
 
   Future<void> _handleRefreshFailure({
@@ -133,6 +148,9 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
         }
         return;
       case UserProfileFailureCode.storage:
+      case UserProfileFailureCode.usernameTaken:
+      case UserProfileFailureCode.validation:
+      case UserProfileFailureCode.cancelled:
         if (previous.status == CurrentUserStatus.available) {
           _emit(emit, previous.copyWith(isSyncing: false));
         } else {
@@ -168,6 +186,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   Future<void> close() async {
     // Avoid leaked subscriptions after scope disposal.
     await _sessionSubscription?.cancel();
+    await _profileChangesSubscription?.cancel();
     return super.close();
   }
 }

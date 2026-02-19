@@ -90,6 +90,40 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get profileEditInfoNavTitle => 'Edit Info';
   @override
+  String get profileEditTitle => 'Edit Profile';
+  @override
+  String get profileEditChangePhoto => 'CHANGE PHOTO';
+  @override
+  String get profileEditUploadingPhoto => 'UPLOADING...';
+  @override
+  String get profileEditNameLabel => 'Name';
+  @override
+  String get profileEditNameHint => 'Your name';
+  @override
+  String get profileEditUsernameLabel => 'Username';
+  @override
+  String get profileEditUsernameHint => 'username';
+  @override
+  String get profileEditSaveButton => 'Save Changes';
+  @override
+  String get profileEditChangePhotoSheetTitle => 'Change profile photo';
+  @override
+  String get profileEditTakePhotoTitle => 'Take Photo';
+  @override
+  String get profileEditTakePhotoSubtitle => 'Use your camera to snap a new one';
+  @override
+  String get profileEditChooseFromGalleryTitle => 'Choose from Gallery';
+  @override
+  String get profileEditChooseFromGallerySubtitle => 'Pick a photo from your phone\'s library';
+  @override
+  String get profileEditInvalidUsernameError => 'Use 3-30 lowercase letters, digits, or underscore';
+  @override
+  String get profileEditUsernameTakenError => 'This username is already taken';
+  @override
+  String get profileEditValidationError => 'Please check your profile details';
+  @override
+  String get profileEditNetworkError => 'Unable to update profile. Check your connection';
+  @override
   String get profileSettingsNavTitle => 'Settings';
   @override
   String get settingsTitle => 'Settings';

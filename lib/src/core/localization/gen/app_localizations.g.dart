@@ -63,8 +63,7 @@ import 'app_localizations_uz.g.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -72,8 +71,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -85,13 +83,12 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -148,6 +145,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit Info'**
   String get profileEditInfoNavTitle;
+
+  /// Title for the edit profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get profileEditTitle;
+
+  /// Action label for changing profile photo.
+  ///
+  /// In en, this message translates to:
+  /// **'CHANGE PHOTO'**
+  String get profileEditChangePhoto;
+
+  /// Action label shown while a profile photo is uploading.
+  ///
+  /// In en, this message translates to:
+  /// **'UPLOADING...'**
+  String get profileEditUploadingPhoto;
+
+  /// Label for the name field on edit profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get profileEditNameLabel;
+
+  /// Hint for the name field on edit profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get profileEditNameHint;
+
+  /// Label for the username field on edit profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get profileEditUsernameLabel;
+
+  /// Hint for the username field on edit profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'username'**
+  String get profileEditUsernameHint;
+
+  /// Primary save button label on the edit profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get profileEditSaveButton;
+
+  /// Title for the profile photo action bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Change profile photo'**
+  String get profileEditChangePhotoSheetTitle;
+
+  /// Bottom sheet option title for taking a photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get profileEditTakePhotoTitle;
+
+  /// Bottom sheet option subtitle for taking a photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your camera to snap a new one'**
+  String get profileEditTakePhotoSubtitle;
+
+  /// Bottom sheet option title for selecting from gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get profileEditChooseFromGalleryTitle;
+
+  /// Bottom sheet option subtitle for selecting from gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a photo from your phone\'s library'**
+  String get profileEditChooseFromGallerySubtitle;
+
+  /// Validation message for invalid profile username.
+  ///
+  /// In en, this message translates to:
+  /// **'Use 3-30 lowercase letters, digits, or underscore'**
+  String get profileEditInvalidUsernameError;
+
+  /// Validation message when chosen username is not available.
+  ///
+  /// In en, this message translates to:
+  /// **'This username is already taken'**
+  String get profileEditUsernameTakenError;
+
+  /// General validation error for edit profile flow.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your profile details'**
+  String get profileEditValidationError;
+
+  /// Network failure message shown on edit profile flow.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to update profile. Check your connection'**
+  String get profileEditNetworkError;
 
   /// Navigation item title for profile settings.
   ///
@@ -1218,8 +1317,7 @@ abstract class AppLocalizations {
   String get authFailureUnknown;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -1228,8 +1326,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'ru', 'uz'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'ru', 'uz'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

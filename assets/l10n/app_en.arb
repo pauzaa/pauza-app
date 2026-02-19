@@ -32,6 +32,74 @@
   "@profileEditInfoNavTitle": {
     "description": "Navigation item title for editing profile details."
   },
+  "profileEditTitle": "Edit Profile",
+  "@profileEditTitle": {
+    "description": "Title for the edit profile screen."
+  },
+  "profileEditChangePhoto": "CHANGE PHOTO",
+  "@profileEditChangePhoto": {
+    "description": "Action label for changing profile photo."
+  },
+  "profileEditUploadingPhoto": "UPLOADING...",
+  "@profileEditUploadingPhoto": {
+    "description": "Action label shown while a profile photo is uploading."
+  },
+  "profileEditNameLabel": "Name",
+  "@profileEditNameLabel": {
+    "description": "Label for the name field on edit profile screen."
+  },
+  "profileEditNameHint": "Your name",
+  "@profileEditNameHint": {
+    "description": "Hint for the name field on edit profile screen."
+  },
+  "profileEditUsernameLabel": "Username",
+  "@profileEditUsernameLabel": {
+    "description": "Label for the username field on edit profile screen."
+  },
+  "profileEditUsernameHint": "username",
+  "@profileEditUsernameHint": {
+    "description": "Hint for the username field on edit profile screen."
+  },
+  "profileEditSaveButton": "Save Changes",
+  "@profileEditSaveButton": {
+    "description": "Primary save button label on the edit profile screen."
+  },
+  "profileEditChangePhotoSheetTitle": "Change profile photo",
+  "@profileEditChangePhotoSheetTitle": {
+    "description": "Title for the profile photo action bottom sheet."
+  },
+  "profileEditTakePhotoTitle": "Take Photo",
+  "@profileEditTakePhotoTitle": {
+    "description": "Bottom sheet option title for taking a photo."
+  },
+  "profileEditTakePhotoSubtitle": "Use your camera to snap a new one",
+  "@profileEditTakePhotoSubtitle": {
+    "description": "Bottom sheet option subtitle for taking a photo."
+  },
+  "profileEditChooseFromGalleryTitle": "Choose from Gallery",
+  "@profileEditChooseFromGalleryTitle": {
+    "description": "Bottom sheet option title for selecting from gallery."
+  },
+  "profileEditChooseFromGallerySubtitle": "Pick a photo from your phone's library",
+  "@profileEditChooseFromGallerySubtitle": {
+    "description": "Bottom sheet option subtitle for selecting from gallery."
+  },
+  "profileEditInvalidUsernameError": "Use 3-30 lowercase letters, digits, or underscore",
+  "@profileEditInvalidUsernameError": {
+    "description": "Validation message for invalid profile username."
+  },
+  "profileEditUsernameTakenError": "This username is already taken",
+  "@profileEditUsernameTakenError": {
+    "description": "Validation message when chosen username is not available."
+  },
+  "profileEditValidationError": "Please check your profile details",
+  "@profileEditValidationError": {
+    "description": "General validation error for edit profile flow."
+  },
+  "profileEditNetworkError": "Unable to update profile. Check your connection",
+  "@profileEditNetworkError": {
+    "description": "Network failure message shown on edit profile flow."
+  },
   "profileSettingsNavTitle": "Settings",
   "@profileSettingsNavTitle": {
     "description": "Navigation item title for profile settings."

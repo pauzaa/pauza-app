@@ -1,6 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:collection/collection.dart';
 import 'package:pauza/src/core/common/extensions.dart';
 import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
@@ -86,13 +86,12 @@ class HomeContent extends StatelessWidget {
                       ),
                       const SizedBox(height: PauzaSpacing.extraLarge),
                       if (blockingState.isPaused) ...<Widget>[
-                        FilledButton(
-                          onPressed: isBusy
-                              ? null
-                              : () {
-                                  context.read<BlockingBloc>().add(const BlockingResumeRequested());
-                                },
-                          child: Text(l10n.homeResumeButtonLabel.toUpperCase()),
+                        PauzaFilledButton(
+                          disabled: isBusy,
+                          onPressed: () {
+                            context.read<BlockingBloc>().add(const BlockingResumeRequested());
+                          },
+                          title: Text(l10n.homeResumeButtonLabel.toUpperCase()),
                         ),
                       ] else ...<Widget>[
                         Text(

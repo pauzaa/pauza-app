@@ -53,8 +53,9 @@ enum PauzaButtonSize {
       context.textTheme.labelSmall ?? const TextStyle(),
     PauzaButtonSize.xSmall => context.textTheme.labelLarge ?? const TextStyle(),
     PauzaButtonSize.small => context.textTheme.labelLarge ?? const TextStyle(),
-    PauzaButtonSize.medium => context.textTheme.labelLarge ?? const TextStyle(),
-    PauzaButtonSize.large => context.textTheme.bodyLarge ?? const TextStyle(),
+    PauzaButtonSize.medium => context.textTheme.titleLarge ?? const TextStyle(),
+    PauzaButtonSize.large =>
+      context.textTheme.headlineSmall ?? const TextStyle(),
   };
 }
 

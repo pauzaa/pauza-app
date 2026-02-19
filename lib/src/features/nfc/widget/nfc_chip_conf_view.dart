@@ -27,7 +27,9 @@ class _NfcChipConfViewState extends State<NfcChipConfView> {
 
   Future<void> startScanning() async {
     try {
-      final card = await PauzaDependencies.of(context).nfcRepository.scanSingleCard();
+      final card = await PauzaDependencies.of(
+        context,
+      ).nfcRepository.scanSingleCard();
       if (mounted) {
         Navigator.of(context).pop(card);
       }
@@ -54,14 +56,22 @@ class _NfcChipConfViewState extends State<NfcChipConfView> {
         mainAxisSize: MainAxisSize.min,
         spacing: PauzaSpacing.large,
         children: [
-          Text(l10n.readyToScanNfcTag, style: Theme.of(context).textTheme.headlineLarge),
+          Text(
+            l10n.readyToScanNfcTag,
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
           const NfcChipConfTargetVisual(size: 300),
           Text(
             l10n.nfcChipHoldCardNearDevice,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
           ),
-          PauzaFilledButton(title: Text(l10n.cancelButton), onPressed: Navigator.of(context).pop, textStyle: context.textTheme.titleLarge),
+          PauzaFilledButton(
+            title: Text(l10n.cancelButton),
+            onPressed: Navigator.of(context).pop,
+          ),
         ],
       ),
     );

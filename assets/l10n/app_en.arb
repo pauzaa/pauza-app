@@ -671,6 +671,27 @@
   "@homeQuickPauseLabel": {
     "description": "Label for the quick pause feature."
   },
+  "pausedTitle": "Paused",
+  "@pausedTitle": {
+    "description": "Title for the paused session."
+  },
+  "reminaingLabel": "Remaining",
+  "@reminaingLabel": {
+    "description": "Label for the remaining time."
+  },
+  "pausedTakeABreathLabel": "Take a breath",
+  "@pausedTakeABreathLabel": {
+    "description": "Label for the take a breath button."
+  },
+  "pauseDurationMinutes": "{minutes}m",
+  "@pauseDurationMinutes": {
+    "description": "Quick pause duration in minutes with 'm' suffix",
+    "placeholders": {
+      "minutes": {
+        "type": "num"
+      }
+    }
+  },
   "homeResumeButtonLabel": "Resume",
   "@homeResumeButtonLabel": {
     "description": "Label for the resume button."

@@ -20,7 +20,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(emitted, isNotEmpty);
-      expect(emitted.last.activeModeId, 'mode-1');
+      expect(emitted.last.restrictionState.activeMode?.modeId, 'mode-1');
       expect(emitted.last.sessionStartedAt, startedAt);
       expect(emitted.last.pausedUntil, isNotNull);
 
@@ -46,7 +46,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(emitted, isNotEmpty);
-      expect(emitted.last.activeModeId, isNull);
+      expect(emitted.last.restrictionState.activeMode, isNull);
       expect(emitted.last.sessionStartedAt, isNull);
       expect(emitted.last.pausedUntil, isNull);
 
@@ -73,7 +73,7 @@ void main() {
       expect(repository.pauseDurations, <Duration>[const Duration(minutes: 5)]);
       expect(emitted, isNotEmpty);
       expect(emitted.last.pausedUntil, isNotNull);
-      expect(emitted.last.activeModeId, 'mode-1');
+      expect(emitted.last.restrictionState.activeMode?.modeId, 'mode-1');
 
       await sub.cancel();
       await bloc.close();
@@ -95,7 +95,7 @@ void main() {
 
       expect(repository.stopCallCount, 1);
       expect(emitted, isNotEmpty);
-      expect(emitted.last.activeModeId, isNull);
+      expect(emitted.last.restrictionState.activeMode, isNull);
       expect(emitted.last.sessionStartedAt, isNull);
       expect(emitted.last.pausedUntil, isNull);
 
@@ -124,7 +124,7 @@ void main() {
 
       expect(repository.resumeCallCount, 1);
       expect(emitted, isNotEmpty);
-      expect(emitted.last.activeModeId, 'mode-1');
+      expect(emitted.last.restrictionState.activeMode?.modeId, 'mode-1');
       expect(emitted.last.pausedUntil, isNull);
 
       await sub.cancel();

@@ -63,16 +63,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileEditTakePhotoTitle => 'Take Photo';
 
   @override
-  String get profileEditTakePhotoSubtitle => 'Use your camera to snap a new one';
+  String get profileEditTakePhotoSubtitle =>
+      'Use your camera to snap a new one';
 
   @override
   String get profileEditChooseFromGalleryTitle => 'Choose from Gallery';
 
   @override
-  String get profileEditChooseFromGallerySubtitle => 'Pick a photo from your phone\'s library';
+  String get profileEditChooseFromGallerySubtitle =>
+      'Pick a photo from your phone\'s library';
 
   @override
-  String get profileEditInvalidUsernameError => 'Use 3-30 lowercase letters, digits, or underscore';
+  String get profileEditInvalidUsernameError =>
+      'Use 3-30 lowercase letters, digits, or underscore';
 
   @override
   String get profileEditUsernameTakenError => 'This username is already taken';
@@ -81,7 +84,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileEditValidationError => 'Please check your profile details';
 
   @override
-  String get profileEditNetworkError => 'Unable to update profile. Check your connection';
+  String get profileEditNetworkError =>
+      'Unable to update profile. Check your connection';
 
   @override
   String get profileSettingsNavTitle => 'Settings';
@@ -256,13 +260,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permissionExactAlarmTitle => 'Allow Exact Alarms';
 
   @override
-  String get permissionExactAlarmBody => 'Exact alarms keep schedules and pause timers accurate so blocks start and end on time.';
+  String get permissionExactAlarmBody =>
+      'Exact alarms keep schedules and pause timers accurate so blocks start and end on time.';
 
   @override
-  String get permissionFamilyControlsTitle => 'Allow Family Controls (Screen Time)';
+  String get permissionFamilyControlsTitle =>
+      'Allow Family Controls (Screen Time)';
 
   @override
-  String get permissionFamilyControlsBody => 'Pauza uses Family Controls / Screen Time authorization to manage app restrictions on iOS.';
+  String get permissionFamilyControlsBody =>
+      'Pauza uses Family Controls / Screen Time authorization to manage app restrictions on iOS.';
 
   @override
   String get permissionsRequiredTitle => 'Permissions Required';
@@ -272,16 +279,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'To help you stay focused and block distracting apps effectively, Pauza needs the permissions listed below. Your data stays private on your device.';
 
   @override
-  String get permissionUsageAccessShortBody => 'Monitor usage and enforce limits';
+  String get permissionUsageAccessShortBody =>
+      'Monitor usage and enforce limits';
 
   @override
-  String get permissionAccessibilityShortBody => 'Identify and block restricted apps';
+  String get permissionAccessibilityShortBody =>
+      'Identify and block restricted apps';
 
   @override
-  String get permissionExactAlarmShortBody => 'Keep schedules and timers accurate';
+  String get permissionExactAlarmShortBody =>
+      'Keep schedules and timers accurate';
 
   @override
-  String get permissionFamilyControlsShortBody => 'Manage app restrictions on iOS';
+  String get permissionFamilyControlsShortBody =>
+      'Manage app restrictions on iOS';
 
   @override
   String permissionCurrentStatusLabel(String status) {
@@ -313,25 +324,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nfcGuidanceAvailableTitle => 'NFC is ready';
 
   @override
-  String get nfcGuidanceAvailableBody => 'Your device is ready to scan NFC tags.';
+  String get nfcGuidanceAvailableBody =>
+      'Your device is ready to scan NFC tags.';
 
   @override
   String get nfcGuidanceDisabledTitle => 'Turn on NFC';
 
   @override
-  String get nfcGuidanceDisabledBody => 'NFC is turned off on this device. Enable it in system settings to continue.';
+  String get nfcGuidanceDisabledBody =>
+      'NFC is turned off on this device. Enable it in system settings to continue.';
 
   @override
   String get nfcGuidanceNotSupportedTitle => 'NFC is not supported';
 
   @override
-  String get nfcGuidanceNotSupportedBody => 'This device does not support NFC scanning.';
+  String get nfcGuidanceNotSupportedBody =>
+      'This device does not support NFC scanning.';
 
   @override
   String get nfcGuidanceUnknownTitle => 'NFC status unavailable';
 
   @override
-  String get nfcGuidanceUnknownBody => 'We could not determine NFC availability right now. Try again in a moment.';
+  String get nfcGuidanceUnknownBody =>
+      'We could not determine NFC availability right now. Try again in a moment.';
 
   @override
   String blockedAppsCountLabel(int count) {
@@ -548,6 +563,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeQuickPauseLabel => 'Quick Pause';
 
   @override
+  String get pausedTitle => 'Paused';
+
+  @override
+  String get reminaingLabel => 'Remaining';
+
+  @override
+  String get pausedTakeABreathLabel => 'Take a breath';
+
+  @override
+  String pauseDurationMinutes(num minutes) {
+    return '${minutes}m';
+  }
+
+  @override
   String get homeResumeButtonLabel => 'Resume';
 
   @override
@@ -617,7 +646,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statsPermissionRequiredTitle => 'Usage permission required';
 
   @override
-  String get statsPermissionRequiredBody => 'Allow Usage Access to view Android usage statistics.';
+  String get statsPermissionRequiredBody =>
+      'Allow Usage Access to view Android usage statistics.';
 
   @override
   String get statsLoadFailed => 'Failed to load usage statistics.';
@@ -629,7 +659,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statsIosReportUnavailableTitle => 'iOS report unavailable';
 
   @override
-  String get statsIosReportUnavailableBody => 'Make sure Screen Time permission and Device Activity Report extension are configured.';
+  String get statsIosReportUnavailableBody =>
+      'Make sure Screen Time permission and Device Activity Report extension are configured.';
 
   @override
   String get authTagline => 'Focus & Wellbeing';
@@ -653,7 +684,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authOtpTitle => 'Verify Your Email';
 
   @override
-  String get authOtpSubtitlePrefix => 'Enter the 6-digit code we sent to your email address ';
+  String get authOtpSubtitlePrefix =>
+      'Enter the 6-digit code we sent to your email address ';
 
   @override
   String get authOtpSubtitleSuffix => '.';
@@ -685,10 +717,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authFailureInvalidOtp => 'Invalid verification code.';
 
   @override
-  String get authFailureOtpChallengeMissing => 'Verification challenge expired. Try again.';
+  String get authFailureOtpChallengeMissing =>
+      'Verification challenge expired. Try again.';
 
   @override
-  String get authFailureStorage => 'Could not access secure storage. Please try again.';
+  String get authFailureStorage =>
+      'Could not access secure storage. Please try again.';
 
   @override
   String get authFailureUnknown => 'Could not sign in. Please try again.';

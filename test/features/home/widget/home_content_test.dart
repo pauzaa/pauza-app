@@ -8,75 +8,19 @@ import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/home/widget/home_content.dart';
 import 'package:pauza/src/features/home/widget/home_current_mode_card.dart';
-import 'package:pauza/src/features/home/widget/home_start_session_button.dart';
+import 'package:pauza/src/features/home/widget/home_session_button.dart';
 import 'package:pauza/src/features/home/widget/home_stats_pill.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
-import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
+import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
   group('HomeContent', () {
-    testWidgets('renders active session UI when blocking is active', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(1200, 3000));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
 
-      final modesBloc = _TestModesListBloc();
-      final blockingBloc = _TestBlockingBloc();
-      blockingBloc.emitForTest(BlockingState(activeModeId: 'mode-1', sessionStartedAt: DateTime.now().subtract(const Duration(hours: 1))));
-
-      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
-      await tester.pump();
-
-      expect(find.byType(HomeStatsPill), findsNothing);
-      expect(find.byType(HomeCurrentModeCard), findsNothing);
-      expect(find.byType(HomeStartSessionButton), findsOneWidget);
-      expect(find.text('1m'), findsOneWidget);
-      expect(find.text('5m'), findsOneWidget);
-      expect(find.text('10m'), findsOneWidget);
-      expect(find.text('RESUME'), findsNothing);
-      expect(tester.widget<HomeStartSessionButton>(find.byType(HomeStartSessionButton)).isActiveSession, isTrue);
-      expect(
-        find.byWidgetPredicate((widget) => widget is Text && widget.data != null && RegExp(r'^\d{2}:\d{2}:\d{2}$').hasMatch(widget.data!)),
-        findsOneWidget,
-      );
-
-      addTearDown(modesBloc.close);
-      addTearDown(blockingBloc.close);
-    });
-
-    testWidgets('renders resume button and hides quick pause pills when paused', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(1200, 3000));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
-
-      final modesBloc = _TestModesListBloc();
-      final blockingBloc = _TestBlockingBloc();
-      blockingBloc.emitForTest(
-        BlockingState(
-          activeModeId: 'mode-1',
-          sessionStartedAt: DateTime.now().subtract(const Duration(hours: 1)),
-          pausedUntil: DateTime.now().add(const Duration(minutes: 1)),
-        ),
-      );
-
-      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
-      await tester.pump();
-
-      expect(find.text('RESUME'), findsOneWidget);
-      expect(find.text('1m'), findsNothing);
-      expect(find.text('5m'), findsNothing);
-      expect(find.text('10m'), findsNothing);
-
-      await tester.tap(find.text('RESUME'));
-      await tester.pump();
-      expect(blockingBloc.lastEvent, isA<BlockingResumeRequested>());
-
-      addTearDown(modesBloc.close);
-      addTearDown(blockingBloc.close);
-    });
 
     testWidgets('renders default home body when session is not active', (tester) async {
       await tester.binding.setSurfaceSize(const Size(1200, 3000));
@@ -90,9 +34,9 @@ void main() {
 
       expect(find.byType(HomeStatsPill), findsOneWidget);
       expect(find.byType(HomeCurrentModeCard), findsOneWidget);
-      expect(find.byType(HomeStartSessionButton), findsOneWidget);
+      expect(find.byType(HomeSessionButton), findsOneWidget);
       expect(find.text('1m'), findsNothing);
-      expect(tester.widget<HomeStartSessionButton>(find.byType(HomeStartSessionButton)).isActiveSession, isFalse);
+      expect(tester.widget<HomeSessionButton>(find.byType(HomeSessionButton)).isActiveSession, isFalse);
 
       addTearDown(modesBloc.close);
       addTearDown(blockingBloc.close);

@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
-class HomeStartSessionButton extends StatelessWidget {
-  const HomeStartSessionButton({required this.onTap, this.isActiveSession = false, super.key});
+class HomeSessionButton extends StatelessWidget {
+  const HomeSessionButton({required this.onTap, this.isActiveSession = false, this.isBusy = false, this.buttonSize = 320, super.key});
 
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
+  final bool isBusy;
   final bool isActiveSession;
+  final double buttonSize;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final title = isActiveSession ? l10n.stopButton.toUpperCase() : l10n.startButton.toUpperCase();
 
-    const buttonSize = 320.0;
-
     return InkWell(
-      onTap: onTap,
+      onTap: isBusy ? null : onTap,
       customBorder: const CircleBorder(),
       child: Stack(
         alignment: Alignment.center,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
@@ -8,7 +10,9 @@ part 'blocking_event.dart';
 part 'blocking_state.dart';
 
 class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
-  BlockingBloc({required BlockingRepository blockingRepository}) : _blockingRepository = blockingRepository, super(const BlockingState()) {
+  BlockingBloc({required BlockingRepository blockingRepository})
+    : _blockingRepository = blockingRepository,
+      super(const BlockingState.initial()) {
     on<BlockingSyncRequested>(_onSyncRequested);
     on<BlockingStartRequested>(_onStartRequested);
     on<BlockingStopRequested>(_onStopRequested);
@@ -17,6 +21,14 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
   }
 
   final BlockingRepository _blockingRepository;
+  Timer? _syncTimer;
+
+  @override
+  Future<void> close() {
+    _syncTimer?.cancel();
+    _syncTimer = null;
+    return super.close();
+  }
 
   Future<void> _onSyncRequested(BlockingSyncRequested event, Emitter<BlockingState> emit) async {
     try {
@@ -48,10 +60,8 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
   Future<void> _onStopRequested(BlockingStopRequested event, Emitter<BlockingState> emit) async {
     try {
       emit(state.loading());
-
       await _blockingRepository.stopBlocking();
-
-      emit(state.clearActiveModeId(isLoading: false));
+      await _syncSessionState(emit: emit);
     } catch (error) {
       emit(state.setError(error));
     }
@@ -79,19 +89,12 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
 
   Future<void> _syncSessionState({required Emitter<BlockingState> emit}) async {
     final restrictionSession = await _blockingRepository.getRestrictionSession();
-    final activeModeId = restrictionSession.activeMode?.modeId;
-    if (activeModeId == null) {
-      emit(state.clearActiveModeId(isLoading: false));
-      return;
+    emit(state.setSessionState(restrictionState: restrictionSession, isLoading: false));
+    if (state.pauseRemainingDuration case final pauseRemainingDuration? when restrictionSession.isPausedNow) {
+      _syncTimer = Timer(pauseRemainingDuration, () {
+        if (isClosed) return;
+        add(const BlockingResumeRequested());
+      });
     }
-
-    emit(
-      state.setSessionState(
-        modeId: activeModeId,
-        sessionStartedAt: restrictionSession.startedAt,
-        pausedUntil: restrictionSession.pausedUntil,
-        isLoading: false,
-      ),
-    );
   }
 }

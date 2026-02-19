@@ -19,6 +19,12 @@ class _NfcChipConfViewState extends State<NfcChipConfView> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    PauzaDependencies.of(context).nfcRepository.stopSession();
+    super.dispose();
+  }
+
   Future<void> startScanning() async {
     try {
       final card = await PauzaDependencies.of(context).nfcRepository.scanSingleCard();

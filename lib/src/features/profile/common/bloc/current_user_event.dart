@@ -21,3 +21,10 @@ final class CurrentUserRefreshRequested extends CurrentUserEvent {
 
   final bool forceRemote;
 }
+
+/// Emitted whenever profile data is changed through profile edit flows.
+final class CurrentUserProfileUpdatedFromRepository extends CurrentUserEvent {
+  const CurrentUserProfileUpdatedFromRepository({required this.user});
+
+  final UserDto user;
+}

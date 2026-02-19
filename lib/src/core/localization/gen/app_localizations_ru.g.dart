@@ -33,6 +33,57 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileEditInfoNavTitle => 'Изменить профиль';
 
   @override
+  String get profileEditTitle => 'Редактировать профиль';
+
+  @override
+  String get profileEditChangePhoto => 'ИЗМЕНИТЬ ФОТО';
+
+  @override
+  String get profileEditUploadingPhoto => 'ЗАГРУЗКА...';
+
+  @override
+  String get profileEditNameLabel => 'Имя';
+
+  @override
+  String get profileEditNameHint => 'Ваше имя';
+
+  @override
+  String get profileEditUsernameLabel => 'Имя пользователя';
+
+  @override
+  String get profileEditUsernameHint => 'username';
+
+  @override
+  String get profileEditSaveButton => 'Сохранить изменения';
+
+  @override
+  String get profileEditChangePhotoSheetTitle => 'Изменить фото профиля';
+
+  @override
+  String get profileEditTakePhotoTitle => 'Сделать фото';
+
+  @override
+  String get profileEditTakePhotoSubtitle => 'Сделайте новый снимок на камеру';
+
+  @override
+  String get profileEditChooseFromGalleryTitle => 'Выбрать из галереи';
+
+  @override
+  String get profileEditChooseFromGallerySubtitle => 'Выберите фото из галереи телефона';
+
+  @override
+  String get profileEditInvalidUsernameError => 'Используйте 3-30 строчных символов, цифр или _';
+
+  @override
+  String get profileEditUsernameTakenError => 'Это имя пользователя уже занято';
+
+  @override
+  String get profileEditValidationError => 'Проверьте данные профиля';
+
+  @override
+  String get profileEditNetworkError => 'Не удалось обновить профиль. Проверьте соединение';
+
+  @override
   String get profileSettingsNavTitle => 'Настройки';
 
   @override
@@ -195,8 +246,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Pauza использует доступ к статистике, чтобы понимать, какие приложения активны, и применять ваши правила блокировки. Данные остаются на устройстве.';
 
   @override
-  String get permissionAccessibilityTitle =>
-      'Включите службу специальных возможностей';
+  String get permissionAccessibilityTitle => 'Включите службу специальных возможностей';
 
   @override
   String get permissionAccessibilityBody =>
@@ -210,8 +260,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Точные будильники делают расписания и таймеры паузы точными, чтобы блокировки начинались и заканчивались вовремя.';
 
   @override
-  String get permissionFamilyControlsTitle =>
-      'Разрешите Family Controls (Screen Time)';
+  String get permissionFamilyControlsTitle => 'Разрешите Family Controls (Screen Time)';
 
   @override
   String get permissionFamilyControlsBody =>
@@ -225,19 +274,16 @@ class AppLocalizationsRu extends AppLocalizations {
       'Чтобы помогать вам сохранять фокус и эффективно блокировать отвлекающие приложения, Pauza нужны разрешения из списка ниже. Ваши данные остаются на устройстве.';
 
   @override
-  String get permissionUsageAccessShortBody =>
-      'Отслеживание использования и лимитов';
+  String get permissionUsageAccessShortBody => 'Отслеживание использования и лимитов';
 
   @override
-  String get permissionAccessibilityShortBody =>
-      'Определение и блокировка ограниченных приложений';
+  String get permissionAccessibilityShortBody => 'Определение и блокировка ограниченных приложений';
 
   @override
   String get permissionExactAlarmShortBody => 'Точное расписание и таймеры';
 
   @override
-  String get permissionFamilyControlsShortBody =>
-      'Управление ограничениями приложений на iOS';
+  String get permissionFamilyControlsShortBody => 'Управление ограничениями приложений на iOS';
 
   @override
   String permissionCurrentStatusLabel(String status) {
@@ -269,29 +315,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get nfcGuidanceAvailableTitle => 'NFC is ready';
 
   @override
-  String get nfcGuidanceAvailableBody =>
-      'Your device is ready to scan NFC tags.';
+  String get nfcGuidanceAvailableBody => 'Your device is ready to scan NFC tags.';
 
   @override
   String get nfcGuidanceDisabledTitle => 'Turn on NFC';
 
   @override
-  String get nfcGuidanceDisabledBody =>
-      'NFC is turned off on this device. Enable it in system settings to continue.';
+  String get nfcGuidanceDisabledBody => 'NFC is turned off on this device. Enable it in system settings to continue.';
 
   @override
   String get nfcGuidanceNotSupportedTitle => 'NFC is not supported';
 
   @override
-  String get nfcGuidanceNotSupportedBody =>
-      'This device does not support NFC scanning.';
+  String get nfcGuidanceNotSupportedBody => 'This device does not support NFC scanning.';
 
   @override
   String get nfcGuidanceUnknownTitle => 'NFC status unavailable';
 
   @override
-  String get nfcGuidanceUnknownBody =>
-      'We could not determine NFC availability right now. Try again in a moment.';
+  String get nfcGuidanceUnknownBody => 'We could not determine NFC availability right now. Try again in a moment.';
 
   @override
   String blockedAppsCountLabel(int count) {
@@ -577,8 +619,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get statsPermissionRequiredTitle => 'Usage permission required';
 
   @override
-  String get statsPermissionRequiredBody =>
-      'Allow Usage Access to view Android usage statistics.';
+  String get statsPermissionRequiredBody => 'Allow Usage Access to view Android usage statistics.';
 
   @override
   String get statsLoadFailed => 'Failed to load usage statistics.';
@@ -590,8 +631,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get statsIosReportUnavailableTitle => 'iOS report unavailable';
 
   @override
-  String get statsIosReportUnavailableBody =>
-      'Make sure Screen Time permission and Device Activity Report extension are configured.';
+  String get statsIosReportUnavailableBody => 'Make sure Screen Time permission and Device Activity Report extension are configured.';
 
   @override
   String get authTagline => 'Фокус и благополучие';
@@ -615,8 +655,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authOtpTitle => 'Подтвердите Email';
 
   @override
-  String get authOtpSubtitlePrefix =>
-      'Введите 6-значный код, который мы отправили на ваш email ';
+  String get authOtpSubtitlePrefix => 'Введите 6-значный код, который мы отправили на ваш email ';
 
   @override
   String get authOtpSubtitleSuffix => '.';
@@ -648,12 +687,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authFailureInvalidOtp => 'Неверный код подтверждения.';
 
   @override
-  String get authFailureOtpChallengeMissing =>
-      'Сессия подтверждения истекла. Попробуйте снова.';
+  String get authFailureOtpChallengeMissing => 'Сессия подтверждения истекла. Попробуйте снова.';
 
   @override
-  String get authFailureStorage =>
-      'Не удалось получить доступ к защищенному хранилищу.';
+  String get authFailureStorage => 'Не удалось получить доступ к защищенному хранилищу.';
 
   @override
   String get authFailureUnknown => 'Не удалось войти. Попробуйте снова.';

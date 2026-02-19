@@ -13,11 +13,7 @@ final class CachedUserProfile {
     }
 
     return CachedUserProfile(
-      user: UserDto(
-        profilePicture: userJson['profilePicture'] as String? ?? '',
-        username: userJson['username'] as String? ?? '',
-        name: userJson['name'] as String? ?? '',
-      ),
+      user: UserDto.fromJson(userJson),
       cachedAtUtc: DateTime.fromMillisecondsSinceEpoch(cachedAtUtcMs, isUtc: true),
     );
   }
@@ -33,10 +29,7 @@ final class CachedUserProfile {
   }
 
   Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'user': <String, Object?>{'profilePicture': user.profilePicture, 'username': user.username, 'name': user.name},
-      'cachedAtUtcMs': cachedAtUtc.toUtc().millisecondsSinceEpoch,
-    };
+    return <String, Object?>{'user': user.toJson(), 'cachedAtUtcMs': cachedAtUtc.toUtc().millisecondsSinceEpoch};
   }
 
   @override

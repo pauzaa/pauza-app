@@ -33,6 +33,57 @@ class AppLocalizationsUz extends AppLocalizations {
   String get profileEditInfoNavTitle => 'Profilni tahrirlash';
 
   @override
+  String get profileEditTitle => 'Profilni tahrirlash';
+
+  @override
+  String get profileEditChangePhoto => 'RASMNI ALMASHTIRISH';
+
+  @override
+  String get profileEditUploadingPhoto => 'YUKLANMOQDA...';
+
+  @override
+  String get profileEditNameLabel => 'Ism';
+
+  @override
+  String get profileEditNameHint => 'Ismingiz';
+
+  @override
+  String get profileEditUsernameLabel => 'Username';
+
+  @override
+  String get profileEditUsernameHint => 'username';
+
+  @override
+  String get profileEditSaveButton => 'O\'zgarishlarni saqlash';
+
+  @override
+  String get profileEditChangePhotoSheetTitle => 'Profil rasmini almashtirish';
+
+  @override
+  String get profileEditTakePhotoTitle => 'Rasmga olish';
+
+  @override
+  String get profileEditTakePhotoSubtitle => 'Kamera orqali yangi rasm oling';
+
+  @override
+  String get profileEditChooseFromGalleryTitle => 'Galereyadan tanlash';
+
+  @override
+  String get profileEditChooseFromGallerySubtitle => 'Telefon galereyasidan rasm tanlang';
+
+  @override
+  String get profileEditInvalidUsernameError => '3-30 ta kichik harf, raqam yoki _ ishlating';
+
+  @override
+  String get profileEditUsernameTakenError => 'Bu username band';
+
+  @override
+  String get profileEditValidationError => 'Profil ma\'lumotlarini tekshiring';
+
+  @override
+  String get profileEditNetworkError => 'Profilni yangilab bo\'lmadi. Aloqani tekshiring';
+
+  @override
   String get profileSettingsNavTitle => 'Sozlamalar';
 
   @override
@@ -209,8 +260,7 @@ class AppLocalizationsUz extends AppLocalizations {
       'Aniq signal (exact alarm) jadval va pauza taymerlarini aniq ishlatib, bloklashni o\'z vaqtida boshlatadi va tugatadi.';
 
   @override
-  String get permissionFamilyControlsTitle =>
-      'Family Controls (Screen Time) ruxsatini bering';
+  String get permissionFamilyControlsTitle => 'Family Controls (Screen Time) ruxsatini bering';
 
   @override
   String get permissionFamilyControlsBody =>
@@ -224,20 +274,16 @@ class AppLocalizationsUz extends AppLocalizations {
       'Diqqatingizni jamlash va chalg\'ituvchi ilovalarni samarali bloklash uchun Pauza\'ga quyida keltirilgan ruxsatlar kerak. Ma\'lumotlaringiz qurilmangizda qoladi.';
 
   @override
-  String get permissionUsageAccessShortBody =>
-      'Foydalanishni kuzatish va limitlarni qo\'llash';
+  String get permissionUsageAccessShortBody => 'Foydalanishni kuzatish va limitlarni qo\'llash';
 
   @override
-  String get permissionAccessibilityShortBody =>
-      'Cheklangan ilovalarni aniqlash va bloklash';
+  String get permissionAccessibilityShortBody => 'Cheklangan ilovalarni aniqlash va bloklash';
 
   @override
-  String get permissionExactAlarmShortBody =>
-      'Jadval va taymerlarni aniq ishlatish';
+  String get permissionExactAlarmShortBody => 'Jadval va taymerlarni aniq ishlatish';
 
   @override
-  String get permissionFamilyControlsShortBody =>
-      'iOS\'da ilova cheklovlarini boshqarish';
+  String get permissionFamilyControlsShortBody => 'iOS\'da ilova cheklovlarini boshqarish';
 
   @override
   String permissionCurrentStatusLabel(String status) {
@@ -269,29 +315,25 @@ class AppLocalizationsUz extends AppLocalizations {
   String get nfcGuidanceAvailableTitle => 'NFC is ready';
 
   @override
-  String get nfcGuidanceAvailableBody =>
-      'Your device is ready to scan NFC tags.';
+  String get nfcGuidanceAvailableBody => 'Your device is ready to scan NFC tags.';
 
   @override
   String get nfcGuidanceDisabledTitle => 'Turn on NFC';
 
   @override
-  String get nfcGuidanceDisabledBody =>
-      'NFC is turned off on this device. Enable it in system settings to continue.';
+  String get nfcGuidanceDisabledBody => 'NFC is turned off on this device. Enable it in system settings to continue.';
 
   @override
   String get nfcGuidanceNotSupportedTitle => 'NFC is not supported';
 
   @override
-  String get nfcGuidanceNotSupportedBody =>
-      'This device does not support NFC scanning.';
+  String get nfcGuidanceNotSupportedBody => 'This device does not support NFC scanning.';
 
   @override
   String get nfcGuidanceUnknownTitle => 'NFC status unavailable';
 
   @override
-  String get nfcGuidanceUnknownBody =>
-      'We could not determine NFC availability right now. Try again in a moment.';
+  String get nfcGuidanceUnknownBody => 'We could not determine NFC availability right now. Try again in a moment.';
 
   @override
   String blockedAppsCountLabel(int count) {
@@ -577,8 +619,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get statsPermissionRequiredTitle => 'Usage permission required';
 
   @override
-  String get statsPermissionRequiredBody =>
-      'Allow Usage Access to view Android usage statistics.';
+  String get statsPermissionRequiredBody => 'Allow Usage Access to view Android usage statistics.';
 
   @override
   String get statsLoadFailed => 'Failed to load usage statistics.';
@@ -590,8 +631,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get statsIosReportUnavailableTitle => 'iOS report unavailable';
 
   @override
-  String get statsIosReportUnavailableBody =>
-      'Make sure Screen Time permission and Device Activity Report extension are configured.';
+  String get statsIosReportUnavailableBody => 'Make sure Screen Time permission and Device Activity Report extension are configured.';
 
   @override
   String get authTagline => 'Diqqat va farovonlik';
@@ -615,8 +655,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get authOtpTitle => 'Emailni tasdiqlang';
 
   @override
-  String get authOtpSubtitlePrefix =>
-      'Email manzilingizga yuborgan 6 xonali kodni kiriting ';
+  String get authOtpSubtitlePrefix => 'Email manzilingizga yuborgan 6 xonali kodni kiriting ';
 
   @override
   String get authOtpSubtitleSuffix => '.';
@@ -648,15 +687,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get authFailureInvalidOtp => 'Tasdiqlash kodi noto\'g\'ri.';
 
   @override
-  String get authFailureOtpChallengeMissing =>
-      'Tasdiqlash sessiyasi tugagan. Qayta urinib ko\'ring.';
+  String get authFailureOtpChallengeMissing => 'Tasdiqlash sessiyasi tugagan. Qayta urinib ko\'ring.';
 
   @override
   String get authFailureStorage => 'Xavfsiz xotiraga kirib bo\'lmadi.';
 
   @override
-  String get authFailureUnknown =>
-      'Kirish amalga oshmadi. Qayta urinib ko\'ring.';
+  String get authFailureUnknown => 'Kirish amalga oshmadi. Qayta urinib ko\'ring.';
 }
 
 /// The translations for Uzbek, using the Cyrillic script (`uz_Cyrl`).
@@ -686,6 +723,57 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get profileEditInfoNavTitle => 'Профилни таҳрирлаш';
+
+  @override
+  String get profileEditTitle => 'Профилни таҳрирлаш';
+
+  @override
+  String get profileEditChangePhoto => 'РАСМНИ АЛМАШТИРИШ';
+
+  @override
+  String get profileEditUploadingPhoto => 'ЮКЛАНМОҚДА...';
+
+  @override
+  String get profileEditNameLabel => 'Исм';
+
+  @override
+  String get profileEditNameHint => 'Исмингиз';
+
+  @override
+  String get profileEditUsernameLabel => 'Username';
+
+  @override
+  String get profileEditUsernameHint => 'username';
+
+  @override
+  String get profileEditSaveButton => 'Ўзгаришларни сақлаш';
+
+  @override
+  String get profileEditChangePhotoSheetTitle => 'Профил расмини алмаштириш';
+
+  @override
+  String get profileEditTakePhotoTitle => 'Расмга олиш';
+
+  @override
+  String get profileEditTakePhotoSubtitle => 'Камера орқали янги расм олинг';
+
+  @override
+  String get profileEditChooseFromGalleryTitle => 'Галереядан танлаш';
+
+  @override
+  String get profileEditChooseFromGallerySubtitle => 'Телефон галереясидан расм танланг';
+
+  @override
+  String get profileEditInvalidUsernameError => '3-30 та кичик ҳарф, рақам ёки _ ишлатинг';
+
+  @override
+  String get profileEditUsernameTakenError => 'Бу username банд';
+
+  @override
+  String get profileEditValidationError => 'Профил маълумотларини текширинг';
+
+  @override
+  String get profileEditNetworkError => 'Профилни янгилаб бўлмади. Алоқани текширинг';
 
   @override
   String get profileSettingsNavTitle => 'Созламалар';
@@ -861,8 +949,7 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
       'Аниқ сигнал (exact alarm) жадвал ва пауза таймерларини аниқ ишлатиб, блоклашни ўз вақтида бошлади ва тугатади.';
 
   @override
-  String get permissionFamilyControlsTitle =>
-      'Family Controls (Screen Time) рухсатини беринг';
+  String get permissionFamilyControlsTitle => 'Family Controls (Screen Time) рухсатини беринг';
 
   @override
   String get permissionFamilyControlsBody =>
@@ -876,20 +963,16 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
       'Диққатингизни жамлаш ва чалғитувчи иловаларни самарали блоклаш учун Pauza\'га қуйида келтирилган рухсатлар керак. Маълумотларингиз қурилмангизда қолади.';
 
   @override
-  String get permissionUsageAccessShortBody =>
-      'Фойдаланишни кузатиш ва лимитларни қўллаш';
+  String get permissionUsageAccessShortBody => 'Фойдаланишни кузатиш ва лимитларни қўллаш';
 
   @override
-  String get permissionAccessibilityShortBody =>
-      'Чекланган иловаларни аниқлаш ва блоклаш';
+  String get permissionAccessibilityShortBody => 'Чекланган иловаларни аниқлаш ва блоклаш';
 
   @override
-  String get permissionExactAlarmShortBody =>
-      'Жадвал ва таймерларни аниқ ишлатиш';
+  String get permissionExactAlarmShortBody => 'Жадвал ва таймерларни аниқ ишлатиш';
 
   @override
-  String get permissionFamilyControlsShortBody =>
-      'iOS\'да илова чекловларини бошқариш';
+  String get permissionFamilyControlsShortBody => 'iOS\'да илова чекловларини бошқариш';
 
   @override
   String permissionCurrentStatusLabel(String status) {
@@ -1135,8 +1218,7 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get statsPermissionRequiredTitle => 'Usage permission required';
 
   @override
-  String get statsPermissionRequiredBody =>
-      'Allow Usage Access to view Android usage statistics.';
+  String get statsPermissionRequiredBody => 'Allow Usage Access to view Android usage statistics.';
 
   @override
   String get statsLoadFailed => 'Failed to load usage statistics.';
@@ -1148,8 +1230,7 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get statsIosReportUnavailableTitle => 'iOS report unavailable';
 
   @override
-  String get statsIosReportUnavailableBody =>
-      'Make sure Screen Time permission and Device Activity Report extension are configured.';
+  String get statsIosReportUnavailableBody => 'Make sure Screen Time permission and Device Activity Report extension are configured.';
 
   @override
   String get authTagline => 'Диққат ва фаровонлик';
@@ -1173,8 +1254,7 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get authOtpTitle => 'Emailни тасдиқланг';
 
   @override
-  String get authOtpSubtitlePrefix =>
-      'Email манзилингизга юборган 6 хонали кодни киритинг ';
+  String get authOtpSubtitlePrefix => 'Email манзилингизга юборган 6 хонали кодни киритинг ';
 
   @override
   String get authOtpSubtitleSuffix => '.';
@@ -1206,8 +1286,7 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get authFailureInvalidOtp => 'Тасдиқлаш коди нотўғри.';
 
   @override
-  String get authFailureOtpChallengeMissing =>
-      'Тасдиқлаш сессияси тугаган. Қайта уриниб кўринг.';
+  String get authFailureOtpChallengeMissing => 'Тасдиқлаш сессияси тугаган. Қайта уриниб кўринг.';
 
   @override
   String get authFailureStorage => 'Хавфсиз хотирага кириб бўлмади.';

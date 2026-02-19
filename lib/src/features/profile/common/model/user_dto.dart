@@ -4,7 +4,13 @@ import 'package:flutter/foundation.dart';
 final class UserDto {
   const UserDto({required this.profilePicture, required this.username, required this.name});
 
-  final String profilePicture;
+  factory UserDto.fromJson(Map<String, Object?> json) => UserDto(
+    profilePicture: json['profilePicture'] as String?,
+    username: json['username'] as String? ?? '',
+    name: json['name'] as String? ?? '',
+  );
+
+  final String? profilePicture;
   final String username;
   final String name;
 
@@ -16,6 +22,8 @@ final class UserDto {
         'name: $name'
         ')';
   }
+
+  Map<String, Object?> toJson() => <String, Object?>{'profilePicture': profilePicture, 'username': username, 'name': name};
 
   @override
   bool operator ==(Object other) {

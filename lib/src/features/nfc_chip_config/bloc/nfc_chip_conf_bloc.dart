@@ -28,7 +28,7 @@ class NfcChipConfBloc extends Bloc<NfcChipConfEvent, NfcChipConfState> {
   Future<void> _onLoadCardsRequested(NfcChipLoadCardsRequested event, Emitter<NfcChipConfState> emit) async {
     try {
       emit(state.loading());
-      _onLoadCards(emit);
+      await _onLoadCards(emit);
     } on Object catch (error) {
       emit(state.setError(error));
     }
@@ -47,7 +47,7 @@ class NfcChipConfBloc extends Bloc<NfcChipConfEvent, NfcChipConfState> {
     try {
       emit(state.loading());
       await _linkedChipsRepository.deleteChip(id: event.cardId);
-      _onLoadCards(emit);
+      await _onLoadCards(emit);
     } on Object catch (error) {
       emit(state.setError(error));
     }
@@ -61,7 +61,7 @@ class NfcChipConfBloc extends Bloc<NfcChipConfEvent, NfcChipConfState> {
         throw const NfcChipConfigMissingIdentifierError();
       }
       await _linkedChipsRepository.linkChipIfAbsent(chipIdentifier: uidHex);
-      _onLoadCards(emit);
+      await _onLoadCards(emit);
     } on Object catch (error) {
       emit(state.setError(error));
     }
@@ -71,7 +71,7 @@ class NfcChipConfBloc extends Bloc<NfcChipConfEvent, NfcChipConfState> {
     try {
       emit(state.loading());
       await _linkedChipsRepository.renameChip(id: event.cardId, name: event.newName);
-      _onLoadCards(emit);
+      await _onLoadCards(emit);
     } on Object catch (error) {
       emit(state.setError(error));
     }

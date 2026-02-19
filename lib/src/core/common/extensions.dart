@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart' show DateTimeX;
 
@@ -14,6 +15,11 @@ extension IterableX<A> on Iterable<A> {
 }
 
 extension DateTimeX on DateTime {
+  String formatLinkedDate(BuildContext context) {
+    final localeName = Localizations.localeOf(context).toLanguageTag();
+    return DateFormat('MMM dd, yyyy', localeName).format(toLocal());
+  }
+
   DateTimeRange get thisWeek {
     final dayStart = this.dayStart;
     final monday = dayStart.subtract(Duration(days: dayStart.weekday - DateTime.monday));

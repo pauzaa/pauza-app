@@ -54,6 +54,37 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get nfcChipConfigScanFailed =>
       'Unable to link NFC tag. Please try again.';
+  @override
+  String get nfcChipConfigTagsTitle => 'Your NFC Tags';
+  @override
+  String get nfcChipConfigTagsBody =>
+      'Manage your linked NFC tags. These tags are your physical keys to unlock focus sessions.';
+  @override
+  String get nfcChipConfigLinkNewTagButton => 'Link New Tag';
+  @override
+  String nfcChipConfigLinkedOnDate(String date) => 'Linked on $date';
+  @override
+  String get nfcChipConfigRenameAction => 'Rename';
+  @override
+  String get nfcChipConfigDeleteAction => 'Delete';
+  @override
+  String get nfcChipConfigRenameDialogTitle => 'Rename NFC Tag';
+  @override
+  String get nfcChipConfigRenameFieldLabel => 'Tag name';
+  @override
+  String get nfcChipConfigRenameFieldHint => 'Enter tag name';
+  @override
+  String get nfcChipConfigRenameSaveButton => 'Save';
+  @override
+  String get nfcChipConfigNoTagsTitle => 'No linked tags yet';
+  @override
+  String get nfcChipConfigNoTagsBody =>
+      'Link your first NFC tag to manage focus session unlocking.';
+  @override
+  String get readyToScanNfcTag => 'Ready to Scan';
+  @override
+  String get nfcChipHoldCardNearDevice =>
+      'Hold your device near the NFC tag to scan';
 
   // Stub implementations for other abstract members
   @override
@@ -466,10 +497,10 @@ class _FakeAppLocalizations extends AppLocalizations {
 
   @override
   String get reminaingLabel => 'Remaining';
-  
+
   @override
   String get scanNfcChipTitle => 'Scan NFC Tag';
-  
+
   @override
   String get scanNfcTagActionLabel => 'Scan your NFC tag.';
 }

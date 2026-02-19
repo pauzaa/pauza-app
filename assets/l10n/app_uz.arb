@@ -33,6 +33,25 @@
   "settingsLanguagePickerTitle": "Tilni tanlang",
   "settingsNfcChipConfiguring": "NFC chipini sozlash",
   "settingsQrCodeConfiguring": "QR kodni sozlash",
+  "nfcChipConfigTagsTitle": "NFC teglaringiz",
+  "nfcChipConfigTagsBody": "Ulangan NFC teglarni boshqaring. Bu teglar fokus sessiyalarini yakunlash uchun jismoniy kalit hisoblanadi.",
+  "nfcChipConfigLinkNewTagButton": "Yangi teg ulash",
+  "nfcChipConfigLinkedOnDate": "{date} da ulangan",
+  "@nfcChipConfigLinkedOnDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "nfcChipConfigRenameAction": "Nomini o'zgartirish",
+  "nfcChipConfigDeleteAction": "O'chirish",
+  "nfcChipConfigRenameDialogTitle": "NFC teg nomini o'zgartirish",
+  "nfcChipConfigRenameFieldLabel": "Teg nomi",
+  "nfcChipConfigRenameFieldHint": "Teg nomini kiriting",
+  "nfcChipConfigRenameSaveButton": "Saqlash",
+  "nfcChipConfigNoTagsTitle": "Hali ulangan teglar yo'q",
+  "nfcChipConfigNoTagsBody": "Fokus sessiyalarini boshqarish uchun birinchi NFC tegni ulang.",
   "settingsSignOut": "Chiqish",
   "settingsVersionFallback": "Pauza",
   "settingsVersionLabel": "Pauza v{version}",

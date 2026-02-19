@@ -388,6 +388,46 @@ class AppLocalizationsRu extends AppLocalizations {
       'Unable to link NFC tag. Please try again.';
 
   @override
+  String get nfcChipConfigTagsTitle => 'Ваши NFC-метки';
+
+  @override
+  String get nfcChipConfigTagsBody =>
+      'Управляйте привязанными NFC-метками. Эти метки служат физическими ключами для завершения фокус-сессий.';
+
+  @override
+  String get nfcChipConfigLinkNewTagButton => 'Привязать новую метку';
+
+  @override
+  String nfcChipConfigLinkedOnDate(String date) {
+    return 'Привязано: $date';
+  }
+
+  @override
+  String get nfcChipConfigRenameAction => 'Переименовать';
+
+  @override
+  String get nfcChipConfigDeleteAction => 'Удалить';
+
+  @override
+  String get nfcChipConfigRenameDialogTitle => 'Переименовать NFC-метку';
+
+  @override
+  String get nfcChipConfigRenameFieldLabel => 'Название метки';
+
+  @override
+  String get nfcChipConfigRenameFieldHint => 'Введите название метки';
+
+  @override
+  String get nfcChipConfigRenameSaveButton => 'Сохранить';
+
+  @override
+  String get nfcChipConfigNoTagsTitle => 'Пока нет привязанных меток';
+
+  @override
+  String get nfcChipConfigNoTagsBody =>
+      'Привяжите первую NFC-метку для управления разблокировкой фокус-сессий.';
+
+  @override
   String blockedAppsCountLabel(int count) {
     return 'Заблокировано приложений: $count';
   }

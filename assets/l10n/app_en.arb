@@ -457,6 +457,59 @@
   "@nfcChipConfigScanFailed": {
     "description": "Error shown when NFC scan or linking fails."
   },
+  "nfcChipConfigTagsTitle": "Your NFC Tags",
+  "@nfcChipConfigTagsTitle": {
+    "description": "Title shown on NFC tags management screen."
+  },
+  "nfcChipConfigTagsBody": "Manage your linked NFC tags. These tags are your physical keys to unlock focus sessions.",
+  "@nfcChipConfigTagsBody": {
+    "description": "Body text shown on NFC tags management screen."
+  },
+  "nfcChipConfigLinkNewTagButton": "Link New Tag",
+  "@nfcChipConfigLinkNewTagButton": {
+    "description": "Primary action label to link a new NFC tag from management screen."
+  },
+  "nfcChipConfigLinkedOnDate": "Linked on {date}",
+  "@nfcChipConfigLinkedOnDate": {
+    "description": "Subtitle shown under NFC tag name with linked date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "nfcChipConfigRenameAction": "Rename",
+  "@nfcChipConfigRenameAction": {
+    "description": "Menu action label to rename a linked NFC tag."
+  },
+  "nfcChipConfigDeleteAction": "Delete",
+  "@nfcChipConfigDeleteAction": {
+    "description": "Menu action label to delete a linked NFC tag."
+  },
+  "nfcChipConfigRenameDialogTitle": "Rename NFC Tag",
+  "@nfcChipConfigRenameDialogTitle": {
+    "description": "Title for the rename NFC tag dialog."
+  },
+  "nfcChipConfigRenameFieldLabel": "Tag name",
+  "@nfcChipConfigRenameFieldLabel": {
+    "description": "Label for NFC tag rename text field."
+  },
+  "nfcChipConfigRenameFieldHint": "Enter tag name",
+  "@nfcChipConfigRenameFieldHint": {
+    "description": "Hint text for NFC tag rename input."
+  },
+  "nfcChipConfigRenameSaveButton": "Save",
+  "@nfcChipConfigRenameSaveButton": {
+    "description": "Primary action label on rename NFC tag dialog."
+  },
+  "nfcChipConfigNoTagsTitle": "No linked tags yet",
+  "@nfcChipConfigNoTagsTitle": {
+    "description": "Title for empty state when there are no linked NFC tags."
+  },
+  "nfcChipConfigNoTagsBody": "Link your first NFC tag to manage focus session unlocking.",
+  "@nfcChipConfigNoTagsBody": {
+    "description": "Body for empty state when there are no linked NFC tags."
+  },
   "blockedAppsCountLabel": "Blocked apps: {count}",
   "@blockedAppsCountLabel": {
     "placeholders": {

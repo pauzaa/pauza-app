@@ -388,6 +388,46 @@ class AppLocalizationsUz extends AppLocalizations {
       'Unable to link NFC tag. Please try again.';
 
   @override
+  String get nfcChipConfigTagsTitle => 'NFC teglaringiz';
+
+  @override
+  String get nfcChipConfigTagsBody =>
+      'Ulangan NFC teglarni boshqaring. Bu teglar fokus sessiyalarini yakunlash uchun jismoniy kalit hisoblanadi.';
+
+  @override
+  String get nfcChipConfigLinkNewTagButton => 'Yangi teg ulash';
+
+  @override
+  String nfcChipConfigLinkedOnDate(String date) {
+    return '$date da ulangan';
+  }
+
+  @override
+  String get nfcChipConfigRenameAction => 'Nomini o\'zgartirish';
+
+  @override
+  String get nfcChipConfigDeleteAction => 'O\'chirish';
+
+  @override
+  String get nfcChipConfigRenameDialogTitle => 'NFC teg nomini o\'zgartirish';
+
+  @override
+  String get nfcChipConfigRenameFieldLabel => 'Teg nomi';
+
+  @override
+  String get nfcChipConfigRenameFieldHint => 'Teg nomini kiriting';
+
+  @override
+  String get nfcChipConfigRenameSaveButton => 'Saqlash';
+
+  @override
+  String get nfcChipConfigNoTagsTitle => 'Hali ulangan teglar yo\'q';
+
+  @override
+  String get nfcChipConfigNoTagsBody =>
+      'Fokus sessiyalarini boshqarish uchun birinchi NFC tegni ulang.';
+
+  @override
   String blockedAppsCountLabel(int count) {
     return 'Bloklangan ilovalar: $count';
   }
@@ -1075,6 +1115,46 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get permissionAllowAccessButton => 'Рухсат бериш';
+
+  @override
+  String get nfcChipConfigTagsTitle => 'NFC тегларингиз';
+
+  @override
+  String get nfcChipConfigTagsBody =>
+      'Уланган NFC тегларни бошқаринг. Бу теглар фокус сессияларини якунлаш учун жисмоний калит ҳисобланади.';
+
+  @override
+  String get nfcChipConfigLinkNewTagButton => 'Янги тег улаш';
+
+  @override
+  String nfcChipConfigLinkedOnDate(String date) {
+    return '$date да уланган';
+  }
+
+  @override
+  String get nfcChipConfigRenameAction => 'Номини ўзгартириш';
+
+  @override
+  String get nfcChipConfigDeleteAction => 'Ўчириш';
+
+  @override
+  String get nfcChipConfigRenameDialogTitle => 'NFC тег номини ўзгартириш';
+
+  @override
+  String get nfcChipConfigRenameFieldLabel => 'Тег номи';
+
+  @override
+  String get nfcChipConfigRenameFieldHint => 'Тег номини киритинг';
+
+  @override
+  String get nfcChipConfigRenameSaveButton => 'Сақлаш';
+
+  @override
+  String get nfcChipConfigNoTagsTitle => 'Ҳали уланган теглар йўқ';
+
+  @override
+  String get nfcChipConfigNoTagsBody =>
+      'Фокус сессияларини бошқариш учун биринчи NFC тегни уланг.';
 
   @override
   String blockedAppsCountLabel(int count) {

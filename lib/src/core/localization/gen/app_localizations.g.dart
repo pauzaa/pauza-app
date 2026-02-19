@@ -761,6 +761,78 @@ abstract class AppLocalizations {
   /// **'Unable to link NFC tag. Please try again.'**
   String get nfcChipConfigScanFailed;
 
+  /// Title shown on NFC tags management screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Your NFC Tags'**
+  String get nfcChipConfigTagsTitle;
+
+  /// Body text shown on NFC tags management screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your linked NFC tags. These tags are your physical keys to unlock focus sessions.'**
+  String get nfcChipConfigTagsBody;
+
+  /// Primary action label to link a new NFC tag from management screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Link New Tag'**
+  String get nfcChipConfigLinkNewTagButton;
+
+  /// Subtitle shown under NFC tag name with linked date.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked on {date}'**
+  String nfcChipConfigLinkedOnDate(String date);
+
+  /// Menu action label to rename a linked NFC tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get nfcChipConfigRenameAction;
+
+  /// Menu action label to delete a linked NFC tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get nfcChipConfigDeleteAction;
+
+  /// Title for the rename NFC tag dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename NFC Tag'**
+  String get nfcChipConfigRenameDialogTitle;
+
+  /// Label for NFC tag rename text field.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag name'**
+  String get nfcChipConfigRenameFieldLabel;
+
+  /// Hint text for NFC tag rename input.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter tag name'**
+  String get nfcChipConfigRenameFieldHint;
+
+  /// Primary action label on rename NFC tag dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get nfcChipConfigRenameSaveButton;
+
+  /// Title for empty state when there are no linked NFC tags.
+  ///
+  /// In en, this message translates to:
+  /// **'No linked tags yet'**
+  String get nfcChipConfigNoTagsTitle;
+
+  /// Body for empty state when there are no linked NFC tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Link your first NFC tag to manage focus session unlocking.'**
+  String get nfcChipConfigNoTagsBody;
+
   /// No description provided for @blockedAppsCountLabel.
   ///
   /// In en, this message translates to:

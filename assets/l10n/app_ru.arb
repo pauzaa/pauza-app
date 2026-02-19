@@ -33,6 +33,25 @@
   "settingsLanguagePickerTitle": "Выберите язык",
   "settingsNfcChipConfiguring": "Настройка NFC-чипа",
   "settingsQrCodeConfiguring": "Настройка QR-кода",
+  "nfcChipConfigTagsTitle": "Ваши NFC-метки",
+  "nfcChipConfigTagsBody": "Управляйте привязанными NFC-метками. Эти метки служат физическими ключами для завершения фокус-сессий.",
+  "nfcChipConfigLinkNewTagButton": "Привязать новую метку",
+  "nfcChipConfigLinkedOnDate": "Привязано: {date}",
+  "@nfcChipConfigLinkedOnDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "nfcChipConfigRenameAction": "Переименовать",
+  "nfcChipConfigDeleteAction": "Удалить",
+  "nfcChipConfigRenameDialogTitle": "Переименовать NFC-метку",
+  "nfcChipConfigRenameFieldLabel": "Название метки",
+  "nfcChipConfigRenameFieldHint": "Введите название метки",
+  "nfcChipConfigRenameSaveButton": "Сохранить",
+  "nfcChipConfigNoTagsTitle": "Пока нет привязанных меток",
+  "nfcChipConfigNoTagsBody": "Привяжите первую NFC-метку для управления разблокировкой фокус-сессий.",
   "settingsSignOut": "Выйти",
   "settingsVersionFallback": "Pauza",
   "settingsVersionLabel": "Pauza v{version}",

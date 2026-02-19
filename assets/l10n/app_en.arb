@@ -128,6 +128,18 @@
   "@settingsSessionEndingConfSectionTitle": {
     "description": "Section title for session ending confirmation settings."
   },
+  "scanNfcChipTitle": "Scan NFC Tag",
+  "@scanNfcChipTitle": {
+    "description": "Title for the NFC tag scanning screen."
+  },
+  "readyToScanNfcTag": "Ready to Scan",
+  "@readyToScanNfcTag": {
+    "description": "Title shown when the user is ready to scan an NFC tag."
+  },
+  "scanNfcTagActionLabel": "Scan your NFC tag.",
+  "@scanNfcTagActionLabel": {
+    "description": "Action label to scan an NFC tag."
+  },
   "settingsNfcChipConfiguring": "NFC Chip Configuring",
   "@settingsNfcChipConfiguring": {
     "description": "Label for NFC chip configuring settings row."
@@ -408,6 +420,42 @@
   "nfcGuidanceUnknownBody": "We could not determine NFC availability right now. Try again in a moment.",
   "@nfcGuidanceUnknownBody": {
     "description": "Body shown when NFC status cannot be determined."
+  },
+  "nfcChipConfigTitle": "Configure NFC Tag",
+  "@nfcChipConfigTitle": {
+    "description": "Title shown on NFC tag linking screen."
+  },
+  "nfcChipConfigBody": "Scan an NFC tag to link it with Pauza. You will need this tag to end your focus sessions.",
+  "@nfcChipConfigBody": {
+    "description": "Body text shown on NFC tag linking screen."
+  },
+  "nfcChipConfigLinkButton": "Link NFC Tag",
+  "@nfcChipConfigLinkButton": {
+    "description": "Primary action to start linking an NFC tag."
+  },
+  "nfcChipConfigScanningButton": "Scanning...",
+  "@nfcChipConfigScanningButton": {
+    "description": "Primary action label while NFC scan is in progress."
+  },
+  "nfcChipConfigLinkedSuccess": "NFC tag linked successfully.",
+  "@nfcChipConfigLinkedSuccess": {
+    "description": "Toast shown when NFC tag has been linked."
+  },
+  "nfcChipConfigAlreadyLinked": "This NFC tag is already linked.",
+  "@nfcChipConfigAlreadyLinked": {
+    "description": "Toast shown when NFC tag already exists in linked tags table."
+  },
+  "nfcChipHoldCardNearDevice": "Hold your device near the NFC tag to scan",
+  "@nfcChipHoldCardNearDevice": {
+    "description": "Instruction shown when the user should hold the NFC tag near the device to scan."
+  },
+  "nfcChipConfigUidMissingError": "This NFC tag cannot be linked because it does not provide an identifier.",
+  "@nfcChipConfigUidMissingError": {
+    "description": "Error shown when scanned NFC tag has no stable UID."
+  },
+  "nfcChipConfigScanFailed": "Unable to link NFC tag. Please try again.",
+  "@nfcChipConfigScanFailed": {
+    "description": "Error shown when NFC scan or linking fails."
   },
   "blockedAppsCountLabel": "Blocked apps: {count}",
   "@blockedAppsCountLabel": {

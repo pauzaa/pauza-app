@@ -1,0 +1,1 @@
+export 'package:pauza_ui_kit/src/base_components/dialogs/pauza_alert_dialog.dart';

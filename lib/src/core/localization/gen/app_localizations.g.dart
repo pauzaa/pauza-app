@@ -293,6 +293,24 @@ abstract class AppLocalizations {
   /// **'Session Ending'**
   String get settingsSessionEndingConfSectionTitle;
 
+  /// Title for the NFC tag scanning screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan NFC Tag'**
+  String get scanNfcChipTitle;
+
+  /// Title shown when the user is ready to scan an NFC tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to Scan'**
+  String get readyToScanNfcTag;
+
+  /// Action label to scan an NFC tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan your NFC tag.'**
+  String get scanNfcTagActionLabel;
+
   /// Label for NFC chip configuring settings row.
   ///
   /// In en, this message translates to:
@@ -688,6 +706,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We could not determine NFC availability right now. Try again in a moment.'**
   String get nfcGuidanceUnknownBody;
+
+  /// Title shown on NFC tag linking screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure NFC Tag'**
+  String get nfcChipConfigTitle;
+
+  /// Body text shown on NFC tag linking screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan an NFC tag to link it with Pauza. You will need this tag to end your focus sessions.'**
+  String get nfcChipConfigBody;
+
+  /// Primary action to start linking an NFC tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Link NFC Tag'**
+  String get nfcChipConfigLinkButton;
+
+  /// Primary action label while NFC scan is in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning...'**
+  String get nfcChipConfigScanningButton;
+
+  /// Toast shown when NFC tag has been linked.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC tag linked successfully.'**
+  String get nfcChipConfigLinkedSuccess;
+
+  /// Toast shown when NFC tag already exists in linked tags table.
+  ///
+  /// In en, this message translates to:
+  /// **'This NFC tag is already linked.'**
+  String get nfcChipConfigAlreadyLinked;
+
+  /// Instruction shown when the user should hold the NFC tag near the device to scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold your device near the NFC tag to scan'**
+  String get nfcChipHoldCardNearDevice;
+
+  /// Error shown when scanned NFC tag has no stable UID.
+  ///
+  /// In en, this message translates to:
+  /// **'This NFC tag cannot be linked because it does not provide an identifier.'**
+  String get nfcChipConfigUidMissingError;
+
+  /// Error shown when NFC scan or linking fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to link NFC tag. Please try again.'**
+  String get nfcChipConfigScanFailed;
 
   /// No description provided for @blockedAppsCountLabel.
   ///

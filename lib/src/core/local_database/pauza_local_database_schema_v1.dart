@@ -76,6 +76,17 @@ CREATE TABLE restriction_sessions (
   updated_at INTEGER NOT NULL
 );
 ''';
+
+  static const String createNfcLinkedChipsTable = '''
+CREATE TABLE nfc_linked_chips (
+  id TEXT PRIMARY KEY NOT NULL,
+  chip_identifier TEXT NOT NULL UNIQUE
+    CHECK (length(trim(chip_identifier)) > 0),
+  name TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+''';
 }
 
 final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
@@ -92,9 +103,14 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
     batch.execute(LocalDatabaseSqlStatements.createSchedulesTable);
     batch.execute(LocalDatabaseSqlStatements.createRestrictionLifecycleEventsTable);
     batch.execute(LocalDatabaseSqlStatements.createRestrictionSessionsTable);
+    batch.execute(LocalDatabaseSqlStatements.createNfcLinkedChipsTable);
     await batch.commit(noResult: true);
   }
 
   @override
-  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {}
+  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {
+    if (oldVersion < 2 && newVersion >= 2) {
+      await database.execute(LocalDatabaseSqlStatements.createNfcLinkedChipsTable);
+    }
+  }
 }

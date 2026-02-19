@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:helm/helm.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 

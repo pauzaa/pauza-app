@@ -35,6 +35,25 @@ class _FakeAppLocalizations extends AppLocalizations {
 
   @override
   String get nfcOpenSettingsButton => 'Open settings';
+  @override
+  String get nfcChipConfigTitle => 'Configure NFC Tag';
+  @override
+  String get nfcChipConfigBody =>
+      'Scan an NFC tag to link it with Pauza. You will need this tag to end your focus sessions.';
+  @override
+  String get nfcChipConfigLinkButton => 'Link NFC Tag';
+  @override
+  String get nfcChipConfigScanningButton => 'Scanning...';
+  @override
+  String get nfcChipConfigLinkedSuccess => 'NFC tag linked successfully.';
+  @override
+  String get nfcChipConfigAlreadyLinked => 'This NFC tag is already linked.';
+  @override
+  String get nfcChipConfigUidMissingError =>
+      'This NFC tag cannot be linked because it does not provide an identifier.';
+  @override
+  String get nfcChipConfigScanFailed =>
+      'Unable to link NFC tag. Please try again.';
 
   // Stub implementations for other abstract members
   @override
@@ -438,15 +457,21 @@ class _FakeAppLocalizations extends AppLocalizations {
       'Ensure iOS report extension is configured.';
   @override
   String get settingsSessionEndingConfSectionTitle => 'Session Ending';
-  
+
   @override
   String get pausedTakeABreathLabel => 'Take a breath';
-  
+
   @override
   String get pausedTitle => 'Paused';
-  
+
   @override
   String get reminaingLabel => 'Remaining';
+  
+  @override
+  String get scanNfcChipTitle => 'Scan NFC Tag';
+  
+  @override
+  String get scanNfcTagActionLabel => 'Scan your NFC tag.';
 }
 
 void main() {

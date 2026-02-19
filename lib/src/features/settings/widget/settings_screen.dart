@@ -8,6 +8,7 @@ import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
+import 'package:pauza/src/features/nfc/widget/nfc_chip_scan_sheet.dart';
 import 'package:pauza/src/features/settings/widget/settings_footer.dart';
 import 'package:pauza/src/features/settings/widget/settings_language_tile.dart';
 import 'package:pauza/src/features/settings/widget/settings_navigation_tile.dart';
@@ -55,7 +56,8 @@ class SettingsScreen extends StatelessWidget {
                 icon: Icons.nfc_rounded,
                 title: l10n.settingsNfcChipConfiguring,
                 onTap: () {
-                  HelmRouter.push(context, PauzaRoutes.nfcChipConfig);
+                  NfcChipScanSheet.show(context);
+                  // HelmRouter.push(context, PauzaRoutes.nfcChipConfig);
                 },
               ),
             ),

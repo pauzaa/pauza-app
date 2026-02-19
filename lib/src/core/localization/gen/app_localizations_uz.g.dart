@@ -108,6 +108,15 @@ class AppLocalizationsUz extends AppLocalizations {
   String get settingsSessionEndingConfSectionTitle => 'Session Ending';
 
   @override
+  String get scanNfcChipTitle => 'Scan NFC Tag';
+
+  @override
+  String get readyToScanNfcTag => 'Ready to Scan';
+
+  @override
+  String get scanNfcTagActionLabel => 'Scan your NFC tag.';
+
+  @override
   String get settingsNfcChipConfiguring => 'NFC chipini sozlash';
 
   @override
@@ -346,6 +355,37 @@ class AppLocalizationsUz extends AppLocalizations {
   @override
   String get nfcGuidanceUnknownBody =>
       'We could not determine NFC availability right now. Try again in a moment.';
+
+  @override
+  String get nfcChipConfigTitle => 'Configure NFC Tag';
+
+  @override
+  String get nfcChipConfigBody =>
+      'Scan an NFC tag to link it with Pauza. You will need this tag to end your focus sessions.';
+
+  @override
+  String get nfcChipConfigLinkButton => 'Link NFC Tag';
+
+  @override
+  String get nfcChipConfigScanningButton => 'Scanning...';
+
+  @override
+  String get nfcChipConfigLinkedSuccess => 'NFC tag linked successfully.';
+
+  @override
+  String get nfcChipConfigAlreadyLinked => 'This NFC tag is already linked.';
+
+  @override
+  String get nfcChipHoldCardNearDevice =>
+      'Hold your device near the NFC tag to scan';
+
+  @override
+  String get nfcChipConfigUidMissingError =>
+      'This NFC tag cannot be linked because it does not provide an identifier.';
+
+  @override
+  String get nfcChipConfigScanFailed =>
+      'Unable to link NFC tag. Please try again.';
 
   @override
   String blockedAppsCountLabel(int count) {

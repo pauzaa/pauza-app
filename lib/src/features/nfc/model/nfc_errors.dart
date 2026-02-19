@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_util/nfc_util.dart';
+import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_availability.dart';
 
-enum NfcErrorCode { unsupported, disabled, busy, permissionDenied, timeout, cancelled, unknown }
+enum NfcErrorCode implements Localizable {
+  unsupported,
+  disabled,
+  busy,
+  permissionDenied,
+  timeout,
+  cancelled,
+  unknown;
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.nfcChipConfigScanFailed;
+  }
+}
 
 @immutable
 class NfcException implements Exception {

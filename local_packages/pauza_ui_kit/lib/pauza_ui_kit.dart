@@ -14,3 +14,4 @@ export 'package:pauza_ui_kit/src/base_components/list_tiles/export.dart';
 export 'package:pauza_ui_kit/src/base_components/bottom_navigation_bar/export.dart';
 export 'package:pauza_ui_kit/src/base_components/selectors/export.dart';
 export 'package:pauza_ui_kit/src/base_components/user_avatar/export.dart';
+export 'package:pauza_ui_kit/src/base_components/dialogs/export.dart';

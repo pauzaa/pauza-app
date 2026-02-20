@@ -11,8 +11,7 @@ import 'package:pauza/src/features/auth/widget/auth_form/auth_credentials_form.d
 import 'package:pauza/src/features/auth/widget/auth_form/auth_header_section.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
-typedef LocaleSelectionHandler =
-    Future<void> Function(BuildContext context, Locale locale);
+typedef LocaleSelectionHandler = Future<void> Function(BuildContext context, Locale locale);
 typedef OtpNavigationHandler = void Function(BuildContext context);
 
 class AuthScreenContent extends StatefulWidget {
@@ -107,10 +106,7 @@ class _AuthScreenContentState extends State<AuthScreenContent> {
     }
 
     context.read<AuthBloc>().add(
-      AuthSignInRequested(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      ),
+      AuthSignInRequested(email: _emailController.text.trim(), password: _passwordController.text),
     );
   }
 

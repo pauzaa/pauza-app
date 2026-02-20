@@ -35,22 +35,13 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     await _loadUsage(emit);
   }
 
-  Future<void> _onDateRangePicked(
-    StatsDateRangePicked event,
-    Emitter<StatsState> emit,
-  ) async {
-    final picked = DateTimeRange(
-      start: event.range.start.dayStart,
-      end: event.range.end.dayEnd,
-    );
+  Future<void> _onDateRangePicked(StatsDateRangePicked event, Emitter<StatsState> emit) async {
+    final picked = DateTimeRange(start: event.range.start.dayStart, end: event.range.end.dayEnd);
     emit(state.copyWith(window: picked));
     await _loadUsage(emit);
   }
 
-  Future<void> _onRefreshRequested(
-    StatsRefreshRequested event,
-    Emitter<StatsState> emit,
-  ) async {
+  Future<void> _onRefreshRequested(StatsRefreshRequested event, Emitter<StatsState> emit) async {
     await _loadUsage(emit);
   }
 
@@ -62,30 +53,16 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     emit(state.copyWith(isLoading: true));
 
     try {
-      final currentUsage = await _usageRepository.getUsageStats(
-        start: state.window.start,
-        end: state.window.end,
-      );
+      final currentUsage = await _usageRepository.getUsageStats(start: state.window.start, end: state.window.end);
 
-      final previousWindow = state.window.shiftByInclusiveRange(
-        -state.window.inclusiveDays,
-      );
-      final previousUsage = await _usageRepository.getUsageStats(
-        start: previousWindow.start,
-        end: previousWindow.end,
-      );
+      final previousWindow = state.window.shiftByInclusiveRange(-state.window.inclusiveDays);
+      final previousUsage = await _usageRepository.getUsageStats(start: previousWindow.start, end: previousWindow.end);
 
       emit(
         state.copyWith(
           isLoading: false,
-          summary: UsageSummary.buildSummary(
-            current: currentUsage,
-            previous: previousUsage,
-            window: state.window,
-          ),
-          usageStats: currentUsage.sort(
-            (a, b) => b.totalDuration.compareTo(a.totalDuration),
-          ),
+          summary: UsageSummary.buildSummary(current: currentUsage, previous: previousUsage, window: state.window),
+          usageStats: currentUsage.sort((a, b) => b.totalDuration.compareTo(a.totalDuration)),
         ),
       );
     } on Object catch (error) {

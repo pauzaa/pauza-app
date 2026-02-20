@@ -6,9 +6,7 @@ import 'package:pauza/src/features/nfc_chip_config/widget/nfc_chip_rename_dialog
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
-  testWidgets('save is disabled for blank input and returns trimmed value', (
-    tester,
-  ) async {
+  testWidgets('save is disabled for blank input and returns trimmed value', (tester) async {
     final result = ValueNotifier<String?>(null);
 
     await tester.pumpWidget(
@@ -27,10 +25,7 @@ void main() {
             builder: (context) {
               return TextButton(
                 onPressed: () async {
-                  result.value = await NfcChipRenameDialog.show(
-                    context,
-                    initialName: 'Home Desk Tag',
-                  );
+                  result.value = await NfcChipRenameDialog.show(context, initialName: 'Home Desk Tag');
                 },
                 child: const Text('open'),
               );
@@ -48,9 +43,7 @@ void main() {
     await tester.enterText(find.byType(EditableText), '   ');
     await tester.pump();
 
-    final disabledSaveButton = tester.widget<FilledButton>(
-      find.widgetWithText(FilledButton, 'Save'),
-    );
+    final disabledSaveButton = tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Save'));
     expect(disabledSaveButton.onPressed, isNull);
 
     await tester.enterText(find.byType(EditableText), '  Office Door  ');

@@ -19,9 +19,7 @@ class HomeSessionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final title = isActiveSession
-        ? l10n.stopButton.toUpperCase()
-        : l10n.startButton.toUpperCase();
+    final title = isActiveSession ? l10n.stopButton.toUpperCase() : l10n.startButton.toUpperCase();
 
     return InkWell(
       onTap: isBusy ? null : onTap,
@@ -34,10 +32,7 @@ class HomeSessionButton extends StatelessWidget {
             height: buttonSize + 30,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: context.colorScheme.primary,
-                width: 2.5,
-              ),
+              border: Border.all(color: context.colorScheme.primary, width: 2.5),
             ),
           ),
           Container(
@@ -45,19 +40,13 @@ class HomeSessionButton extends StatelessWidget {
             height: buttonSize + 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: context.colorScheme.primary,
-                width: 2.5,
-              ),
+              border: Border.all(color: context.colorScheme.primary, width: 2.5),
             ),
           ),
           Ink(
             width: buttonSize,
             height: buttonSize,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.colorScheme.primary,
-            ),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: context.colorScheme.primary),
             child: isActiveSession
                 ? Center(
                     child: Text(
@@ -73,18 +62,13 @@ class HomeSessionButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       DecoratedBox(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: context.colorScheme.surface,
-                        ),
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: context.colorScheme.surface),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Icon(
                             Icons.lock,
                             size: PauzaIconSizes.xxLarge,
-                            color: context.colorScheme.primary.withValues(
-                              alpha: 0.85,
-                            ),
+                            color: context.colorScheme.primary.withValues(alpha: 0.85),
                           ),
                         ),
                       ),

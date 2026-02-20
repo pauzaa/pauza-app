@@ -3,11 +3,7 @@ import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 final class ModeEditorIconPicker extends StatelessWidget {
-  const ModeEditorIconPicker({
-    required this.selectedIcon,
-    required this.onTap,
-    super.key,
-  });
+  const ModeEditorIconPicker({required this.selectedIcon, required this.onTap, super.key});
 
   final ModeIcon selectedIcon;
   final VoidCallback onTap;

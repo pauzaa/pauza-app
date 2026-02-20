@@ -49,9 +49,6 @@ class ProfileEditAvatarSection extends StatelessWidget {
       return;
     }
 
-    UserEditDraftScope.of(
-      context,
-      watch: false,
-    ).update(profilePictureBytes: bytes);
+    UserEditDraftScope.of(context, watch: false).update(profilePictureBytes: bytes);
   }
 }

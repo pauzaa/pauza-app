@@ -13,13 +13,10 @@ enum UserProfileFailureCode implements Localizable {
   @override
   String localize(AppLocalizations localizations) {
     return switch (this) {
-      UserProfileFailureCode.usernameTaken =>
-        localizations.profileEditUsernameTakenError,
-      UserProfileFailureCode.validation =>
-        localizations.profileEditValidationError,
+      UserProfileFailureCode.usernameTaken => localizations.profileEditUsernameTakenError,
+      UserProfileFailureCode.validation => localizations.profileEditValidationError,
       UserProfileFailureCode.network => localizations.profileEditNetworkError,
-      UserProfileFailureCode.unauthorized ||
-      UserProfileFailureCode.forbidden => localizations.errorTitle,
+      UserProfileFailureCode.unauthorized || UserProfileFailureCode.forbidden => localizations.errorTitle,
       _ => localizations.errorTitle,
     };
   }

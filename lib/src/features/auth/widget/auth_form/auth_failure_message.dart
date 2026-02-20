@@ -18,10 +18,7 @@ class AuthFailureMessage extends StatelessWidget {
         padding: const EdgeInsets.all(PauzaSpacing.medium),
         child: Text(
           message,
-          style: context.textTheme.bodyMedium?.copyWith(
-            color: context.colorScheme.error,
-            fontWeight: FontWeight.w600,
-          ),
+          style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.error, fontWeight: FontWeight.w600),
         ),
       ),
     );

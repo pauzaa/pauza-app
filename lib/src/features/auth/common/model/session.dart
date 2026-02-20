@@ -12,10 +12,7 @@ final class Session {
   bool get isAuthenticated => accessToken.isNotEmpty;
 
   Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'accessToken': accessToken,
-      'refreshToken': refreshToken,
-    };
+    return <String, Object?>{'accessToken': accessToken, 'refreshToken': refreshToken};
   }
 
   factory Session.fromJson(Map<String, Object?> json) {
@@ -38,9 +35,7 @@ final class Session {
     if (identical(this, other)) {
       return true;
     }
-    return other is Session &&
-        other.accessToken == accessToken &&
-        other.refreshToken == refreshToken;
+    return other is Session && other.accessToken == accessToken && other.refreshToken == refreshToken;
   }
 
   @override

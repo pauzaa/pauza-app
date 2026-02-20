@@ -35,10 +35,7 @@ final class ModeIcon {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ModeIcon &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          icon == other.icon;
+      other is ModeIcon && runtimeType == other.runtimeType && id == other.id && icon == other.icon;
 
   @override
   int get hashCode => Object.hash(id, icon);
@@ -83,6 +80,5 @@ abstract final class ModeIconCatalog {
     return isValidToken(trimmed) ? trimmed : defaultToken;
   }
 
-  static ModeIcon _resolveToken(String? token) =>
-      _entriesByToken[normalizeToken(token)] ?? defaultIcon;
+  static ModeIcon _resolveToken(String? token) => _entriesByToken[normalizeToken(token)] ?? defaultIcon;
 }

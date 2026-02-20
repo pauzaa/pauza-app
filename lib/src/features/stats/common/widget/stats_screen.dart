@@ -47,10 +47,7 @@ class _StatsScreenState extends State<StatsScreen> {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: PauzaSpacing.large,
-            vertical: PauzaSpacing.large,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large, vertical: PauzaSpacing.large),
           children: <Widget>[
             PauzaDashboardAppBar(title: l10n.deviceUsage),
             ValueListenableBuilder(
@@ -71,12 +68,9 @@ class _StatsScreenState extends State<StatsScreen> {
               builder: (context, value, child) {
                 return switch (value) {
                   StatsTab.usage => BlocProvider(
-                    create: (context) => StatsBloc(
-                      usageRepository: RootScope.of(
-                        context,
-                      ).statsUsageRepository,
-                      platform: kPauzaPlatform,
-                    )..add(const StatsStarted()),
+                    create: (context) =>
+                        StatsBloc(usageRepository: RootScope.of(context).statsUsageRepository, platform: kPauzaPlatform)
+                          ..add(const StatsStarted()),
                     child: const StatsUsageTabContent(),
                   ),
                   StatsTab.blocking => const StatsBlockingTabPlaceholder(),

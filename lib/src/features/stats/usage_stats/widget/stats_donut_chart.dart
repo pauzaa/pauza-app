@@ -10,10 +10,7 @@ class StatsDonutChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = buckets.values.fold<Duration>(
-      Duration.zero,
-      (sum, duration) => sum + duration,
-    );
+    final total = buckets.values.fold<Duration>(Duration.zero, (sum, duration) => sum + duration);
 
     final sections = <PieChartSectionData>[
       _section(context, UsageCategoryBucket.social, total),
@@ -36,11 +33,7 @@ class StatsDonutChart extends StatelessWidget {
     );
   }
 
-  PieChartSectionData _section(
-    BuildContext context,
-    UsageCategoryBucket bucket,
-    Duration total,
-  ) {
+  PieChartSectionData _section(BuildContext context, UsageCategoryBucket bucket, Duration total) {
     final value = buckets[bucket]?.inMilliseconds.toDouble() ?? 0;
     final fallback = total.inMilliseconds == 0 ? 1.0 : value;
 

@@ -10,28 +10,17 @@ void main() {
     await schema.onUpgrade(database, 1, 2);
 
     expect(database.executedSql, hasLength(1));
-    expect(
-      database.executedSql.single,
-      contains('CREATE TABLE nfc_linked_chips'),
-    );
+    expect(database.executedSql.single, contains('CREATE TABLE nfc_linked_chips'));
   });
 
-  test(
-    'onUpgrade from v2 to v3 adds streak_session_daily_rollups table',
-    () async {
-      final database = _FakeDatabase();
-      const schema = PauzaLocalDatabaseSchemaV1();
+  test('onUpgrade from v2 to v3 adds streak_session_daily_rollups table', () async {
+    final database = _FakeDatabase();
+    const schema = PauzaLocalDatabaseSchemaV1();
 
-      await schema.onUpgrade(database, 2, 3);
+    await schema.onUpgrade(database, 2, 3);
 
-      expect(
-        database.executedSql.any(
-          (sql) => sql.contains('CREATE TABLE streak_session_daily_rollups'),
-        ),
-        isTrue,
-      );
-    },
-  );
+    expect(database.executedSql.any((sql) => sql.contains('CREATE TABLE streak_session_daily_rollups')), isTrue);
+  });
 
   test('onUpgrade from v2 to v3 adds streak_daily_aggregates table', () async {
     final database = _FakeDatabase();
@@ -39,12 +28,7 @@ void main() {
 
     await schema.onUpgrade(database, 2, 3);
 
-    expect(
-      database.executedSql.any(
-        (sql) => sql.contains('CREATE TABLE streak_daily_aggregates'),
-      ),
-      isTrue,
-    );
+    expect(database.executedSql.any((sql) => sql.contains('CREATE TABLE streak_daily_aggregates')), isTrue);
   });
 
   test('onUpgrade from v2 to v3 adds streak_rollup_state table', () async {
@@ -53,12 +37,7 @@ void main() {
 
     await schema.onUpgrade(database, 2, 3);
 
-    expect(
-      database.executedSql.any(
-        (sql) => sql.contains('CREATE TABLE streak_rollup_state'),
-      ),
-      isTrue,
-    );
+    expect(database.executedSql.any((sql) => sql.contains('CREATE TABLE streak_rollup_state')), isTrue);
   });
 
   test('onUpgrade from v2 to v3 seeds streak_rollup_state row', () async {
@@ -69,9 +48,7 @@ void main() {
 
     expect(
       database.executedSql.any(
-        (sql) =>
-            sql.contains('INSERT OR IGNORE INTO streak_rollup_state') &&
-            sql.contains('VALUES (1, 0, \'\', 0)'),
+        (sql) => sql.contains('INSERT OR IGNORE INTO streak_rollup_state') && sql.contains('VALUES (1, 0, \'\', 0)'),
       ),
       isTrue,
     );

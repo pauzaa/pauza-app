@@ -17,16 +17,11 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
 
   final ModesRepository _modesRepository;
 
-  Future<void> _onLoadRequested(
-    ModeEditorLoadRequested event,
-    Emitter<ModeEditorState> emit,
-  ) async {
+  Future<void> _onLoadRequested(ModeEditorLoadRequested event, Emitter<ModeEditorState> emit) async {
     emit(const ModeEditorLoading());
 
     if (event.modeId == null) {
-      emit(
-        const ModeEditorReady(modeId: null, request: ModeUpsertDTO.initial()),
-      );
+      emit(const ModeEditorReady(modeId: null, request: ModeUpsertDTO.initial()));
       return;
     }
 
@@ -52,20 +47,14 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
     }
   }
 
-  Future<void> _onSaveRequested(
-    ModeEditorSaveRequested event,
-    Emitter<ModeEditorState> emit,
-  ) async {
+  Future<void> _onSaveRequested(ModeEditorSaveRequested event, Emitter<ModeEditorState> emit) async {
     emit(const ModeEditorLoading());
 
     try {
       if (event.modeId == null) {
         await _modesRepository.createMode(event.request);
       } else {
-        await _modesRepository.updateMode(
-          modeId: event.modeId!,
-          request: event.request,
-        );
+        await _modesRepository.updateMode(modeId: event.modeId!, request: event.request);
       }
       emit(ModeEditorSaveSuccess(modeId: event.modeId, request: event.request));
     } on Object catch (error) {
@@ -73,10 +62,7 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
     }
   }
 
-  Future<void> _onDeleteRequested(
-    ModeEditorDeleteRequested event,
-    Emitter<ModeEditorState> emit,
-  ) async {
+  Future<void> _onDeleteRequested(ModeEditorDeleteRequested event, Emitter<ModeEditorState> emit) async {
     emit(const ModeEditorLoading());
 
     final modeId = event.modeId;

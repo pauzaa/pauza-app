@@ -21,14 +21,8 @@ final class NfcLinkedChip {
       id: row['id'] as String,
       chipIdentifier: row['chip_identifier'] as String,
       name: row['name'] as String,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-        row['created_at'] as int,
-        isUtc: true,
-      ),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(
-        row['updated_at'] as int,
-        isUtc: true,
-      ),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(row['created_at'] as int, isUtc: true),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(row['updated_at'] as int, isUtc: true),
     );
   }
 
@@ -58,6 +52,5 @@ final class NfcLinkedChip {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, chipIdentifier, name, createdAt, updatedAt);
+  int get hashCode => Object.hash(id, chipIdentifier, name, createdAt, updatedAt);
 }

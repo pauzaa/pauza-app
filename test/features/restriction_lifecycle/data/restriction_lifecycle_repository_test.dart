@@ -23,10 +23,7 @@ void main() {
           <RestrictionLifecycleEvent>[],
         ],
       );
-      final repository = RestrictionLifecycleRepositoryImpl(
-        localDatabase: localDatabase,
-        pluginClient: pluginClient,
-      );
+      final repository = RestrictionLifecycleRepositoryImpl(localDatabase: localDatabase, pluginClient: pluginClient);
 
       await repository.syncFromPluginQueue();
 
@@ -39,74 +36,43 @@ void main() {
       final localDatabase = _FakeLocalDatabase();
       final pluginClient = _FakeRestrictionLifecyclePluginClient(
         batches: <List<RestrictionLifecycleEvent>>[
-          [
-            _event(
-              id: 'e1',
-              sessionId: 's1',
-              action: RestrictionLifecycleAction.start,
-              occurredAtEpochMs: 1_000,
-            ),
-          ],
+          [_event(id: 'e1', sessionId: 's1', action: RestrictionLifecycleAction.start, occurredAtEpochMs: 1_000)],
           <RestrictionLifecycleEvent>[],
         ],
         onAck: () {
           expect(localDatabase.committedTransactions, greaterThan(0));
         },
       );
-      final repository = RestrictionLifecycleRepositoryImpl(
-        localDatabase: localDatabase,
-        pluginClient: pluginClient,
-      );
+      final repository = RestrictionLifecycleRepositoryImpl(localDatabase: localDatabase, pluginClient: pluginClient);
 
       await repository.syncFromPluginQueue();
 
       expect(pluginClient.acknowledgedThroughEventIds, ['e1']);
     });
 
-    test(
-      'upsert applies initial and subsequent events into one session row',
-      () async {
-        final localDatabase = _FakeLocalDatabase();
-        final pluginClient = _FakeRestrictionLifecyclePluginClient(
-          batches: <List<RestrictionLifecycleEvent>>[
-            [
-              _event(
-                id: 'e1',
-                sessionId: 's1',
-                action: RestrictionLifecycleAction.start,
-                occurredAtEpochMs: 1_000,
-              ),
-              _event(
-                id: 'e2',
-                sessionId: 's1',
-                action: RestrictionLifecycleAction.pause,
-                occurredAtEpochMs: 2_000,
-              ),
-              _event(
-                id: 'e3',
-                sessionId: 's1',
-                action: RestrictionLifecycleAction.resume,
-                occurredAtEpochMs: 3_000,
-              ),
-            ],
-            <RestrictionLifecycleEvent>[],
+    test('upsert applies initial and subsequent events into one session row', () async {
+      final localDatabase = _FakeLocalDatabase();
+      final pluginClient = _FakeRestrictionLifecyclePluginClient(
+        batches: <List<RestrictionLifecycleEvent>>[
+          [
+            _event(id: 'e1', sessionId: 's1', action: RestrictionLifecycleAction.start, occurredAtEpochMs: 1_000),
+            _event(id: 'e2', sessionId: 's1', action: RestrictionLifecycleAction.pause, occurredAtEpochMs: 2_000),
+            _event(id: 'e3', sessionId: 's1', action: RestrictionLifecycleAction.resume, occurredAtEpochMs: 3_000),
           ],
-        );
-        final repository = RestrictionLifecycleRepositoryImpl(
-          localDatabase: localDatabase,
-          pluginClient: pluginClient,
-        );
+          <RestrictionLifecycleEvent>[],
+        ],
+      );
+      final repository = RestrictionLifecycleRepositoryImpl(localDatabase: localDatabase, pluginClient: pluginClient);
 
-        await repository.syncFromPluginQueue();
+      await repository.syncFromPluginQueue();
 
-        final row = localDatabase.sessionRows['s1'];
-        expect(row, isNotNull);
-        expect(row?['pause_count'], 1);
-        expect(row?['total_paused_ms'], 1_000);
-        expect(row?['last_paused_at'], isNull);
-        expect(row?['last_event_id'], 'e3');
-      },
-    );
+      final row = localDatabase.sessionRows['s1'];
+      expect(row, isNotNull);
+      expect(row?['pause_count'], 1);
+      expect(row?['total_paused_ms'], 1_000);
+      expect(row?['last_paused_at'], isNull);
+      expect(row?['last_event_id'], 'e3');
+    });
   });
 }
 
@@ -123,28 +89,20 @@ RestrictionLifecycleEvent _event({
     action: action,
     source: RestrictionLifecycleSource.manual,
     reason: 'test',
-    occurredAt: DateTime.fromMillisecondsSinceEpoch(
-      occurredAtEpochMs,
-      isUtc: true,
-    ),
+    occurredAt: DateTime.fromMillisecondsSinceEpoch(occurredAtEpochMs, isUtc: true),
   );
 }
 
-final class _FakeRestrictionLifecyclePluginClient
-    implements RestrictionLifecyclePluginClient {
-  _FakeRestrictionLifecyclePluginClient({
-    required List<List<RestrictionLifecycleEvent>> batches,
-    this.onAck,
-  }) : _batches = batches;
+final class _FakeRestrictionLifecyclePluginClient implements RestrictionLifecyclePluginClient {
+  _FakeRestrictionLifecyclePluginClient({required List<List<RestrictionLifecycleEvent>> batches, this.onAck})
+    : _batches = batches;
 
   final List<List<RestrictionLifecycleEvent>> _batches;
   final void Function()? onAck;
   final List<String> acknowledgedThroughEventIds = <String>[];
 
   @override
-  Future<IList<RestrictionLifecycleEvent>> getPendingLifecycleEvents({
-    int limit = 200,
-  }) async {
+  Future<IList<RestrictionLifecycleEvent>> getPendingLifecycleEvents({int limit = 200}) async {
     if (_batches.isEmpty) {
       return const IListConst<RestrictionLifecycleEvent>([]);
     }
@@ -160,10 +118,8 @@ final class _FakeRestrictionLifecyclePluginClient
 }
 
 final class _FakeLocalDatabase implements LocalDatabase {
-  final Map<String, Map<String, Object?>> eventRows =
-      <String, Map<String, Object?>>{};
-  final Map<String, Map<String, Object?>> sessionRows =
-      <String, Map<String, Object?>>{};
+  final Map<String, Map<String, Object?>> eventRows = <String, Map<String, Object?>>{};
+  final Map<String, Map<String, Object?>> sessionRows = <String, Map<String, Object?>>{};
 
   int committedTransactions = 0;
 
@@ -177,15 +133,10 @@ final class _FakeLocalDatabase implements LocalDatabase {
   Future<void> open() async {}
 
   @override
-  Future<List<Map<String, Object?>>> rawQuery(
-    String sql, [
-    List<Object?>? arguments,
-  ]) async {
+  Future<List<Map<String, Object?>>> rawQuery(String sql, [List<Object?>? arguments]) async {
     if (sql.contains('FROM restriction_sessions')) {
       final rows = sessionRows.values.toList(growable: false);
-      rows.sort(
-        (a, b) => (b['started_at'] as int).compareTo(a['started_at'] as int),
-      );
+      rows.sort((a, b) => (b['started_at'] as int).compareTo(a['started_at'] as int));
       return rows;
     }
     if (sql.contains('FROM restriction_lifecycle_events')) {
@@ -210,27 +161,18 @@ final class _FakeLocalDatabase implements LocalDatabase {
   }
 
   @override
-  Future<T> read<T>(
-    Future<T> Function(DatabaseExecutor database) action,
-  ) async {
+  Future<T> read<T>(Future<T> Function(DatabaseExecutor database) action) async {
     throw UnsupportedError('Not used directly in repository tests.');
   }
 
   @override
-  Future<T> write<T>(
-    Future<T> Function(DatabaseExecutor database) action,
-  ) async {
+  Future<T> write<T>(Future<T> Function(DatabaseExecutor database) action) async {
     throw UnsupportedError('Not used directly in repository tests.');
   }
 
   @override
-  Future<T> transaction<T>(
-    Future<T> Function(Transaction transaction) action,
-  ) async {
-    final transaction = _FakeTransaction(
-      eventRows: eventRows,
-      sessionRows: sessionRows,
-    );
+  Future<T> transaction<T>(Future<T> Function(Transaction transaction) action) async {
+    final transaction = _FakeTransaction(eventRows: eventRows, sessionRows: sessionRows);
     final result = await action(transaction);
     committedTransactions += 1;
     return result;
@@ -288,16 +230,11 @@ final class _FakeTransaction implements Transaction {
   }
 
   @override
-  Future<List<Map<String, Object?>>> rawQuery(
-    String sql, [
-    List<Object?>? arguments,
-  ]) async {
+  Future<List<Map<String, Object?>>> rawQuery(String sql, [List<Object?>? arguments]) async {
     if (sql.contains('FROM restriction_sessions')) {
       final sessionId = arguments?.first as String;
       final row = sessionRows[sessionId];
-      return row == null
-          ? const <Map<String, Object?>>[]
-          : <Map<String, Object?>>[row];
+      return row == null ? const <Map<String, Object?>>[] : <Map<String, Object?>>[row];
     }
     throw UnsupportedError('Unsupported rawQuery in fake transaction.');
   }

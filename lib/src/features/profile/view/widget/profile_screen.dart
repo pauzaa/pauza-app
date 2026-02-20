@@ -21,10 +21,7 @@ class ProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(
-            horizontal: PauzaSpacing.large,
-            vertical: PauzaSpacing.large,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large, vertical: PauzaSpacing.large),
           children: <Widget>[
             PauzaDashboardAppBar(title: l10n.profileTitle),
             const SizedBox(height: PauzaSpacing.extraLarge),
@@ -33,13 +30,11 @@ class ProfileScreen extends StatelessWidget {
               builder: (context, state) {
                 final user = state.user;
                 final displayName = switch (state.status) {
-                  CurrentUserStatus.available =>
-                    user?.name ?? l10n.profileDisplayNameFallback,
+                  CurrentUserStatus.available => user?.name ?? l10n.profileDisplayNameFallback,
                   _ => l10n.profileDisplayNameFallback,
                 };
                 final username = switch (state.status) {
-                  CurrentUserStatus.available =>
-                    user?.username ?? l10n.profileUsernameFallback,
+                  CurrentUserStatus.available => user?.username ?? l10n.profileUsernameFallback,
                   _ => l10n.profileUsernameFallback,
                 };
                 final profilePictureUrl = switch (state.status) {

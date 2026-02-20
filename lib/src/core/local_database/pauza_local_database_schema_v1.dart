@@ -139,14 +139,10 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
     batch.execute(LocalDatabaseSqlStatements.createModesTable);
     batch.execute(LocalDatabaseSqlStatements.createModeBlockedAppsTable);
     batch.execute(LocalDatabaseSqlStatements.createSchedulesTable);
-    batch.execute(
-      LocalDatabaseSqlStatements.createRestrictionLifecycleEventsTable,
-    );
+    batch.execute(LocalDatabaseSqlStatements.createRestrictionLifecycleEventsTable);
     batch.execute(LocalDatabaseSqlStatements.createRestrictionSessionsTable);
     batch.execute(LocalDatabaseSqlStatements.createNfcLinkedChipsTable);
-    batch.execute(
-      LocalDatabaseSqlStatements.createStreakSessionDailyRollupsTable,
-    );
+    batch.execute(LocalDatabaseSqlStatements.createStreakSessionDailyRollupsTable);
     batch.execute(LocalDatabaseSqlStatements.createStreakDailyAggregatesTable);
     batch.execute(LocalDatabaseSqlStatements.createStreakRollupStateTable);
     batch.execute(LocalDatabaseSqlStatements.seedStreakRollupStateRow);
@@ -154,30 +150,16 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
   }
 
   @override
-  Future<void> onUpgrade(
-    Database database,
-    int oldVersion,
-    int newVersion,
-  ) async {
+  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {
     if (oldVersion < 2 && newVersion >= 2) {
-      await database.execute(
-        LocalDatabaseSqlStatements.createNfcLinkedChipsTable,
-      );
+      await database.execute(LocalDatabaseSqlStatements.createNfcLinkedChipsTable);
     }
 
     if (oldVersion < 3 && newVersion >= 3) {
-      await database.execute(
-        LocalDatabaseSqlStatements.createStreakSessionDailyRollupsTable,
-      );
-      await database.execute(
-        LocalDatabaseSqlStatements.createStreakDailyAggregatesTable,
-      );
-      await database.execute(
-        LocalDatabaseSqlStatements.createStreakRollupStateTable,
-      );
-      await database.execute(
-        LocalDatabaseSqlStatements.seedStreakRollupStateRow,
-      );
+      await database.execute(LocalDatabaseSqlStatements.createStreakSessionDailyRollupsTable);
+      await database.execute(LocalDatabaseSqlStatements.createStreakDailyAggregatesTable);
+      await database.execute(LocalDatabaseSqlStatements.createStreakRollupStateTable);
+      await database.execute(LocalDatabaseSqlStatements.seedStreakRollupStateRow);
     }
   }
 }

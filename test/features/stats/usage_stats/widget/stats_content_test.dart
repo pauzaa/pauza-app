@@ -14,10 +14,8 @@ import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 void main() {
   testWidgets('renders without crashing', (tester) async {
-    final bloc = StatsBloc(
-      usageRepository: _WidgetStatsUsageRepository(),
-      platform: PauzaPlatform.android,
-    )..add(const StatsStarted());
+    final bloc = StatsBloc(usageRepository: _WidgetStatsUsageRepository(), platform: PauzaPlatform.android)
+      ..add(const StatsStarted());
     addTearDown(bloc.close);
 
     await tester.pumpWidget(_TestApp(bloc: bloc));
@@ -53,10 +51,7 @@ class _TestApp extends StatelessWidget {
       theme: PauzaTheme.dark,
       home: Scaffold(
         body: SingleChildScrollView(
-          child: BlocProvider<StatsBloc>.value(
-            value: bloc,
-            child: const StatsUsageTabContent(),
-          ),
+          child: BlocProvider<StatsBloc>.value(value: bloc, child: const StatsUsageTabContent()),
         ),
       ),
     );
@@ -65,10 +60,7 @@ class _TestApp extends StatelessWidget {
 
 class _WidgetStatsUsageRepository implements StatsUsageRepository {
   @override
-  Future<IList<UsageStats>> getUsageStats({
-    required DateTime start,
-    required DateTime end,
-  }) async {
+  Future<IList<UsageStats>> getUsageStats({required DateTime start, required DateTime end}) async {
     return <UsageStats>[
       UsageStats(
         appInfo: const AndroidAppInfo(

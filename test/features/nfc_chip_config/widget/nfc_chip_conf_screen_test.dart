@@ -13,22 +13,14 @@ import 'package:pauza/src/features/nfc_chip_config/widget/nfc_linked_chip_menu.d
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
-  testWidgets('renders title, body, list item, and link button', (
-    tester,
-  ) async {
+  testWidgets('renders title, body, list item, and link button', (tester) async {
     final bloc = _RecordingNfcChipConfBloc();
     addTearDown(bloc.close);
 
     await tester.pumpWidget(_TestApp(bloc: bloc));
     bloc.emitState(
       NfcChipConfIdle(
-        linkedChips: [
-          _chip(
-            id: 'chip-1',
-            name: 'Home Desk Tag',
-            createdAt: DateTime.utc(2023, 10, 24),
-          ),
-        ].lock,
+        linkedChips: [_chip(id: 'chip-1', name: 'Home Desk Tag', createdAt: DateTime.utc(2023, 10, 24))].lock,
       ),
     );
     await tester.pump();
@@ -46,13 +38,7 @@ void main() {
     await tester.pumpWidget(_TestApp(bloc: bloc));
     bloc.emitState(
       NfcChipConfIdle(
-        linkedChips: [
-          _chip(
-            id: 'chip-1',
-            name: 'Kitchen Tag',
-            createdAt: DateTime.utc(2023, 11, 2),
-          ),
-        ].lock,
+        linkedChips: [_chip(id: 'chip-1', name: 'Kitchen Tag', createdAt: DateTime.utc(2023, 11, 2))].lock,
       ),
     );
     await tester.pump();
@@ -69,28 +55,18 @@ void main() {
     addTearDown(bloc.close);
 
     await tester.pumpWidget(
-      _TestApp(
-        bloc: bloc,
-        renameDialogOpener: (_, {required initialName}) async => 'Office Door',
-      ),
+      _TestApp(bloc: bloc, renameDialogOpener: (_, {required initialName}) async => 'Office Door'),
     );
     bloc.emitState(
       NfcChipConfIdle(
-        linkedChips: [
-          _chip(
-            id: 'chip-1',
-            name: 'Office Entry',
-            createdAt: DateTime.utc(2023, 12, 15),
-          ),
-        ].lock,
+        linkedChips: [_chip(id: 'chip-1', name: 'Office Entry', createdAt: DateTime.utc(2023, 12, 15))].lock,
       ),
     );
     await tester.pump();
 
-    final popupMenuButton = tester
-        .widget<PopupMenuButton<NfcLinkedChipMenuAction>>(
-          find.byType(PopupMenuButton<NfcLinkedChipMenuAction>),
-        );
+    final popupMenuButton = tester.widget<PopupMenuButton<NfcLinkedChipMenuAction>>(
+      find.byType(PopupMenuButton<NfcLinkedChipMenuAction>),
+    );
     popupMenuButton.onSelected?.call(NfcLinkedChipMenuAction.rename);
     await tester.pump();
 
@@ -108,21 +84,14 @@ void main() {
     await tester.pumpWidget(_TestApp(bloc: bloc));
     bloc.emitState(
       NfcChipConfIdle(
-        linkedChips: [
-          _chip(
-            id: 'chip-1',
-            name: 'Travel Pack',
-            createdAt: DateTime.utc(2023, 1, 10),
-          ),
-        ].lock,
+        linkedChips: [_chip(id: 'chip-1', name: 'Travel Pack', createdAt: DateTime.utc(2023, 1, 10))].lock,
       ),
     );
     await tester.pump();
 
-    final popupMenuButton = tester
-        .widget<PopupMenuButton<NfcLinkedChipMenuAction>>(
-          find.byType(PopupMenuButton<NfcLinkedChipMenuAction>),
-        );
+    final popupMenuButton = tester.widget<PopupMenuButton<NfcLinkedChipMenuAction>>(
+      find.byType(PopupMenuButton<NfcLinkedChipMenuAction>),
+    );
     popupMenuButton.onSelected?.call(NfcLinkedChipMenuAction.delete);
     await tester.pump();
 
@@ -139,26 +108,17 @@ void main() {
     await tester.pumpWidget(_TestApp(bloc: bloc));
     bloc.emitState(
       NfcChipConfLoading(
-        linkedChips: [
-          _chip(
-            id: 'chip-1',
-            name: 'Kitchen Tag',
-            createdAt: DateTime.utc(2023, 11, 2),
-          ),
-        ].lock,
+        linkedChips: [_chip(id: 'chip-1', name: 'Kitchen Tag', createdAt: DateTime.utc(2023, 11, 2))].lock,
       ),
     );
     await tester.pump();
 
-    final filledButton = tester.widget<PauzaFilledButton>(
-      find.byType(PauzaFilledButton),
-    );
+    final filledButton = tester.widget<PauzaFilledButton>(find.byType(PauzaFilledButton));
     expect(filledButton.disabled, isTrue);
 
-    final popupMenuButton = tester
-        .widget<PopupMenuButton<NfcLinkedChipMenuAction>>(
-          find.byType(PopupMenuButton<NfcLinkedChipMenuAction>),
-        );
+    final popupMenuButton = tester.widget<PopupMenuButton<NfcLinkedChipMenuAction>>(
+      find.byType(PopupMenuButton<NfcLinkedChipMenuAction>),
+    );
     expect(popupMenuButton.enabled, isFalse);
   });
 }
@@ -167,11 +127,7 @@ class _TestApp extends StatelessWidget {
   const _TestApp({required this.bloc, this.renameDialogOpener});
 
   final _RecordingNfcChipConfBloc bloc;
-  final Future<String?> Function(
-    BuildContext context, {
-    required String initialName,
-  })?
-  renameDialogOpener;
+  final Future<String?> Function(BuildContext context, {required String initialName})? renameDialogOpener;
 
   @override
   Widget build(BuildContext context) {
@@ -187,10 +143,7 @@ class _TestApp extends StatelessWidget {
       theme: PauzaTheme.dark,
       home: BlocProvider<NfcChipConfBloc>.value(
         value: bloc,
-        child: NfcChipConfContent(
-          scanSheetOpener: _noScan,
-          renameDialogOpener: renameDialogOpener ?? _noRename,
-        ),
+        child: NfcChipConfContent(scanSheetOpener: _noScan, renameDialogOpener: renameDialogOpener ?? _noRename),
       ),
     );
   }
@@ -199,17 +152,13 @@ class _TestApp extends StatelessWidget {
     return null;
   }
 
-  Future<String?> _noRename(
-    BuildContext context, {
-    required String initialName,
-  }) async {
+  Future<String?> _noRename(BuildContext context, {required String initialName}) async {
     return null;
   }
 }
 
 final class _RecordingNfcChipConfBloc extends NfcChipConfBloc {
-  _RecordingNfcChipConfBloc()
-    : super(linkedChipsRepository: _NoopNfcLinkedChipsRepository());
+  _RecordingNfcChipConfBloc() : super(linkedChipsRepository: _NoopNfcLinkedChipsRepository());
 
   final List<NfcChipConfEvent> events = <NfcChipConfEvent>[];
 
@@ -246,16 +195,6 @@ final class _NoopNfcLinkedChipsRepository implements NfcLinkedChipsRepository {
   Future<void> renameChip({required String id, required String name}) async {}
 }
 
-NfcLinkedChip _chip({
-  required String id,
-  required String name,
-  required DateTime createdAt,
-}) {
-  return NfcLinkedChip(
-    id: id,
-    chipIdentifier: id,
-    name: name,
-    createdAt: createdAt,
-    updatedAt: createdAt,
-  );
+NfcLinkedChip _chip({required String id, required String name, required DateTime createdAt}) {
+  return NfcLinkedChip(id: id, chipIdentifier: id, name: name, createdAt: createdAt, updatedAt: createdAt);
 }

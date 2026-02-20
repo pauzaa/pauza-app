@@ -10,22 +10,10 @@ void main() {
     test('subtracts paused segment from effective intervals', () {
       final intervals = UtcInterval.buildEffectiveIntervals(
         events: [
-          StreakLifecycleEventPoint(
-            action: RestrictionLifecycleAction.start,
-            occurredAtUtc: _utc(0),
-          ),
-          StreakLifecycleEventPoint(
-            action: RestrictionLifecycleAction.pause,
-            occurredAtUtc: _utc(1_000),
-          ),
-          StreakLifecycleEventPoint(
-            action: RestrictionLifecycleAction.resume,
-            occurredAtUtc: _utc(2_000),
-          ),
-          StreakLifecycleEventPoint(
-            action: RestrictionLifecycleAction.end,
-            occurredAtUtc: _utc(3_000),
-          ),
+          StreakLifecycleEventPoint(action: RestrictionLifecycleAction.start, occurredAtUtc: _utc(0)),
+          StreakLifecycleEventPoint(action: RestrictionLifecycleAction.pause, occurredAtUtc: _utc(1_000)),
+          StreakLifecycleEventPoint(action: RestrictionLifecycleAction.resume, occurredAtUtc: _utc(2_000)),
+          StreakLifecycleEventPoint(action: RestrictionLifecycleAction.end, occurredAtUtc: _utc(3_000)),
         ].toIList(),
         endedAtUtc: _utc(3_000),
         refreshNowUtc: _utc(4_000),
@@ -33,8 +21,7 @@ void main() {
 
       final totalMs = intervals.fold<int>(
         0,
-        (sum, interval) =>
-            sum + interval.endUtc.difference(interval.startUtc).inMilliseconds,
+        (sum, interval) => sum + interval.endUtc.difference(interval.startUtc).inMilliseconds,
       );
       expect(totalMs, 2_000);
     });
@@ -42,22 +29,14 @@ void main() {
     test('includes in-progress window for open session until refresh now', () {
       final intervals = UtcInterval.buildEffectiveIntervals(
         events: [
-          StreakLifecycleEventPoint(
-            action: RestrictionLifecycleAction.start,
-            occurredAtUtc: _utc(1_000),
-          ),
+          StreakLifecycleEventPoint(action: RestrictionLifecycleAction.start, occurredAtUtc: _utc(1_000)),
         ].toIList(),
         endedAtUtc: null,
         refreshNowUtc: _utc(5_000),
       );
 
       expect(intervals, hasLength(1));
-      expect(
-        intervals.single.endUtc
-            .difference(intervals.single.startUtc)
-            .inMilliseconds,
-        4_000,
-      );
+      expect(intervals.single.endUtc.difference(intervals.single.startUtc).inMilliseconds, 4_000);
     });
   });
 
@@ -75,9 +54,7 @@ void main() {
         todayLocal: DateTime(2026, 1, 15, 9),
         qualifiedDays: qualifiedDays.toISet(),
       );
-      final best = BestStreakDays.fromQualifiedDays(
-        qualifiedDays: qualifiedDays.toISet(),
-      );
+      final best = BestStreakDays.fromQualifiedDays(qualifiedDays: qualifiedDays.toISet());
 
       expect(current, 2);
       expect(best, 3);
@@ -88,28 +65,18 @@ void main() {
         todayLocal: DateTime(2026, 1, 15, 9),
         qualifiedDays: const <LocalDayKey>{}.toISet(),
       );
-      final best = BestStreakDays.fromQualifiedDays(
-        qualifiedDays: const <LocalDayKey>{}.toISet(),
-      );
+      final best = BestStreakDays.fromQualifiedDays(qualifiedDays: const <LocalDayKey>{}.toISet());
 
       expect(current, 0);
       expect(best, 0);
     });
 
     test('applies 10-minute threshold edges deterministically', () {
-      final justBelow =
-          StreakConstants.targetDurationPerDay.inMilliseconds -
-          const Duration(seconds: 1).inMilliseconds;
+      final justBelow = StreakConstants.targetDurationPerDay.inMilliseconds - const Duration(seconds: 1).inMilliseconds;
       final exact = StreakConstants.targetDurationPerDay.inMilliseconds;
 
-      expect(
-        justBelow >= StreakConstants.targetDurationPerDay.inMilliseconds,
-        isFalse,
-      );
-      expect(
-        exact >= StreakConstants.targetDurationPerDay.inMilliseconds,
-        isTrue,
-      );
+      expect(justBelow >= StreakConstants.targetDurationPerDay.inMilliseconds, isFalse);
+      expect(exact >= StreakConstants.targetDurationPerDay.inMilliseconds, isTrue);
     });
   });
 }

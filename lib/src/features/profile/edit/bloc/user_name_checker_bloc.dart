@@ -19,8 +19,7 @@ final class UserNameCheckerStarted extends UserNameCheckerEvent {
   List<Object?> get props => [username];
 }
 
-class UserNameCheckerBloc
-    extends Bloc<UserNameCheckerEvent, UsernameAvailability> {
+class UserNameCheckerBloc extends Bloc<UserNameCheckerEvent, UsernameAvailability> {
   UserNameCheckerBloc({
     required UserProfileRepository userProfileRepository,
     Duration debounceDuration = const Duration(milliseconds: 500),
@@ -28,26 +27,20 @@ class UserNameCheckerBloc
        super(UsernameAvailability.unknown) {
     on<UserNameCheckerStarted>(
       _onStarted,
-      transformer: (events, mapper) =>
-          events.debounceTime(debounceDuration).switchMap(mapper),
+      transformer: (events, mapper) => events.debounceTime(debounceDuration).switchMap(mapper),
     );
   }
 
   final UserProfileRepository _userProfileRepository;
 
-  Future<void> _onStarted(
-    UserNameCheckerStarted event,
-    Emitter<UsernameAvailability> emit,
-  ) async {
+  Future<void> _onStarted(UserNameCheckerStarted event, Emitter<UsernameAvailability> emit) async {
     try {
       if (!PauzaValidators.isUsernameValid(event.username)) {
         emit(UsernameAvailability.error);
         return;
       }
       emit(UsernameAvailability.checking);
-      final available = await _userProfileRepository.isUsernameAvailable(
-        username: event.username,
-      );
+      final available = await _userProfileRepository.isUsernameAvailable(username: event.username);
       if (available) {
         emit(UsernameAvailability.available);
       } else {

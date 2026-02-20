@@ -18,11 +18,7 @@ class NfcChipConfContent extends StatelessWidget {
   });
 
   final Future<NfcCardDto?> Function(BuildContext context) scanSheetOpener;
-  final Future<String?> Function(
-    BuildContext context, {
-    required String initialName,
-  })
-  renameDialogOpener;
+  final Future<String?> Function(BuildContext context, {required String initialName}) renameDialogOpener;
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +48,7 @@ class NfcChipConfContent extends StatelessWidget {
                 AbsorbPointer(
                   absorbing: state.isLoading,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: PauzaSpacing.large,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       spacing: PauzaSpacing.large,
@@ -62,18 +56,14 @@ class NfcChipConfContent extends StatelessWidget {
                       children: [
                         Text(
                           context.l10n.nfcChipConfigTagsBody,
-                          style: context.textTheme.bodyLarge?.copyWith(
-                            color: context.colorScheme.onSurfaceVariant,
-                          ),
+                          style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onSurfaceVariant),
                         ),
                         Expanded(
                           child: NfcLinkedChipList(
                             linkedChips: state.linkedChips,
                             isLoading: state.isLoading,
-                            onRenamePressed: (chip) =>
-                                _onRenamePressed(context, chip),
-                            onDeletePressed: (chip) =>
-                                _onDeletePressed(context, chip),
+                            onRenamePressed: (chip) => _onRenamePressed(context, chip),
+                            onDeletePressed: (chip) => _onDeletePressed(context, chip),
                           ),
                         ),
                       ],
@@ -81,10 +71,7 @@ class NfcChipConfContent extends StatelessWidget {
                   ),
                 ),
                 if (state.isLoading)
-                  const Align(
-                    alignment: Alignment.topCenter,
-                    child: LinearProgressIndicator(minHeight: 2),
-                  ),
+                  const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(minHeight: 2)),
               ],
             );
           },
@@ -105,9 +92,7 @@ class NfcChipConfContent extends StatelessWidget {
                 disabled: isLoading,
                 size: PauzaButtonSize.large,
                 icon: const Icon(Icons.add_circle),
-                textStyle: context.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                textStyle: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
                 title: Text(context.l10n.nfcChipConfigLinkNewTagButton),
               );
             },
@@ -126,23 +111,16 @@ class NfcChipConfContent extends StatelessWidget {
     context.read<NfcChipConfBloc>().add(NfcChipLinkCardRequested(card: card));
   }
 
-  Future<void> _onRenamePressed(
-    BuildContext context,
-    NfcLinkedChip chip,
-  ) async {
+  Future<void> _onRenamePressed(BuildContext context, NfcLinkedChip chip) async {
     final newName = await renameDialogOpener(context, initialName: chip.name);
     if (!context.mounted || newName == null) {
       return;
     }
 
-    context.read<NfcChipConfBloc>().add(
-      NfcChipRenameCardRequested(cardId: chip.id, newName: newName),
-    );
+    context.read<NfcChipConfBloc>().add(NfcChipRenameCardRequested(cardId: chip.id, newName: newName));
   }
 
   void _onDeletePressed(BuildContext context, NfcLinkedChip chip) {
-    context.read<NfcChipConfBloc>().add(
-      NfcChipDeleteCardRequested(cardId: chip.id),
-    );
+    context.read<NfcChipConfBloc>().add(NfcChipDeleteCardRequested(cardId: chip.id));
   }
 }

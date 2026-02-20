@@ -62,6 +62,5 @@ class NfcNdefRecordDto {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(tnf, typeHex, identifierHex, payloadHex, payloadText);
+  int get hashCode => Object.hash(tnf, typeHex, identifierHex, payloadHex, payloadText);
 }

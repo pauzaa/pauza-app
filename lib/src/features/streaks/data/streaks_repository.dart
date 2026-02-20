@@ -18,11 +18,9 @@ abstract interface class StreaksRepository {
 }
 
 final class StreaksRepositoryImpl implements StreaksRepository {
-  StreaksRepositoryImpl({
-    required LocalDatabase localDatabase,
-    DateTime Function()? nowUtc,
-  }) : _localDatabase = localDatabase,
-       _nowUtc = nowUtc ?? (() => DateTime.now().toUtc());
+  StreaksRepositoryImpl({required LocalDatabase localDatabase, DateTime Function()? nowUtc})
+    : _localDatabase = localDatabase,
+      _nowUtc = nowUtc ?? (() => DateTime.now().toUtc());
 
   static const int _refreshBatchSize = 500;
 
@@ -48,104 +46,6 @@ final class StreaksRepositoryImpl implements StreaksRepository {
     });
   }
 
-  Future<void> _refreshAggregatesInternal() async {
-    try {
-      while (true) {
-        final processedCount = await _localDatabase.transaction((
-          transaction,
-        ) async {
-          await _ensureStateRow(transaction: transaction);
-          final state = await _readRollupState(transaction: transaction);
-
-          final sessions = await _queryUpdatedSessions(
-            transaction: transaction,
-            cursorUpdatedAt: state.cursorUpdatedAt,
-            cursorSessionId: state.cursorSessionId,
-            limit: _refreshBatchSize,
-          );
-
-          final nowEpochMs = _nowUtc().millisecondsSinceEpoch;
-
-          if (sessions.isEmpty) {
-            await _updateLastRefreshAt(
-              transaction: transaction,
-              nowEpochMs: nowEpochMs,
-            );
-            return 0;
-          }
-
-          final affectedDays = <LocalDayKey>{};
-
-          for (final session in sessions) {
-            final oldDays = await _queryRollupDaysForSession(
-              transaction: transaction,
-              sessionId: session.sessionId,
-            );
-            affectedDays.addAll(oldDays);
-
-            await _deleteRollupsForSession(
-              transaction: transaction,
-              sessionId: session.sessionId,
-            );
-
-            if (session.integrityStatus == 'anomaly') {
-              continue;
-            }
-
-            final effectiveMsByDay = await _buildSessionEffectiveMsByDay(
-              transaction: transaction,
-              sessionId: session.sessionId,
-              endedAtEpochMs: session.endedAtEpochMs,
-              refreshNowUtc: DateTime.fromMillisecondsSinceEpoch(
-                nowEpochMs,
-                isUtc: true,
-              ),
-            );
-
-            for (final dayEffectiveMs in effectiveMsByDay) {
-              if (dayEffectiveMs.effectiveMs <= 0) {
-                continue;
-              }
-
-              affectedDays.add(dayEffectiveMs.localDay);
-              await _upsertSessionDayRollup(
-                transaction: transaction,
-                sessionId: session.sessionId,
-                localDay: dayEffectiveMs.localDay,
-                effectiveMs: dayEffectiveMs.effectiveMs,
-                updatedAtEpochMs: nowEpochMs,
-              );
-            }
-          }
-
-          for (final dayKey in affectedDays) {
-            await _recomputeDailyAggregate(
-              transaction: transaction,
-              localDay: dayKey,
-              updatedAtEpochMs: nowEpochMs,
-            );
-          }
-
-          final lastSession = sessions.last;
-          await _updateRollupStateCursor(
-            transaction: transaction,
-            cursorUpdatedAt: lastSession.updatedAtEpochMs,
-            cursorSessionId: lastSession.sessionId,
-            lastRefreshAtEpochMs: nowEpochMs,
-          );
-
-          return sessions.length;
-        });
-
-        if (processedCount == 0) {
-          return;
-        }
-      }
-    } on Object {
-      return;
-    }
-  }
-
   @override
   Future<StreakSnapshot> getGlobalSnapshot({required DateTime nowLocal}) async {
     await refreshAggregates();
@@ -169,12 +69,89 @@ ORDER BY local_day ASC
 
       final dailyAggregates = rows.map(StreakDailyAggregate.fromJson).toIList();
 
-      return StreakSnapshot.fromDailyAggregates(
-        asOfLocal: asOfLocal,
-        rows: dailyAggregates,
-      );
+      return StreakSnapshot.fromDailyAggregates(asOfLocal: asOfLocal, rows: dailyAggregates);
     } on Object {
       return StreakSnapshot.zero(asOfLocal: asOfLocal);
+    }
+  }
+
+  Future<void> _refreshAggregatesInternal() async {
+    try {
+      while (true) {
+        final processedCount = await _localDatabase.transaction((transaction) async {
+          await _ensureStateRow(transaction: transaction);
+          final state = await _readRollupState(transaction: transaction);
+
+          final sessions = await _queryUpdatedSessions(
+            transaction: transaction,
+            cursorUpdatedAt: state.cursorUpdatedAt,
+            cursorSessionId: state.cursorSessionId,
+            limit: _refreshBatchSize,
+          );
+
+          final nowEpochMs = _nowUtc().millisecondsSinceEpoch;
+
+          if (sessions.isEmpty) {
+            await _updateLastRefreshAt(transaction: transaction, nowEpochMs: nowEpochMs);
+            return 0;
+          }
+
+          final affectedDays = <LocalDayKey>{};
+
+          for (final session in sessions) {
+            final oldDays = await _queryRollupDaysForSession(transaction: transaction, sessionId: session.sessionId);
+            affectedDays.addAll(oldDays);
+
+            await _deleteRollupsForSession(transaction: transaction, sessionId: session.sessionId);
+
+            if (session.integrityStatus == 'anomaly') {
+              continue;
+            }
+
+            final effectiveMsByDay = await _buildSessionEffectiveMsByDay(
+              transaction: transaction,
+              sessionId: session.sessionId,
+              endedAtEpochMs: session.endedAtEpochMs,
+              refreshNowUtc: DateTime.fromMillisecondsSinceEpoch(nowEpochMs, isUtc: true),
+            );
+
+            for (final dayEffectiveMs in effectiveMsByDay) {
+              if (dayEffectiveMs.effectiveMs <= 0) {
+                continue;
+              }
+
+              affectedDays.add(dayEffectiveMs.localDay);
+              await _upsertSessionDayRollup(
+                transaction: transaction,
+                sessionId: session.sessionId,
+                localDay: dayEffectiveMs.localDay,
+                effectiveMs: dayEffectiveMs.effectiveMs,
+                updatedAtEpochMs: nowEpochMs,
+              );
+            }
+          }
+
+          for (final dayKey in affectedDays) {
+            await _recomputeDailyAggregate(transaction: transaction, localDay: dayKey, updatedAtEpochMs: nowEpochMs);
+          }
+
+          final lastSession = sessions.last;
+          await _updateRollupStateCursor(
+            transaction: transaction,
+            cursorUpdatedAt: lastSession.updatedAtEpochMs,
+            cursorSessionId: lastSession.sessionId,
+            lastRefreshAtEpochMs: nowEpochMs,
+          );
+
+          return sessions.length;
+        });
+
+        if (processedCount == 0) {
+          return;
+        }
+      }
+    } on Object {
+      return;
     }
   }
 
@@ -189,9 +166,7 @@ INSERT OR IGNORE INTO streak_rollup_state (
 ''');
   }
 
-  Future<_RollupStateRow> _readRollupState({
-    required Transaction transaction,
-  }) async {
+  Future<_RollupStateRow> _readRollupState({required Transaction transaction}) async {
     final rows = await transaction.rawQuery('''
 SELECT
   session_cursor_updated_at,
@@ -232,24 +207,15 @@ LIMIT ?
     required Transaction transaction,
     required String sessionId,
   }) async {
-    final rows = await transaction.rawQuery(
-      'SELECT local_day FROM streak_session_daily_rollups WHERE session_id = ?',
-      [sessionId],
-    );
+    final rows = await transaction.rawQuery('SELECT local_day FROM streak_session_daily_rollups WHERE session_id = ?', [
+      sessionId,
+    ]);
 
-    return rows
-        .map((row) => LocalDayKey.fromDb(row['local_day'] as String))
-        .toSet();
+    return rows.map((row) => LocalDayKey.fromDb(row['local_day'] as String)).toSet();
   }
 
-  Future<void> _deleteRollupsForSession({
-    required Transaction transaction,
-    required String sessionId,
-  }) {
-    return transaction.rawDelete(
-      'DELETE FROM streak_session_daily_rollups WHERE session_id = ?',
-      [sessionId],
-    );
+  Future<void> _deleteRollupsForSession({required Transaction transaction, required String sessionId}) {
+    return transaction.rawDelete('DELETE FROM streak_session_daily_rollups WHERE session_id = ?', [sessionId]);
   }
 
   Future<List<_SessionDayEffectiveMsDto>> _buildSessionEffectiveMsByDay({
@@ -271,22 +237,15 @@ ORDER BY occurred_at ASC, id ASC
       [sessionId],
     );
 
-    final events = rows
-        .map(_LifecycleEventPointDto.fromJson)
-        .map((dto) => dto.toDomain())
-        .toIList();
+    final events = rows.map(_LifecycleEventPointDto.fromJson).map((dto) => dto.toDomain()).toIList();
 
     final intervals = UtcInterval.buildEffectiveIntervals(
       events: events,
-      endedAtUtc: endedAtEpochMs == null
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(endedAtEpochMs, isUtc: true),
+      endedAtUtc: endedAtEpochMs == null ? null : DateTime.fromMillisecondsSinceEpoch(endedAtEpochMs, isUtc: true),
       refreshNowUtc: refreshNowUtc,
     );
 
-    return _SessionDayEffectiveMsDto.splitIntervalsByLocalDay(
-      intervals: intervals,
-    );
+    return _SessionDayEffectiveMsDto.splitIntervalsByLocalDay(intervals: intervals);
   }
 
   Future<void> _upsertSessionDayRollup({
@@ -333,10 +292,7 @@ WHERE local_day = ?
     final sourceSessionCount = row['source_session_count'].intOrZero;
 
     if (totalEffectiveMs <= 0) {
-      await transaction.rawDelete(
-        'DELETE FROM streak_daily_aggregates WHERE local_day = ?',
-        [localDay.dbValue],
-      );
+      await transaction.rawDelete('DELETE FROM streak_daily_aggregates WHERE local_day = ?', [localDay.dbValue]);
       return;
     }
 
@@ -358,9 +314,7 @@ ON CONFLICT(local_day) DO UPDATE SET
       [
         localDay.dbValue,
         totalEffectiveMs,
-        totalEffectiveMs >= StreakConstants.targetDurationPerDay.inMilliseconds
-            ? 1
-            : 0,
+        totalEffectiveMs >= StreakConstants.targetDurationPerDay.inMilliseconds ? 1 : 0,
         sourceSessionCount,
         updatedAtEpochMs,
       ],
@@ -386,13 +340,7 @@ WHERE id = 1
     );
   }
 
-  Future<void> _updateLastRefreshAt({
-    required Transaction transaction,
-    required int nowEpochMs,
-  }) {
-    return transaction.rawUpdate(
-      'UPDATE streak_rollup_state SET last_refresh_at = ? WHERE id = 1',
-      [nowEpochMs],
-    );
+  Future<void> _updateLastRefreshAt({required Transaction transaction, required int nowEpochMs}) {
+    return transaction.rawUpdate('UPDATE streak_rollup_state SET last_refresh_at = ? WHERE id = 1', [nowEpochMs]);
   }
 }

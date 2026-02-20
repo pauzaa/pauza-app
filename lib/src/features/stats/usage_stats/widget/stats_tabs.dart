@@ -51,11 +51,7 @@ class StatsTabs extends StatelessWidget {
 }
 
 final class _StatsTabButton extends StatelessWidget {
-  const _StatsTabButton({
-    required this.title,
-    required this.isSelected,
-    required this.onTap,
-  });
+  const _StatsTabButton({required this.title, required this.isSelected, required this.onTap});
 
   final String title;
   final bool isSelected;
@@ -78,9 +74,7 @@ final class _StatsTabButton extends StatelessWidget {
             textAlign: TextAlign.center,
             style: context.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
-              color: isSelected
-                  ? context.colorScheme.onPrimary
-                  : context.colorScheme.onSurfaceVariant,
+              color: isSelected ? context.colorScheme.onPrimary : context.colorScheme.onSurfaceVariant,
             ),
           ),
         ),

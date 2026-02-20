@@ -39,10 +39,7 @@ class ProfileEditSaveButton extends StatelessWidget {
               return PauzaFilledButton(
                 onPressed: () {
                   if (Form.of(context).validate()) {
-                    final notifier = UserEditDraftScope.of(
-                      context,
-                      watch: false,
-                    );
+                    final notifier = UserEditDraftScope.of(context, watch: false);
 
                     context.read<ProfileEditBloc>().add(
                       ProfileEditSaveRequested(

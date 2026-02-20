@@ -16,10 +16,7 @@ abstract interface class ModesRepository implements Disposable {
 
   Future<void> createMode(ModeUpsertDTO request);
 
-  Future<void> updateMode({
-    required String modeId,
-    required ModeUpsertDTO request,
-  });
+  Future<void> updateMode({required String modeId, required ModeUpsertDTO request});
 
   Future<void> deleteMode(String modeId);
 
@@ -27,12 +24,9 @@ abstract interface class ModesRepository implements Disposable {
 }
 
 class ModesRepositoryImpl implements ModesRepository {
-  ModesRepositoryImpl({
-    required LocalDatabase localDatabase,
-    required this.platform,
-    Uuid? uuid,
-  }) : _localDatabase = localDatabase,
-       _uuid = uuid ?? const Uuid();
+  ModesRepositoryImpl({required LocalDatabase localDatabase, required this.platform, Uuid? uuid})
+    : _localDatabase = localDatabase,
+      _uuid = uuid ?? const Uuid();
 
   final LocalDatabase _localDatabase;
   final Uuid _uuid;
@@ -199,33 +193,23 @@ INSERT INTO mode_blocked_apps (
   }
 
   @override
-  Future<void> updateMode({
-    required String modeId,
-    required ModeUpsertDTO request,
-  }) async {
+  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {
     final now = DateTime.now().toUtc().millisecondsSinceEpoch;
 
     await _localDatabase.transaction((transaction) async {
       final schedule = request.schedule;
-      final existingScheduleRows = await transaction.rawQuery(
-        'SELECT created_at FROM schedules WHERE mode_id = ?',
-        [modeId],
-      );
+      final existingScheduleRows = await transaction.rawQuery('SELECT created_at FROM schedules WHERE mode_id = ?', [
+        modeId,
+      ]);
       final scheduleExists =
-          existingScheduleRows.isNotEmpty &&
-          (existingScheduleRows.first['created_at'] as int?) != null;
+          existingScheduleRows.isNotEmpty && (existingScheduleRows.first['created_at'] as int?) != null;
 
       final existingBlockedRows = await transaction.rawQuery(
         'SELECT app_identifier FROM mode_blocked_apps WHERE mode_id = ? AND platform = ?',
         [modeId, platform.dbValue],
       );
-      final existingBlocked = existingBlockedRows
-          .map((row) => row['app_identifier'])
-          .whereType<String>()
-          .toSet();
-      final requestedBlocked = request.blockedAppIds
-          .map((id) => id.raw)
-          .toSet();
+      final existingBlocked = existingBlockedRows.map((row) => row['app_identifier']).whereType<String>().toSet();
+      final requestedBlocked = request.blockedAppIds.map((id) => id.raw).toSet();
       final removedBlocked = existingBlocked.difference(requestedBlocked);
       final addedBlocked = requestedBlocked.difference(existingBlocked);
 
@@ -306,10 +290,11 @@ INSERT INTO schedules (
       }
 
       for (final appId in removedBlocked) {
-        batch.rawDelete(
-          'DELETE FROM mode_blocked_apps WHERE mode_id = ? AND platform = ? AND app_identifier = ?',
-          [modeId, platform.dbValue, appId],
-        );
+        batch.rawDelete('DELETE FROM mode_blocked_apps WHERE mode_id = ? AND platform = ? AND app_identifier = ?', [
+          modeId,
+          platform.dbValue,
+          appId,
+        ]);
       }
 
       for (final appId in addedBlocked) {

@@ -2,10 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 abstract interface class StatsUsageRepository {
-  Future<IList<UsageStats>> getUsageStats({
-    required DateTime start,
-    required DateTime end,
-  });
+  Future<IList<UsageStats>> getUsageStats({required DateTime start, required DateTime end});
 }
 
 class StatsUsageRepositoryImpl implements StatsUsageRepository {
@@ -21,14 +18,8 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
   // Map<AppIdentifier, AndroidAppInfo>? _cachedAndroidApps;
 
   @override
-  Future<IList<UsageStats>> getUsageStats({
-    required DateTime start,
-    required DateTime end,
-  }) async {
-    final usage = await _usageStatsManager.getUsageStats(
-      startDate: start,
-      endDate: end,
-    );
+  Future<IList<UsageStats>> getUsageStats({required DateTime start, required DateTime end}) async {
+    final usage = await _usageStatsManager.getUsageStats(startDate: start, endDate: end);
 
     // final apps = await _getAndroidAppsById();
     return usage

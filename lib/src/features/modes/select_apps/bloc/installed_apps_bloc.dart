@@ -21,18 +21,14 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
     on<InstalledAppsRequested>(_onInstalledAppsRequested);
     on<SearchQueryChanged>(
       _onSearchQueryChanged,
-      transformer: (events, mapper) =>
-          events.debounceTime(debounceDuration).switchMap(mapper),
+      transformer: (events, mapper) => events.debounceTime(debounceDuration).switchMap(mapper),
     );
     on<CategoryFilterChanged>(_onCategoryFilterChanged);
   }
 
   final InstalledAppsRepository _installedAppsRepository;
 
-  Future<void> _onInstalledAppsRequested(
-    InstalledAppsRequested event,
-    Emitter<InstalledAppsState> emit,
-  ) async {
+  Future<void> _onInstalledAppsRequested(InstalledAppsRequested event, Emitter<InstalledAppsState> emit) async {
     try {
       emit(state.loading());
 
@@ -62,44 +58,28 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
     }
   }
 
-  FutureOr<void> _onSearchQueryChanged(
-    SearchQueryChanged event,
-    Emitter<InstalledAppsState> emit,
-  ) {
+  FutureOr<void> _onSearchQueryChanged(SearchQueryChanged event, Emitter<InstalledAppsState> emit) {
     emit(_buildProjectedState(state.copyWith(searchQuery: event.searchQuery)));
   }
 
-  void _onCategoryFilterChanged(
-    CategoryFilterChanged event,
-    Emitter<InstalledAppsState> emit,
-  ) {
+  void _onCategoryFilterChanged(CategoryFilterChanged event, Emitter<InstalledAppsState> emit) {
     emit(
       _buildProjectedState(
-        state.copyWith(
-          selectedCategoryKey: event.categoryKey,
-          clearSelectedCategoryKey: event.categoryKey == null,
-        ),
+        state.copyWith(selectedCategoryKey: event.categoryKey, clearSelectedCategoryKey: event.categoryKey == null),
       ),
     );
   }
 
   InstalledAppsState _buildProjectedState(InstalledAppsState currentState) {
-    final filteredApps = _computeFilteredApps(
-      apps: currentState.allApps,
-      searchQuery: currentState.searchQuery,
-    );
+    final filteredApps = _computeFilteredApps(apps: currentState.allApps, searchQuery: currentState.searchQuery);
 
     final availableCategoryKeys = _computeAvailableCategories(filteredApps);
 
-    final selectedCategoryKey =
-        availableCategoryKeys.contains(currentState.selectedCategoryKey)
+    final selectedCategoryKey = availableCategoryKeys.contains(currentState.selectedCategoryKey)
         ? currentState.selectedCategoryKey
         : null;
 
-    final visibleGroupedApps = _computeVisibleGroups(
-      apps: filteredApps,
-      selectedCategoryKey: selectedCategoryKey,
-    );
+    final visibleGroupedApps = _computeVisibleGroups(apps: filteredApps, selectedCategoryKey: selectedCategoryKey);
 
     return currentState.copyWith(
       selectedCategoryKey: selectedCategoryKey,
@@ -115,10 +95,7 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
     return sortedApps.toIList();
   }
 
-  IList<AndroidAppInfo> _computeFilteredApps({
-    required IList<AndroidAppInfo> apps,
-    required String searchQuery,
-  }) {
+  IList<AndroidAppInfo> _computeFilteredApps({required IList<AndroidAppInfo> apps, required String searchQuery}) {
     final normalizedQuery = searchQuery.trim().toLowerCase();
 
     if (normalizedQuery.isEmpty) {
@@ -136,8 +113,7 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
 
   IList<String> _computeAvailableCategories(IList<AndroidAppInfo> apps) {
     final grouped = groupBy(apps, (app) => app.category ?? _otherCategoryKey);
-    final categories = grouped.keys.toList(growable: false)
-      ..sort(_compareCategoryKeys);
+    final categories = grouped.keys.toList(growable: false)..sort(_compareCategoryKeys);
     return categories.toIList();
   }
 
@@ -158,8 +134,7 @@ class InstalledAppsBloc extends Bloc<InstalledAppsEvent, InstalledAppsState> {
     ).map((key, value) => MapEntry(key, value.toIList()));
 
     if (selectedCategoryKey == null) {
-      final sortedKeys = grouped.keys.toList(growable: false)
-        ..sort(_compareCategoryKeys);
+      final sortedKeys = grouped.keys.toList(growable: false)..sort(_compareCategoryKeys);
 
       return {for (final key in sortedKeys) key: grouped[key]!};
     }

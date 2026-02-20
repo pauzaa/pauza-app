@@ -17,10 +17,7 @@ class UsageTrendPoint {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is UsageTrendPoint &&
-          other.day == day &&
-          other.duration == duration;
+      identical(this, other) || other is UsageTrendPoint && other.day == day && other.duration == duration;
 
   @override
   int get hashCode => Object.hash(day, duration);
@@ -41,14 +38,8 @@ class UsageSummary {
     required IList<UsageStats> previous,
     required DateTimeRange window,
   }) {
-    final currentTotal = current.fold<Duration>(
-      Duration.zero,
-      (sum, item) => sum + item.totalDuration,
-    );
-    final previousTotal = previous.fold<Duration>(
-      Duration.zero,
-      (sum, item) => sum + item.totalDuration,
-    );
+    final currentTotal = current.fold<Duration>(Duration.zero, (sum, item) => sum + item.totalDuration);
+    final previousTotal = previous.fold<Duration>(Duration.zero, (sum, item) => sum + item.totalDuration);
 
     final bucketTotals = <UsageCategoryBucket, Duration>{
       UsageCategoryBucket.social: Duration.zero,
@@ -58,8 +49,7 @@ class UsageSummary {
 
     for (final item in current) {
       final bucket = UsageCategoryBucket.fromCategory(item.appInfo.category);
-      bucketTotals[bucket] =
-          (bucketTotals[bucket] ?? Duration.zero) + item.totalDuration;
+      bucketTotals[bucket] = (bucketTotals[bucket] ?? Duration.zero) + item.totalDuration;
     }
 
     final trendDurations = <DateTime, Duration>{};
@@ -74,30 +64,23 @@ class UsageSummary {
       if (!trendDurations.containsKey(key)) {
         continue;
       }
-      trendDurations[key] =
-          (trendDurations[key] ?? Duration.zero) + item.totalDuration;
+      trendDurations[key] = (trendDurations[key] ?? Duration.zero) + item.totalDuration;
     }
 
     final trend =
         trendDurations.entries
-            .map(
-              (entry) => UsageTrendPoint(day: entry.key, duration: entry.value),
-            )
+            .map((entry) => UsageTrendPoint(day: entry.key, duration: entry.value))
             .toList(growable: false)
           ..sort((a, b) => a.day.compareTo(b.day));
 
     final deltaPercent = previousTotal.inMilliseconds == 0
         ? null
-        : ((currentTotal.inMilliseconds - previousTotal.inMilliseconds) /
-                  previousTotal.inMilliseconds) *
-              100;
+        : ((currentTotal.inMilliseconds - previousTotal.inMilliseconds) / previousTotal.inMilliseconds) * 100;
 
     return UsageSummary(
       totalDuration: currentTotal,
       dailyAverage: Duration(
-        milliseconds: window.inclusiveDays == 0
-            ? 0
-            : currentTotal.inMilliseconds ~/ window.inclusiveDays,
+        milliseconds: window.inclusiveDays == 0 ? 0 : currentTotal.inMilliseconds ~/ window.inclusiveDays,
       ),
       deltaPercent: deltaPercent,
       buckets: bucketTotals,
@@ -129,11 +112,6 @@ class UsageSummary {
   }
 
   @override
-  int get hashCode => Object.hash(
-    totalDuration,
-    dailyAverage,
-    deltaPercent,
-    Object.hashAll(buckets.entries),
-    Object.hashAll(trend),
-  );
+  int get hashCode =>
+      Object.hash(totalDuration, dailyAverage, deltaPercent, Object.hashAll(buckets.entries), Object.hashAll(trend));
 }

@@ -31,14 +31,8 @@ final class RestrictionLifecycleEventLog {
       action: RestrictionLifecycleAction.fromWire(row['action'] as String),
       source: RestrictionLifecycleSource.fromWire(row['source'] as String),
       reason: row['reason'] as String,
-      occurredAt: DateTime.fromMillisecondsSinceEpoch(
-        row['occurred_at'] as int,
-        isUtc: true,
-      ),
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-        row['created_at'] as int,
-        isUtc: true,
-      ),
+      occurredAt: DateTime.fromMillisecondsSinceEpoch(row['occurred_at'] as int, isUtc: true),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(row['created_at'] as int, isUtc: true),
     );
   }
 
@@ -73,14 +67,5 @@ final class RestrictionLifecycleEventLog {
   }
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    sessionId,
-    modeId,
-    action,
-    source,
-    reason,
-    occurredAt,
-    createdAt,
-  );
+  int get hashCode => Object.hash(id, sessionId, modeId, action, source, reason, occurredAt, createdAt);
 }

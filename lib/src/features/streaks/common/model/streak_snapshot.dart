@@ -31,35 +31,27 @@ final class StreakSnapshot {
     );
   }
 
-  factory StreakSnapshot.fromDailyAggregates({
-    required DateTime asOfLocal,
-    required IList<StreakDailyAggregate> rows,
-  }) {
-    final effectiveMsByDay = <LocalDayKey, int>{};
+  factory StreakSnapshot.fromDailyAggregates({required DateTime asOfLocal, required IList<StreakDailyAggregate> rows}) {
+    final effectiveDurationByDay = <LocalDayKey, Duration>{};
     final qualifiedDays = <LocalDayKey>{};
 
     for (final row in rows) {
-      effectiveMsByDay[row.localDay] = row.effectiveMs;
+      effectiveDurationByDay[row.localDay] = row.effectiveDuration;
       if (row.qualified) {
         qualifiedDays.add(row.localDay);
       }
     }
 
     final todayKey = LocalDayKey.fromDateTime(asOfLocal);
-    final todayEffectiveMs = effectiveMsByDay[todayKey] ?? 0;
+    final todayEffectiveDuration = effectiveDurationByDay[todayKey] ?? Duration.zero;
     final qualifiedDaySet = qualifiedDays.toISet();
 
     return StreakSnapshot(
       asOfLocal: asOfLocal,
       targetDurationPerDay: StreakConstants.targetDurationPerDay,
-      todayEffectiveDuration: Duration(milliseconds: todayEffectiveMs),
-      currentStreakDays: CurrentStreakDays.fromQualifiedDays(
-        todayLocal: asOfLocal,
-        qualifiedDays: qualifiedDaySet,
-      ),
-      bestStreakDays: BestStreakDays.fromQualifiedDays(
-        qualifiedDays: qualifiedDaySet,
-      ),
+      todayEffectiveDuration: todayEffectiveDuration,
+      currentStreakDays: CurrentStreakDays.fromQualifiedDays(todayLocal: asOfLocal, qualifiedDays: qualifiedDaySet),
+      bestStreakDays: BestStreakDays.fromQualifiedDays(qualifiedDays: qualifiedDaySet),
     );
   }
 
@@ -91,12 +83,6 @@ final class StreakSnapshot {
 
   @override
   int get hashCode {
-    return Object.hash(
-      asOfLocal,
-      targetDurationPerDay,
-      todayEffectiveDuration,
-      currentStreakDays,
-      bestStreakDays,
-    );
+    return Object.hash(asOfLocal, targetDurationPerDay, todayEffectiveDuration, currentStreakDays, bestStreakDays);
   }
 }

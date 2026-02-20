@@ -30,23 +30,11 @@ class UserEditDraftNotifier extends ValueNotifier<ProfileEditDTO> {
     return PauzaValidators.validateName(value.name, l10n);
   }
 
-  String? validateUsername(
-    AppLocalizations l10n,
-    UsernameAvailability usernameAvailability,
-  ) {
-    return PauzaValidators.validateUsername(
-      value.username,
-      l10n,
-      usernameAvailability,
-    );
+  String? validateUsername(AppLocalizations l10n, UsernameAvailability usernameAvailability) {
+    return PauzaValidators.validateUsername(value.username, l10n, usernameAvailability);
   }
 
-  void update({
-    String? name,
-    String? username,
-    String? profilePictureUrl,
-    Uint8List? profilePictureBytes,
-  }) {
+  void update({String? name, String? username, String? profilePictureUrl, Uint8List? profilePictureBytes}) {
     value = value.copyWith(
       name: name,
       username: username,
@@ -57,11 +45,7 @@ class UserEditDraftNotifier extends ValueNotifier<ProfileEditDTO> {
 }
 
 class UserEditDraftScope extends InheritedNotifier<UserEditDraftNotifier> {
-  const UserEditDraftScope({
-    required super.notifier,
-    required super.child,
-    super.key,
-  });
+  const UserEditDraftScope({required super.notifier, required super.child, super.key});
 
   static UserEditDraftNotifier of(BuildContext context, {bool watch = true}) {
     final scope = watch

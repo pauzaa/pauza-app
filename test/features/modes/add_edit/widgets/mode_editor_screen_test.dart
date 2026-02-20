@@ -17,12 +17,7 @@ void main() {
   testWidgets('delete button appears only in edit mode', (tester) async {
     final createBloc = ModeEditorBloc(modesRepository: _TestModesRepository());
     addTearDown(createBloc.close);
-    await tester.pumpWidget(
-      _TestApp(
-        bloc: createBloc,
-        child: const ModeEditorMainScreen(modeId: null),
-      ),
-    );
+    await tester.pumpWidget(_TestApp(bloc: createBloc, child: const ModeEditorMainScreen(modeId: null)));
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text('Delete Focus Mode'), findsNothing);
@@ -48,14 +43,10 @@ void main() {
     expect(find.text('Delete Focus Mode'), findsOneWidget);
   });
 
-  testWidgets('save with empty fields shows notifier validation errors', (
-    tester,
-  ) async {
+  testWidgets('save with empty fields shows notifier validation errors', (tester) async {
     final bloc = ModeEditorBloc(modesRepository: _TestModesRepository());
     addTearDown(bloc.close);
-    await tester.pumpWidget(
-      _TestApp(bloc: bloc, child: const ModeEditorMainScreen(modeId: null)),
-    );
+    await tester.pumpWidget(_TestApp(bloc: bloc, child: const ModeEditorMainScreen(modeId: null)));
     await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.text('Save Mode'));
@@ -67,9 +58,7 @@ void main() {
   testWidgets('renders icon picker at top', (tester) async {
     final bloc = ModeEditorBloc(modesRepository: _TestModesRepository());
     addTearDown(bloc.close);
-    await tester.pumpWidget(
-      _TestApp(bloc: bloc, child: const ModeEditorMainScreen(modeId: null)),
-    );
+    await tester.pumpWidget(_TestApp(bloc: bloc, child: const ModeEditorMainScreen(modeId: null)));
     await tester.pump(const Duration(milliseconds: 300));
 
     // Icon picker is visible at the top (in the Row with title field)
@@ -127,10 +116,7 @@ class _TestModesRepository implements ModesRepository {
   Future<List<Mode>> getModes() async => <Mode>[];
 
   @override
-  Future<void> updateMode({
-    required String modeId,
-    required ModeUpsertDTO request,
-  }) async {}
+  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {}
 
   @override
   Stream<void> watchModes() => const Stream.empty();

@@ -9,20 +9,12 @@ import 'package:sqflite/sqflite.dart';
 abstract interface class RestrictionLifecycleRepository {
   Future<void> syncFromPluginQueue({int batchSize = 200});
 
-  Future<List<RestrictionSessionLog>> getSessions({
-    String? modeId,
-    int limit = 200,
-  });
+  Future<List<RestrictionSessionLog>> getSessions({String? modeId, int limit = 200});
 
-  Future<List<RestrictionLifecycleEventLog>> getEvents({
-    String? modeId,
-    String? sessionId,
-    int limit = 500,
-  });
+  Future<List<RestrictionLifecycleEventLog>> getEvents({String? modeId, String? sessionId, int limit = 500});
 }
 
-final class RestrictionLifecycleRepositoryImpl
-    implements RestrictionLifecycleRepository {
+final class RestrictionLifecycleRepositoryImpl implements RestrictionLifecycleRepository {
   RestrictionLifecycleRepositoryImpl({
     required LocalDatabase localDatabase,
     required RestrictionLifecyclePluginClient pluginClient,
@@ -37,41 +29,25 @@ final class RestrictionLifecycleRepositoryImpl
   @override
   Future<void> syncFromPluginQueue({int batchSize = 200}) async {
     if (batchSize <= 0) {
-      throw ArgumentError.value(
-        batchSize,
-        'batchSize',
-        'batchSize must be > 0',
-      );
+      throw ArgumentError.value(batchSize, 'batchSize', 'batchSize must be > 0');
     }
 
     while (true) {
-      final events = await _pluginClient.getPendingLifecycleEvents(
-        limit: batchSize,
-      );
+      final events = await _pluginClient.getPendingLifecycleEvents(limit: batchSize);
       if (events.isEmpty) {
         return;
       }
 
       await _localDatabase.transaction((transaction) async {
         for (final event in events) {
-          final inserted = await _insertEventIgnore(
-            transaction: transaction,
-            event: event,
-          );
+          final inserted = await _insertEventIgnore(transaction: transaction, event: event);
           if (!inserted) {
             continue;
           }
 
-          final currentSession = await _getSessionById(
-            transaction: transaction,
-            sessionId: event.sessionId,
-          );
+          final currentSession = await _getSessionById(transaction: transaction, sessionId: event.sessionId);
 
-          final session = _reducer.reduce(
-            event: event,
-            currentSession: currentSession,
-            nowUtc: DateTime.now().toUtc(),
-          );
+          final session = _reducer.reduce(event: event, currentSession: currentSession, nowUtc: DateTime.now().toUtc());
 
           await _upsertSession(transaction: transaction, session: session);
         }
@@ -82,10 +58,7 @@ final class RestrictionLifecycleRepositoryImpl
   }
 
   @override
-  Future<List<RestrictionSessionLog>> getSessions({
-    String? modeId,
-    int limit = 200,
-  }) async {
+  Future<List<RestrictionSessionLog>> getSessions({String? modeId, int limit = 200}) async {
     if (limit <= 0) {
       throw ArgumentError.value(limit, 'limit', 'limit must be > 0');
     }
@@ -125,11 +98,7 @@ LIMIT ?
   }
 
   @override
-  Future<List<RestrictionLifecycleEventLog>> getEvents({
-    String? modeId,
-    String? sessionId,
-    int limit = 500,
-  }) async {
+  Future<List<RestrictionLifecycleEventLog>> getEvents({String? modeId, String? sessionId, int limit = 500}) async {
     if (limit <= 0) {
       throw ArgumentError.value(limit, 'limit', 'limit must be > 0');
     }
@@ -147,9 +116,7 @@ LIMIT ?
       arguments.add(selectedSessionId);
     }
 
-    final whereClause = whereClauses.isEmpty
-        ? ''
-        : 'WHERE ${whereClauses.join(' AND ')}';
+    final whereClause = whereClauses.isEmpty ? '' : 'WHERE ${whereClauses.join(' AND ')}';
 
     arguments.add(limit);
 
@@ -169,15 +136,10 @@ ORDER BY occurred_at DESC
 LIMIT ?
 ''', arguments);
 
-    return rows
-        .map(RestrictionLifecycleEventLog.fromDbRow)
-        .toList(growable: false);
+    return rows.map(RestrictionLifecycleEventLog.fromDbRow).toList(growable: false);
   }
 
-  Future<bool> _insertEventIgnore({
-    required Transaction transaction,
-    required RestrictionLifecycleEvent event,
-  }) async {
+  Future<bool> _insertEventIgnore({required Transaction transaction, required RestrictionLifecycleEvent event}) async {
     final now = DateTime.now().toUtc().millisecondsSinceEpoch;
 
     final insertedRowId = await transaction.rawInsert(
@@ -208,10 +170,7 @@ INSERT OR IGNORE INTO restriction_lifecycle_events (
     return insertedRowId != 0;
   }
 
-  Future<RestrictionSessionLog?> _getSessionById({
-    required Transaction transaction,
-    required String sessionId,
-  }) async {
+  Future<RestrictionSessionLog?> _getSessionById({required Transaction transaction, required String sessionId}) async {
     final rows = await transaction.rawQuery(
       '''
 SELECT
@@ -242,10 +201,7 @@ LIMIT 1
     return RestrictionSessionLog.fromDbRow(rows.first);
   }
 
-  Future<void> _upsertSession({
-    required Transaction transaction,
-    required RestrictionSessionLog session,
-  }) async {
+  Future<void> _upsertSession({required Transaction transaction, required RestrictionSessionLog session}) async {
     await transaction.rawInsert('''
 INSERT INTO restriction_sessions (
   session_id,

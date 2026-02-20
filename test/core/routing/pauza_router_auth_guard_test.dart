@@ -47,11 +47,7 @@ void main() {
     });
 
     test('authenticated + [otp] redirects to [root]', () {
-      final result = _applyGuards(
-        isAuthenticated: true,
-        isReady: true,
-        state: <Page<Object?>>[PauzaRoutes.otp.page()],
-      );
+      final result = _applyGuards(isAuthenticated: true, isReady: true, state: <Page<Object?>>[PauzaRoutes.otp.page()]);
 
       expect(_routesOf(result), <PauzaRoutes>[PauzaRoutes.root]);
     });
@@ -63,73 +59,47 @@ void main() {
         state: <Page<Object?>>[PauzaRoutes.profile.page()],
       );
 
-      expect(_routesOf(result), <PauzaRoutes>[
-        PauzaRoutes.root,
-        PauzaRoutes.profile,
-      ]);
+      expect(_routesOf(result), <PauzaRoutes>[PauzaRoutes.root, PauzaRoutes.profile]);
     });
 
     test('authenticated + missing permissions overlays permissions on top', () {
       final result = _applyGuards(
         isAuthenticated: true,
         isReady: false,
-        state: <Page<Object?>>[
-          PauzaRoutes.root.page(),
-          PauzaRoutes.profile.page(),
-        ],
+        state: <Page<Object?>>[PauzaRoutes.root.page(), PauzaRoutes.profile.page()],
       );
 
-      expect(_routesOf(result), <PauzaRoutes>[
-        PauzaRoutes.root,
-        PauzaRoutes.profile,
-        PauzaRoutes.permissions,
-      ]);
+      expect(_routesOf(result), <PauzaRoutes>[PauzaRoutes.root, PauzaRoutes.profile, PauzaRoutes.permissions]);
     });
 
     test('authenticated + permissions ready removes permissions page', () {
       final result = _applyGuards(
         isAuthenticated: true,
         isReady: true,
-        state: <Page<Object?>>[
-          PauzaRoutes.root.page(),
-          PauzaRoutes.profile.page(),
-          PauzaRoutes.permissions.page(),
-        ],
+        state: <Page<Object?>>[PauzaRoutes.root.page(), PauzaRoutes.profile.page(), PauzaRoutes.permissions.page()],
       );
 
-      expect(_routesOf(result), <PauzaRoutes>[
-        PauzaRoutes.root,
-        PauzaRoutes.profile,
-      ]);
+      expect(_routesOf(result), <PauzaRoutes>[PauzaRoutes.root, PauzaRoutes.profile]);
     });
 
-    test(
-      'unauthenticated ignores permissions state and keeps auth-only flow',
-      () {
-        final result = _applyGuards(
-          isAuthenticated: false,
-          isReady: false,
-          state: <Page<Object?>>[PauzaRoutes.auth.page()],
-        );
+    test('unauthenticated ignores permissions state and keeps auth-only flow', () {
+      final result = _applyGuards(
+        isAuthenticated: false,
+        isReady: false,
+        state: <Page<Object?>>[PauzaRoutes.auth.page()],
+      );
 
-        expect(_routesOf(result), <PauzaRoutes>[PauzaRoutes.auth]);
-      },
-    );
+      expect(_routesOf(result), <PauzaRoutes>[PauzaRoutes.auth]);
+    });
 
     test('duplicate exact pages collapse and keep latest/topmost', () {
       final result = _applyGuards(
         isAuthenticated: true,
         isReady: true,
-        state: <Page<Object?>>[
-          PauzaRoutes.profile.page(),
-          PauzaRoutes.profile.page(),
-        ],
+        state: <Page<Object?>>[PauzaRoutes.profile.page(), PauzaRoutes.profile.page()],
       );
 
-      expect(_routesOf(result), <PauzaRoutes>[
-        PauzaRoutes.root,
-        PauzaRoutes.profile,
-      ]);
+      expect(_routesOf(result), <PauzaRoutes>[PauzaRoutes.root, PauzaRoutes.profile]);
       expect(result.length, 2);
     });
 
@@ -138,19 +108,12 @@ void main() {
         isAuthenticated: true,
         isReady: true,
         state: <Page<Object?>>[
-          PauzaRoutes.modeEdit.page(
-            pathParams: <String, String>{'midEdit': '1'},
-          ),
-          PauzaRoutes.modeEdit.page(
-            pathParams: <String, String>{'midEdit': '2'},
-          ),
+          PauzaRoutes.modeEdit.page(pathParams: <String, String>{'midEdit': '1'}),
+          PauzaRoutes.modeEdit.page(pathParams: <String, String>{'midEdit': '2'}),
         ],
       );
 
-      expect(_routesOf(result), <PauzaRoutes>[
-        PauzaRoutes.root,
-        PauzaRoutes.modeEdit,
-      ]);
+      expect(_routesOf(result), <PauzaRoutes>[PauzaRoutes.root, PauzaRoutes.modeEdit]);
       expect(result.length, 2);
       final modeEditPage = result.last;
       expect(modeEditPage.meta?.pathParams, <String, String>{'midEdit': '2'});
@@ -158,23 +121,14 @@ void main() {
   });
 }
 
-NavigationState _applyGuards({
-  required bool isAuthenticated,
-  required bool isReady,
-  required NavigationState state,
-}) {
+NavigationState _applyGuards({required bool isAuthenticated, required bool isReady, required NavigationState state}) {
   final guards = <NavigationGuard>[
     createAuthGuard(isAuthenticated: () => isAuthenticated),
-    createPermissionGuard(
-      isAuthenticated: () => isAuthenticated,
-      isReady: () => isReady,
-    ),
+    createPermissionGuard(isAuthenticated: () => isAuthenticated, isReady: () => isReady),
   ];
   return guards.fold<NavigationState>(state, (pages, guard) => guard(pages));
 }
 
 List<PauzaRoutes> _routesOf(NavigationState pages) {
-  return pages
-      .map((page) => page.meta?.route as PauzaRoutes)
-      .toList(growable: false);
+  return pages.map((page) => page.meta?.route as PauzaRoutes).toList(growable: false);
 }

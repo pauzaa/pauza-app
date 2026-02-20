@@ -44,25 +44,19 @@ void main() {
           theme: PauzaTheme.light,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(
-            body: SettingsNotificationsTile(title: 'Notifications'),
-          ),
+          home: const Scaffold(body: SettingsNotificationsTile(title: 'Notifications')),
         ),
       );
 
       expect(find.text('Notifications'), findsOneWidget);
 
-      final switchWidgetBefore = tester.widget<PauzaSwitch>(
-        find.byType(PauzaSwitch),
-      );
+      final switchWidgetBefore = tester.widget<PauzaSwitch>(find.byType(PauzaSwitch));
       expect(switchWidgetBefore.value, isFalse);
 
       await tester.tap(find.byType(SettingsNotificationsTile));
       await tester.pump();
 
-      final switchWidgetAfter = tester.widget<PauzaSwitch>(
-        find.byType(PauzaSwitch),
-      );
+      final switchWidgetAfter = tester.widget<PauzaSwitch>(find.byType(PauzaSwitch));
       expect(switchWidgetAfter.value, isTrue);
     });
   });

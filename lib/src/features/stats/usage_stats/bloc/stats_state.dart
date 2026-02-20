@@ -43,12 +43,5 @@ final class StatsState extends Equatable {
   }
 
   @override
-  List<Object?> get props => <Object?>[
-    window,
-    usageStats,
-    maxDate,
-    isLoading,
-    summary,
-    error,
-  ];
+  List<Object?> get props => <Object?>[window, usageStats, maxDate, isLoading, summary, error];
 }

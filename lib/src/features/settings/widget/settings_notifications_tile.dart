@@ -8,12 +8,10 @@ final class SettingsNotificationsTile extends StatefulWidget {
   final String title;
 
   @override
-  State<SettingsNotificationsTile> createState() =>
-      _SettingsNotificationsTileState();
+  State<SettingsNotificationsTile> createState() => _SettingsNotificationsTileState();
 }
 
-final class _SettingsNotificationsTileState
-    extends State<SettingsNotificationsTile> {
+final class _SettingsNotificationsTileState extends State<SettingsNotificationsTile> {
   bool _isEnabled = false;
 
   @override

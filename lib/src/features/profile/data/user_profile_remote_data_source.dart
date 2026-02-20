@@ -18,8 +18,7 @@ abstract interface class UserProfileRemoteDataSource {
   Future<String> uploadProfilePhoto({required String localFilePath});
 }
 
-final class UserProfileRemoteDataSourceImpl
-    implements UserProfileRemoteDataSource {
+final class UserProfileRemoteDataSourceImpl implements UserProfileRemoteDataSource {
   const UserProfileRemoteDataSourceImpl();
 
   @override
@@ -47,14 +46,10 @@ final class UserProfileRemoteDataSourceImpl
 
     final available = await isUsernameAvailable(username: normalizedUsername);
     if (!available) {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.usernameTaken,
-      );
+      throw const UserProfileException(code: UserProfileFailureCode.usernameTaken);
     }
 
-    final resolvedProfilePicture = profilePictureBytes == null
-        ? profilePictureUrl
-        : 'memory://profile';
+    final resolvedProfilePicture = profilePictureBytes == null ? profilePictureUrl : 'memory://profile';
     final user = UserDto(
       profilePicture: resolvedProfilePicture ?? '',
       username: normalizedUsername,

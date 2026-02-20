@@ -4,10 +4,7 @@ import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 @immutable
 final class StreakLifecycleEventPoint {
-  const StreakLifecycleEventPoint({
-    required this.action,
-    required this.occurredAtUtc,
-  });
+  const StreakLifecycleEventPoint({required this.action, required this.occurredAtUtc});
 
   final RestrictionLifecycleAction action;
   final DateTime occurredAtUtc;
@@ -38,11 +35,7 @@ final class UtcInterval {
           break;
         case RestrictionLifecycleAction.pause:
           if (activeStartUtc != null && !isPaused) {
-            intervals = _appendInterval(
-              intervals: intervals,
-              startUtc: activeStartUtc,
-              endUtc: event.occurredAtUtc,
-            );
+            intervals = _appendInterval(intervals: intervals, startUtc: activeStartUtc, endUtc: event.occurredAtUtc);
             activeStartUtc = null;
             isPaused = true;
           }
@@ -55,11 +48,7 @@ final class UtcInterval {
           break;
         case RestrictionLifecycleAction.end:
           if (activeStartUtc != null && !isPaused) {
-            intervals = _appendInterval(
-              intervals: intervals,
-              startUtc: activeStartUtc,
-              endUtc: event.occurredAtUtc,
-            );
+            intervals = _appendInterval(intervals: intervals, startUtc: activeStartUtc, endUtc: event.occurredAtUtc);
           }
           activeStartUtc = null;
           isPaused = false;
@@ -69,11 +58,7 @@ final class UtcInterval {
 
     if (activeStartUtc != null && !isPaused) {
       final cap = endedAtUtc ?? refreshNowUtc;
-      intervals = _appendInterval(
-        intervals: intervals,
-        startUtc: activeStartUtc,
-        endUtc: cap,
-      );
+      intervals = _appendInterval(intervals: intervals, startUtc: activeStartUtc, endUtc: cap);
     }
 
     return intervals;

@@ -2,13 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 final class SettingsOptionTile extends StatelessWidget {
-  const SettingsOptionTile({
-    required this.icon,
-    required this.title,
-    required this.trailing,
-    super.key,
-    this.onTap,
-  });
+  const SettingsOptionTile({required this.icon, required this.title, required this.trailing, super.key, this.onTap});
 
   final IconData icon;
   final String title;
@@ -30,10 +24,7 @@ final class SettingsOptionTile extends StatelessWidget {
         onTap: onTap,
         customBorder: shape,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: PauzaSpacing.medium,
-            vertical: PauzaSpacing.regular,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.regular),
           child: Row(
             children: <Widget>[
               DecoratedBox(
@@ -48,12 +39,7 @@ final class SettingsOptionTile extends StatelessWidget {
               ),
               const SizedBox(width: PauzaSpacing.medium),
               Expanded(
-                child: Text(
-                  title,
-                  style: context.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
               ),
               trailing,
             ],

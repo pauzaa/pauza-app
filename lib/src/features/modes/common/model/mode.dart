@@ -55,11 +55,8 @@ class Mode {
     updatedAt: updatedAt ?? this.updatedAt,
   );
 
-  RestrictionMode toRestrictionMode() => RestrictionMode(
-    modeId: id,
-    blockedAppIds: blockedAppIds.toList(),
-    schedule: schedule?.toRestrictionSchedule(),
-  );
+  RestrictionMode toRestrictionMode() =>
+      RestrictionMode(modeId: id, blockedAppIds: blockedAppIds.toList(), schedule: schedule?.toRestrictionSchedule());
 
   factory Mode.fromDbRow(Map<String, Object?> row) {
     final createdAtMillis = row['created_at'] as int;
@@ -96,14 +93,8 @@ class Mode {
       icon: ModeIcon.fromToken(ModeIconCatalog.normalizeToken(rawIconToken)),
       schedule: schedule,
       blockedAppIds: blockedAppIds,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-        createdAtMillis,
-        isUtc: true,
-      ),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(
-        updatedAtMillis,
-        isUtc: true,
-      ),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(createdAtMillis, isUtc: true),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(updatedAtMillis, isUtc: true),
     );
   }
 

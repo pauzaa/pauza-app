@@ -41,20 +41,12 @@ void main() {
     });
 
     test('readSession throws storageFailure for malformed payload', () async {
-      FlutterSecureStorage.setMockInitialValues(<String, String>{
-        'auth.session': 'not-json',
-      });
+      FlutterSecureStorage.setMockInitialValues(<String, String>{'auth.session': 'not-json'});
       final storage = SecureAuthSessionStorage();
 
       await expectLater(
         storage.readSession,
-        throwsA(
-          isA<AuthException>().having(
-            (error) => error.failure,
-            'failure',
-            AuthFailure.storageFailure,
-          ),
-        ),
+        throwsA(isA<AuthException>().having((error) => error.failure, 'failure', AuthFailure.storageFailure)),
       );
     });
   });

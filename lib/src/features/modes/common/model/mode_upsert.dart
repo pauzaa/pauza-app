@@ -54,36 +54,20 @@ class ModeUpsertDTO {
   );
 }
 
-enum ModeUpsertValidationField {
-  title,
-  textOnScreen,
-  blockedApps,
-  allowedPausesCount,
-  scheduleDays,
-}
+enum ModeUpsertValidationField { title, textOnScreen, blockedApps, allowedPausesCount, scheduleDays }
 
-enum ModeUpsertValidationCode {
-  required,
-  blockedAppsRequired,
-  allowedPausesOutOfRange,
-  scheduleDaysRequired,
-}
+enum ModeUpsertValidationCode { required, blockedAppsRequired, allowedPausesOutOfRange, scheduleDaysRequired }
 
 @immutable
 class ModeUpsertValidationResult {
   const ModeUpsertValidationResult({required this.fieldErrors});
 
   const ModeUpsertValidationResult.valid()
-    : fieldErrors =
-          const IMap<
-            ModeUpsertValidationField,
-            ModeUpsertValidationCode
-          >.empty();
+    : fieldErrors = const IMap<ModeUpsertValidationField, ModeUpsertValidationCode>.empty();
 
   final IMap<ModeUpsertValidationField, ModeUpsertValidationCode> fieldErrors;
 
   bool get isValid => fieldErrors.isEmpty;
 
-  ModeUpsertValidationCode? operator [](ModeUpsertValidationField field) =>
-      fieldErrors[field];
+  ModeUpsertValidationCode? operator [](ModeUpsertValidationField field) => fieldErrors[field];
 }

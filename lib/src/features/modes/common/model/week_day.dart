@@ -15,17 +15,14 @@ enum WeekDay implements Localizable {
   factory WeekDay.fromDateTime(DateTime dateTime) =>
       WeekDay.values.firstWhere((day) => day.dayIndex == dateTime.weekday);
 
-  factory WeekDay.fromDayIndex(int dayIndex) =>
-      WeekDay.values.firstWhere((day) => day.dayIndex == dayIndex);
+  factory WeekDay.fromDayIndex(int dayIndex) => WeekDay.values.firstWhere((day) => day.dayIndex == dayIndex);
 
   final int dayIndex;
 
   @override
-  String localize(AppLocalizations localizations) =>
-      localizations.weekDays(name);
+  String localize(AppLocalizations localizations) => localizations.weekDays(name);
 
-  String localizeShort(AppLocalizations localizations) =>
-      localizations.weekDaysShort(name);
+  String localizeShort(AppLocalizations localizations) => localizations.weekDaysShort(name);
 
   /// return closes date time within one week
   DateTime get closestDateTime {
@@ -61,8 +58,7 @@ enum WeekDay implements Localizable {
     final values = raw.split(',');
     final parsedDays = <WeekDay>[];
     for (final value in values) {
-      if (int.tryParse(value.trim()) case final parsed?
-          when parsed < 1 || parsed > 7) {
+      if (int.tryParse(value.trim()) case final parsed? when parsed < 1 || parsed > 7) {
         parsedDays.add(WeekDay.fromDayIndex(parsed));
       }
     }

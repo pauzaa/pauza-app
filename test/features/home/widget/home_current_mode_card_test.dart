@@ -40,9 +40,7 @@ void main() {
     );
 
     final icon = tester.widget<Icon>(
-      find.byWidgetPredicate(
-        (widget) => widget is Icon && widget.icon == mode.icon.icon,
-      ),
+      find.byWidgetPredicate((widget) => widget is Icon && widget.icon == mode.icon.icon),
     );
 
     expect(icon.icon, mode.icon.icon);

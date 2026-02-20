@@ -41,12 +41,7 @@ class StatsUsageTrendCard extends StatelessWidget {
                   gridData: FlGridData(
                     horizontalInterval: 1,
                     getDrawingHorizontalLine: (value) {
-                      return FlLine(
-                        color: context.colorScheme.outlineVariant.withValues(
-                          alpha: 0.5,
-                        ),
-                        strokeWidth: 1,
-                      );
+                      return FlLine(color: context.colorScheme.outlineVariant.withValues(alpha: 0.5), strokeWidth: 1);
                     },
                   ),
                   titlesData: FlTitlesData(
@@ -64,9 +59,7 @@ class StatsUsageTrendCard extends StatelessWidget {
                           }
                           return Text(
                             DateFormat('MMMd').format(points[index].day),
-                            style: context.textTheme.labelMedium?.copyWith(
-                              color: context.colorScheme.onSurfaceVariant,
-                            ),
+                            style: context.textTheme.labelMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
                           );
                         },
                       ),
@@ -78,18 +71,10 @@ class StatsUsageTrendCard extends StatelessWidget {
                       color: context.colorScheme.primary,
                       barWidth: 3,
                       dotData: const FlDotData(show: false),
-                      belowBarData: BarAreaData(
-                        show: true,
-                        color: context.colorScheme.primary.withValues(
-                          alpha: 0.2,
-                        ),
-                      ),
+                      belowBarData: BarAreaData(show: true, color: context.colorScheme.primary.withValues(alpha: 0.2)),
                       spots: List.generate(
                         points.length,
-                        (index) => FlSpot(
-                          index.toDouble(),
-                          points[index].duration.inMinutes.toDouble(),
-                        ),
+                        (index) => FlSpot(index.toDouble(), points[index].duration.inMinutes.toDouble()),
                       ),
                     ),
                   ],

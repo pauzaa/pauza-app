@@ -30,16 +30,10 @@ class NfcLinkedChipMenu extends StatelessWidget {
         }
       },
       itemBuilder: (context) => [
-        PopupMenuItem(
-          value: NfcLinkedChipMenuAction.rename,
-          child: Text(context.l10n.nfcChipConfigRenameAction),
-        ),
+        PopupMenuItem(value: NfcLinkedChipMenuAction.rename, child: Text(context.l10n.nfcChipConfigRenameAction)),
         PopupMenuItem(
           value: NfcLinkedChipMenuAction.delete,
-          child: Text(
-            context.l10n.nfcChipConfigDeleteAction,
-            style: TextStyle(color: colorScheme.error),
-          ),
+          child: Text(context.l10n.nfcChipConfigDeleteAction, style: TextStyle(color: colorScheme.error)),
         ),
       ],
       icon: const Icon(Icons.more_vert),

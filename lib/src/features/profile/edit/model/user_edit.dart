@@ -5,34 +5,19 @@ import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 
 @immutable
 class ProfileEditDTO {
-  const ProfileEditDTO({
-    required this.name,
-    required this.username,
-    this.profilePictureUrl,
-    this.profilePictureBytes,
-  });
+  const ProfileEditDTO({required this.name, required this.username, this.profilePictureUrl, this.profilePictureBytes});
 
-  const ProfileEditDTO.initial()
-    : this(
-        name: '',
-        username: '',
-        profilePictureUrl: null,
-        profilePictureBytes: null,
-      );
+  const ProfileEditDTO.initial() : this(name: '', username: '', profilePictureUrl: null, profilePictureBytes: null);
 
-  factory ProfileEditDTO.fromUserDto(UserDto user) => ProfileEditDTO(
-    name: user.name,
-    username: user.username,
-    profilePictureUrl: user.profilePicture,
-  );
+  factory ProfileEditDTO.fromUserDto(UserDto user) =>
+      ProfileEditDTO(name: user.name, username: user.username, profilePictureUrl: user.profilePicture);
 
   final String name;
   final String username;
   final String? profilePictureUrl;
   final Uint8List? profilePictureBytes;
 
-  dynamic get effectifeProfilePicture =>
-      profilePictureBytes ?? profilePictureUrl;
+  dynamic get effectifeProfilePicture => profilePictureBytes ?? profilePictureUrl;
 
   ProfileEditDTO copyWith({
     String? name,
@@ -64,6 +49,5 @@ class ProfileEditDTO {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(name, username, profilePictureUrl, profilePictureBytes);
+  int get hashCode => Object.hash(name, username, profilePictureUrl, profilePictureBytes);
 }

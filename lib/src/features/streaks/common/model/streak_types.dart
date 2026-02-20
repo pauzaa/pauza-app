@@ -18,9 +18,7 @@ extension type const LocalDayKey(String value) implements String {
 extension type const BestStreakDays(int value) implements int {
   const BestStreakDays.zero() : this(0);
 
-  factory BestStreakDays.fromQualifiedDays({
-    required ISet<LocalDayKey> qualifiedDays,
-  }) {
+  factory BestStreakDays.fromQualifiedDays({required ISet<LocalDayKey> qualifiedDays}) {
     if (qualifiedDays.isEmpty) {
       return const BestStreakDays.zero();
     }

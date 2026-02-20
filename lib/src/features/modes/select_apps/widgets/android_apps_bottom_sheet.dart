@@ -11,23 +11,16 @@ import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class AndroidAppsBottomSheet extends StatelessWidget {
-  const AndroidAppsBottomSheet({
-    required this.initialSelectedAppIds,
-    super.key,
-  });
+  const AndroidAppsBottomSheet({required this.initialSelectedAppIds, super.key});
 
   final ISet<AppIdentifier> initialSelectedAppIds;
 
-  static Future<Set<AppIdentifier>?> show(
-    BuildContext context, {
-    required ISet<AppIdentifier> initialSelectedAppIds,
-  }) {
+  static Future<Set<AppIdentifier>?> show(BuildContext context, {required ISet<AppIdentifier> initialSelectedAppIds}) {
     return showModalBottomSheet<Set<AppIdentifier>>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) =>
-          AndroidAppsBottomSheet(initialSelectedAppIds: initialSelectedAppIds),
+      builder: (_) => AndroidAppsBottomSheet(initialSelectedAppIds: initialSelectedAppIds),
     );
   }
 
@@ -36,11 +29,9 @@ class AndroidAppsBottomSheet extends StatelessWidget {
     return SelectedAppsScope(
       notifier: SelectedAppsNotifier(initialSelected: initialSelectedAppIds),
       child: BlocProvider(
-        create: (_) => InstalledAppsBloc(
-          installedAppsRepository: RootScope.of(
-            context,
-          ).installedAppsRepository,
-        )..add(const InstalledAppsRequested()),
+        create: (_) =>
+            InstalledAppsBloc(installedAppsRepository: RootScope.of(context).installedAppsRepository)
+              ..add(const InstalledAppsRequested()),
         child: const AndroidAppsBottomSheetContent(),
       ),
     );
@@ -61,9 +52,7 @@ class AndroidAppsBottomSheetContent extends StatelessWidget {
         if (state.hasError) {
           return PauzaErrorWidget(
             message: context.l10n.modeAppsLoadFailedMessage,
-            onRetry: () => context.read<InstalledAppsBloc>().add(
-              const InstalledAppsRequested(),
-            ),
+            onRetry: () => context.read<InstalledAppsBloc>().add(const InstalledAppsRequested()),
           );
         }
 
@@ -80,14 +69,10 @@ class AndroidAppsBottomSheetContent extends StatelessWidget {
             spacing: PauzaSpacing.medium,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: PauzaSpacing.medium,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium),
                 child: PauzaTextFormField(
                   onChanged: (query) {
-                    context.read<InstalledAppsBloc>().add(
-                      SearchQueryChanged(searchQuery: query),
-                    );
+                    context.read<InstalledAppsBloc>().add(SearchQueryChanged(searchQuery: query));
                   },
                   decoration: PauzaInputDecoration(
                     prefixIcon: const Icon(Icons.search),
@@ -99,44 +84,25 @@ class AndroidAppsBottomSheetContent extends StatelessWidget {
                 height: 52,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: PauzaSpacing.medium,
-                  ),
-                  children:
-                      [
-                            PauzaFilterChip(
-                              label: context.l10n.allAppsCategory,
-                              isSelected: state.selectedCategoryKey == null,
-                              onPressed: () {
-                                context.read<InstalledAppsBloc>().add(
-                                  const CategoryFilterChanged(
-                                    categoryKey: null,
-                                  ),
-                                );
-                              },
-                            ),
-                            ...state.availableCategoryKeys.map<Widget>(
-                              (categoryKey) => PauzaFilterChip(
-                                label: _localizeCategoryName(
-                                  context,
-                                  categoryKey,
-                                ),
-                                isSelected:
-                                    state.selectedCategoryKey == categoryKey,
-                                onPressed: () {
-                                  context.read<InstalledAppsBloc>().add(
-                                    CategoryFilterChanged(
-                                      categoryKey: categoryKey,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ]
-                          .interleaved(
-                            const SizedBox(width: PauzaSpacing.regular),
-                          )
-                          .toList(),
+                  padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium),
+                  children: [
+                    PauzaFilterChip(
+                      label: context.l10n.allAppsCategory,
+                      isSelected: state.selectedCategoryKey == null,
+                      onPressed: () {
+                        context.read<InstalledAppsBloc>().add(const CategoryFilterChanged(categoryKey: null));
+                      },
+                    ),
+                    ...state.availableCategoryKeys.map<Widget>(
+                      (categoryKey) => PauzaFilterChip(
+                        label: _localizeCategoryName(context, categoryKey),
+                        isSelected: state.selectedCategoryKey == categoryKey,
+                        onPressed: () {
+                          context.read<InstalledAppsBloc>().add(CategoryFilterChanged(categoryKey: categoryKey));
+                        },
+                      ),
+                    ),
+                  ].interleaved(const SizedBox(width: PauzaSpacing.regular)).toList(),
                 ),
               ),
               Expanded(
@@ -144,9 +110,7 @@ class AndroidAppsBottomSheetContent extends StatelessWidget {
                     ? Center(
                         child: Text(
                           context.l10n.emptyStateMessage,
-                          style: context.textTheme.bodyLarge?.copyWith(
-                            color: context.colorScheme.onSurfaceVariant,
-                          ),
+                          style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onSurfaceVariant),
                         ),
                       )
                     : ListView.separated(
@@ -155,18 +119,12 @@ class AndroidAppsBottomSheetContent extends StatelessWidget {
                           vertical: PauzaSpacing.small,
                         ),
                         itemCount: state.visibleGroupedApps.length,
-                        separatorBuilder: (_, _) =>
-                            const SizedBox(height: PauzaSpacing.large),
+                        separatorBuilder: (_, _) => const SizedBox(height: PauzaSpacing.large),
                         itemBuilder: (context, index) {
-                          final categoryKey = state.visibleGroupedApps.keys
-                              .elementAt(index);
-                          final categoryApps =
-                              state.visibleGroupedApps[categoryKey]!;
+                          final categoryKey = state.visibleGroupedApps.keys.elementAt(index);
+                          final categoryApps = state.visibleGroupedApps[categoryKey]!;
 
-                          return _CategorySection(
-                            categoryKey: categoryKey,
-                            categoryApps: categoryApps,
-                          );
+                          return _CategorySection(categoryKey: categoryKey, categoryApps: categoryApps);
                         },
                       ),
               ),
@@ -202,15 +160,10 @@ class _SelectedAppsCounter extends StatelessWidget {
             borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: PauzaSpacing.medium,
-              vertical: PauzaSpacing.small,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.small),
             child: Text(
               context.l10n.appsSelectedCountLabel(scope.selectedCount),
-              style: context.textTheme.titleMedium?.copyWith(
-                color: context.colorScheme.primary,
-              ),
+              style: context.textTheme.titleMedium?.copyWith(color: context.colorScheme.primary),
             ),
           ),
         );
@@ -237,10 +190,7 @@ class _FooterButton extends StatelessWidget {
 }
 
 class _CategorySection extends StatelessWidget {
-  const _CategorySection({
-    required this.categoryKey,
-    required this.categoryApps,
-  });
+  const _CategorySection({required this.categoryKey, required this.categoryApps});
 
   final String categoryKey;
   final IList<AndroidAppInfo> categoryApps;
@@ -277,9 +227,7 @@ class _CategorySection extends StatelessWidget {
                     scope.toggleCategory(categoryAppIds, !isFullySelected);
                   },
                   child: Text(
-                    isFullySelected
-                        ? context.l10n.deselectAllButton
-                        : context.l10n.selectAllButton,
+                    isFullySelected ? context.l10n.deselectAllButton : context.l10n.selectAllButton,
                     style: context.textTheme.titleMedium?.copyWith(
                       color: context.colorScheme.primary,
                       fontWeight: FontWeight.w600,
@@ -322,20 +270,13 @@ class _AppTile extends StatelessWidget {
                 child: app.icon != null
                     ? Image.memory(app.icon!, fit: BoxFit.cover)
                     : DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: context.colorScheme.surfaceContainer,
-                        ),
-                        child: Icon(
-                          Icons.android,
-                          color: context.colorScheme.onSurfaceVariant,
-                        ),
+                        decoration: BoxDecoration(color: context.colorScheme.surfaceContainer),
+                        child: Icon(Icons.android, color: context.colorScheme.onSurfaceVariant),
                       ),
               ),
             ),
             title: app.name,
-            trailing: PauzaSelectionIndicator(
-              isSelected: scope.isAppSelected(app.packageId),
-            ),
+            trailing: PauzaSelectionIndicator(isSelected: scope.isAppSelected(app.packageId)),
           ),
         );
       },

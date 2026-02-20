@@ -17,24 +17,15 @@ class OtpHeaderText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: PauzaSpacing.large,
       children: <Widget>[
-        Text(
-          l10n.authOtpTitle,
-          style: context.textTheme.displaySmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text(l10n.authOtpTitle, style: context.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600)),
         RichText(
           text: TextSpan(
-            style: context.textTheme.headlineSmall?.copyWith(
-              color: context.colorScheme.onSurfaceVariant,
-            ),
+            style: context.textTheme.headlineSmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
             children: <InlineSpan>[
               TextSpan(text: l10n.authOtpSubtitlePrefix),
               TextSpan(
                 text: maskedEmail,
-                style: context.textTheme.headlineSmall?.copyWith(
-                  color: context.colorScheme.primary,
-                ),
+                style: context.textTheme.headlineSmall?.copyWith(color: context.colorScheme.primary),
               ),
               TextSpan(text: l10n.authOtpSubtitleSuffix),
             ],

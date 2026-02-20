@@ -3,29 +3,20 @@ import 'package:flutter/widgets.dart';
 import 'package:helm/helm.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 
-NavigationGuard createPermissionGuard({
-  required bool Function() isAuthenticated,
-  required bool Function() isReady,
-}) {
+NavigationGuard createPermissionGuard({required bool Function() isAuthenticated, required bool Function() isReady}) {
   return (pages) {
     if (!isAuthenticated()) {
       return _dedupeState(pages);
     }
 
     final normalizedPages = _normalizeAuthenticatedStack(pages);
-    final withoutPermissions = _removeRouteAll(
-      normalizedPages,
-      PauzaRoutes.permissions,
-    );
+    final withoutPermissions = _removeRouteAll(normalizedPages, PauzaRoutes.permissions);
 
     if (isReady()) {
       return _dedupeState(withoutPermissions);
     }
 
-    return _dedupeState(<Page<Object?>>[
-      ...withoutPermissions,
-      PauzaRoutes.permissions.page(),
-    ]);
+    return _dedupeState(<Page<Object?>>[...withoutPermissions, PauzaRoutes.permissions.page()]);
   };
 }
 
@@ -38,8 +29,7 @@ NavigationGuard createAuthGuard({required bool Function() isAuthenticated}) {
     }
 
     final isOnAuthFlow =
-        _containsRoute(dedupedPages, PauzaRoutes.auth) ||
-        _containsRoute(dedupedPages, PauzaRoutes.otp);
+        _containsRoute(dedupedPages, PauzaRoutes.auth) || _containsRoute(dedupedPages, PauzaRoutes.otp);
     if (isOnAuthFlow) {
       return <Page<Object?>>[PauzaRoutes.root.page()];
     }
@@ -57,16 +47,12 @@ NavigationState _normalizeAuthenticatedStack(NavigationState pages) {
     (page) => _routeOf(page) == PauzaRoutes.root,
     orElse: () => PauzaRoutes.root.page(),
   );
-  final topLevelPages = normalizedPages
-      .where((page) => _routeOf(page) != PauzaRoutes.root)
-      .toList(growable: false);
+  final topLevelPages = normalizedPages.where((page) => _routeOf(page) != PauzaRoutes.root).toList(growable: false);
   return _dedupeState(<Page<Object?>>[rootPage, ...topLevelPages]);
 }
 
 NavigationState _authOnlyStack(NavigationState pages) {
-  final authFlowPages = pages
-      .where((page) => _isAuthFlowRoute(_routeOf(page)))
-      .toList(growable: false);
+  final authFlowPages = pages.where((page) => _isAuthFlowRoute(_routeOf(page))).toList(growable: false);
   if (authFlowPages.isEmpty) {
     return <Page<Object?>>[PauzaRoutes.auth.page()];
   }
@@ -78,9 +64,7 @@ NavigationState _removeRouteAll(NavigationState pages, PauzaRoutes route) {
 }
 
 NavigationState _dedupeState(NavigationState pages) {
-  final pagesWithDedupedChildren = pages
-      .map(_withDedupedChildren)
-      .toList(growable: false);
+  final pagesWithDedupedChildren = pages.map(_withDedupedChildren).toList(growable: false);
 
   final signatures = <String>{};
   final deduped = <Page<Object?>>[];

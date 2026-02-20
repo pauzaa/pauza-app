@@ -5,12 +5,7 @@ import 'package:pauza_screen_time/pauza_screen_time.dart' show PermissionStatus;
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class PermissionRequirementRow extends StatelessWidget {
-  const PermissionRequirementRow({
-    required this.requirement,
-    required this.status,
-    required this.onTap,
-    super.key,
-  });
+  const PermissionRequirementRow({required this.requirement, required this.status, required this.onTap, super.key});
 
   final PauzaPermissionRequirement requirement;
   final PermissionStatus status;
@@ -31,9 +26,7 @@ class PermissionRequirementRow extends StatelessWidget {
       leading: _PermissionLeadingIcon(iconData: requirement.iconData),
       trailing: Icon(
         isGranted ? Icons.done : Icons.chevron_right,
-        color: isGranted
-            ? context.pauzaColorScheme.success
-            : context.colorScheme.onSurfaceVariant,
+        color: isGranted ? context.pauzaColorScheme.success : context.colorScheme.onSurfaceVariant,
       ),
     );
   }

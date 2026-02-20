@@ -12,15 +12,9 @@ sealed class NfcChipConfState extends Equatable {
       NfcChipConfLoading(linkedChips: newLinkedChips ?? linkedChips);
   NfcChipConfState success({IList<NfcLinkedChip>? newLinkedChips}) =>
       NfcChipConfSuccess(linkedChips: newLinkedChips ?? linkedChips);
-  NfcChipConfState setError(
-    Object error, {
-    IList<NfcLinkedChip>? newLinkedChips,
-  }) => NfcChipConfError(
-    error: error,
-    linkedChips: newLinkedChips ?? linkedChips,
-  );
-  NfcChipConfState idle(IList<NfcLinkedChip> newLinedList) =>
-      NfcChipConfIdle(linkedChips: newLinedList);
+  NfcChipConfState setError(Object error, {IList<NfcLinkedChip>? newLinkedChips}) =>
+      NfcChipConfError(error: error, linkedChips: newLinkedChips ?? linkedChips);
+  NfcChipConfState idle(IList<NfcLinkedChip> newLinedList) => NfcChipConfIdle(linkedChips: newLinedList);
 }
 
 final class NfcChipConfIdle extends NfcChipConfState {

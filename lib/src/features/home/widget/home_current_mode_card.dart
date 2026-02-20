@@ -18,10 +18,7 @@ class HomeCurrentModeCard extends StatelessWidget {
       color: context.colorScheme.surfaceContainerLowest.withValues(alpha: 0.75),
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius,
-        side: BorderSide(
-          color: context.colorScheme.primary.withValues(alpha: 0.5),
-          width: 2,
-        ),
+        side: BorderSide(color: context.colorScheme.primary.withValues(alpha: 0.5), width: 2),
       ),
       child: InkWell(
         onTap: onTap,
@@ -37,19 +34,10 @@ class HomeCurrentModeCard extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: context.colorScheme.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(
-                      PauzaCornerRadius.medium,
-                    ),
-                    border: Border.all(
-                      color: context.colorScheme.primary.withValues(
-                        alpha: 0.35,
-                      ),
-                    ),
+                    borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
+                    border: Border.all(color: context.colorScheme.primary.withValues(alpha: 0.35)),
                   ),
-                  child: Icon(
-                    mode == null ? Icons.psychology : mode!.icon.icon,
-                    color: context.colorScheme.primary,
-                  ),
+                  child: Icon(mode == null ? Icons.psychology : mode!.icon.icon, color: context.colorScheme.primary),
                 ),
               ),
               Expanded(
@@ -65,10 +53,7 @@ class HomeCurrentModeCard extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    Text(
-                      mode?.title ?? l10n.noModesEmptyState,
-                      style: context.textTheme.headlineSmall,
-                    ),
+                    Text(mode?.title ?? l10n.noModesEmptyState, style: context.textTheme.headlineSmall),
                   ],
                 ),
               ),
@@ -79,14 +64,9 @@ class HomeCurrentModeCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: context.colorScheme.surfaceContainerHigh,
-                    border: Border.all(
-                      color: context.colorScheme.outlineVariant,
-                    ),
+                    border: Border.all(color: context.colorScheme.outlineVariant),
                   ),
-                  child: Icon(
-                    Icons.expand_more,
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
+                  child: Icon(Icons.expand_more, color: context.colorScheme.onSurfaceVariant),
                 ),
               ),
             ],

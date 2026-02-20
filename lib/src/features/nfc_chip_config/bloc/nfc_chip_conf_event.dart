@@ -30,10 +30,7 @@ final class NfcChipLinkCardRequested extends NfcChipConfEvent {
 }
 
 final class NfcChipRenameCardRequested extends NfcChipConfEvent {
-  const NfcChipRenameCardRequested({
-    required this.cardId,
-    required this.newName,
-  });
+  const NfcChipRenameCardRequested({required this.cardId, required this.newName});
 
   final String cardId;
   final String newName;

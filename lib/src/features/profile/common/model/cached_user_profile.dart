@@ -14,10 +14,7 @@ final class CachedUserProfile {
 
     return CachedUserProfile(
       user: UserDto.fromJson(userJson),
-      cachedAtUtc: DateTime.fromMillisecondsSinceEpoch(
-        cachedAtUtcMs,
-        isUtc: true,
-      ),
+      cachedAtUtc: DateTime.fromMillisecondsSinceEpoch(cachedAtUtcMs, isUtc: true),
     );
   }
 
@@ -32,10 +29,7 @@ final class CachedUserProfile {
   }
 
   Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'user': user.toJson(),
-      'cachedAtUtcMs': cachedAtUtc.toUtc().millisecondsSinceEpoch,
-    };
+    return <String, Object?>{'user': user.toJson(), 'cachedAtUtcMs': cachedAtUtc.toUtc().millisecondsSinceEpoch};
   }
 
   @override
@@ -48,9 +42,7 @@ final class CachedUserProfile {
     if (identical(this, other)) {
       return true;
     }
-    return other is CachedUserProfile &&
-        other.user == user &&
-        other.cachedAtUtc == cachedAtUtc;
+    return other is CachedUserProfile && other.user == user && other.cachedAtUtc == cachedAtUtc;
   }
 
   @override

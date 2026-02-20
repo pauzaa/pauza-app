@@ -5,10 +5,7 @@ import 'package:pauza_screen_time/pauza_screen_time.dart';
 abstract interface class BlockingRepository {
   Future<RestrictionState> getRestrictionSession();
 
-  Future<void> startBlocking({
-    required Mode mode,
-    required ShieldConfiguration? shield,
-  });
+  Future<void> startBlocking({required Mode mode, required ShieldConfiguration? shield});
 
   Future<void> stopBlocking();
 
@@ -30,14 +27,10 @@ class PauzaBlockingRepository implements BlockingRepository {
   final RestrictionLifecycleRepository _restrictionLifecycleRepository;
 
   @override
-  Future<RestrictionState> getRestrictionSession() =>
-      _restrictions.getRestrictionSession();
+  Future<RestrictionState> getRestrictionSession() => _restrictions.getRestrictionSession();
 
   @override
-  Future<void> startBlocking({
-    required Mode mode,
-    required ShieldConfiguration? shield,
-  }) async {
+  Future<void> startBlocking({required Mode mode, required ShieldConfiguration? shield}) async {
     await _restrictions.startSession(mode.toRestrictionMode());
     if (shield != null) {
       await _restrictions.configureShield(shield);

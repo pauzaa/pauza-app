@@ -1,10 +1,7 @@
 part of 'streaks_repository.dart';
 
 final class _RollupStateRow {
-  const _RollupStateRow({
-    required this.cursorUpdatedAt,
-    required this.cursorSessionId,
-  });
+  const _RollupStateRow({required this.cursorUpdatedAt, required this.cursorSessionId});
 
   factory _RollupStateRow.fromJson(Map<String, Object?> row) {
     return _RollupStateRow(
@@ -41,18 +38,12 @@ final class _SessionForRefresh {
 }
 
 final class _LifecycleEventPointDto {
-  const _LifecycleEventPointDto({
-    required this.action,
-    required this.occurredAtUtc,
-  });
+  const _LifecycleEventPointDto({required this.action, required this.occurredAtUtc});
 
   factory _LifecycleEventPointDto.fromJson(Map<String, Object?> row) {
     return _LifecycleEventPointDto(
       action: RestrictionLifecycleAction.fromWire(row['action'] as String),
-      occurredAtUtc: DateTime.fromMillisecondsSinceEpoch(
-        row['occurred_at'].intOrZero,
-        isUtc: true,
-      ),
+      occurredAtUtc: DateTime.fromMillisecondsSinceEpoch(row['occurred_at'].intOrZero, isUtc: true),
     );
   }
 
@@ -60,34 +51,21 @@ final class _LifecycleEventPointDto {
   final DateTime occurredAtUtc;
 
   StreakLifecycleEventPoint toDomain() {
-    return StreakLifecycleEventPoint(
-      action: action,
-      occurredAtUtc: occurredAtUtc,
-    );
+    return StreakLifecycleEventPoint(action: action, occurredAtUtc: occurredAtUtc);
   }
 }
 
 final class _SessionDayEffectiveMsDto {
-  const _SessionDayEffectiveMsDto({
-    required this.localDay,
-    required this.effectiveMs,
-  });
+  const _SessionDayEffectiveMsDto({required this.localDay, required this.effectiveMs});
 
-  factory _SessionDayEffectiveMsDto.fromEntry(
-    MapEntry<LocalDayKey, int> entry,
-  ) {
-    return _SessionDayEffectiveMsDto(
-      localDay: entry.key,
-      effectiveMs: entry.value,
-    );
+  factory _SessionDayEffectiveMsDto.fromEntry(MapEntry<LocalDayKey, int> entry) {
+    return _SessionDayEffectiveMsDto(localDay: entry.key, effectiveMs: entry.value);
   }
 
   final LocalDayKey localDay;
   final int effectiveMs;
 
-  static List<_SessionDayEffectiveMsDto> splitIntervalsByLocalDay({
-    required IList<UtcInterval> intervals,
-  }) {
+  static List<_SessionDayEffectiveMsDto> splitIntervalsByLocalDay({required IList<UtcInterval> intervals}) {
     final byDay = <LocalDayKey, int>{};
 
     for (final interval in intervals) {
@@ -95,29 +73,20 @@ final class _SessionDayEffectiveMsDto {
 
       while (cursor.isBefore(interval.endUtc)) {
         final localCursor = cursor.toLocal();
-        final nextLocalDayStart = DateTime(
-          localCursor.year,
-          localCursor.month,
-          localCursor.day + 1,
-        );
+        final nextLocalDayStart = DateTime(localCursor.year, localCursor.month, localCursor.day + 1);
         final nextBoundaryUtc = nextLocalDayStart.toUtc();
-        final segmentEnd = nextBoundaryUtc.isBefore(interval.endUtc)
-            ? nextBoundaryUtc
-            : interval.endUtc;
+        final segmentEnd = nextBoundaryUtc.isBefore(interval.endUtc) ? nextBoundaryUtc : interval.endUtc;
 
         if (!segmentEnd.isAfter(cursor)) {
           break;
         }
 
         final dayKey = LocalDayKey.fromDateTime(localCursor);
-        byDay[dayKey] =
-            (byDay[dayKey] ?? 0) + segmentEnd.difference(cursor).inMilliseconds;
+        byDay[dayKey] = (byDay[dayKey] ?? 0) + segmentEnd.difference(cursor).inMilliseconds;
         cursor = segmentEnd;
       }
     }
 
-    return byDay.entries
-        .map(_SessionDayEffectiveMsDto.fromEntry)
-        .toList(growable: false);
+    return byDay.entries.map(_SessionDayEffectiveMsDto.fromEntry).toList(growable: false);
   }
 }

@@ -20,33 +20,27 @@ void main() {
       debugDefaultTargetPlatformOverride = previousPlatformOverride;
     });
 
-    test(
-      'checkAvailability returns available when platform is available',
-      () async {
-        final client = NfcUtilClient(
-          manager: _FakeNfcManagerGateway(),
-          settingsLauncher: const NoopNfcSystemSettingsLauncher(),
-        );
+    test('checkAvailability returns available when platform is available', () async {
+      final client = NfcUtilClient(
+        manager: _FakeNfcManagerGateway(),
+        settingsLauncher: const NoopNfcSystemSettingsLauncher(),
+      );
 
-        final availability = await client.checkAvailability();
+      final availability = await client.checkAvailability();
 
-        expect(availability, NfcPlatformAvailability.available);
-      },
-    );
+      expect(availability, NfcPlatformAvailability.available);
+    });
 
-    test(
-      'checkAvailability returns disabled when platform reports unavailable',
-      () async {
-        final client = NfcUtilClient(
-          manager: _FakeNfcManagerGateway(isAvailableResult: false),
-          settingsLauncher: const NoopNfcSystemSettingsLauncher(),
-        );
+    test('checkAvailability returns disabled when platform reports unavailable', () async {
+      final client = NfcUtilClient(
+        manager: _FakeNfcManagerGateway(isAvailableResult: false),
+        settingsLauncher: const NoopNfcSystemSettingsLauncher(),
+      );
 
-        final availability = await client.checkAvailability();
+      final availability = await client.checkAvailability();
 
-        expect(availability, NfcPlatformAvailability.disabled);
-      },
-    );
+      expect(availability, NfcPlatformAvailability.disabled);
+    });
 
     test('scanSingleTag returns timeout when no tag is discovered', () async {
       final client = NfcUtilClient(
@@ -56,22 +50,13 @@ void main() {
 
       expect(
         client.scanSingleTag(timeout: const Duration(milliseconds: 10)),
-        throwsA(
-          isA<NfcException>().having(
-            (exception) => exception.code,
-            'code',
-            NfcErrorCode.timeout,
-          ),
-        ),
+        throwsA(isA<NfcException>().having((exception) => exception.code, 'code', NfcErrorCode.timeout)),
       );
     });
 
     test('scanSingleTag maps discovered nfc_util tag into snapshot', () async {
       final manager = _FakeNfcManagerGateway();
-      final client = NfcUtilClient(
-        manager: manager,
-        settingsLauncher: const NoopNfcSystemSettingsLauncher(),
-      );
+      final client = NfcUtilClient(manager: manager, settingsLauncher: const NoopNfcSystemSettingsLauncher());
 
       final pending = client.scanSingleTag(timeout: const Duration(seconds: 1));
       await Future<void>.delayed(const Duration(milliseconds: 1));
@@ -87,41 +72,23 @@ void main() {
       expect(snapshot.ndefRecords.first.payloadText, 'Hi');
     });
 
-    test(
-      'scanSingleTag maps session user cancel to cancelled exception',
-      () async {
-        final manager = _FakeNfcManagerGateway();
-        final client = NfcUtilClient(
-          manager: manager,
-          settingsLauncher: const NoopNfcSystemSettingsLauncher(),
-        );
+    test('scanSingleTag maps session user cancel to cancelled exception', () async {
+      final manager = _FakeNfcManagerGateway();
+      final client = NfcUtilClient(manager: manager, settingsLauncher: const NoopNfcSystemSettingsLauncher());
 
-        final pending = client.scanSingleTag(
-          timeout: const Duration(seconds: 1),
-        );
-        await Future<void>.delayed(const Duration(milliseconds: 1));
-        await manager.triggerError(
-          const NfcError(type: NfcErrorType.userCanceled, message: 'cancelled'),
-        );
+      final pending = client.scanSingleTag(timeout: const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(milliseconds: 1));
+      await manager.triggerError(const NfcError(type: NfcErrorType.userCanceled, message: 'cancelled'));
 
-        await expectLater(
-          pending,
-          throwsA(
-            isA<NfcException>().having(
-              (exception) => exception.code,
-              'code',
-              NfcErrorCode.cancelled,
-            ),
-          ),
-        );
-      },
-    );
+      await expectLater(
+        pending,
+        throwsA(isA<NfcException>().having((exception) => exception.code, 'code', NfcErrorCode.cancelled)),
+      );
+    });
 
     test('stopSession ignores platform stop errors', () async {
       final client = NfcUtilClient(
-        manager: _FakeNfcManagerGateway(
-          stopSessionError: StateError('session missing'),
-        ),
+        manager: _FakeNfcManagerGateway(stopSessionError: StateError('session missing')),
         settingsLauncher: const NoopNfcSystemSettingsLauncher(),
       );
 
@@ -131,10 +98,7 @@ void main() {
 }
 
 final class _FakeNfcManagerGateway implements NfcManagerGateway {
-  _FakeNfcManagerGateway({
-    this.isAvailableResult = true,
-    this.stopSessionError,
-  });
+  _FakeNfcManagerGateway({this.isAvailableResult = true, this.stopSessionError});
 
   final bool isAvailableResult;
   final Object? stopSessionError;

@@ -61,38 +61,30 @@ void main() {
       await bloc.close();
     });
 
-    test(
-      'quick pause calls repository and emits updated paused state',
-      () async {
-        final now = DateTime.now().toUtc();
-        final startedAt = now.subtract(const Duration(minutes: 30));
-        final repository = _FakeBlockingRepository(
-          restrictionState: _restrictionState(
-            activeModeId: 'mode-1',
-            startedAt: startedAt,
-          ),
-        );
-        final bloc = BlockingBloc(blockingRepository: repository);
+    test('quick pause calls repository and emits updated paused state', () async {
+      final now = DateTime.now().toUtc();
+      final startedAt = now.subtract(const Duration(minutes: 30));
+      final repository = _FakeBlockingRepository(
+        restrictionState: _restrictionState(activeModeId: 'mode-1', startedAt: startedAt),
+      );
+      final bloc = BlockingBloc(blockingRepository: repository);
 
-        bloc.add(const BlockingSyncRequested());
-        await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const BlockingSyncRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-        final emitted = <BlockingState>[];
-        final sub = bloc.stream.listen(emitted.add);
-        bloc.add(const BlockingQuickPauseRequested(Duration(minutes: 5)));
-        await Future<void>.delayed(const Duration(milliseconds: 20));
+      final emitted = <BlockingState>[];
+      final sub = bloc.stream.listen(emitted.add);
+      bloc.add(const BlockingQuickPauseRequested(Duration(minutes: 5)));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-        expect(repository.pauseDurations, <Duration>[
-          const Duration(minutes: 5),
-        ]);
-        expect(emitted, isNotEmpty);
-        expect(emitted.last.pausedUntil, isNotNull);
-        expect(emitted.last.restrictionState.activeMode?.modeId, 'mode-1');
+      expect(repository.pauseDurations, <Duration>[const Duration(minutes: 5)]);
+      expect(emitted, isNotEmpty);
+      expect(emitted.last.pausedUntil, isNotNull);
+      expect(emitted.last.restrictionState.activeMode?.modeId, 'mode-1');
 
-        await sub.cancel();
-        await bloc.close();
-      },
-    );
+      await sub.cancel();
+      await bloc.close();
+    });
 
     test('stop clears active mode and session fields', () async {
       final now = DateTime.now().toUtc();
@@ -173,14 +165,8 @@ class _FakeBlockingRepository implements BlockingRepository {
   }
 
   @override
-  Future<void> startBlocking({
-    required Mode mode,
-    required ShieldConfiguration? shield,
-  }) async {
-    restrictionState = _restrictionState(
-      activeModeId: mode.id,
-      startedAt: DateTime.now().toUtc(),
-    );
+  Future<void> startBlocking({required Mode mode, required ShieldConfiguration? shield}) async {
+    restrictionState = _restrictionState(activeModeId: mode.id, startedAt: DateTime.now().toUtc());
   }
 
   @override
@@ -202,11 +188,7 @@ class _FakeBlockingRepository implements BlockingRepository {
   Future<void> syncRestrictionLifecycleEvents() async {}
 }
 
-RestrictionState _restrictionState({
-  required String? activeModeId,
-  DateTime? startedAt,
-  DateTime? pausedUntil,
-}) {
+RestrictionState _restrictionState({required String? activeModeId, DateTime? startedAt, DateTime? pausedUntil}) {
   final currentSessionEvents = startedAt == null || activeModeId == null
       ? const <RestrictionLifecycleEvent>[]
       : <RestrictionLifecycleEvent>[
@@ -227,13 +209,8 @@ RestrictionState _restrictionState({
     pausedUntil: pausedUntil,
     activeMode: activeModeId == null
         ? null
-        : RestrictionMode(
-            modeId: activeModeId,
-            blockedAppIds: const <AppIdentifier>[],
-          ),
-    activeModeSource: activeModeId == null
-        ? RestrictionModeSource.none
-        : RestrictionModeSource.manual,
+        : RestrictionMode(modeId: activeModeId, blockedAppIds: const <AppIdentifier>[]),
+    activeModeSource: activeModeId == null ? RestrictionModeSource.none : RestrictionModeSource.manual,
     currentSessionEvents: currentSessionEvents,
   );
 }

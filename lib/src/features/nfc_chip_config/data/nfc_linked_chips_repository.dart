@@ -17,11 +17,9 @@ abstract interface class NfcLinkedChipsRepository {
 }
 
 final class NfcLinkedChipsRepositoryImpl implements NfcLinkedChipsRepository {
-  NfcLinkedChipsRepositoryImpl({
-    required LocalDatabase localDatabase,
-    Uuid? uuid,
-  }) : _localDatabase = localDatabase,
-       _uuid = uuid ?? const Uuid();
+  NfcLinkedChipsRepositoryImpl({required LocalDatabase localDatabase, Uuid? uuid})
+    : _localDatabase = localDatabase,
+      _uuid = uuid ?? const Uuid();
 
   final LocalDatabase _localDatabase;
   final Uuid _uuid;
@@ -61,13 +59,7 @@ INSERT OR IGNORE INTO nfc_linked_chips (
   updated_at
 ) VALUES (?, ?, ?, ?, ?)
 ''',
-      [
-        _uuid.v4(),
-        normalizedChipIdentifier,
-        normalizedChipIdentifier,
-        now,
-        now,
-      ],
+      [_uuid.v4(), normalizedChipIdentifier, normalizedChipIdentifier, now, now],
     );
 
     return inserted > 0;
@@ -75,20 +67,16 @@ INSERT OR IGNORE INTO nfc_linked_chips (
 
   @override
   Future<void> deleteChip({required String id}) async {
-    await _localDatabase.rawDelete(
-      'DELETE FROM nfc_linked_chips WHERE id = ?',
-      [id],
-    );
+    await _localDatabase.rawDelete('DELETE FROM nfc_linked_chips WHERE id = ?', [id]);
   }
 
   @override
   Future<bool> hasChip({required String chipIdentifier}) async {
     final normalizedChipIdentifier = _normalizeChipIdentifier(chipIdentifier);
 
-    final rows = await _localDatabase.rawQuery(
-      'SELECT 1 FROM nfc_linked_chips WHERE chip_identifier = ? LIMIT 1',
-      [normalizedChipIdentifier],
-    );
+    final rows = await _localDatabase.rawQuery('SELECT 1 FROM nfc_linked_chips WHERE chip_identifier = ? LIMIT 1', [
+      normalizedChipIdentifier,
+    ]);
 
     return rows.isNotEmpty;
   }
@@ -115,11 +103,7 @@ WHERE id = ?
   String _normalizeChipIdentifier(String value) {
     final normalized = value.trim().toLowerCase();
     if (normalized.isEmpty) {
-      throw ArgumentError.value(
-        value,
-        'chipIdentifier',
-        'chipIdentifier must not be empty',
-      );
+      throw ArgumentError.value(value, 'chipIdentifier', 'chipIdentifier must not be empty');
     }
 
     return normalized;

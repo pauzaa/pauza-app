@@ -32,17 +32,10 @@ final class ModeEditorAllowedPausesTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: PauzaSpacing.small,
               children: <Widget>[
-                Text(
-                  title,
-                  style: context.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
                 Text(
                   subtitle,
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
+                  style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
@@ -67,16 +60,10 @@ final class ModeEditorAllowedPausesTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Text(
                       '$value',
-                      style: context.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: context.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w700),
                     ),
                   ),
-                  PauzaIconButton.filled(
-                    onPressed: onIncrement,
-                    disabled: !canIncrement,
-                    icon: const Icon(Icons.add),
-                  ),
+                  PauzaIconButton.filled(onPressed: onIncrement, disabled: !canIncrement, icon: const Icon(Icons.add)),
                 ],
               ),
             ),

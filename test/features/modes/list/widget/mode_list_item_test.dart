@@ -36,22 +36,11 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         theme: PauzaTheme.light,
         home: Scaffold(
-          body: ModeListItem(
-            mode: mode,
-            isSelected: false,
-            onTap: () {},
-            onEdit: () {},
-            onDelete: () {},
-          ),
+          body: ModeListItem(mode: mode, isSelected: false, onTap: () {}, onEdit: () {}, onDelete: () {}),
         ),
       ),
     );
 
-    expect(
-      find.byWidgetPredicate(
-        (widget) => widget is Icon && widget.icon == mode.icon.icon,
-      ),
-      findsOneWidget,
-    );
+    expect(find.byWidgetPredicate((widget) => widget is Icon && widget.icon == mode.icon.icon), findsOneWidget);
   });
 }

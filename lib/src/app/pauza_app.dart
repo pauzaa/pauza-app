@@ -10,10 +10,7 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 class PauzaApp extends StatefulWidget {
   const PauzaApp({super.key});
 
-  static final themes = <Brightness, ThemeData>{
-    Brightness.light: PauzaTheme.light,
-    Brightness.dark: PauzaTheme.dark,
-  };
+  static final themes = <Brightness, ThemeData>{Brightness.light: PauzaTheme.light, Brightness.dark: PauzaTheme.dark};
 
   static final configs = [TestConfig(), ProdConfig()];
 
@@ -64,9 +61,7 @@ class _PauzaAppState extends State<PauzaApp> with RouterStateMixin<PauzaApp> {
       builder: (context, child) {
         return MediaQuery(
           key: builderKey,
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.noScaling),
+          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
           child: RootScope(child: child ?? const SizedBox.shrink()),
         );
       },

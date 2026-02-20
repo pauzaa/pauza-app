@@ -21,13 +21,11 @@ class HomeScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              ModesListBloc(modesRepository: rootScope.modesRepository)
-                ..add(const ModesListRequested()),
+              ModesListBloc(modesRepository: rootScope.modesRepository)..add(const ModesListRequested()),
         ),
         BlocProvider(
           create: (context) =>
-              BlockingBloc(blockingRepository: rootScope.blockingRepository)
-                ..add(const BlockingSyncRequested()),
+              BlockingBloc(blockingRepository: rootScope.blockingRepository)..add(const BlockingSyncRequested()),
         ),
       ],
       child: const HomeContent(),

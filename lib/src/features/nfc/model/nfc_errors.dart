@@ -20,12 +20,7 @@ enum NfcErrorCode implements Localizable {
 
 @immutable
 class NfcException implements Exception {
-  const NfcException({
-    required this.code,
-    required this.message,
-    this.cause,
-    this.nfcAvailability,
-  });
+  const NfcException({required this.code, required this.message, this.cause, this.nfcAvailability});
 
   factory NfcException.fromError(Object error) {
     if (error is NfcException) {
@@ -35,29 +30,15 @@ class NfcException implements Exception {
     final message = error.toString().toLowerCase();
 
     if (message.contains('busy')) {
-      return NfcException(
-        code: NfcErrorCode.busy,
-        message: 'Another NFC session is already active.',
-        cause: error,
-      );
+      return NfcException(code: NfcErrorCode.busy, message: 'Another NFC session is already active.', cause: error);
     }
 
-    if (message.contains('permission') ||
-        message.contains('denied') ||
-        message.contains('unauthorized')) {
-      return NfcException(
-        code: NfcErrorCode.permissionDenied,
-        message: 'NFC permission was denied.',
-        cause: error,
-      );
+    if (message.contains('permission') || message.contains('denied') || message.contains('unauthorized')) {
+      return NfcException(code: NfcErrorCode.permissionDenied, message: 'NFC permission was denied.', cause: error);
     }
 
     if (message.contains('cancel')) {
-      return NfcException(
-        code: NfcErrorCode.cancelled,
-        message: 'NFC scan session was cancelled.',
-        cause: error,
-      );
+      return NfcException(code: NfcErrorCode.cancelled, message: 'NFC scan session was cancelled.', cause: error);
     }
 
     if (message.contains('timeout')) {
@@ -76,11 +57,7 @@ class NfcException implements Exception {
       );
     }
 
-    return NfcException(
-      code: NfcErrorCode.unknown,
-      message: 'Unexpected NFC error.',
-      cause: error,
-    );
+    return NfcException(code: NfcErrorCode.unknown, message: 'Unexpected NFC error.', cause: error);
   }
 
   factory NfcException.fromNfcError(NfcError error) {
@@ -97,11 +74,7 @@ class NfcException implements Exception {
         code: NfcErrorCode.cancelled,
         message: 'NFC scan session was cancelled.',
       ),
-      NfcErrorType.unknown => NfcException(
-        code: NfcErrorCode.unknown,
-        message: error.message,
-        cause: error,
-      ),
+      NfcErrorType.unknown => NfcException(code: NfcErrorCode.unknown, message: error.message, cause: error),
     };
   }
 

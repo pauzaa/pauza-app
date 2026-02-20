@@ -243,10 +243,7 @@ Object? _normalizeRawValue(Object? value) {
   }
   if (value is Map<Object?, Object?>) {
     return value.map(
-      (key, entryValue) => MapEntry(
-        key is String ? key : key.toString(),
-        _normalizeRawValue(entryValue),
-      ),
+      (key, entryValue) => MapEntry(key is String ? key : key.toString(), _normalizeRawValue(entryValue)),
     );
   }
   if (value is Iterable<Object?>) {

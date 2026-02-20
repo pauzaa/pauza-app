@@ -13,19 +13,10 @@ final class RestrictionSessionReducer {
     final now = nowUtc.toUtc();
 
     if (currentSession == null) {
-      return _reduceWithoutSession(
-        event: event,
-        occurredAt: occurredAt,
-        now: now,
-      );
+      return _reduceWithoutSession(event: event, occurredAt: occurredAt, now: now);
     }
 
-    return _reduceWithSession(
-      event: event,
-      session: currentSession,
-      occurredAt: occurredAt,
-      now: now,
-    );
+    return _reduceWithSession(event: event, session: currentSession, occurredAt: occurredAt, now: now);
   }
 
   RestrictionSessionLog _reduceWithoutSession({
@@ -83,11 +74,7 @@ final class RestrictionSessionReducer {
     required DateTime now,
   }) {
     return switch (event.action) {
-      RestrictionLifecycleAction.start => _reduceStart(
-        event: event,
-        session: session,
-        now: now,
-      ),
+      RestrictionLifecycleAction.start => _reduceStart(event: event, session: session, now: now),
       RestrictionLifecycleAction.pause => _reducePause(
         event: event,
         session: session,
@@ -100,12 +87,7 @@ final class RestrictionSessionReducer {
         occurredAt: occurredAt,
         now: now,
       ),
-      RestrictionLifecycleAction.end => _reduceEnd(
-        event: event,
-        session: session,
-        occurredAt: occurredAt,
-        now: now,
-      ),
+      RestrictionLifecycleAction.end => _reduceEnd(event: event, session: session, occurredAt: occurredAt, now: now),
     };
   }
 
@@ -114,9 +96,7 @@ final class RestrictionSessionReducer {
     required RestrictionSessionLog session,
     required DateTime now,
   }) {
-    final reason = session.endedAt == null
-        ? 'start_when_session_active'
-        : 'duplicate_start_for_session';
+    final reason = session.endedAt == null ? 'start_when_session_active' : 'duplicate_start_for_session';
 
     return session.copyWith(
       modeId: event.modeId,
@@ -188,9 +168,7 @@ final class RestrictionSessionReducer {
 
     final occurredEpochMs = occurredAt.toUtc().millisecondsSinceEpoch;
     final pauseStartedEpochMs = pauseStartedAt.toUtc().millisecondsSinceEpoch;
-    final pauseDurationMs = occurredEpochMs >= pauseStartedEpochMs
-        ? occurredEpochMs - pauseStartedEpochMs
-        : 0;
+    final pauseDurationMs = occurredEpochMs >= pauseStartedEpochMs ? occurredEpochMs - pauseStartedEpochMs : 0;
 
     return session.copyWith(
       totalPausedMs: session.totalPausedMs + pauseDurationMs,
@@ -218,10 +196,8 @@ final class RestrictionSessionReducer {
     final pauseStartedAt = session.lastPausedAt;
     final pauseDurationMs =
         pauseStartedAt != null &&
-            occurredAt.toUtc().millisecondsSinceEpoch >=
-                pauseStartedAt.toUtc().millisecondsSinceEpoch
-        ? occurredAt.toUtc().millisecondsSinceEpoch -
-              pauseStartedAt.toUtc().millisecondsSinceEpoch
+            occurredAt.toUtc().millisecondsSinceEpoch >= pauseStartedAt.toUtc().millisecondsSinceEpoch
+        ? occurredAt.toUtc().millisecondsSinceEpoch - pauseStartedAt.toUtc().millisecondsSinceEpoch
         : 0;
 
     return session.copyWith(

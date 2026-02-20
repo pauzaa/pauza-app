@@ -1,7 +1,7 @@
 {
-  "dart.lineLength": 140,
+  "dart.lineLength": 120,
   "editor.rulers": [
-    140
+    120
   ],
   "[dart]": {
     "editor.insertSpaces": true,

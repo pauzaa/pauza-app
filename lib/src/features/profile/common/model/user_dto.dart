@@ -2,11 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 final class UserDto {
-  const UserDto({
-    required this.profilePicture,
-    required this.username,
-    required this.name,
-  });
+  const UserDto({required this.profilePicture, required this.username, required this.name});
 
   factory UserDto.fromJson(Map<String, Object?> json) => UserDto(
     profilePicture: json['profilePicture'] as String?,

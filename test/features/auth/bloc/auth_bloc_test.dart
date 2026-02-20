@@ -25,9 +25,7 @@ void main() {
       final repository = _FakeAuthRepository();
       final bloc = AuthBloc(authRepository: repository);
 
-      bloc.add(
-        const AuthSignInRequested(email: 'john@doe.com', password: '123456'),
-      );
+      bloc.add(const AuthSignInRequested(email: 'john@doe.com', password: '123456'));
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state, isA<AuthFlowSuccess>());
@@ -40,19 +38,11 @@ void main() {
       final repository = _FakeAuthRepository();
       final bloc = AuthBloc(authRepository: repository);
 
-      bloc.add(
-        const AuthSignInRequested(
-          email: AuthRepositoryImpl.invalidCredentialsEmail,
-          password: '123456',
-        ),
-      );
+      bloc.add(const AuthSignInRequested(email: AuthRepositoryImpl.invalidCredentialsEmail, password: '123456'));
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state, isA<AuthFlowFailure>());
-      expect(
-        (bloc.state as AuthFlowFailure).failure,
-        AuthFailure.invalidCredentials,
-      );
+      expect((bloc.state as AuthFlowFailure).failure, AuthFailure.invalidCredentials);
 
       await bloc.close();
       repository.dispose();
@@ -62,12 +52,7 @@ void main() {
       final repository = _FakeAuthRepository();
       final bloc = AuthBloc(authRepository: repository);
 
-      bloc.add(
-        const AuthSignInRequested(
-          email: AuthRepositoryImpl.otpRequiredEmail,
-          password: '123456',
-        ),
-      );
+      bloc.add(const AuthSignInRequested(email: AuthRepositoryImpl.otpRequiredEmail, password: '123456'));
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state, isA<AuthOtpRequired>());
@@ -80,12 +65,7 @@ void main() {
       final repository = _FakeAuthRepository();
       final bloc = AuthBloc(authRepository: repository);
 
-      bloc.add(
-        const AuthSignInRequested(
-          email: AuthRepositoryImpl.otpRequiredEmail,
-          password: '123456',
-        ),
-      );
+      bloc.add(const AuthSignInRequested(email: AuthRepositoryImpl.otpRequiredEmail, password: '123456'));
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
@@ -97,32 +77,24 @@ void main() {
       repository.dispose();
     });
 
-    test(
-      'otp invalid emits AuthFlowFailure and keeps previous otp state',
-      () async {
-        final repository = _FakeAuthRepository();
-        final bloc = AuthBloc(authRepository: repository);
+    test('otp invalid emits AuthFlowFailure and keeps previous otp state', () async {
+      final repository = _FakeAuthRepository();
+      final bloc = AuthBloc(authRepository: repository);
 
-        bloc.add(
-          const AuthSignInRequested(
-            email: AuthRepositoryImpl.otpRequiredEmail,
-            password: '123456',
-          ),
-        );
-        await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const AuthSignInRequested(email: AuthRepositoryImpl.otpRequiredEmail, password: '123456'));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-        bloc.add(const AuthOtpSubmitted(otp: '000000'));
-        await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const AuthOtpSubmitted(otp: '000000'));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-        expect(bloc.state, isA<AuthFlowFailure>());
-        final failure = bloc.state as AuthFlowFailure;
-        expect(failure.failure, AuthFailure.invalidOtp);
-        expect(failure.email, AuthRepositoryImpl.otpRequiredEmail);
+      expect(bloc.state, isA<AuthFlowFailure>());
+      final failure = bloc.state as AuthFlowFailure;
+      expect(failure.failure, AuthFailure.invalidOtp);
+      expect(failure.email, AuthRepositoryImpl.otpRequiredEmail);
 
-        await bloc.close();
-        repository.dispose();
-      },
-    );
+      await bloc.close();
+      repository.dispose();
+    });
 
     test('otp submit without challenge emits otpChallengeMissing', () async {
       final repository = _FakeAuthRepository();
@@ -132,10 +104,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state, isA<AuthFlowFailure>());
-      expect(
-        (bloc.state as AuthFlowFailure).failure,
-        AuthFailure.otpChallengeMissing,
-      );
+      expect((bloc.state as AuthFlowFailure).failure, AuthFailure.otpChallengeMissing);
 
       await bloc.close();
       repository.dispose();
@@ -145,9 +114,7 @@ void main() {
       final repository = _FakeAuthRepository();
       final bloc = AuthBloc(authRepository: repository);
 
-      bloc.add(
-        const AuthSignInRequested(email: 'john@doe.com', password: '123456'),
-      );
+      bloc.add(const AuthSignInRequested(email: 'john@doe.com', password: '123456'));
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       bloc.add(const AuthSignOutRequested());
@@ -159,39 +126,29 @@ void main() {
       repository.dispose();
     });
 
-    test(
-      'reset flow emits AuthIdle and clears pending OTP challenge',
-      () async {
-        final repository = _FakeAuthRepository();
-        final bloc = AuthBloc(authRepository: repository);
+    test('reset flow emits AuthIdle and clears pending OTP challenge', () async {
+      final repository = _FakeAuthRepository();
+      final bloc = AuthBloc(authRepository: repository);
 
-        bloc.add(
-          const AuthSignInRequested(
-            email: AuthRepositoryImpl.otpRequiredEmail,
-            password: '123456',
-          ),
-        );
-        await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const AuthSignInRequested(email: AuthRepositoryImpl.otpRequiredEmail, password: '123456'));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-        bloc.add(const AuthFlowResetRequested());
-        await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const AuthFlowResetRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-        expect(bloc.state, isA<AuthIdle>());
-        expect(repository.clearPendingOtpChallengeCallCount, 1);
+      expect(bloc.state, isA<AuthIdle>());
+      expect(repository.clearPendingOtpChallengeCallCount, 1);
 
-        await bloc.close();
-        repository.dispose();
-      },
-    );
+      await bloc.close();
+      repository.dispose();
+    });
   });
 }
 
 final class _FakeAuthRepository implements AuthRepository {
-  _FakeAuthRepository({Session? initialSession})
-    : _currentSession = initialSession ?? const Session.empty();
+  _FakeAuthRepository({Session? initialSession}) : _currentSession = initialSession ?? const Session.empty();
 
-  final StreamController<Session> _controller =
-      StreamController<Session>.broadcast();
+  final StreamController<Session> _controller = StreamController<Session>.broadcast();
 
   Session _currentSession;
   String? _pendingChallenge;
@@ -223,11 +180,7 @@ final class _FakeAuthRepository implements AuthRepository {
     }
 
     const session = Session(accessToken: 'access', refreshToken: 'refresh');
-    const user = UserDto(
-      profilePicture: 'https://example.com/avatar/john.png',
-      username: 'john',
-      name: 'John',
-    );
+    const user = UserDto(profilePicture: 'https://example.com/avatar/john.png', username: 'john', name: 'John');
     _currentSession = session;
     _controller.add(session);
     return const AuthSuccess(session: session, user: user);
@@ -244,11 +197,7 @@ final class _FakeAuthRepository implements AuthRepository {
     }
 
     const session = Session(accessToken: 'access', refreshToken: 'refresh');
-    const user = UserDto(
-      profilePicture: 'https://example.com/avatar/new.png',
-      username: 'new',
-      name: 'New',
-    );
+    const user = UserDto(profilePicture: 'https://example.com/avatar/new.png', username: 'new', name: 'New');
     _currentSession = session;
     _controller.add(session);
     return const AuthSuccess(session: session, user: user);

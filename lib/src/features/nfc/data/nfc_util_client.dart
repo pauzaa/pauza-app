@@ -21,20 +21,14 @@ abstract interface class NfcOperations {
 }
 
 class NfcUtilClient implements NfcOperations {
-  NfcUtilClient._({
-    required NfcManagerGateway manager,
-    required NfcSystemSettingsLauncher settingsLauncher,
-  }) : _manager = manager,
-       _settingsLauncher = settingsLauncher;
+  NfcUtilClient._({required NfcManagerGateway manager, required NfcSystemSettingsLauncher settingsLauncher})
+    : _manager = manager,
+      _settingsLauncher = settingsLauncher;
 
-  factory NfcUtilClient({
-    NfcManagerGateway? manager,
-    NfcSystemSettingsLauncher? settingsLauncher,
-  }) {
+  factory NfcUtilClient({NfcManagerGateway? manager, NfcSystemSettingsLauncher? settingsLauncher}) {
     return NfcUtilClient._(
       manager: manager ?? _DefaultNfcManagerGateway(),
-      settingsLauncher:
-          settingsLauncher ?? AndroidIntentNfcSystemSettingsLauncher(),
+      settingsLauncher: settingsLauncher ?? AndroidIntentNfcSystemSettingsLauncher(),
     );
   }
 
@@ -90,10 +84,7 @@ class NfcUtilClient implements NfcOperations {
   @override
   Future<NfcTagSnapshot> scanSingleTag({required Duration timeout}) async {
     if (_isSessionActive) {
-      throw const NfcException(
-        code: NfcErrorCode.busy,
-        message: 'Another NFC session is already active.',
-      );
+      throw const NfcException(code: NfcErrorCode.busy, message: 'Another NFC session is already active.');
     }
 
     final completer = Completer<NfcTagSnapshot>();
@@ -108,9 +99,7 @@ class NfcUtilClient implements NfcOperations {
           }
 
           try {
-            final snapshot = await NfcTagSnapshot.mapNfcTagSnapshotFromUtilTag(
-              tag,
-            );
+            final snapshot = await NfcTagSnapshot.mapNfcTagSnapshotFromUtilTag(tag);
             completer.complete(snapshot);
           } on Object catch (error) {
             completer.completeError(error);
@@ -137,10 +126,7 @@ class NfcUtilClient implements NfcOperations {
         }
 
         completer.completeError(
-          const NfcException(
-            code: NfcErrorCode.timeout,
-            message: 'NFC scan timed out before a tag was discovered.',
-          ),
+          const NfcException(code: NfcErrorCode.timeout, message: 'NFC scan timed out before a tag was discovered.'),
         );
       });
 
@@ -156,25 +142,16 @@ class NfcUtilClient implements NfcOperations {
 
   @override
   Future<void> stopSession({String? alertMessage, String? errorMessage}) async {
-    await _stopSessionCore(
-      alertMessage: alertMessage,
-      errorMessage: errorMessage,
-    );
+    await _stopSessionCore(alertMessage: alertMessage, errorMessage: errorMessage);
   }
 
   Future<void> _safeStopSession() async {
     await _stopSessionCore();
   }
 
-  Future<void> _stopSessionCore({
-    String? alertMessage,
-    String? errorMessage,
-  }) async {
+  Future<void> _stopSessionCore({String? alertMessage, String? errorMessage}) async {
     try {
-      await _manager.stopSession(
-        alertMessage: alertMessage,
-        errorMessage: errorMessage,
-      );
+      await _manager.stopSession(alertMessage: alertMessage, errorMessage: errorMessage);
     } on Object {
       // Ignore stop failures: session may already be closed or unavailable.
     }
@@ -188,45 +165,25 @@ class NfcUtilClient implements NfcOperations {
     final message = error.toString().toLowerCase();
 
     if (message.contains('busy') || message.contains('already')) {
-      return const NfcException(
-        code: NfcErrorCode.busy,
-        message: 'Another NFC session is already active.',
-      );
+      return const NfcException(code: NfcErrorCode.busy, message: 'Another NFC session is already active.');
     }
-    if (message.contains('permission') ||
-        message.contains('denied') ||
-        message.contains('unauthorized')) {
-      return const NfcException(
-        code: NfcErrorCode.permissionDenied,
-        message: 'NFC permission was denied.',
-      );
+    if (message.contains('permission') || message.contains('denied') || message.contains('unauthorized')) {
+      return const NfcException(code: NfcErrorCode.permissionDenied, message: 'NFC permission was denied.');
     }
     if (message.contains('cancel')) {
-      return const NfcException(
-        code: NfcErrorCode.cancelled,
-        message: 'NFC scan session was cancelled.',
-      );
+      return const NfcException(code: NfcErrorCode.cancelled, message: 'NFC scan session was cancelled.');
     }
     if (message.contains('timeout')) {
-      return const NfcException(
-        code: NfcErrorCode.timeout,
-        message: 'NFC scan timed out before a tag was discovered.',
-      );
+      return const NfcException(code: NfcErrorCode.timeout, message: 'NFC scan timed out before a tag was discovered.');
     }
-    if (message.contains('unsupported') ||
-        message.contains('not available') ||
-        message.contains('unavailable')) {
+    if (message.contains('unsupported') || message.contains('not available') || message.contains('unavailable')) {
       return const NfcException(
         code: NfcErrorCode.unsupported,
         message: 'NFC is not supported on this platform/device.',
       );
     }
 
-    return NfcException(
-      code: NfcErrorCode.unknown,
-      message: 'Unexpected NFC error.',
-      cause: error,
-    );
+    return NfcException(code: NfcErrorCode.unknown, message: 'Unexpected NFC error.', cause: error);
   }
 }
 
@@ -268,9 +225,6 @@ final class _DefaultNfcManagerGateway implements NfcManagerGateway {
 
   @override
   Future<void> stopSession({String? alertMessage, String? errorMessage}) async {
-    await _manager.stopSession(
-      alertMessage: alertMessage,
-      errorMessage: errorMessage,
-    );
+    await _manager.stopSession(alertMessage: alertMessage, errorMessage: errorMessage);
   }
 }

@@ -37,18 +37,13 @@ class ProfileEditForm extends StatelessWidget {
               initialValue: notifier.value.username,
               textInputAction: TextInputAction.done,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (value) =>
-                  notifier.validateUsername(context.l10n, state),
+              validator: (value) => notifier.validateUsername(context.l10n, state),
               onChanged: (value) {
                 notifier.update(username: value);
 
-                context.read<UserNameCheckerBloc>().add(
-                  UserNameCheckerStarted(username: value),
-                );
+                context.read<UserNameCheckerBloc>().add(UserNameCheckerStarted(username: value));
               },
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9_]')),
-              ],
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9_]'))],
               decoration: PauzaInputDecoration(
                 labelText: context.l10n.profileEditUsernameLabel,
                 hintText: context.l10n.profileEditUsernameHint,
@@ -57,10 +52,7 @@ class ProfileEditForm extends StatelessWidget {
                     ? const SizedBox(
                         width: 18,
                         height: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          padding: EdgeInsets.all(12),
-                        ),
+                        child: CircularProgressIndicator(strokeWidth: 2, padding: EdgeInsets.all(12)),
                       )
                     : const Icon(Icons.alternate_email_rounded),
               ),

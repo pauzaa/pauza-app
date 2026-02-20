@@ -17,10 +17,7 @@ class OtpActionsSection extends StatelessWidget {
   String _countdownLabel(BuildContext context, int remainingSeconds) {
     final minutes = remainingSeconds ~/ 60;
     final seconds = remainingSeconds % 60;
-    return context.l10n.authOtpAvailableInLabel(
-      minutes.toString().padLeft(2, '0'),
-      seconds.toString().padLeft(2, '0'),
-    );
+    return context.l10n.authOtpAvailableInLabel(minutes.toString().padLeft(2, '0'), seconds.toString().padLeft(2, '0'));
   }
 
   @override
@@ -34,9 +31,7 @@ class OtpActionsSection extends StatelessWidget {
         Text(
           l10n.authOtpDidNotReceiveCode,
           textAlign: TextAlign.center,
-          style: context.textTheme.headlineSmall?.copyWith(
-            color: context.colorScheme.onSurfaceVariant,
-          ),
+          style: context.textTheme.headlineSmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
         ),
         StreamBuilder<int>(
           stream: countdownStream,
@@ -58,9 +53,7 @@ class OtpActionsSection extends StatelessWidget {
                     _countdownLabel(context, remainingSeconds),
                     textAlign: TextAlign.center,
                     style: context.textTheme.titleLarge?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant.withValues(
-                        alpha: 0.5,
-                      ),
+                      color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                     ),
                   ),
                 ],

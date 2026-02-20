@@ -13,8 +13,7 @@ abstract interface class UserProfileCacheStorage {
 }
 
 final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
-  const AppFuseUserProfileCacheStorage({required IAppFuseStorage storage})
-    : _storage = storage;
+  const AppFuseUserProfileCacheStorage({required IAppFuseStorage storage}) : _storage = storage;
 
   static const String cacheKey = 'auth.user_profile.cache.v1';
 
@@ -40,10 +39,7 @@ final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
     } on UserProfileException {
       rethrow;
     } on FormatException {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.storage,
-        message: 'Invalid cached user payload.',
-      );
+      throw const UserProfileException(code: UserProfileFailureCode.storage, message: 'Invalid cached user payload.');
     } on Object {
       throw const UserProfileException(
         code: UserProfileFailureCode.storage,

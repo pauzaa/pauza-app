@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:pauza/src/core/common/disposable.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
-abstract interface class BlockingRepository {
+abstract interface class BlockingRepository implements Disposable {
+  Stream<RestrictionLifecycleAction> get lifecycleActions;
+
   Future<RestrictionState> getRestrictionSession();
 
   Future<void> startBlocking({required Mode mode, required ShieldConfiguration? shield});
@@ -25,6 +30,11 @@ class PauzaBlockingRepository implements BlockingRepository {
 
   final AppRestrictionManager _restrictions;
   final RestrictionLifecycleRepository _restrictionLifecycleRepository;
+  final StreamController<RestrictionLifecycleAction> _lifecycleActionsController =
+      StreamController<RestrictionLifecycleAction>.broadcast();
+
+  @override
+  Stream<RestrictionLifecycleAction> get lifecycleActions => _lifecycleActionsController.stream;
 
   @override
   Future<RestrictionState> getRestrictionSession() => _restrictions.getRestrictionSession();
@@ -36,24 +46,28 @@ class PauzaBlockingRepository implements BlockingRepository {
       await _restrictions.configureShield(shield);
     }
     await syncRestrictionLifecycleEvents();
+    _lifecycleActionsController.add(RestrictionLifecycleAction.start);
   }
 
   @override
   Future<void> stopBlocking() async {
     await _restrictions.endSession();
     await syncRestrictionLifecycleEvents();
+    _lifecycleActionsController.add(RestrictionLifecycleAction.end);
   }
 
   @override
   Future<void> pauseBlocking(Duration duration) async {
     await _restrictions.pauseEnforcement(duration);
     await syncRestrictionLifecycleEvents();
+    _lifecycleActionsController.add(RestrictionLifecycleAction.pause);
   }
 
   @override
   Future<void> resumeBlocking() async {
     await _restrictions.resumeEnforcement();
     await syncRestrictionLifecycleEvents();
+    _lifecycleActionsController.add(RestrictionLifecycleAction.resume);
   }
 
   @override
@@ -63,5 +77,10 @@ class PauzaBlockingRepository implements BlockingRepository {
     } on Object {
       // Keep existing end-session behavior even if lifecycle sync fails.
     }
+  }
+
+  @override
+  void dispose() {
+    _lifecycleActionsController.close();
   }
 }

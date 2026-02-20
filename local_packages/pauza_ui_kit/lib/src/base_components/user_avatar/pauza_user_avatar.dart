@@ -61,10 +61,6 @@ final class _FallbackIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      Icons.person_rounded,
-      size: radius * 0.7,
-      color: context.colorScheme.onSurfaceVariant,
-    );
+    return Icon(Icons.person_rounded, size: radius * 0.7, color: context.colorScheme.onSurfaceVariant);
   }
 }

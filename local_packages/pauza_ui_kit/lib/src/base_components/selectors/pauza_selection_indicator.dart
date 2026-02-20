@@ -16,20 +16,9 @@ final class PauzaSelectionIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isSelected ? context.colorScheme.primary : Colors.transparent,
-        border: Border.all(
-          color: isSelected
-              ? context.colorScheme.primary
-              : context.colorScheme.outline,
-          width: 2,
-        ),
+        border: Border.all(color: isSelected ? context.colorScheme.primary : context.colorScheme.outline, width: 2),
       ),
-      child: isSelected
-          ? Icon(
-              Icons.check,
-              size: PauzaIconSizes.small,
-              color: context.colorScheme.onPrimary,
-            )
-          : null,
+      child: isSelected ? Icon(Icons.check, size: PauzaIconSizes.small, color: context.colorScheme.onPrimary) : null,
     );
   }
 }

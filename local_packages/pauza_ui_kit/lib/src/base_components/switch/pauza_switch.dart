@@ -29,10 +29,7 @@ final class PauzaSwitch extends StatelessWidget {
       children: <Widget>[
         if (effectiveTitle case final title?)
           Expanded(
-            child: DefaultTextStyle.merge(
-              style: titleStyle ?? context.textTheme.labelLarge,
-              child: title,
-            ),
+            child: DefaultTextStyle.merge(style: titleStyle ?? context.textTheme.labelLarge, child: title),
           ),
         SizedBox(
           height: 32,
@@ -40,18 +37,14 @@ final class PauzaSwitch extends StatelessWidget {
             value: value,
             onChanged: onChanged,
             thumbIcon: withIcon
-                ? WidgetStateProperty.resolveWith<Icon?>((
-                    Set<WidgetState> states,
-                  ) {
+                ? WidgetStateProperty.resolveWith<Icon?>((Set<WidgetState> states) {
                     if (states.contains(WidgetState.selected)) {
                       return const Icon(Icons.done);
                     }
                     return const Icon(Icons.close);
                   })
                 : null,
-            thumbColor: WidgetStateProperty.resolveWith<Color?>((
-              Set<WidgetState> states,
-            ) {
+            thumbColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
               if (states.contains(WidgetState.selected)) {
                 return context.colorScheme.onPrimary;
               }
@@ -63,22 +56,16 @@ final class PauzaSwitch extends StatelessWidget {
               }
               return context.colorScheme.outlineVariant;
             }),
-            trackColor: WidgetStateProperty.resolveWith<Color?>((
-              Set<WidgetState> states,
-            ) {
+            trackColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
               if (states.contains(WidgetState.selected)) {
-                return isDisabled
-                    ? context.colorScheme.onSurface.withValues(alpha: 0.12)
-                    : context.colorScheme.primary;
+                return isDisabled ? context.colorScheme.onSurface.withValues(alpha: 0.12) : context.colorScheme.primary;
               }
               if (states.contains(WidgetState.disabled)) {
                 return context.colorScheme.surface;
               }
               return context.colorScheme.surfaceContainerHighest;
             }),
-            trackOutlineColor: WidgetStateProperty.resolveWith<Color?>((
-              Set<WidgetState> states,
-            ) {
+            trackOutlineColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
               if (states.contains(WidgetState.selected)) {
                 return isDisabled ? null : context.colorScheme.primary;
               }

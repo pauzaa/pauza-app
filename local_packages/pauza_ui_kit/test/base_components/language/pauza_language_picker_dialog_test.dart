@@ -3,14 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
-  final languages = <Locale, String>{
-    const Locale('en'): 'English',
-    const Locale('ru'): 'Русский',
-  };
+  final languages = <Locale, String>{const Locale('en'): 'English', const Locale('ru'): 'Русский'};
 
-  testWidgets('dialog shows supported languages and selected locale', (
-    tester,
-  ) async {
+  testWidgets('dialog shows supported languages and selected locale', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: PauzaTheme.light,
@@ -41,9 +36,7 @@ void main() {
   });
 
   testWidgets('dialog returns selected locale', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(theme: PauzaTheme.light, home: const SizedBox.shrink()),
-    );
+    await tester.pumpWidget(MaterialApp(theme: PauzaTheme.light, home: const SizedBox.shrink()));
 
     final context = tester.element(find.byType(SizedBox));
     final resultFuture = PauzaLanguagePickerDialog.show(
@@ -61,9 +54,7 @@ void main() {
   });
 
   testWidgets('dialog returns null when cancelled', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(theme: PauzaTheme.light, home: const SizedBox.shrink()),
-    );
+    await tester.pumpWidget(MaterialApp(theme: PauzaTheme.light, home: const SizedBox.shrink()));
 
     final context = tester.element(find.byType(SizedBox));
     final resultFuture = PauzaLanguagePickerDialog.show(

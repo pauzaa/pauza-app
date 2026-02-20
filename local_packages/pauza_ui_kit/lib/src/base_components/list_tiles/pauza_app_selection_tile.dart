@@ -37,12 +37,7 @@ final class PauzaAppSelectionTile extends StatelessWidget {
             children: <Widget>[
               leading,
               Expanded(
-                child: Text(
-                  title,
-                  style: context.textTheme.titleLarge,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                child: Text(title, style: context.textTheme.titleLarge, maxLines: 1, overflow: TextOverflow.ellipsis),
               ),
               trailing,
             ],

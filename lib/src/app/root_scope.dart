@@ -85,6 +85,7 @@ class RootScopeState extends State<RootScope> {
     currentUserBloc.close();
     authBloc.close();
     restrictionLifecycleSyncCoordinator.detach();
+    blockingRepository.dispose();
     modesRepository.dispose();
     super.dispose();
   }

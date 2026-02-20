@@ -3,17 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
-  testWidgets('renders configured amount of pin cells', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('renders configured amount of pin cells', (WidgetTester tester) async {
     final controller = TextEditingController();
 
     await tester.pumpWidget(
       MaterialApp(
         theme: PauzaTheme.dark,
-        home: Scaffold(
-          body: PauzaPinCodeField(controller: controller, length: 6),
-        ),
+        home: Scaffold(body: PauzaPinCodeField(controller: controller, length: 6)),
       ),
     );
 
@@ -22,17 +18,13 @@ void main() {
     }
   });
 
-  testWidgets('accepts digits and enforces max length', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('accepts digits and enforces max length', (WidgetTester tester) async {
     final controller = TextEditingController();
 
     await tester.pumpWidget(
       MaterialApp(
         theme: PauzaTheme.dark,
-        home: Scaffold(
-          body: PauzaPinCodeField(controller: controller, length: 6),
-        ),
+        home: Scaffold(body: PauzaPinCodeField(controller: controller, length: 6)),
       ),
     );
 
@@ -47,9 +39,7 @@ void main() {
     expect(controller.text, '123456');
   });
 
-  testWidgets('calls onFilled when code reaches full length', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('calls onFilled when code reaches full length', (WidgetTester tester) async {
     final controller = TextEditingController();
     var onFilledCallCount = 0;
 
@@ -74,21 +64,13 @@ void main() {
     expect(onFilledCallCount, 1);
   });
 
-  testWidgets('disabled pin field does not accept text input', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('disabled pin field does not accept text input', (WidgetTester tester) async {
     final controller = TextEditingController();
 
     await tester.pumpWidget(
       MaterialApp(
         theme: PauzaTheme.dark,
-        home: Scaffold(
-          body: PauzaPinCodeField(
-            controller: controller,
-            enabled: false,
-            length: 6,
-          ),
-        ),
+        home: Scaffold(body: PauzaPinCodeField(controller: controller, enabled: false, length: 6)),
       ),
     );
 

@@ -3,9 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
-  testWidgets('PauzaTextFormField renders label above field', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PauzaTextFormField renders label above field', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: PauzaTheme.light,
@@ -22,9 +20,7 @@ void main() {
     expect(find.byType(TextFormField), findsOneWidget);
   });
 
-  testWidgets('PauzaInputDecoration clear icon clears text', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PauzaInputDecoration clear icon clears text', (WidgetTester tester) async {
     final controller = TextEditingController(text: 'hello');
     await tester.pumpWidget(
       MaterialApp(
@@ -33,9 +29,7 @@ void main() {
           body: PauzaTextFormField(
             controller: controller,
             onChanged: (_) {},
-            decoration: const PauzaInputDecoration(
-              automaticallyImplyClear: true,
-            ),
+            decoration: const PauzaInputDecoration(automaticallyImplyClear: true),
           ),
         ),
       ),

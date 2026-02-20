@@ -100,8 +100,7 @@ final class PauzaIconButton extends StatelessWidget {
     return switch (type) {
       PauzaIconButtonType.filled => context.colorScheme.onPrimary,
       PauzaIconButtonType.tonal => context.colorScheme.onSecondaryContainer,
-      PauzaIconButtonType.standard ||
-      PauzaIconButtonType.outlined => context.colorScheme.onSurfaceVariant,
+      PauzaIconButtonType.standard || PauzaIconButtonType.outlined => context.colorScheme.onSurfaceVariant,
     };
   }
 
@@ -112,8 +111,7 @@ final class PauzaIconButton extends StatelessWidget {
     return switch (type) {
       PauzaIconButtonType.filled => context.colorScheme.primary,
       PauzaIconButtonType.tonal => context.colorScheme.secondaryContainer,
-      PauzaIconButtonType.standard ||
-      PauzaIconButtonType.outlined => Colors.transparent,
+      PauzaIconButtonType.standard || PauzaIconButtonType.outlined => Colors.transparent,
     };
   }
 
@@ -129,16 +127,10 @@ final class PauzaIconButton extends StatelessWidget {
       return color;
     }
     return switch (type) {
-      PauzaIconButtonType.outlined =>
-        context.colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
-      PauzaIconButtonType.tonal =>
-        context.colorScheme.secondaryContainer.withValues(alpha: 0.2),
-      PauzaIconButtonType.standard => context.colorScheme.onSurface.withValues(
-        alpha: 0.2,
-      ),
-      PauzaIconButtonType.filled => context.colorScheme.onSurface.withValues(
-        alpha: 0.12,
-      ),
+      PauzaIconButtonType.outlined => context.colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
+      PauzaIconButtonType.tonal => context.colorScheme.secondaryContainer.withValues(alpha: 0.2),
+      PauzaIconButtonType.standard => context.colorScheme.onSurface.withValues(alpha: 0.2),
+      PauzaIconButtonType.filled => context.colorScheme.onSurface.withValues(alpha: 0.12),
     };
   }
 
@@ -148,8 +140,7 @@ final class PauzaIconButton extends StatelessWidget {
         return _focusedBackgroundColorToApply(context);
       }
       if (states.contains(WidgetState.disabled) &&
-          (type == PauzaIconButtonType.filled ||
-              type == PauzaIconButtonType.tonal)) {
+          (type == PauzaIconButtonType.filled || type == PauzaIconButtonType.tonal)) {
         return context.themeData.disabledColor;
       }
       return _backgroundColorToApply(context);
@@ -158,9 +149,7 @@ final class PauzaIconButton extends StatelessWidget {
 
   WidgetStateProperty<Color?> _foregroundColorProperty(BuildContext context) {
     return WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-      if (focused ||
-          states.contains(WidgetState.pressed) ||
-          states.contains(WidgetState.hovered)) {
+      if (focused || states.contains(WidgetState.pressed) || states.contains(WidgetState.hovered)) {
         return _focusedForegroundColorToApply(context);
       }
       if (states.contains(WidgetState.disabled)) {
@@ -172,9 +161,7 @@ final class PauzaIconButton extends StatelessWidget {
 
   WidgetStateProperty<Color?> _overlayColorProperty(BuildContext context) {
     return WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-      if (focused ||
-          states.contains(WidgetState.pressed) ||
-          states.contains(WidgetState.hovered)) {
+      if (focused || states.contains(WidgetState.pressed) || states.contains(WidgetState.hovered)) {
         return _focusedBackgroundColorToApply(context);
       }
       return Colors.transparent;
@@ -197,16 +184,8 @@ final class PauzaIconButton extends StatelessWidget {
           iconSize: PauzaIconSizes.small,
           style:
               OutlinedButton.styleFrom(
-                fixedSize:
-                    buttonSize ??
-                    const Size(PauzaFormSizes.xxSmall, PauzaFormSizes.xxSmall),
-                shape:
-                    shape ??
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        PauzaCornerRadius.full,
-                      ),
-                    ),
+                fixedSize: buttonSize ?? const Size(PauzaFormSizes.xxSmall, PauzaFormSizes.xxSmall),
+                shape: shape ?? RoundedRectangleBorder(borderRadius: BorderRadius.circular(PauzaCornerRadius.full)),
                 side: type == PauzaIconButtonType.outlined
                     ? BorderSide(color: context.colorScheme.outlineVariant)
                     : BorderSide.none,

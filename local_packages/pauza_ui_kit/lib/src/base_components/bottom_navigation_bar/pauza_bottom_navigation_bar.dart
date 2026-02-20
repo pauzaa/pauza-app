@@ -32,23 +32,15 @@ class PauzaBottomNavigationBar extends StatelessWidget {
             Align(
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: context.colorScheme.surfaceContainerLow.withValues(
-                    alpha: 0.92,
-                  ),
+                  color: context.colorScheme.surfaceContainerLow.withValues(alpha: 0.92),
                   borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
-                  border: Border.all(
-                    color: context.colorScheme.outlineVariant.withValues(
-                      alpha: 0.7,
-                    ),
-                  ),
+                  border: Border.all(color: context.colorScheme.outlineVariant.withValues(alpha: 0.7)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(PauzaSpacing.small),
                   child: Row(
                     spacing: 4,
-                    children: List<Widget>.generate(destinations.length, (
-                      index,
-                    ) {
+                    children: List<Widget>.generate(destinations.length, (index) {
                       final destination = destinations[index];
                       final isSelected = selectedIndex == index;
 
@@ -65,16 +57,12 @@ class PauzaBottomNavigationBar extends StatelessWidget {
                             curve: Curves.easeOutCubic,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: isSelected
-                                  ? context.colorScheme.primary
-                                  : Colors.transparent,
+                              color: isSelected ? context.colorScheme.primary : Colors.transparent,
                             ),
                             child: Icon(
                               destination.icon,
                               size: 28,
-                              color: isSelected
-                                  ? context.colorScheme.onPrimary
-                                  : context.colorScheme.onSurfaceVariant,
+                              color: isSelected ? context.colorScheme.onPrimary : context.colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ),

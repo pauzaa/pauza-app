@@ -51,10 +51,7 @@ final class BottomSheetScaffold extends StatelessWidget {
             : constraints.maxHeight * maxHeightFactor;
 
         return ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: boundedMaxHeight,
-            minWidth: double.infinity,
-          ),
+          constraints: BoxConstraints(maxHeight: boundedMaxHeight, minWidth: double.infinity),
           child: SafeArea(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -67,32 +64,21 @@ final class BottomSheetScaffold extends StatelessWidget {
                         Expanded(
                           child: DefaultTextStyle(
                             style:
-                                textTheme.headlineSmall ??
-                                textTheme.titleLarge ??
-                                DefaultTextStyle.of(context).style,
+                                textTheme.headlineSmall ?? textTheme.titleLarge ?? DefaultTextStyle.of(context).style,
                             child: title,
                           ),
                         ),
                         if (onClose != null)
-                          IconButton(
-                            onPressed: onClose,
-                            icon: const Icon(Icons.close),
-                            tooltip: 'Close',
-                          ),
+                          IconButton(onPressed: onClose, icon: const Icon(Icons.close), tooltip: 'Close'),
                       ],
                     ),
                   ),
-                  if (showDivider)
-                    Divider(
-                      color: colorScheme.outlineVariant.withValues(alpha: 0.8),
-                      height: 1,
-                    ),
+                  if (showDivider) Divider(color: colorScheme.outlineVariant.withValues(alpha: 0.8), height: 1),
                 ],
                 Flexible(
                   child: Padding(padding: bodyPadding, child: body),
                 ),
-                if (footer != null)
-                  Padding(padding: footerPadding, child: footer),
+                if (footer != null) Padding(padding: footerPadding, child: footer),
               ],
             ),
           ),

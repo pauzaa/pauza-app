@@ -18,26 +18,11 @@ enum PauzaButtonSize {
   };
 
   EdgeInsetsGeometry get padding => switch (this) {
-    PauzaButtonSize.xxSmall => const EdgeInsets.symmetric(
-      horizontal: 12,
-      vertical: 10,
-    ),
-    PauzaButtonSize.xSmall => const EdgeInsets.symmetric(
-      horizontal: 24,
-      vertical: 10,
-    ),
-    PauzaButtonSize.small => const EdgeInsets.symmetric(
-      horizontal: 24,
-      vertical: 10,
-    ),
-    PauzaButtonSize.medium => const EdgeInsets.symmetric(
-      horizontal: 24,
-      vertical: 10,
-    ),
-    PauzaButtonSize.large => const EdgeInsets.symmetric(
-      horizontal: 32,
-      vertical: 10,
-    ),
+    PauzaButtonSize.xxSmall => const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+    PauzaButtonSize.xSmall => const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+    PauzaButtonSize.small => const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+    PauzaButtonSize.medium => const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+    PauzaButtonSize.large => const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
   };
 
   double get iconGap => switch (this) {
@@ -49,13 +34,11 @@ enum PauzaButtonSize {
   };
 
   TextStyle textStyle(BuildContext context) => switch (this) {
-    PauzaButtonSize.xxSmall =>
-      context.textTheme.labelSmall ?? const TextStyle(),
+    PauzaButtonSize.xxSmall => context.textTheme.labelSmall ?? const TextStyle(),
     PauzaButtonSize.xSmall => context.textTheme.labelLarge ?? const TextStyle(),
     PauzaButtonSize.small => context.textTheme.labelLarge ?? const TextStyle(),
     PauzaButtonSize.medium => context.textTheme.titleLarge ?? const TextStyle(),
-    PauzaButtonSize.large =>
-      context.textTheme.headlineSmall ?? const TextStyle(),
+    PauzaButtonSize.large => context.textTheme.headlineSmall ?? const TextStyle(),
   };
 }
 
@@ -109,8 +92,7 @@ abstract base class PauzaButtonBase extends StatelessWidget {
 
   WidgetStateProperty<Color?> overlayColorProperty(BuildContext context) {
     return WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-      if (states.contains(WidgetState.pressed) ||
-          states.contains(WidgetState.hovered)) {
+      if (states.contains(WidgetState.pressed) || states.contains(WidgetState.hovered)) {
         return context.colorScheme.primary.withValues(alpha: 0.12);
       }
       return Colors.transparent;
@@ -121,12 +103,7 @@ abstract base class PauzaButtonBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = _PauzaButtonContent(
-      title: title,
-      icon: icon,
-      iconAlignment: iconAlignment,
-      iconGap: size.iconGap,
-    );
+    final content = _PauzaButtonContent(title: title, icon: icon, iconAlignment: iconAlignment, iconGap: size.iconGap);
 
     final style =
         OutlinedButton.styleFrom(
@@ -137,10 +114,7 @@ abstract base class PauzaButtonBase extends StatelessWidget {
           animationDuration: Duration.zero,
           side: borderSideToApply(context),
           splashFactory: NoSplash.splashFactory,
-          shape: RoundedRectangleBorder(
-            side: borderSideToApply(context),
-            borderRadius: BorderRadius.circular(radius),
-          ),
+          shape: RoundedRectangleBorder(side: borderSideToApply(context), borderRadius: BorderRadius.circular(radius)),
           padding: padding ?? size.padding,
           iconSize: PauzaIconSizes.small,
         ).copyWith(

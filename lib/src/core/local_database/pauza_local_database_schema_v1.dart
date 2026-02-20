@@ -87,6 +87,44 @@ CREATE TABLE nfc_linked_chips (
   updated_at INTEGER NOT NULL
 );
 ''';
+
+  static const String createStreakSessionDailyRollupsTable = '''
+CREATE TABLE streak_session_daily_rollups (
+  session_id TEXT NOT NULL REFERENCES restriction_sessions(session_id) ON DELETE CASCADE,
+  local_day TEXT NOT NULL CHECK (length(local_day) = 10),
+  effective_ms INTEGER NOT NULL DEFAULT 0 CHECK (effective_ms >= 0),
+  updated_at INTEGER NOT NULL,
+  PRIMARY KEY (session_id, local_day)
+);
+''';
+
+  static const String createStreakDailyAggregatesTable = '''
+CREATE TABLE streak_daily_aggregates (
+  local_day TEXT PRIMARY KEY NOT NULL CHECK (length(local_day) = 10),
+  effective_ms INTEGER NOT NULL DEFAULT 0 CHECK (effective_ms >= 0),
+  qualified INTEGER NOT NULL CHECK (qualified IN (0, 1)),
+  source_session_count INTEGER NOT NULL DEFAULT 0 CHECK (source_session_count >= 0),
+  updated_at INTEGER NOT NULL
+);
+''';
+
+  static const String createStreakRollupStateTable = '''
+CREATE TABLE streak_rollup_state (
+  id INTEGER PRIMARY KEY NOT NULL CHECK (id = 1),
+  session_cursor_updated_at INTEGER NOT NULL DEFAULT 0,
+  session_cursor_id TEXT NOT NULL DEFAULT '',
+  last_refresh_at INTEGER NOT NULL DEFAULT 0
+);
+''';
+
+  static const String seedStreakRollupStateRow = '''
+INSERT OR IGNORE INTO streak_rollup_state (
+  id,
+  session_cursor_updated_at,
+  session_cursor_id,
+  last_refresh_at
+) VALUES (1, 0, '', 0);
+''';
 }
 
 final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
@@ -101,16 +139,45 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
     batch.execute(LocalDatabaseSqlStatements.createModesTable);
     batch.execute(LocalDatabaseSqlStatements.createModeBlockedAppsTable);
     batch.execute(LocalDatabaseSqlStatements.createSchedulesTable);
-    batch.execute(LocalDatabaseSqlStatements.createRestrictionLifecycleEventsTable);
+    batch.execute(
+      LocalDatabaseSqlStatements.createRestrictionLifecycleEventsTable,
+    );
     batch.execute(LocalDatabaseSqlStatements.createRestrictionSessionsTable);
     batch.execute(LocalDatabaseSqlStatements.createNfcLinkedChipsTable);
+    batch.execute(
+      LocalDatabaseSqlStatements.createStreakSessionDailyRollupsTable,
+    );
+    batch.execute(LocalDatabaseSqlStatements.createStreakDailyAggregatesTable);
+    batch.execute(LocalDatabaseSqlStatements.createStreakRollupStateTable);
+    batch.execute(LocalDatabaseSqlStatements.seedStreakRollupStateRow);
     await batch.commit(noResult: true);
   }
 
   @override
-  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {
+  Future<void> onUpgrade(
+    Database database,
+    int oldVersion,
+    int newVersion,
+  ) async {
     if (oldVersion < 2 && newVersion >= 2) {
-      await database.execute(LocalDatabaseSqlStatements.createNfcLinkedChipsTable);
+      await database.execute(
+        LocalDatabaseSqlStatements.createNfcLinkedChipsTable,
+      );
+    }
+
+    if (oldVersion < 3 && newVersion >= 3) {
+      await database.execute(
+        LocalDatabaseSqlStatements.createStreakSessionDailyRollupsTable,
+      );
+      await database.execute(
+        LocalDatabaseSqlStatements.createStreakDailyAggregatesTable,
+      );
+      await database.execute(
+        LocalDatabaseSqlStatements.createStreakRollupStateTable,
+      );
+      await database.execute(
+        LocalDatabaseSqlStatements.seedStreakRollupStateRow,
+      );
     }
   }
 }

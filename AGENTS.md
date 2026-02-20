@@ -125,6 +125,18 @@ test/
   ```
 - Use Dart 3 pattern clauses (e.g., `if case final ...`) when they improve clarity
 
+### Global feature implementation rules
+- Prefer existing domain enums over raw strings.
+- Prefer immutable collections (`IList`/`ISet`/`IMap`) over mutable `List`/`Set`/`Map` where practical.
+- Use extension types for semantic primitives to avoid raw `int`/`String` leakage.
+- Prefer `Duration` in domain models/constants for time quantities instead of raw millisecond/minute integers.
+- Keep parsing/formatting as local extensions or typed value methods, not free helpers.
+- Keep row mapping in factory constructors (`fromJson`) on DTO/model types; avoid inline map parsing in repositories.
+- If model and DTO are structurally identical, unify into a single type and remove duplicates.
+- Keep repository-private row/transport DTOs in dedicated `part` files when they are repository-internal.
+- Move transformation logic closer to owning DTO/model when it improves cohesion and reduces repository orchestration noise.
+- Reuse shared object extensions for common coercions instead of duplicating helpers.
+
 ### Enums & models
 - Prefer enhanced enums (Dart ≥2.17) when associating data or behavior with enum values
 - Domain models must be:

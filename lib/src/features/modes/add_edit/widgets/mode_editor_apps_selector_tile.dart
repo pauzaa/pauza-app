@@ -27,7 +27,9 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ModeEditorCard(
-          borderColor: hasError ? context.colorScheme.error.withValues(alpha: 0.8) : null,
+          borderColor: hasError
+              ? context.colorScheme.error.withValues(alpha: 0.8)
+              : null,
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
@@ -37,7 +39,9 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                 DecoratedBox(
                   decoration: BoxDecoration(
                     color: context.colorScheme.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(PauzaCornerRadius.medium),
+                    borderRadius: BorderRadius.circular(
+                      PauzaCornerRadius.medium,
+                    ),
                   ),
                   child: SizedBox(
                     width: PauzaFormSizes.xSmall,
@@ -50,8 +54,18 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: PauzaSpacing.small,
                     children: <Widget>[
-                      Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
-                      Text(subtitle, style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant)),
+                      Text(
+                        title,
+                        style: context.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          color: context.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -61,19 +75,34 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(PauzaCornerRadius.full),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.small),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: PauzaSpacing.medium,
+                      vertical: PauzaSpacing.small,
+                    ),
                     child: Text(
                       selectedCountLabel,
-                      style: context.textTheme.labelLarge?.copyWith(color: context.colorScheme.primary, fontWeight: FontWeight.w700),
+                      style: context.textTheme.labelLarge?.copyWith(
+                        color: context.colorScheme.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),
-                Icon(Icons.chevron_right, color: context.colorScheme.onSurfaceVariant),
+                Icon(
+                  Icons.chevron_right,
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
               ],
             ),
           ),
         ),
-        if (hasError) Text(errorText!, style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.error)),
+        if (hasError)
+          Text(
+            errorText!,
+            style: context.textTheme.bodySmall?.copyWith(
+              color: context.colorScheme.error,
+            ),
+          ),
       ],
     );
   }

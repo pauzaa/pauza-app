@@ -16,9 +16,18 @@ void main() {
       final result = notifier.validateForSubmit();
 
       expect(result.isValid, isFalse);
-      expect(result[ModeUpsertValidationField.title], ModeUpsertValidationCode.required);
-      expect(result[ModeUpsertValidationField.textOnScreen], ModeUpsertValidationCode.required);
-      expect(result[ModeUpsertValidationField.blockedApps], ModeUpsertValidationCode.blockedAppsRequired);
+      expect(
+        result[ModeUpsertValidationField.title],
+        ModeUpsertValidationCode.required,
+      );
+      expect(
+        result[ModeUpsertValidationField.textOnScreen],
+        ModeUpsertValidationCode.required,
+      );
+      expect(
+        result[ModeUpsertValidationField.blockedApps],
+        ModeUpsertValidationCode.blockedAppsRequired,
+      );
     });
 
     test('schedule enabled requires selected days', () {
@@ -31,12 +40,18 @@ void main() {
       final result = notifier.validateForSubmit();
 
       expect(result.isValid, isFalse);
-      expect(result[ModeUpsertValidationField.scheduleDays], ModeUpsertValidationCode.scheduleDaysRequired);
+      expect(
+        result[ModeUpsertValidationField.scheduleDays],
+        ModeUpsertValidationCode.scheduleDaysRequired,
+      );
     });
 
     test('create mode stores null schedule when disabled', () {
       final notifier = ModeUpsertDraftNotifier()
-        ..configureForMode(initialDraft: const ModeUpsertDTO.initial(), isEditMode: false)
+        ..configureForMode(
+          initialDraft: const ModeUpsertDTO.initial(),
+          isEditMode: false,
+        )
         ..toggleScheduleEnabled(true)
         ..toggleScheduleDay(WeekDay.mon)
         ..toggleScheduleEnabled(false);
@@ -46,33 +61,38 @@ void main() {
       expect(request.schedule, isNull);
     });
 
-    test('edit mode keeps schedule object disabled when it existed initially', () {
-      final notifier = ModeUpsertDraftNotifier()
-        ..configureForMode(
-          isEditMode: true,
-          initialDraft: ModeUpsertDTO(
-            title: 'Focus',
-            textOnScreen: 'Focus',
-            description: null,
-            allowedPausesCount: 2,
-            icon: ModeIconCatalog.defaultIcon,
-            blockedAppIds: ISet<AppIdentifier>(const <AppIdentifier>[AppIdentifier('app.one')]),
-            schedule: Schedule(
-              days: ISet<WeekDay>(const [WeekDay.mon]),
-              start: const TimeOfDay(hour: 9, minute: 0),
-              end: const TimeOfDay(hour: 17, minute: 0),
-              enabled: true,
+    test(
+      'edit mode keeps schedule object disabled when it existed initially',
+      () {
+        final notifier = ModeUpsertDraftNotifier()
+          ..configureForMode(
+            isEditMode: true,
+            initialDraft: ModeUpsertDTO(
+              title: 'Focus',
+              textOnScreen: 'Focus',
+              description: null,
+              allowedPausesCount: 2,
+              icon: ModeIconCatalog.defaultIcon,
+              blockedAppIds: ISet<AppIdentifier>(const <AppIdentifier>[
+                AppIdentifier('app.one'),
+              ]),
+              schedule: Schedule(
+                days: ISet<WeekDay>(const [WeekDay.mon]),
+                start: const TimeOfDay(hour: 9, minute: 0),
+                end: const TimeOfDay(hour: 17, minute: 0),
+                enabled: true,
+              ),
             ),
-          ),
-        )
-        ..toggleScheduleEnabled(false);
+          )
+          ..toggleScheduleEnabled(false);
 
-      final request = notifier.buildSubmitRequest();
+        final request = notifier.buildSubmitRequest();
 
-      expect(request.schedule, isNotNull);
-      expect(request.schedule?.enabled, isFalse);
-      expect(request.schedule?.days, isNotEmpty);
-    });
+        expect(request.schedule, isNotNull);
+        expect(request.schedule?.enabled, isFalse);
+        expect(request.schedule?.days, isNotEmpty);
+      },
+    );
 
     test('allowed pauses are clamped to 0..5', () {
       final notifier = ModeUpsertDraftNotifier();

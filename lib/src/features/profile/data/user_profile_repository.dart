@@ -40,7 +40,8 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   final UserProfileCacheStorage _cacheStorage;
   final UserProfileRemoteDataSource _remoteDataSource;
   final DateTime Function() _nowUtc;
-  final StreamController<UserDto> _profileChangesController = StreamController<UserDto>.broadcast();
+  final StreamController<UserDto> _profileChangesController =
+      StreamController<UserDto>.broadcast();
 
   @override
   Future<CachedUserProfile?> readCachedProfile() {
@@ -116,7 +117,9 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   }
 
   Future<void> _writeCacheAndNotify(UserDto user) async {
-    await _cacheStorage.write(CachedUserProfile(user: user, cachedAtUtc: _nowUtc()));
+    await _cacheStorage.write(
+      CachedUserProfile(user: user, cachedAtUtc: _nowUtc()),
+    );
     if (!_profileChangesController.isClosed) {
       _profileChangesController.add(user);
     }

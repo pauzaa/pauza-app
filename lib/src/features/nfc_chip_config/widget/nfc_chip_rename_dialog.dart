@@ -7,7 +7,10 @@ class NfcChipRenameDialog extends StatefulWidget {
 
   final String initialName;
 
-  static Future<String?> show(BuildContext context, {required String initialName}) {
+  static Future<String?> show(
+    BuildContext context, {
+    required String initialName,
+  }) {
     return showDialog<String>(
       context: context,
       builder: (context) => NfcChipRenameDialog(initialName: initialName),
@@ -48,12 +51,18 @@ class _NfcChipRenameDialogState extends State<NfcChipRenameDialog> {
         onFieldSubmitted: (_) => _onSavePressed(),
       ),
       actions: [
-        TextButton(onPressed: Navigator.of(context).pop, child: Text(context.l10n.cancelButton)),
+        TextButton(
+          onPressed: Navigator.of(context).pop,
+          child: Text(context.l10n.cancelButton),
+        ),
         ListenableBuilder(
           listenable: _controller,
           builder: (context, _) {
             final canSave = _controller.text.trim().isNotEmpty;
-            return FilledButton(onPressed: canSave ? _onSavePressed : null, child: Text(context.l10n.nfcChipConfigRenameSaveButton));
+            return FilledButton(
+              onPressed: canSave ? _onSavePressed : null,
+              child: Text(context.l10n.nfcChipConfigRenameSaveButton),
+            );
           },
         ),
       ],

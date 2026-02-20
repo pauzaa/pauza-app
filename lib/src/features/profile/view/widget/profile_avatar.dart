@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class ProfileAvatar extends StatelessWidget {
-  const ProfileAvatar({required this.profilePictureUrl, required this.displayName, required this.username, super.key});
+  const ProfileAvatar({
+    required this.profilePictureUrl,
+    required this.displayName,
+    required this.username,
+    super.key,
+  });
 
   final String? profilePictureUrl;
   final String displayName;
@@ -17,13 +22,18 @@ class ProfileAvatar extends StatelessWidget {
         Text(
           displayName,
           textAlign: TextAlign.center,
-          style: context.textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.w700),
+          style: context.textTheme.headlineLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
         ),
         const SizedBox(height: PauzaSpacing.small),
         Text(
           '@$username',
           textAlign: TextAlign.center,
-          style: context.textTheme.titleLarge?.copyWith(color: context.colorScheme.primary, fontWeight: FontWeight.w600),
+          style: context.textTheme.titleLarge?.copyWith(
+            color: context.colorScheme.primary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ],
     );

@@ -8,11 +8,19 @@ sealed class NfcChipConfState extends Equatable {
   bool get isSuccess => this is NfcChipConfSuccess;
   bool get isError => this is NfcChipConfError;
 
-  NfcChipConfState loading({IList<NfcLinkedChip>? newLinkedChips}) => NfcChipConfLoading(linkedChips: newLinkedChips ?? linkedChips);
-  NfcChipConfState success({IList<NfcLinkedChip>? newLinkedChips}) => NfcChipConfSuccess(linkedChips: newLinkedChips ?? linkedChips);
-  NfcChipConfState setError(Object error, {IList<NfcLinkedChip>? newLinkedChips}) =>
-      NfcChipConfError(error: error, linkedChips: newLinkedChips ?? linkedChips);
-  NfcChipConfState idle(IList<NfcLinkedChip> newLinedList) => NfcChipConfIdle(linkedChips: newLinedList);
+  NfcChipConfState loading({IList<NfcLinkedChip>? newLinkedChips}) =>
+      NfcChipConfLoading(linkedChips: newLinkedChips ?? linkedChips);
+  NfcChipConfState success({IList<NfcLinkedChip>? newLinkedChips}) =>
+      NfcChipConfSuccess(linkedChips: newLinkedChips ?? linkedChips);
+  NfcChipConfState setError(
+    Object error, {
+    IList<NfcLinkedChip>? newLinkedChips,
+  }) => NfcChipConfError(
+    error: error,
+    linkedChips: newLinkedChips ?? linkedChips,
+  );
+  NfcChipConfState idle(IList<NfcLinkedChip> newLinedList) =>
+      NfcChipConfIdle(linkedChips: newLinedList);
 }
 
 final class NfcChipConfIdle extends NfcChipConfState {

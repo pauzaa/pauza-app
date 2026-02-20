@@ -13,7 +13,10 @@ abstract interface class LocalDatabase {
 
   Future<T> transaction<T>(Future<T> Function(Transaction transaction) action);
 
-  Future<List<Map<String, Object?>>> rawQuery(String sql, [List<Object?>? arguments]);
+  Future<List<Map<String, Object?>>> rawQuery(
+    String sql, [
+    List<Object?>? arguments,
+  ]);
 
   Future<int> rawInsert(String sql, [List<Object?>? arguments]);
 

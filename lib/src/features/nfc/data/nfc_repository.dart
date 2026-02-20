@@ -16,13 +16,17 @@ abstract interface class NfcRepository {
 
   Future<bool> openSystemSettingsForNfc();
 
-  Future<NfcCardDto> scanSingleCard({Duration timeout = const Duration(seconds: 20)});
+  Future<NfcCardDto> scanSingleCard({
+    Duration timeout = const Duration(seconds: 20),
+  });
 
   Future<void> stopSession({String? alertMessage, String? errorMessage});
 }
 
 final class NfcRepositoryImpl implements NfcRepository {
-  NfcRepositoryImpl({required NfcOperations managerClient, Uuid? uuid}) : _managerClient = managerClient, _uuid = uuid ?? const Uuid();
+  NfcRepositoryImpl({required NfcOperations managerClient, Uuid? uuid})
+    : _managerClient = managerClient,
+      _uuid = uuid ?? const Uuid();
 
   final NfcOperations _managerClient;
   final Uuid _uuid;
@@ -31,7 +35,8 @@ final class NfcRepositoryImpl implements NfcRepository {
   bool get isScanInProgress => _managerClient.isSessionActive;
 
   @override
-  bool get canOpenSystemSettingsForNfc => _managerClient.canOpenSystemSettingsForNfc;
+  bool get canOpenSystemSettingsForNfc =>
+      _managerClient.canOpenSystemSettingsForNfc;
 
   @override
   Future<NfcChipAvailability> getAvailability() async {
@@ -40,7 +45,8 @@ final class NfcRepositoryImpl implements NfcRepository {
       return switch (availability) {
         NfcPlatformAvailability.available => NfcChipAvailability.available,
         NfcPlatformAvailability.disabled => NfcChipAvailability.disabled,
-        NfcPlatformAvailability.notSupported => NfcChipAvailability.notSupported,
+        NfcPlatformAvailability.notSupported =>
+          NfcChipAvailability.notSupported,
         NfcPlatformAvailability.unknown => throw const NfcException(
           code: NfcErrorCode.unknown,
           message: 'Could not determine NFC availability.',
@@ -57,7 +63,9 @@ final class NfcRepositoryImpl implements NfcRepository {
   }
 
   @override
-  Future<NfcCardDto> scanSingleCard({Duration timeout = const Duration(seconds: 20)}) async {
+  Future<NfcCardDto> scanSingleCard({
+    Duration timeout = const Duration(seconds: 20),
+  }) async {
     final availability = await getAvailability();
 
     if (availability == NfcChipAvailability.notSupported) {
@@ -69,7 +77,11 @@ final class NfcRepositoryImpl implements NfcRepository {
     }
 
     if (availability == NfcChipAvailability.disabled) {
-      throw NfcException(code: NfcErrorCode.disabled, nfcAvailability: availability, message: 'NFC is disabled on this device.');
+      throw NfcException(
+        code: NfcErrorCode.disabled,
+        nfcAvailability: availability,
+        message: 'NFC is disabled on this device.',
+      );
     }
 
     try {
@@ -85,7 +97,10 @@ final class NfcRepositoryImpl implements NfcRepository {
         rawSnapshot: snapshot.rawSnapshot,
       );
     } on TimeoutException {
-      throw const NfcException(code: NfcErrorCode.timeout, message: 'NFC scan timed out before a tag was discovered.');
+      throw const NfcException(
+        code: NfcErrorCode.timeout,
+        message: 'NFC scan timed out before a tag was discovered.',
+      );
     } on Object catch (error) {
       throw NfcException.fromError(error);
     }
@@ -93,6 +108,9 @@ final class NfcRepositoryImpl implements NfcRepository {
 
   @override
   Future<void> stopSession({String? alertMessage, String? errorMessage}) async {
-    await _managerClient.stopSession(alertMessage: alertMessage, errorMessage: errorMessage);
+    await _managerClient.stopSession(
+      alertMessage: alertMessage,
+      errorMessage: errorMessage,
+    );
   }
 }

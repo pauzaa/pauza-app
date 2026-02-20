@@ -7,7 +7,12 @@ extension $PauzaConfigX on BuildContext {
 }
 
 class PauzaConfig extends JsonAssetConfig {
-  PauzaConfig({required super.path, required super.name, required super.color, super.showBanner});
+  PauzaConfig({
+    required super.path,
+    required super.name,
+    required super.color,
+    super.showBanner,
+  });
 
   bool get isProd {
     if (name.toLowerCase() == 'production') return true;
@@ -20,9 +25,21 @@ class PauzaConfig extends JsonAssetConfig {
 }
 
 class ProdConfig extends PauzaConfig {
-  ProdConfig() : super(name: 'production', path: Assets.config.prod, color: Colors.green, showBanner: true);
+  ProdConfig()
+    : super(
+        name: 'production',
+        path: Assets.config.prod,
+        color: Colors.green,
+        showBanner: true,
+      );
 }
 
 class TestConfig extends PauzaConfig {
-  TestConfig() : super(name: 'testing', path: Assets.config.test, color: Colors.red, showBanner: false);
+  TestConfig()
+    : super(
+        name: 'testing',
+        path: Assets.config.test,
+        color: Colors.red,
+        showBanner: false,
+      );
 }

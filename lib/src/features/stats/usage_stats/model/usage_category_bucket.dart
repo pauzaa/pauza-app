@@ -19,7 +19,9 @@ enum UsageCategoryBucket {
     }
     final normalized = category.toLowerCase();
 
-    if (normalized.contains('social') || normalized.contains('communication') || normalized.contains('messaging')) {
+    if (normalized.contains('social') ||
+        normalized.contains('communication') ||
+        normalized.contains('messaging')) {
       return UsageCategoryBucket.social;
     }
 

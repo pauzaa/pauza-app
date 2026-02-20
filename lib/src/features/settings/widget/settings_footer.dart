@@ -23,11 +23,17 @@ final class SettingsFooter extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: PauzaSpacing.regular,
       children: <Widget>[
-        PauzaFilledButton(title: Text(signOutLabel), onPressed: onSignOutTap, icon: const Icon(Icons.logout_rounded)),
+        PauzaFilledButton(
+          title: Text(signOutLabel),
+          onPressed: onSignOutTap,
+          icon: const Icon(Icons.logout_rounded),
+        ),
         Text(
           versionLabel(packageInfo.version),
           textAlign: TextAlign.center,
-          style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onSurfaceVariant),
+          style: context.textTheme.bodyLarge?.copyWith(
+            color: context.colorScheme.onSurfaceVariant,
+          ),
         ),
       ],
     );

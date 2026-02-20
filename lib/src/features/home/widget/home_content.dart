@@ -27,9 +27,15 @@ class HomeContent extends StatelessWidget {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           shrinkWrap: true,
-          padding: const EdgeInsets.symmetric(vertical: PauzaSpacing.large, horizontal: PauzaSpacing.large),
+          padding: const EdgeInsets.symmetric(
+            vertical: PauzaSpacing.large,
+            horizontal: PauzaSpacing.large,
+          ),
           children: <Widget>[
-            PauzaDashboardAppBar(greeting: l10n.homeGreeting(DateTime.now().hour.toString()), title: l10n.homeDashboardTitle),
+            PauzaDashboardAppBar(
+              greeting: l10n.homeGreeting(DateTime.now().hour.toString()),
+              title: l10n.homeDashboardTitle,
+            ),
 
             Padding(
               padding: const EdgeInsets.only(top: PauzaSpacing.xLarge),
@@ -57,7 +63,10 @@ class HomeDefaultWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const metrics = HomeDashboardMetrics(streakDays: 5, focusedDuration: Duration(hours: 2, minutes: 15));
+    const metrics = HomeDashboardMetrics(
+      streakDays: 5,
+      focusedDuration: Duration(hours: 2, minutes: 15),
+    );
     return Column(
       children: [
         const Center(child: HomeStatsPill(metrics: metrics)),
@@ -70,7 +79,11 @@ class HomeDefaultWidget extends StatelessWidget {
               builder: (context, isBusy) {
                 return HomeSessionButton(
                   isBusy: isBusy,
-                  onTap: () => _onStartPressed(context: context, mode: effectiveMode, isBlocking: false),
+                  onTap: () => _onStartPressed(
+                    context: context,
+                    mode: effectiveMode,
+                    isBlocking: false,
+                  ),
                 );
               },
             );
@@ -83,7 +96,11 @@ class HomeDefaultWidget extends StatelessWidget {
               builder: (context, state) {
                 return HomeCurrentModeCard(
                   modesState.selectedMode,
-                  onTap: () => _onCurrentModePressed(context, modesState.items, modesState.selectedMode),
+                  onTap: () => _onCurrentModePressed(
+                    context,
+                    modesState.items,
+                    modesState.selectedMode,
+                  ),
                 );
               },
             );
@@ -93,16 +110,30 @@ class HomeDefaultWidget extends StatelessWidget {
     );
   }
 
-  Future<void> _onCurrentModePressed(BuildContext context, List<Mode> modes, Mode? selectedMode) async {
-    final pickedMode = await ModePickerSheet.show(context, modes: modes, activeModeId: selectedMode?.id);
+  Future<void> _onCurrentModePressed(
+    BuildContext context,
+    List<Mode> modes,
+    Mode? selectedMode,
+  ) async {
+    final pickedMode = await ModePickerSheet.show(
+      context,
+      modes: modes,
+      activeModeId: selectedMode?.id,
+    );
     if (pickedMode == null || !context.mounted) {
       return;
     }
 
-    context.read<ModesListBloc>().add(ModesSelectionRequested(modeId: pickedMode.id));
+    context.read<ModesListBloc>().add(
+      ModesSelectionRequested(modeId: pickedMode.id),
+    );
   }
 
-  void _onStartPressed({required BuildContext context, required Mode? mode, required bool isBlocking}) {
+  void _onStartPressed({
+    required BuildContext context,
+    required Mode? mode,
+    required bool isBlocking,
+  }) {
     if (isBlocking) {
       context.showToast(context.l10n.alreadyBlocking);
       return;
@@ -129,15 +160,26 @@ class HomePauseSession extends StatelessWidget {
         Text(
           l10n.pausedTitle.toUpperCase(),
           textAlign: TextAlign.center,
-          style: context.textTheme.titleLarge?.copyWith(letterSpacing: 4, color: context.colorScheme.primary, fontWeight: FontWeight.w600),
+          style: context.textTheme.titleLarge?.copyWith(
+            letterSpacing: 4,
+            color: context.colorScheme.primary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         Text(
           l10n.pausedTakeABreathLabel.toUpperCase(),
           textAlign: TextAlign.center,
           style: context.textTheme.bodyMedium?.copyWith(letterSpacing: 2),
         ),
-        BlocSelector<BlockingBloc, BlockingState, ({Duration? pauseTotalDuration, DateTime? pauseStartedAt})>(
-          selector: (state) => (pauseTotalDuration: state.pauseTotalDuration, pauseStartedAt: state.pauseStartedAt),
+        BlocSelector<
+          BlockingBloc,
+          BlockingState,
+          ({Duration? pauseTotalDuration, DateTime? pauseStartedAt})
+        >(
+          selector: (state) => (
+            pauseTotalDuration: state.pauseTotalDuration,
+            pauseStartedAt: state.pauseStartedAt,
+          ),
           builder: (context, state) {
             return HomePauseRing(
               total: state.pauseTotalDuration ?? Duration.zero,
@@ -152,7 +194,9 @@ class HomePauseSession extends StatelessWidget {
             return PauzaFilledButton(
               disabled: isBusy,
               onPressed: () {
-                context.read<BlockingBloc>().add(const BlockingResumeRequested());
+                context.read<BlockingBloc>().add(
+                  const BlockingResumeRequested(),
+                );
               },
               title: Text(l10n.homeResumeButtonLabel.toUpperCase()),
             );
@@ -175,19 +219,29 @@ class HomeActiveSession extends StatelessWidget {
         Text(
           l10n.homeSessionDurationLabel.toUpperCase(),
           textAlign: TextAlign.center,
-          style: context.textTheme.titleLarge?.copyWith(letterSpacing: 4, color: context.colorScheme.primary, fontWeight: FontWeight.w600),
+          style: context.textTheme.titleLarge?.copyWith(
+            letterSpacing: 4,
+            color: context.colorScheme.primary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
 
         BlocSelector<BlockingBloc, BlockingState, DateTime?>(
           selector: (state) => state.sessionStartedAt,
           builder: (context, sessionStartedAt) {
             return StreamBuilder<DateTime>(
-              stream: Stream<DateTime>.periodic(const Duration(seconds: 1), (_) => DateTime.now()),
+              stream: Stream<DateTime>.periodic(
+                const Duration(seconds: 1),
+                (_) => DateTime.now(),
+              ),
               initialData: DateTime.now(),
               builder: (context, snapshot) {
                 final now = snapshot.data ?? DateTime.now();
                 final duration = switch (sessionStartedAt) {
-                  final startedAt? => now.isAfter(startedAt) ? now.difference(startedAt) : Duration.zero,
+                  final startedAt? =>
+                    now.isAfter(startedAt)
+                        ? now.difference(startedAt)
+                        : Duration.zero,
                   null => Duration.zero,
                 };
 
@@ -220,7 +274,10 @@ class HomeActiveSession extends StatelessWidget {
         Text(
           l10n.homeQuickPauseLabel.toUpperCase(),
           textAlign: TextAlign.center,
-          style: context.textTheme.titleMedium?.copyWith(color: context.colorScheme.onSurfaceVariant, letterSpacing: 3),
+          style: context.textTheme.titleMedium?.copyWith(
+            color: context.colorScheme.onSurfaceVariant,
+            letterSpacing: 3,
+          ),
         ),
         BlocSelector<BlockingBloc, BlockingState, bool>(
           selector: (state) => state.isLoading,
@@ -233,7 +290,9 @@ class HomeActiveSession extends StatelessWidget {
                     minutes: 1,
                     isBusy: isBusy,
                     onTap: () {
-                      context.read<BlockingBloc>().add(const BlockingQuickPauseRequested(Duration(minutes: 1)));
+                      context.read<BlockingBloc>().add(
+                        const BlockingQuickPauseRequested(Duration(minutes: 1)),
+                      );
                     },
                   ),
                 ),
@@ -242,7 +301,9 @@ class HomeActiveSession extends StatelessWidget {
                     minutes: 5,
                     isBusy: isBusy,
                     onTap: () {
-                      context.read<BlockingBloc>().add(const BlockingQuickPauseRequested(Duration(minutes: 5)));
+                      context.read<BlockingBloc>().add(
+                        const BlockingQuickPauseRequested(Duration(minutes: 5)),
+                      );
                     },
                   ),
                 ),
@@ -251,7 +312,11 @@ class HomeActiveSession extends StatelessWidget {
                     minutes: 10,
                     isBusy: isBusy,
                     onTap: () {
-                      context.read<BlockingBloc>().add(const BlockingQuickPauseRequested(Duration(minutes: 10)));
+                      context.read<BlockingBloc>().add(
+                        const BlockingQuickPauseRequested(
+                          Duration(minutes: 10),
+                        ),
+                      );
                     },
                   ),
                 ),

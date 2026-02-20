@@ -72,7 +72,10 @@ enum PauzaRoutes with Routable {
   };
 
   @override
-  Widget builder(Map<String, String> pathParams, Map<String, String> queryParams) => switch (this) {
+  Widget builder(
+    Map<String, String> pathParams,
+    Map<String, String> queryParams,
+  ) => switch (this) {
     PauzaRoutes.root => const DashboardTabsShell(),
     PauzaRoutes.home => const HomeScreen(),
     PauzaRoutes.stats => const StatsScreen(),
@@ -80,7 +83,9 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.profile => const ProfileScreen(),
     PauzaRoutes.profileEdit => const ProfileEditScreen(),
     PauzaRoutes.modeCreate => ModeEditorScreen.create(),
-    PauzaRoutes.modeEdit => ModeEditorScreen.edit(modeId: pathParams['midEdit'] ?? ''),
+    PauzaRoutes.modeEdit => ModeEditorScreen.edit(
+      modeId: pathParams['midEdit'] ?? '',
+    ),
     PauzaRoutes.permissions => const PermissionsScreen(),
     PauzaRoutes.auth => const AuthScreen(),
     PauzaRoutes.otp => const OtpScreen(),

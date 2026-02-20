@@ -25,7 +25,10 @@ class NfcChipConfBloc extends Bloc<NfcChipConfEvent, NfcChipConfState> {
 
   final NfcLinkedChipsRepository _linkedChipsRepository;
 
-  Future<void> _onLoadCardsRequested(NfcChipLoadCardsRequested event, Emitter<NfcChipConfState> emit) async {
+  Future<void> _onLoadCardsRequested(
+    NfcChipLoadCardsRequested event,
+    Emitter<NfcChipConfState> emit,
+  ) async {
     try {
       emit(state.loading());
       await _onLoadCards(emit);
@@ -43,7 +46,10 @@ class NfcChipConfBloc extends Bloc<NfcChipConfEvent, NfcChipConfState> {
     }
   }
 
-  Future<void> _onDeleteCardRequested(NfcChipDeleteCardRequested event, Emitter<NfcChipConfState> emit) async {
+  Future<void> _onDeleteCardRequested(
+    NfcChipDeleteCardRequested event,
+    Emitter<NfcChipConfState> emit,
+  ) async {
     try {
       emit(state.loading());
       await _linkedChipsRepository.deleteChip(id: event.cardId);
@@ -53,7 +59,10 @@ class NfcChipConfBloc extends Bloc<NfcChipConfEvent, NfcChipConfState> {
     }
   }
 
-  Future<void> _onLinkCardRequested(NfcChipLinkCardRequested event, Emitter<NfcChipConfState> emit) async {
+  Future<void> _onLinkCardRequested(
+    NfcChipLinkCardRequested event,
+    Emitter<NfcChipConfState> emit,
+  ) async {
     try {
       emit(state.loading());
       final uidHex = event.card.uidHex;
@@ -67,10 +76,16 @@ class NfcChipConfBloc extends Bloc<NfcChipConfEvent, NfcChipConfState> {
     }
   }
 
-  Future<void> _onRenameCardRequested(NfcChipRenameCardRequested event, Emitter<NfcChipConfState> emit) async {
+  Future<void> _onRenameCardRequested(
+    NfcChipRenameCardRequested event,
+    Emitter<NfcChipConfState> emit,
+  ) async {
     try {
       emit(state.loading());
-      await _linkedChipsRepository.renameChip(id: event.cardId, name: event.newName);
+      await _linkedChipsRepository.renameChip(
+        id: event.cardId,
+        name: event.newName,
+      );
       await _onLoadCards(emit);
     } on Object catch (error) {
       emit(state.setError(error));

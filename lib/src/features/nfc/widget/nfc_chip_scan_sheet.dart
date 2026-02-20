@@ -11,7 +11,9 @@ class NfcChipScanSheet extends StatelessWidget {
   const NfcChipScanSheet({super.key});
 
   static Future<NfcCardDto?> show(BuildContext context) async {
-    final availability = await PauzaDependencies.of(context).nfcRepository.getAvailability();
+    final availability = await PauzaDependencies.of(
+      context,
+    ).nfcRepository.getAvailability();
     if (!context.mounted) {
       return null;
     }
@@ -20,15 +22,26 @@ class NfcChipScanSheet extends StatelessWidget {
         context,
         title: availability.localizedTitle(context.l10n),
         body: availability.localizedBody(context.l10n),
-        primaryActionLabel: availability.localizedActionLabel(context.l10n, canOpenSettings: true) ?? context.l10n.okButton,
+        primaryActionLabel:
+            availability.localizedActionLabel(
+              context.l10n,
+              canOpenSettings: true,
+            ) ??
+            context.l10n.okButton,
         onPrimaryActionPressed: () {
-          if (availability.shouldShowOpenSettings(canOpenSettings: kPauzaPlatform == PauzaPlatform.android)) {
-            PauzaDependencies.of(context).nfcRepository.openSystemSettingsForNfc();
+          if (availability.shouldShowOpenSettings(
+            canOpenSettings: kPauzaPlatform == PauzaPlatform.android,
+          )) {
+            PauzaDependencies.of(
+              context,
+            ).nfcRepository.openSystemSettingsForNfc();
           } else {
             Navigator.of(context).pop();
           }
         },
-        secondaryActionLabel: availability == NfcChipAvailability.disabled ? context.l10n.cancelButton : null,
+        secondaryActionLabel: availability == NfcChipAvailability.disabled
+            ? context.l10n.cancelButton
+            : null,
       );
       return null;
     }

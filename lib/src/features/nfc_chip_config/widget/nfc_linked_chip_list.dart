@@ -28,7 +28,8 @@ class NfcLinkedChipList extends StatelessWidget {
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
       itemCount: linkedChips.length,
-      separatorBuilder: (context, index) => const SizedBox(height: PauzaSpacing.medium),
+      separatorBuilder: (context, index) =>
+          const SizedBox(height: PauzaSpacing.medium),
       itemBuilder: (context, index) {
         final chip = linkedChips[index];
         return NfcLinkedChipTile(
@@ -58,11 +59,20 @@ class _NfcLinkedChipsEmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: PauzaSpacing.small,
           children: [
-            Text(context.l10n.nfcChipConfigNoTagsTitle, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
             Text(
-              isLoading ? context.l10n.loadingLabel : context.l10n.nfcChipConfigNoTagsBody,
+              context.l10n.nfcChipConfigNoTagsTitle,
+              style: context.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Text(
+              isLoading
+                  ? context.l10n.loadingLabel
+                  : context.l10n.nfcChipConfigNoTagsBody,
               textAlign: TextAlign.center,
-              style: context.textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
+              style: context.textTheme.bodyLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),

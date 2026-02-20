@@ -25,5 +25,10 @@ final class ProfileEditSaveRequested extends ProfileEditEvent {
   final Uint8List? profilePictureBytes;
 
   @override
-  List<Object?> get props => <Object?>[name, username, profilePictureUrl, profilePictureBytes];
+  List<Object?> get props => <Object?>[
+    name,
+    username,
+    profilePictureUrl,
+    profilePictureBytes,
+  ];
 }

@@ -27,10 +27,15 @@ class NfcLinkedChipTile extends StatelessWidget {
       color: colorScheme.surfaceContainerLowest.withValues(alpha: 0.45),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
-        side: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.75)),
+        side: BorderSide(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.75),
+        ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.regular),
+        padding: const EdgeInsets.symmetric(
+          horizontal: PauzaSpacing.medium,
+          vertical: PauzaSpacing.regular,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: PauzaSpacing.small,
@@ -44,16 +49,26 @@ class NfcLinkedChipTile extends StatelessWidget {
                     chip.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+                    style: context.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   Text(
-                    context.l10n.nfcChipConfigLinkedOnDate(chip.createdAt.formatLinkedDate(context)),
-                    style: context.textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
+                    context.l10n.nfcChipConfigLinkedOnDate(
+                      chip.createdAt.formatLinkedDate(context),
+                    ),
+                    style: context.textTheme.bodyLarge?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
             ),
-            NfcLinkedChipMenu(enabled: enabled, onRenamePressed: onRenamePressed, onDeletePressed: onDeletePressed),
+            NfcLinkedChipMenu(
+              enabled: enabled,
+              onRenamePressed: onRenamePressed,
+              onDeletePressed: onDeletePressed,
+            ),
           ],
         ),
       ),

@@ -25,7 +25,11 @@ class StatsUsageTabContent extends StatelessWidget {
     return Column(
       spacing: PauzaSpacing.large,
       children: <Widget>[
-        BlocSelector<StatsBloc, StatsState, ({DateTimeRange dateTimeRange, DateTime maxDate})>(
+        BlocSelector<
+          StatsBloc,
+          StatsState,
+          ({DateTimeRange dateTimeRange, DateTime maxDate})
+        >(
           selector: (state) {
             return (dateTimeRange: state.window, maxDate: state.maxDate);
           },
@@ -34,7 +38,8 @@ class StatsUsageTabContent extends StatelessWidget {
               selectedRange: state.dateTimeRange,
               minDate: DateTime(2020),
               maxDate: state.maxDate,
-              rangeTextBuilder: (range) => '${DateFormat('MMM d').format(range.start)} - ${DateFormat('MMM d').format(range.end)}',
+              rangeTextBuilder: (range) =>
+                  '${DateFormat('MMM d').format(range.start)} - ${DateFormat('MMM d').format(range.end)}',
               onRangeChanged: (range) {
                 context.read<StatsBloc>().add(StatsDateRangePicked(range));
               },
@@ -62,7 +67,9 @@ class StatsUsageTabContent extends StatelessWidget {
                     message: l10n.statsLoadFailed,
                     actionLabel: l10n.retryButton,
                     onActionPressed: () {
-                      context.read<StatsBloc>().add(const StatsRefreshRequested());
+                      context.read<StatsBloc>().add(
+                        const StatsRefreshRequested(),
+                      );
                     },
                   );
                 }
@@ -82,7 +89,10 @@ class StatsUsageTabContent extends StatelessWidget {
                   ],
                 );
               } else {
-                return StatsInlineFallbackCard(title: l10n.emptyStateMessage, message: l10n.statsNoUsageData);
+                return StatsInlineFallbackCard(
+                  title: l10n.emptyStateMessage,
+                  message: l10n.statsNoUsageData,
+                );
               }
             },
           ),

@@ -110,7 +110,10 @@ class _FakeModesRepository implements ModesRepository {
   Future<List<Mode>> getModes() async => <Mode>[];
 
   @override
-  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {}
+  Future<void> updateMode({
+    required String modeId,
+    required ModeUpsertDTO request,
+  }) async {}
 
   @override
   Stream<void> watchModes() => const Stream.empty();

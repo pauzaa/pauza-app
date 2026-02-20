@@ -16,8 +16,14 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       expect(bloc.state.hasError, isFalse);
-      expect(bloc.state.availableCategoryKeys, containsAll(<String>['Social', 'Video']));
-      expect(bloc.state.visibleGroupedApps.keys, containsAll(<String>['Social', 'Video']));
+      expect(
+        bloc.state.availableCategoryKeys,
+        containsAll(<String>['Social', 'Video']),
+      );
+      expect(
+        bloc.state.visibleGroupedApps.keys,
+        containsAll(<String>['Social', 'Video']),
+      );
 
       await bloc.close();
     });
@@ -64,7 +70,9 @@ void main() {
 
     test('failure path sets error state', () async {
       final bloc = InstalledAppsBloc(
-        installedAppsRepository: _FakeInstalledAppsRepository(error: Exception('failed')),
+        installedAppsRepository: _FakeInstalledAppsRepository(
+          error: Exception('failed'),
+        ),
         debounceDuration: Duration.zero,
       );
 
@@ -79,24 +87,38 @@ void main() {
   });
 }
 
-const AppIdentifier _instagramId = AppIdentifier.android('com.instagram.android');
+const AppIdentifier _instagramId = AppIdentifier.android(
+  'com.instagram.android',
+);
 const AppIdentifier _xId = AppIdentifier.android('com.twitter.android');
-const AppIdentifier _youtubeId = AppIdentifier.android('com.google.android.youtube');
+const AppIdentifier _youtubeId = AppIdentifier.android(
+  'com.google.android.youtube',
+);
 
 const List<AndroidAppInfo> _apps = <AndroidAppInfo>[
-  AndroidAppInfo(packageId: _instagramId, name: 'Instagram', category: 'Social'),
+  AndroidAppInfo(
+    packageId: _instagramId,
+    name: 'Instagram',
+    category: 'Social',
+  ),
   AndroidAppInfo(packageId: _xId, name: 'X', category: 'Social'),
   AndroidAppInfo(packageId: _youtubeId, name: 'YouTube', category: 'Video'),
 ];
 
 class _FakeInstalledAppsRepository implements InstalledAppsRepository {
-  _FakeInstalledAppsRepository({this.apps = const <AndroidAppInfo>[], this.error});
+  _FakeInstalledAppsRepository({
+    this.apps = const <AndroidAppInfo>[],
+    this.error,
+  });
 
   final List<AndroidAppInfo> apps;
   final Object? error;
 
   @override
-  Future<List<AndroidAppInfo>> getAndroidInstalledApps({bool includeSystemApps = false, bool includeIcons = true}) async {
+  Future<List<AndroidAppInfo>> getAndroidInstalledApps({
+    bool includeSystemApps = false,
+    bool includeIcons = true,
+  }) async {
     if (error case final currentError?) {
       throw currentError;
     }
@@ -105,7 +127,9 @@ class _FakeInstalledAppsRepository implements InstalledAppsRepository {
   }
 
   @override
-  Future<List<IOSAppInfo>> selectIOSApps({List<IOSAppInfo>? preSelectedApps}) async {
+  Future<List<IOSAppInfo>> selectIOSApps({
+    List<IOSAppInfo>? preSelectedApps,
+  }) async {
     return preSelectedApps ?? const <IOSAppInfo>[];
   }
 }

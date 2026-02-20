@@ -11,7 +11,10 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 void main() {
   group('StatsBloc', () {
     test('initializes with valid date range on start', () async {
-      final bloc = StatsBloc(usageRepository: _FakeStatsUsageRepository(), platform: PauzaPlatform.android);
+      final bloc = StatsBloc(
+        usageRepository: _FakeStatsUsageRepository(),
+        platform: PauzaPlatform.android,
+      );
 
       bloc.add(const StatsStarted());
       await Future<void>.delayed(Duration.zero);
@@ -25,27 +28,52 @@ void main() {
     test('builds summary data on android success', () async {
       final repo = _FakeStatsUsageRepository(
         current: <UsageStats>[
-          _usage(packageId: 'social.app', category: 'Social', minutes: 120, day: DateTime(2026, 2, 10)),
-          _usage(packageId: 'work.app', category: 'Productivity', minutes: 60, day: DateTime(2026, 2, 11)),
+          _usage(
+            packageId: 'social.app',
+            category: 'Social',
+            minutes: 120,
+            day: DateTime(2026, 2, 10),
+          ),
+          _usage(
+            packageId: 'work.app',
+            category: 'Productivity',
+            minutes: 60,
+            day: DateTime(2026, 2, 11),
+          ),
         ],
-        previous: <UsageStats>[_usage(packageId: 'social.app', category: 'Social', minutes: 60, day: DateTime(2026, 2, 3))],
+        previous: <UsageStats>[
+          _usage(
+            packageId: 'social.app',
+            category: 'Social',
+            minutes: 60,
+            day: DateTime(2026, 2, 3),
+          ),
+        ],
       );
 
-      final bloc = StatsBloc(usageRepository: repo, platform: PauzaPlatform.android);
+      final bloc = StatsBloc(
+        usageRepository: repo,
+        platform: PauzaPlatform.android,
+      );
 
       bloc.add(const StatsStarted());
       await Future<void>.delayed(const Duration(milliseconds: 10));
 
       expect(bloc.state.summary, isNotNull);
       expect(bloc.state.summary!.totalDuration, const Duration(minutes: 180));
-      expect(bloc.state.summary!.buckets[UsageCategoryBucket.social], const Duration(minutes: 120));
+      expect(
+        bloc.state.summary!.buckets[UsageCategoryBucket.social],
+        const Duration(minutes: 120),
+      );
 
       await bloc.close();
     });
 
     test('marks error state on permission errors', () async {
       final bloc = StatsBloc(
-        usageRepository: _ErrorStatsUsageRepository(const PauzaMissingPermissionError(message: 'missing')),
+        usageRepository: _ErrorStatsUsageRepository(
+          const PauzaMissingPermissionError(message: 'missing'),
+        ),
         platform: PauzaPlatform.android,
       );
 
@@ -60,7 +88,10 @@ void main() {
 
     test('does not load android stats on iOS platform', () async {
       final repo = _FakeStatsUsageRepository();
-      final bloc = StatsBloc(usageRepository: repo, platform: PauzaPlatform.ios);
+      final bloc = StatsBloc(
+        usageRepository: repo,
+        platform: PauzaPlatform.ios,
+      );
 
       bloc.add(const StatsStarted());
       await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -73,14 +104,20 @@ void main() {
 }
 
 class _FakeStatsUsageRepository implements StatsUsageRepository {
-  _FakeStatsUsageRepository({this.current = const <UsageStats>[], this.previous = const <UsageStats>[]});
+  _FakeStatsUsageRepository({
+    this.current = const <UsageStats>[],
+    this.previous = const <UsageStats>[],
+  });
 
   final List<UsageStats> current;
   final List<UsageStats> previous;
   var calls = 0;
 
   @override
-  Future<IList<UsageStats>> getUsageStats({required DateTime start, required DateTime end}) async {
+  Future<IList<UsageStats>> getUsageStats({
+    required DateTime start,
+    required DateTime end,
+  }) async {
     calls++;
     return calls.isOdd ? current.lock : previous.lock;
   }
@@ -92,14 +129,26 @@ class _ErrorStatsUsageRepository implements StatsUsageRepository {
   final Object error;
 
   @override
-  Future<IList<UsageStats>> getUsageStats({required DateTime start, required DateTime end}) {
+  Future<IList<UsageStats>> getUsageStats({
+    required DateTime start,
+    required DateTime end,
+  }) {
     return Future<IList<UsageStats>>.error(error);
   }
 }
 
-UsageStats _usage({required String packageId, required String category, required int minutes, required DateTime day}) {
+UsageStats _usage({
+  required String packageId,
+  required String category,
+  required int minutes,
+  required DateTime day,
+}) {
   return UsageStats(
-    appInfo: AndroidAppInfo(packageId: AppIdentifier.android(packageId), name: packageId, category: category),
+    appInfo: AndroidAppInfo(
+      packageId: AppIdentifier.android(packageId),
+      name: packageId,
+      category: category,
+    ),
     totalDuration: Duration(minutes: minutes),
     totalLaunchCount: 1,
     bucketStart: day.dayStart,

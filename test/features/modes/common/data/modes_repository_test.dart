@@ -12,7 +12,10 @@ void main() {
   group('ModesRepositoryImpl', () {
     test('createMode persists normalized icon token', () async {
       final database = _FakeLocalDatabase();
-      final repository = ModesRepositoryImpl(localDatabase: database, platform: PauzaPlatform.android);
+      final repository = ModesRepositoryImpl(
+        localDatabase: database,
+        platform: PauzaPlatform.android,
+      );
 
       final request = const ModeUpsertDTO.initial().copyWith(
         title: 'Focus',
@@ -23,15 +26,20 @@ void main() {
 
       await repository.createMode(request);
 
-      final modesInsert = (database.fakeTransaction.batch() as _FakeBatch).operations.firstWhere(
-        (operation) => operation.sql.contains('INSERT INTO modes'),
-      );
+      final modesInsert = (database.fakeTransaction.batch() as _FakeBatch)
+          .operations
+          .firstWhere(
+            (operation) => operation.sql.contains('INSERT INTO modes'),
+          );
       expect(modesInsert.arguments, contains(ModeIconCatalog.defaultToken));
     });
 
     test('updateMode persists normalized icon token', () async {
       final database = _FakeLocalDatabase();
-      final repository = ModesRepositoryImpl(localDatabase: database, platform: PauzaPlatform.android);
+      final repository = ModesRepositoryImpl(
+        localDatabase: database,
+        platform: PauzaPlatform.android,
+      );
 
       final request = const ModeUpsertDTO.initial().copyWith(
         title: 'Focus',
@@ -42,9 +50,8 @@ void main() {
 
       await repository.updateMode(modeId: 'mode-1', request: request);
 
-      final update = (database.fakeTransaction.batch() as _FakeBatch).operations.firstWhere(
-        (operation) => operation.sql.contains('UPDATE modes'),
-      );
+      final update = (database.fakeTransaction.batch() as _FakeBatch).operations
+          .firstWhere((operation) => operation.sql.contains('UPDATE modes'));
       expect(update.arguments, contains(ModeIconCatalog.defaultToken));
     });
 
@@ -68,7 +75,10 @@ void main() {
             'blocked_apps': null,
           },
         ];
-      final repository = ModesRepositoryImpl(localDatabase: database, platform: PauzaPlatform.android);
+      final repository = ModesRepositoryImpl(
+        localDatabase: database,
+        platform: PauzaPlatform.android,
+      );
 
       final modes = await repository.getModes();
 
@@ -78,7 +88,10 @@ void main() {
 
     test('watchModes emits on changes', () async {
       final database = _FakeLocalDatabase();
-      final repository = ModesRepositoryImpl(localDatabase: database, platform: PauzaPlatform.android);
+      final repository = ModesRepositoryImpl(
+        localDatabase: database,
+        platform: PauzaPlatform.android,
+      );
 
       final request = const ModeUpsertDTO.initial().copyWith(
         title: 'Focus',
@@ -121,21 +134,31 @@ final class _FakeBatch implements Batch {
 
   @override
   void rawInsert(String sql, [List<Object?>? arguments]) {
-    operations.add(_SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]));
+    operations.add(
+      _SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]),
+    );
   }
 
   @override
   void rawUpdate(String sql, [List<Object?>? arguments]) {
-    operations.add(_SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]));
+    operations.add(
+      _SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]),
+    );
   }
 
   @override
   void rawDelete(String sql, [List<Object?>? arguments]) {
-    operations.add(_SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]));
+    operations.add(
+      _SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]),
+    );
   }
 
   @override
-  Future<List<Object?>> commit({bool? exclusive, bool? noResult, bool? continueOnError}) async => <Object?>[];
+  Future<List<Object?>> commit({
+    bool? exclusive,
+    bool? noResult,
+    bool? continueOnError,
+  }) async => <Object?>[];
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -152,7 +175,10 @@ final class _FakeTransaction implements Transaction {
   Batch batch() => _batch;
 
   @override
-  Future<List<Map<String, Object?>>> rawQuery(String sql, [List<Object?>? arguments]) async {
+  Future<List<Map<String, Object?>>> rawQuery(
+    String sql, [
+    List<Object?>? arguments,
+  ]) async {
     if (sql.contains('FROM schedules')) {
       return scheduleRows;
     }
@@ -180,7 +206,10 @@ final class _FakeLocalDatabase implements LocalDatabase {
   Future<void> open() async {}
 
   @override
-  Future<List<Map<String, Object?>>> rawQuery(String sql, [List<Object?>? arguments]) async => queryRows;
+  Future<List<Map<String, Object?>>> rawQuery(
+    String sql, [
+    List<Object?>? arguments,
+  ]) async => queryRows;
 
   @override
   Future<int> rawInsert(String sql, [List<Object?>? arguments]) async => 0;
@@ -192,17 +221,23 @@ final class _FakeLocalDatabase implements LocalDatabase {
   Future<int> rawDelete(String sql, [List<Object?>? arguments]) async => 0;
 
   @override
-  Future<T> read<T>(Future<T> Function(DatabaseExecutor database) action) async {
+  Future<T> read<T>(
+    Future<T> Function(DatabaseExecutor database) action,
+  ) async {
     throw UnimplementedError();
   }
 
   @override
-  Future<T> write<T>(Future<T> Function(DatabaseExecutor database) action) async {
+  Future<T> write<T>(
+    Future<T> Function(DatabaseExecutor database) action,
+  ) async {
     throw UnimplementedError();
   }
 
   @override
-  Future<T> transaction<T>(Future<T> Function(Transaction transactionFn) action) async {
+  Future<T> transaction<T>(
+    Future<T> Function(Transaction transactionFn) action,
+  ) async {
     return action(fakeTransaction);
   }
 }

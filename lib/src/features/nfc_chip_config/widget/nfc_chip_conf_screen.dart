@@ -16,8 +16,9 @@ class NfcChipConfScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          NfcChipConfBloc(linkedChipsRepository: RootScope.of(context).nfcLinkedChipsRepository)..add(const NfcChipLoadCardsRequested()),
+      create: (context) => NfcChipConfBloc(
+        linkedChipsRepository: RootScope.of(context).nfcLinkedChipsRepository,
+      )..add(const NfcChipLoadCardsRequested()),
       child: const NfcChipConfContent(),
     );
   }

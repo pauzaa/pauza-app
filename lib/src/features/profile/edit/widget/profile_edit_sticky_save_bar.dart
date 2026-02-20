@@ -13,7 +13,12 @@ class ProfileEditSaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(PauzaSpacing.medium, PauzaSpacing.medium, PauzaSpacing.medium, PauzaSpacing.medium),
+      padding: const EdgeInsets.fromLTRB(
+        PauzaSpacing.medium,
+        PauzaSpacing.medium,
+        PauzaSpacing.medium,
+        PauzaSpacing.medium,
+      ),
       child: BlocBuilder<UserNameCheckerBloc, UsernameAvailability>(
         buildWhen: (previous, current) => previous != current,
         builder: (context, usernameAvailability) {
@@ -34,7 +39,10 @@ class ProfileEditSaveButton extends StatelessWidget {
               return PauzaFilledButton(
                 onPressed: () {
                   if (Form.of(context).validate()) {
-                    final notifier = UserEditDraftScope.of(context, watch: false);
+                    final notifier = UserEditDraftScope.of(
+                      context,
+                      watch: false,
+                    );
 
                     context.read<ProfileEditBloc>().add(
                       ProfileEditSaveRequested(

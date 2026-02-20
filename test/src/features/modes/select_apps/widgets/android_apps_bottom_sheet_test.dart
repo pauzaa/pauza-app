@@ -8,7 +8,12 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 void main() {
   group('AndroidAppsBottomSheet widgets', () {
     test('sheet can be constructed with initial IDs', () {
-      expect(const AndroidAppsBottomSheet(initialSelectedAppIds: ISet<AppIdentifier>.empty()), isNotNull);
+      expect(
+        const AndroidAppsBottomSheet(
+          initialSelectedAppIds: ISet<AppIdentifier>.empty(),
+        ),
+        isNotNull,
+      );
     });
 
     testWidgets('selection primitives render and react', (tester) async {

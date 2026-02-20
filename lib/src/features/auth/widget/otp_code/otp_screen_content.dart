@@ -50,7 +50,10 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
     _emitTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
       final elapsedSeconds = _stopwatch!.elapsed.inSeconds;
-      final remaining = (_initialCountdownSeconds - elapsedSeconds).clamp(0, _initialCountdownSeconds);
+      final remaining = (_initialCountdownSeconds - elapsedSeconds).clamp(
+        0,
+        _initialCountdownSeconds,
+      );
 
       _countdownStream.add(remaining);
 
@@ -86,7 +89,9 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
           body: SafeArea(
             child: ListView(
               physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large).copyWith(top: PauzaSpacing.xxLarge),
+              padding: const EdgeInsets.symmetric(
+                horizontal: PauzaSpacing.large,
+              ).copyWith(top: PauzaSpacing.xxLarge),
               children: <Widget>[
                 BlocSelector<AuthBloc, AuthState, String>(
                   selector: (state) {
@@ -142,7 +147,9 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
       return;
     }
 
-    context.read<AuthBloc>().add(AuthOtpSubmitted(otp: _otpController.text.trim()));
+    context.read<AuthBloc>().add(
+      AuthOtpSubmitted(otp: _otpController.text.trim()),
+    );
   }
 
   void _onResendTap() {

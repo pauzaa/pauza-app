@@ -19,9 +19,15 @@ class HomeScreen extends StatelessWidget {
     final rootScope = RootScope.of(context);
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => ModesListBloc(modesRepository: rootScope.modesRepository)..add(const ModesListRequested())),
         BlocProvider(
-          create: (context) => BlockingBloc(blockingRepository: rootScope.blockingRepository)..add(const BlockingSyncRequested()),
+          create: (context) =>
+              ModesListBloc(modesRepository: rootScope.modesRepository)
+                ..add(const ModesListRequested()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              BlockingBloc(blockingRepository: rootScope.blockingRepository)
+                ..add(const BlockingSyncRequested()),
         ),
       ],
       child: const HomeContent(),

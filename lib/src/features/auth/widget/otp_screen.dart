@@ -11,6 +11,9 @@ class OtpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authBloc = RootScope.of(context).authBloc;
 
-    return BlocProvider<AuthBloc>.value(value: authBloc, child: const OtpScreenContent());
+    return BlocProvider<AuthBloc>.value(
+      value: authBloc,
+      child: const OtpScreenContent(),
+    );
   }
 }

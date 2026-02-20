@@ -20,7 +20,11 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
     router = HelmRouter(
       routes: PauzaRoutes.values,
       refresh: Listenable.merge(<Listenable>[permissionGate, authGate]),
-      guards: <NavigationGuard>[_emptyPageGuard, _authGuard(authGate), _permissionGuard(permissionGate, authGate)],
+      guards: <NavigationGuard>[
+        _emptyPageGuard,
+        _authGuard(authGate),
+        _permissionGuard(permissionGate, authGate),
+      ],
     );
   }
 
@@ -28,8 +32,14 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
     return pages.isEmpty ? [PauzaRoutes.notFound.page()] : pages;
   }
 
-  NavigationGuard _permissionGuard(PauzaPermissionGate permissionGate, PauzaAuthGate authGate) {
-    return createPermissionGuard(isAuthenticated: () => authGate.isAuthenticated, isReady: () => permissionGate.state.isReady);
+  NavigationGuard _permissionGuard(
+    PauzaPermissionGate permissionGate,
+    PauzaAuthGate authGate,
+  ) {
+    return createPermissionGuard(
+      isAuthenticated: () => authGate.isAuthenticated,
+      isReady: () => permissionGate.state.isReady,
+    );
   }
 
   NavigationGuard _authGuard(PauzaAuthGate authGate) {

@@ -24,7 +24,8 @@ final class SettingsLanguageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentLabel = supportedLanguages[currentLocale] ?? currentLocale.languageCode;
+    final currentLabel =
+        supportedLanguages[currentLocale] ?? currentLocale.languageCode;
 
     return SettingsOptionTile(
       icon: Icons.language_rounded,
@@ -33,7 +34,12 @@ final class SettingsLanguageTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: PauzaSpacing.tiny,
         children: <Widget>[
-          Text(currentLabel, style: context.textTheme.titleLarge?.copyWith(color: context.colorScheme.onSurfaceVariant)),
+          Text(
+            currentLabel,
+            style: context.textTheme.titleLarge?.copyWith(
+              color: context.colorScheme.onSurfaceVariant,
+            ),
+          ),
           Icon(Icons.chevron_right_rounded, color: context.colorScheme.primary),
         ],
       ),
@@ -45,7 +51,8 @@ final class SettingsLanguageTile extends StatelessWidget {
           title: dialogTitle,
           cancelLabel: dialogCancelLabel,
         );
-        if (selected case final locale? when context.mounted && locale != currentLocale) {
+        if (selected case final locale?
+            when context.mounted && locale != currentLocale) {
           await onLocaleChanged(selected);
         }
       },

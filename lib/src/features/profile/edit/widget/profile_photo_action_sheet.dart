@@ -25,7 +25,10 @@ class ProfilePhotoActionSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(l10n.profileEditChangePhotoSheetTitle, style: context.textTheme.headlineSmall),
+          Text(
+            l10n.profileEditChangePhotoSheetTitle,
+            style: context.textTheme.headlineSmall,
+          ),
           const SizedBox(height: PauzaSpacing.medium),
           _PhotoActionTile(
             icon: Icons.photo_camera_rounded,
@@ -45,7 +48,11 @@ class ProfilePhotoActionSheet extends StatelessWidget {
             },
           ),
           const SizedBox(height: PauzaSpacing.large),
-          PauzaOutlinedButton(onPressed: Navigator.of(context).pop, title: Text(l10n.cancelButton), size: PauzaButtonSize.large),
+          PauzaOutlinedButton(
+            onPressed: Navigator.of(context).pop,
+            title: Text(l10n.cancelButton),
+            size: PauzaButtonSize.large,
+          ),
         ],
       ),
     );
@@ -53,7 +60,12 @@ class ProfilePhotoActionSheet extends StatelessWidget {
 }
 
 class _PhotoActionTile extends StatelessWidget {
-  const _PhotoActionTile({required this.icon, required this.title, required this.subtitle, required this.onTap});
+  const _PhotoActionTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
 
   final IconData icon;
   final String title;
@@ -76,7 +88,10 @@ class _PhotoActionTile extends StatelessWidget {
           child: Row(
             children: <Widget>[
               DecoratedBox(
-                decoration: BoxDecoration(color: context.colorScheme.primary.withValues(alpha: 0.16), shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.primary.withValues(alpha: 0.16),
+                  shape: BoxShape.circle,
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(PauzaSpacing.regular),
                   child: Icon(icon, color: context.colorScheme.primary),
@@ -88,12 +103,25 @@ class _PhotoActionTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: PauzaSpacing.small,
                   children: <Widget>[
-                    Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
-                    Text(subtitle, style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onSurfaceVariant)),
+                    Text(
+                      title,
+                      style: context.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      subtitle,
+                      style: context.textTheme.bodyLarge?.copyWith(
+                        color: context.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: context.colorScheme.onSurfaceVariant),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: context.colorScheme.onSurfaceVariant,
+              ),
             ],
           ),
         ),

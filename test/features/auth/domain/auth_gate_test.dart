@@ -18,7 +18,9 @@ void main() {
         notificationCount += 1;
       });
 
-      repository.emitSession(const Session(accessToken: 'a', refreshToken: 'b'));
+      repository.emitSession(
+        const Session(accessToken: 'a', refreshToken: 'b'),
+      );
       await Future<void>.delayed(Duration.zero);
 
       expect(gate.isAuthenticated, isTrue);
@@ -37,7 +39,8 @@ void main() {
 }
 
 final class _FakeAuthRepository implements AuthRepository {
-  final StreamController<Session> _controller = StreamController<Session>.broadcast();
+  final StreamController<Session> _controller =
+      StreamController<Session>.broadcast();
 
   Session _currentSession = const Session.empty();
 

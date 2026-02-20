@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 final class ModeEditorCard extends StatelessWidget {
-  const ModeEditorCard({required this.child, super.key, this.padding, this.borderColor, this.backgroundColor});
+  const ModeEditorCard({
+    required this.child,
+    super.key,
+    this.padding,
+    this.borderColor,
+    this.backgroundColor,
+  });
 
   final Widget child;
   final EdgeInsetsGeometry? padding;
@@ -15,9 +21,14 @@ final class ModeEditorCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? context.colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
-        border: Border.all(color: borderColor ?? context.colorScheme.outlineVariant),
+        border: Border.all(
+          color: borderColor ?? context.colorScheme.outlineVariant,
+        ),
       ),
-      child: Padding(padding: padding ?? const EdgeInsets.all(16), child: child),
+      child: Padding(
+        padding: padding ?? const EdgeInsets.all(16),
+        child: child,
+      ),
     );
   }
 }

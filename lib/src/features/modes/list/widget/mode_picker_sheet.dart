@@ -14,13 +14,18 @@ class ModePickerSheet extends StatelessWidget {
   final List<Mode> modes;
   final String? activeModeId;
 
-  static Future<Mode?> show(BuildContext context, {required List<Mode> modes, String? activeModeId}) {
+  static Future<Mode?> show(
+    BuildContext context, {
+    required List<Mode> modes,
+    String? activeModeId,
+  }) {
     return showModalBottomSheet<Mode>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
       useRootNavigator: true,
-      builder: (context) => ModePickerSheet(modes: modes, activeModeId: activeModeId),
+      builder: (context) =>
+          ModePickerSheet(modes: modes, activeModeId: activeModeId),
     );
   }
 
@@ -29,9 +34,13 @@ class ModePickerSheet extends StatelessWidget {
     final l10n = context.l10n;
 
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.9,
+      ),
       child: BottomSheetScaffold(
-        bodyPadding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium),
+        bodyPadding: const EdgeInsets.symmetric(
+          horizontal: PauzaSpacing.medium,
+        ),
         title: Text(l10n.selectModeTitle),
         body: Column(
           mainAxisSize: MainAxisSize.min,
@@ -40,15 +49,23 @@ class ModePickerSheet extends StatelessWidget {
             if (modes.isEmpty)
               Padding(
                 padding: const EdgeInsets.all(PauzaSpacing.large),
-                child: Center(child: Text(l10n.noModesEmptyState, style: context.textTheme.bodyLarge)),
+                child: Center(
+                  child: Text(
+                    l10n.noModesEmptyState,
+                    style: context.textTheme.bodyLarge,
+                  ),
+                ),
               )
             else
               Flexible(
                 child: ListView.separated(
                   shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(vertical: PauzaSpacing.medium),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: PauzaSpacing.medium,
+                  ),
                   itemCount: modes.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: PauzaSpacing.regular),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: PauzaSpacing.regular),
                   itemBuilder: (context, index) {
                     final mode = modes[index];
                     return ModeListItem(

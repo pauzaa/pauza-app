@@ -44,24 +44,36 @@ class HomePauseRing extends StatefulWidget {
   State<HomePauseRing> createState() => _HomePauseRingState();
 }
 
-class _HomePauseRingState extends State<HomePauseRing> with SingleTickerProviderStateMixin {
+class _HomePauseRingState extends State<HomePauseRing>
+    with SingleTickerProviderStateMixin {
   // value range [0..1]: 1 = full remaining, 0 = elapsed
   late final AnimationController _ac;
   late final Stream<Duration> _stream;
   late final StreamSubscription<Duration> _sub;
 
-  Duration get effectiveInitialValue => widget.initialValue ?? widget.total - DateTime.now().difference(widget.startedAt);
+  Duration get effectiveInitialValue =>
+      widget.initialValue ??
+      widget.total - DateTime.now().difference(widget.startedAt);
 
   @override
   void initState() {
     super.initState();
 
-    _ac = AnimationController(vsync: this, value: _normalizeRemaining(effectiveInitialValue), duration: const Duration(milliseconds: 900));
+    _ac = AnimationController(
+      vsync: this,
+      value: _normalizeRemaining(effectiveInitialValue),
+      duration: const Duration(milliseconds: 900),
+    );
     _stream = Stream.periodic(
       const Duration(seconds: 1),
       (_) => widget.total - DateTime.now().difference(widget.startedAt),
     ).asBroadcastStream();
-    _sub = _stream.listen((remaining) => _ac.animateTo(_normalizeRemaining(remaining), curve: Curves.easeOutCubic));
+    _sub = _stream.listen(
+      (remaining) => _ac.animateTo(
+        _normalizeRemaining(remaining),
+        curve: Curves.easeOutCubic,
+      ),
+    );
   }
 
   @override
@@ -81,11 +93,19 @@ class _HomePauseRingState extends State<HomePauseRing> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     final effectiveTextStyle =
-        widget.textStyle ?? context.textTheme.displayLarge?.copyWith(fontWeight: FontWeight.w800, letterSpacing: -1.0);
+        widget.textStyle ??
+        context.textTheme.displayLarge?.copyWith(
+          fontWeight: FontWeight.w800,
+          letterSpacing: -1.0,
+        );
 
     final effectiveSubTextStyle =
         widget.subTextStyle ??
-        context.textTheme.titleLarge?.copyWith(color: context.colorScheme.primary, letterSpacing: 2.2, fontWeight: FontWeight.w700);
+        context.textTheme.titleLarge?.copyWith(
+          color: context.colorScheme.primary,
+          letterSpacing: 2.2,
+          fontWeight: FontWeight.w700,
+        );
 
     return SizedBox(
       width: widget.size,
@@ -95,8 +115,11 @@ class _HomePauseRingState extends State<HomePauseRing> with SingleTickerProvider
         builder: (_, _) {
           return CustomPaint(
             painter: _RingPainter(
-              trackColor: widget.trackColor ?? context.colorScheme.primary.withValues(alpha: 0.45),
-              progressColor: widget.progressColor ?? context.colorScheme.primary,
+              trackColor:
+                  widget.trackColor ??
+                  context.colorScheme.primary.withValues(alpha: 0.45),
+              progressColor:
+                  widget.progressColor ?? context.colorScheme.primary,
               strokeWidth: widget.strokeWidth,
               cap: widget.cap,
               gapDegrees: widget.gapDegrees,
@@ -110,9 +133,13 @@ class _HomePauseRingState extends State<HomePauseRing> with SingleTickerProvider
                   StreamBuilder<Duration>(
                     stream: _stream,
                     initialData: widget.initialValue ?? effectiveInitialValue,
-                    builder: (_, snap) => Text((snap.data ?? Duration.zero).formatTimerHhMmSs(), style: effectiveTextStyle),
+                    builder: (_, snap) => Text(
+                      (snap.data ?? Duration.zero).formatTimerHhMmSs(),
+                      style: effectiveTextStyle,
+                    ),
                   ),
-                  if (widget.subText case final subText?) Text(subText, style: effectiveSubTextStyle),
+                  if (widget.subText case final subText?)
+                    Text(subText, style: effectiveSubTextStyle),
                 ],
               ),
             ),

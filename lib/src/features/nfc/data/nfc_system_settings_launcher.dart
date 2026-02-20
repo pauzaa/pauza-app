@@ -12,14 +12,18 @@ abstract interface class NfcSystemSettingsLauncher {
   Future<bool> openNfcSettings();
 }
 
-final class AndroidIntentNfcSystemSettingsLauncher implements NfcSystemSettingsLauncher {
+final class AndroidIntentNfcSystemSettingsLauncher
+    implements NfcSystemSettingsLauncher {
   AndroidIntentNfcSystemSettingsLauncher({
     @visibleForTesting bool? isAndroidPlatform,
     @visibleForTesting IntentLaunch? openNfcSettingsIntent,
     @visibleForTesting IntentLaunch? openWirelessSettingsIntent,
-  }) : _isAndroidPlatform = isAndroidPlatform ?? (!kIsWeb && Platform.isAndroid),
-       _openNfcSettingsIntent = openNfcSettingsIntent ?? _defaultOpenNfcSettingsIntent,
-       _openWirelessSettingsIntent = openWirelessSettingsIntent ?? _defaultOpenWirelessSettingsIntent;
+  }) : _isAndroidPlatform =
+           isAndroidPlatform ?? (!kIsWeb && Platform.isAndroid),
+       _openNfcSettingsIntent =
+           openNfcSettingsIntent ?? _defaultOpenNfcSettingsIntent,
+       _openWirelessSettingsIntent =
+           openWirelessSettingsIntent ?? _defaultOpenWirelessSettingsIntent;
 
   final bool _isAndroidPlatform;
   final IntentLaunch _openNfcSettingsIntent;

@@ -20,23 +20,30 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
   group('HomeContent', () {
-
-
-    testWidgets('renders default home body when session is not active', (tester) async {
+    testWidgets('renders default home body when session is not active', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(const Size(1200, 3000));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
       final modesBloc = _TestModesListBloc();
       final blockingBloc = _TestBlockingBloc();
 
-      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
+      await tester.pumpWidget(
+        _TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc),
+      );
       await tester.pump();
 
       expect(find.byType(HomeStatsPill), findsOneWidget);
       expect(find.byType(HomeCurrentModeCard), findsOneWidget);
       expect(find.byType(HomeSessionButton), findsOneWidget);
       expect(find.text('1m'), findsNothing);
-      expect(tester.widget<HomeSessionButton>(find.byType(HomeSessionButton)).isActiveSession, isFalse);
+      expect(
+        tester
+            .widget<HomeSessionButton>(find.byType(HomeSessionButton))
+            .isActiveSession,
+        isFalse,
+      );
 
       addTearDown(modesBloc.close);
       addTearDown(blockingBloc.close);
@@ -107,7 +114,10 @@ class _NoopModesRepository implements ModesRepository {
   Future<List<Mode>> getModes() async => <Mode>[_mode];
 
   @override
-  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {}
+  Future<void> updateMode({
+    required String modeId,
+    required ModeUpsertDTO request,
+  }) async {}
 
   static final Mode _mode = Mode(
     id: 'mode-1',
@@ -149,7 +159,10 @@ class _NoopBlockingRepository implements BlockingRepository {
   Future<void> resumeBlocking() async {}
 
   @override
-  Future<void> startBlocking({required Mode mode, required ShieldConfiguration? shield}) async {}
+  Future<void> startBlocking({
+    required Mode mode,
+    required ShieldConfiguration? shield,
+  }) async {}
 
   @override
   Future<void> stopBlocking() async {}

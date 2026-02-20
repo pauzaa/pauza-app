@@ -12,7 +12,11 @@ final class ModeEditorSectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 5),
       child: Text(
         label.toUpperCase(),
-        style: context.textTheme.labelLarge?.copyWith(color: context.colorScheme.primary, letterSpacing: 2, fontWeight: FontWeight.w700),
+        style: context.textTheme.labelLarge?.copyWith(
+          color: context.colorScheme.primary,
+          letterSpacing: 2,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }

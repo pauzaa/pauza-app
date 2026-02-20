@@ -3,7 +3,13 @@ import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class HomeSessionButton extends StatelessWidget {
-  const HomeSessionButton({required this.onTap, this.isActiveSession = false, this.isBusy = false, this.buttonSize = 320, super.key});
+  const HomeSessionButton({
+    required this.onTap,
+    this.isActiveSession = false,
+    this.isBusy = false,
+    this.buttonSize = 320,
+    super.key,
+  });
 
   final VoidCallback onTap;
   final bool isBusy;
@@ -13,7 +19,9 @@ class HomeSessionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final title = isActiveSession ? l10n.stopButton.toUpperCase() : l10n.startButton.toUpperCase();
+    final title = isActiveSession
+        ? l10n.stopButton.toUpperCase()
+        : l10n.startButton.toUpperCase();
 
     return InkWell(
       onTap: isBusy ? null : onTap,
@@ -26,7 +34,10 @@ class HomeSessionButton extends StatelessWidget {
             height: buttonSize + 30,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: context.colorScheme.primary, width: 2.5),
+              border: Border.all(
+                color: context.colorScheme.primary,
+                width: 2.5,
+              ),
             ),
           ),
           Container(
@@ -34,13 +45,19 @@ class HomeSessionButton extends StatelessWidget {
             height: buttonSize + 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: context.colorScheme.primary, width: 2.5),
+              border: Border.all(
+                color: context.colorScheme.primary,
+                width: 2.5,
+              ),
             ),
           ),
           Ink(
             width: buttonSize,
             height: buttonSize,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: context.colorScheme.primary),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: context.colorScheme.primary,
+            ),
             child: isActiveSession
                 ? Center(
                     child: Text(
@@ -56,10 +73,19 @@ class HomeSessionButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       DecoratedBox(
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: context.colorScheme.surface),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: context.colorScheme.surface,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Icon(Icons.lock, size: PauzaIconSizes.xxLarge, color: context.colorScheme.primary.withValues(alpha: 0.85)),
+                          child: Icon(
+                            Icons.lock,
+                            size: PauzaIconSizes.xxLarge,
+                            color: context.colorScheme.primary.withValues(
+                              alpha: 0.85,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: PauzaSpacing.large),
@@ -74,7 +100,10 @@ class HomeSessionButton extends StatelessWidget {
                       const SizedBox(height: PauzaSpacing.small),
                       Text(
                         l10n.homePauzaSessionLabel.toUpperCase(),
-                        style: context.textTheme.labelLarge?.copyWith(letterSpacing: 4, color: context.colorScheme.onPrimary),
+                        style: context.textTheme.labelLarge?.copyWith(
+                          letterSpacing: 4,
+                          color: context.colorScheme.onPrimary,
+                        ),
                       ),
                     ],
                   ),

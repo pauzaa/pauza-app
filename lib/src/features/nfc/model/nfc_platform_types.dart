@@ -242,7 +242,12 @@ Object? _normalizeRawValue(Object? value) {
     return value.toList(growable: false);
   }
   if (value is Map<Object?, Object?>) {
-    return value.map((key, entryValue) => MapEntry(key is String ? key : key.toString(), _normalizeRawValue(entryValue)));
+    return value.map(
+      (key, entryValue) => MapEntry(
+        key is String ? key : key.toString(),
+        _normalizeRawValue(entryValue),
+      ),
+    );
   }
   if (value is Iterable<Object?>) {
     return value.map(_normalizeRawValue).toList(growable: false);

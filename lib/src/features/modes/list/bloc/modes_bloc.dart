@@ -11,8 +11,13 @@ part 'modes_event.dart';
 part 'modes_state.dart';
 
 class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
-  ModesListBloc({required ModesRepository modesRepository}) : _modesRepository = modesRepository, super(const ModesListState()) {
-    _modesSubscription = _modesRepository.watchModes().listen((_) => add(const ModesListUpdated()), onError: (_) {});
+  ModesListBloc({required ModesRepository modesRepository})
+    : _modesRepository = modesRepository,
+      super(const ModesListState()) {
+    _modesSubscription = _modesRepository.watchModes().listen(
+      (_) => add(const ModesListUpdated()),
+      onError: (_) {},
+    );
     on<ModesListRequested>(_onModesRequested);
     on<ModesDeleteRequested>(_onModesDeleteRequested);
     on<ModesSelectionRequested>(_onModesSelectionRequested);
@@ -22,11 +27,17 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
   final ModesRepository _modesRepository;
   late final StreamSubscription<void> _modesSubscription;
 
-  Future<void> _onModesRequested(ModesListRequested event, Emitter<ModesListState> emit) async {
+  Future<void> _onModesRequested(
+    ModesListRequested event,
+    Emitter<ModesListState> emit,
+  ) async {
     await _load(emit: emit);
   }
 
-  Future<void> _onModesDeleteRequested(ModesDeleteRequested event, Emitter<ModesListState> emit) async {
+  Future<void> _onModesDeleteRequested(
+    ModesDeleteRequested event,
+    Emitter<ModesListState> emit,
+  ) async {
     try {
       emit(state.loading());
       await _modesRepository.deleteMode(event.modeId);
@@ -36,12 +47,18 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
     }
   }
 
-  void _onModesSelectionRequested(ModesSelectionRequested event, Emitter<ModesListState> emit) {
+  void _onModesSelectionRequested(
+    ModesSelectionRequested event,
+    Emitter<ModesListState> emit,
+  ) {
     if (state.selectedModeId == event.modeId) return;
     emit(state.copyWith(selectedModeId: event.modeId));
   }
 
-  Future<void> _onModesUpdated(ModesListUpdated event, Emitter<ModesListState> emit) async {
+  Future<void> _onModesUpdated(
+    ModesListUpdated event,
+    Emitter<ModesListState> emit,
+  ) async {
     await _load(emit: emit);
   }
 
@@ -51,7 +68,9 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
     try {
       final summaries = await _modesRepository.getModes();
 
-      emit(state.copyWith(items: summaries, isLoading: false, clearError: true));
+      emit(
+        state.copyWith(items: summaries, isLoading: false, clearError: true),
+      );
     } on Object catch (error) {
       emit(state.setError(error));
     }

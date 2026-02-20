@@ -5,7 +5,10 @@ class ConfirmDeleteModeDialog extends StatelessWidget {
   const ConfirmDeleteModeDialog({super.key});
 
   static Future<bool?> show(BuildContext context) {
-    return showDialog<bool>(context: context, builder: (context) => const ConfirmDeleteModeDialog());
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => const ConfirmDeleteModeDialog(),
+    );
   }
 
   @override
@@ -16,7 +19,10 @@ class ConfirmDeleteModeDialog extends StatelessWidget {
       title: Text(l10n.deleteModeTitle),
       content: Text(l10n.deleteModeMessage),
       actions: [
-        TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(l10n.cancelButton)),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(l10n.cancelButton),
+        ),
         FilledButton(
           onPressed: () {
             Navigator.of(context).pop(true);

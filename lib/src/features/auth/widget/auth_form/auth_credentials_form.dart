@@ -65,7 +65,10 @@ class AuthCredentialsForm extends StatelessWidget {
                     onPressed: onForgotPasswordTap,
                     child: Text(
                       l10n.authForgotPassword,
-                      style: context.textTheme.titleMedium?.copyWith(color: context.colorScheme.primary, fontWeight: FontWeight.w600),
+                      style: context.textTheme.titleMedium?.copyWith(
+                        color: context.colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -84,7 +87,9 @@ class AuthCredentialsForm extends StatelessWidget {
             width: double.infinity,
             disabled: isSubmitting,
             onPressed: onLoginTap,
-            textStyle: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+            textStyle: context.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
             title: Text(l10n.authLogIn.toUpperCase()),
             radius: PauzaCornerRadius.large,
           ),

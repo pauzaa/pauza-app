@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 
 class HomePausePill extends StatelessWidget {
-  const HomePausePill({required this.minutes, required this.isBusy, required this.onTap, super.key});
+  const HomePausePill({
+    required this.minutes,
+    required this.isBusy,
+    required this.onTap,
+    super.key,
+  });
 
   final int minutes;
   final bool isBusy;
@@ -33,7 +38,9 @@ class HomePausePill extends StatelessWidget {
             ),
             child: Text(
               text,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
               textAlign: TextAlign.center,
             ),
           ),

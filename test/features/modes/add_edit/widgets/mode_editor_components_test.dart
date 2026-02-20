@@ -36,7 +36,9 @@ void main() {
     expect(find.text('Select at least one app'), findsOneWidget);
   });
 
-  testWidgets('ModeEditorAllowedPausesTile controls trigger callbacks', (tester) async {
+  testWidgets('ModeEditorAllowedPausesTile controls trigger callbacks', (
+    tester,
+  ) async {
     var incrementCount = 0;
     var decrementCount = 0;
 

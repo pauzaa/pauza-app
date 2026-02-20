@@ -20,12 +20,16 @@ final class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
 
   final UserProfileRepository _userProfileRepository;
 
-  Future<void> _onStarted(ProfileEditStarted event, Emitter<ProfileEditState> emit) async {
+  Future<void> _onStarted(
+    ProfileEditStarted event,
+    Emitter<ProfileEditState> emit,
+  ) async {
     emit(state.loading());
 
     try {
       final cached = await _userProfileRepository.readCachedProfile();
-      final user = cached?.user ?? await _userProfileRepository.fetchAndCacheProfile();
+      final user =
+          cached?.user ?? await _userProfileRepository.fetchAndCacheProfile();
       emit(state.ready(user));
     } on UserProfileException catch (error) {
       emit(state.failure(error.code, error.message));
@@ -34,7 +38,10 @@ final class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
     }
   }
 
-  Future<void> _onSaveRequested(ProfileEditSaveRequested event, Emitter<ProfileEditState> emit) async {
+  Future<void> _onSaveRequested(
+    ProfileEditSaveRequested event,
+    Emitter<ProfileEditState> emit,
+  ) async {
     if (!state.isReady) {
       return;
     }

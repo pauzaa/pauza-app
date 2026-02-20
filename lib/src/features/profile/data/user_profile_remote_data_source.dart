@@ -6,14 +6,20 @@ import 'package:pauza/src/features/profile/common/model/user_profile_failure.dar
 abstract interface class UserProfileRemoteDataSource {
   Future<UserDto> fetchMe();
 
-  Future<UserDto> updateMe({required String name, required String username, String? profilePictureUrl, Uint8List? profilePictureBytes});
+  Future<UserDto> updateMe({
+    required String name,
+    required String username,
+    String? profilePictureUrl,
+    Uint8List? profilePictureBytes,
+  });
 
   Future<bool> isUsernameAvailable({required String username});
 
   Future<String> uploadProfilePhoto({required String localFilePath});
 }
 
-final class UserProfileRemoteDataSourceImpl implements UserProfileRemoteDataSource {
+final class UserProfileRemoteDataSourceImpl
+    implements UserProfileRemoteDataSource {
   const UserProfileRemoteDataSourceImpl();
 
   @override
@@ -41,11 +47,19 @@ final class UserProfileRemoteDataSourceImpl implements UserProfileRemoteDataSour
 
     final available = await isUsernameAvailable(username: normalizedUsername);
     if (!available) {
-      throw const UserProfileException(code: UserProfileFailureCode.usernameTaken);
+      throw const UserProfileException(
+        code: UserProfileFailureCode.usernameTaken,
+      );
     }
 
-    final resolvedProfilePicture = profilePictureBytes == null ? profilePictureUrl : 'memory://profile';
-    final user = UserDto(profilePicture: resolvedProfilePicture ?? '', username: normalizedUsername, name: normalizedName);
+    final resolvedProfilePicture = profilePictureBytes == null
+        ? profilePictureUrl
+        : 'memory://profile';
+    final user = UserDto(
+      profilePicture: resolvedProfilePicture ?? '',
+      username: normalizedUsername,
+      name: normalizedName,
+    );
     return user;
   }
 

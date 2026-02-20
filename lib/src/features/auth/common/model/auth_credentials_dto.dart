@@ -17,7 +17,9 @@ final class AuthCredentialsDto {
     if (identical(this, other)) {
       return true;
     }
-    return other is AuthCredentialsDto && other.email == email && other.password == password;
+    return other is AuthCredentialsDto &&
+        other.email == email &&
+        other.password == password;
   }
 
   @override

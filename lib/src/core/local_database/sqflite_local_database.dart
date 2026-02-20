@@ -51,32 +51,43 @@ class SqfliteLocalDatabase implements LocalDatabase {
   }
 
   @override
-  Future<T> read<T>(Future<T> Function(DatabaseExecutor database) action) async {
+  Future<T> read<T>(
+    Future<T> Function(DatabaseExecutor database) action,
+  ) async {
     await open();
     return action(_requireDatabase());
   }
 
   @override
-  Future<T> write<T>(Future<T> Function(DatabaseExecutor database) action) async => transaction((transaction) => action(transaction));
+  Future<T> write<T>(
+    Future<T> Function(DatabaseExecutor database) action,
+  ) async => transaction((transaction) => action(transaction));
 
   @override
-  Future<T> transaction<T>(Future<T> Function(Transaction transaction) action) async {
+  Future<T> transaction<T>(
+    Future<T> Function(Transaction transaction) action,
+  ) async {
     await open();
     return _requireDatabase().transaction(action);
   }
 
   @override
-  Future<List<Map<String, Object?>>> rawQuery(String sql, [List<Object?>? arguments]) =>
-      read((database) => database.rawQuery(sql, arguments));
+  Future<List<Map<String, Object?>>> rawQuery(
+    String sql, [
+    List<Object?>? arguments,
+  ]) => read((database) => database.rawQuery(sql, arguments));
 
   @override
-  Future<int> rawInsert(String sql, [List<Object?>? arguments]) => write((database) => database.rawInsert(sql, arguments));
+  Future<int> rawInsert(String sql, [List<Object?>? arguments]) =>
+      write((database) => database.rawInsert(sql, arguments));
 
   @override
-  Future<int> rawUpdate(String sql, [List<Object?>? arguments]) => write((database) => database.rawUpdate(sql, arguments));
+  Future<int> rawUpdate(String sql, [List<Object?>? arguments]) =>
+      write((database) => database.rawUpdate(sql, arguments));
 
   @override
-  Future<int> rawDelete(String sql, [List<Object?>? arguments]) => write((database) => database.rawDelete(sql, arguments));
+  Future<int> rawDelete(String sql, [List<Object?>? arguments]) =>
+      write((database) => database.rawDelete(sql, arguments));
 
   Future<void> _openInternal() async {
     final databasesPath = await getDatabasesPath();
@@ -110,7 +121,9 @@ class SqfliteLocalDatabase implements LocalDatabase {
   Database _requireDatabase() {
     final database = _database;
     if (database == null) {
-      throw StateError('Local database is not available. Call open() before usage.');
+      throw StateError(
+        'Local database is not available. Call open() before usage.',
+      );
     }
     return database;
   }

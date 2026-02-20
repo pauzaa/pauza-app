@@ -44,7 +44,11 @@ abstract final class PauzaValidators {
   ///
   /// Requires 3-30 characters, only lowercase letters, digits, or underscore.
   /// Returns a localized error message if invalid, or null if valid.
-  static String? validateUsername(String? value, AppLocalizations l10n, UsernameAvailability usernameAvailability) {
+  static String? validateUsername(
+    String? value,
+    AppLocalizations l10n,
+    UsernameAvailability usernameAvailability,
+  ) {
     final candidate = (value ?? '').trim();
     if (candidate.isEmpty) {
       return l10n.profileEditInvalidUsernameError;

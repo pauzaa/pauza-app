@@ -52,7 +52,9 @@ class PauzaAlertDialog extends StatelessWidget {
         if (secondaryActionLabel case final label?)
           CupertinoDialogAction(
             onPressed: onSecondaryActionPressed ?? Navigator.of(context).pop,
-            textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             child: Text(label),
           ),
         CupertinoDialogAction(

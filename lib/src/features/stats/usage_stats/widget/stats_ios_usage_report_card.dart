@@ -25,7 +25,10 @@ class StatsIosUsageReportCard extends StatelessWidget {
           children: <Widget>[
             Text(
               context.l10n.usageTrend.toUpperCase(),
-              style: context.textTheme.headlineSmall?.copyWith(color: context.colorScheme.onSurfaceVariant, letterSpacing: 2),
+              style: context.textTheme.headlineSmall?.copyWith(
+                color: context.colorScheme.onSurfaceVariant,
+                letterSpacing: 2,
+              ),
             ),
             const SizedBox(height: PauzaSpacing.medium),
             SizedBox(

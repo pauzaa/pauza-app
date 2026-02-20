@@ -11,6 +11,9 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authBloc = RootScope.of(context).authBloc;
 
-    return BlocProvider<AuthBloc>.value(value: authBloc, child: const AuthScreenContent());
+    return BlocProvider<AuthBloc>.value(
+      value: authBloc,
+      child: const AuthScreenContent(),
+    );
   }
 }

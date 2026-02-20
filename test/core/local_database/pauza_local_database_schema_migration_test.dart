@@ -15,6 +15,67 @@ void main() {
       contains('CREATE TABLE nfc_linked_chips'),
     );
   });
+
+  test(
+    'onUpgrade from v2 to v3 adds streak_session_daily_rollups table',
+    () async {
+      final database = _FakeDatabase();
+      const schema = PauzaLocalDatabaseSchemaV1();
+
+      await schema.onUpgrade(database, 2, 3);
+
+      expect(
+        database.executedSql.any(
+          (sql) => sql.contains('CREATE TABLE streak_session_daily_rollups'),
+        ),
+        isTrue,
+      );
+    },
+  );
+
+  test('onUpgrade from v2 to v3 adds streak_daily_aggregates table', () async {
+    final database = _FakeDatabase();
+    const schema = PauzaLocalDatabaseSchemaV1();
+
+    await schema.onUpgrade(database, 2, 3);
+
+    expect(
+      database.executedSql.any(
+        (sql) => sql.contains('CREATE TABLE streak_daily_aggregates'),
+      ),
+      isTrue,
+    );
+  });
+
+  test('onUpgrade from v2 to v3 adds streak_rollup_state table', () async {
+    final database = _FakeDatabase();
+    const schema = PauzaLocalDatabaseSchemaV1();
+
+    await schema.onUpgrade(database, 2, 3);
+
+    expect(
+      database.executedSql.any(
+        (sql) => sql.contains('CREATE TABLE streak_rollup_state'),
+      ),
+      isTrue,
+    );
+  });
+
+  test('onUpgrade from v2 to v3 seeds streak_rollup_state row', () async {
+    final database = _FakeDatabase();
+    const schema = PauzaLocalDatabaseSchemaV1();
+
+    await schema.onUpgrade(database, 2, 3);
+
+    expect(
+      database.executedSql.any(
+        (sql) =>
+            sql.contains('INSERT OR IGNORE INTO streak_rollup_state') &&
+            sql.contains('VALUES (1, 0, \'\', 0)'),
+      ),
+      isTrue,
+    );
+  });
 }
 
 final class _FakeDatabase implements Database {

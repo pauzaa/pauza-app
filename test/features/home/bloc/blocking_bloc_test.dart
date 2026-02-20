@@ -150,6 +150,10 @@ class _FakeBlockingRepository implements BlockingRepository {
   int stopCallCount = 0;
   int resumeCallCount = 0;
   final List<Duration> pauseDurations = <Duration>[];
+  final Stream<RestrictionLifecycleAction> _lifecycleActions = const Stream<RestrictionLifecycleAction>.empty();
+
+  @override
+  Stream<RestrictionLifecycleAction> get lifecycleActions => _lifecycleActions;
 
   @override
   Future<RestrictionState> getRestrictionSession() async => restrictionState;
@@ -186,6 +190,9 @@ class _FakeBlockingRepository implements BlockingRepository {
 
   @override
   Future<void> syncRestrictionLifecycleEvents() async {}
+
+  @override
+  void dispose() {}
 }
 
 RestrictionState _restrictionState({required String? activeModeId, DateTime? startedAt, DateTime? pausedUntil}) {

@@ -41,13 +41,9 @@ final class PauzaLanguageSelector extends StatelessWidget {
                     spacing: PauzaSpacing.small,
                     children: <Widget>[
                       Icon(
-                        isSelected
-                            ? Icons.radio_button_checked
-                            : Icons.circle_outlined,
+                        isSelected ? Icons.radio_button_checked : Icons.circle_outlined,
                         size: 18,
-                        color: isSelected
-                            ? context.colorScheme.primary
-                            : context.colorScheme.onSurfaceVariant,
+                        color: isSelected ? context.colorScheme.primary : context.colorScheme.onSurfaceVariant,
                       ),
                       Expanded(child: Text(entry.value)),
                     ],
@@ -57,30 +53,14 @@ final class PauzaLanguageSelector extends StatelessWidget {
               .toList(growable: false);
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: PauzaSpacing.medium,
-            vertical: PauzaSpacing.small,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.small),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             spacing: PauzaSpacing.small,
             children: <Widget>[
-              Icon(
-                Icons.language,
-                size: 20,
-                color: context.colorScheme.onSurfaceVariant,
-              ),
-              Text(
-                currentCode,
-                style: context.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Icon(
-                Icons.keyboard_arrow_down_rounded,
-                size: 20,
-                color: context.colorScheme.onSurfaceVariant,
-              ),
+              Icon(Icons.language, size: 20, color: context.colorScheme.onSurfaceVariant),
+              Text(currentCode, style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
+              Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: context.colorScheme.onSurfaceVariant),
             ],
           ),
         ),

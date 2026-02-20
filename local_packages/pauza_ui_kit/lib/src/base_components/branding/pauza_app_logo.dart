@@ -24,10 +24,7 @@ final class PauzaAppLogo extends StatelessWidget {
             if (appName case final appName? when appName.isNotEmpty)
               Text(
                 appName,
-                style: context.textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.2,
-                ),
+                style: context.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w800, letterSpacing: 1.2),
                 textAlign: TextAlign.center,
               ),
             if (tagline case final tagline? when tagline.isNotEmpty)
@@ -74,10 +71,7 @@ final class _FallbackLogoMark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: context.colorScheme.primary,
-        borderRadius: BorderRadius.circular(28),
-      ),
+      decoration: BoxDecoration(color: context.colorScheme.primary, borderRadius: BorderRadius.circular(28)),
       child: SizedBox(
         width: 120,
         height: 120,
@@ -102,10 +96,7 @@ final class _PauseBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(2),
-      ),
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(2)),
       child: const SizedBox(width: 18, height: 48),
     );
   }

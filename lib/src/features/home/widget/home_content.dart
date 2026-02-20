@@ -4,7 +4,7 @@ import 'package:pauza/src/core/common/extensions.dart';
 import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
-import 'package:pauza/src/features/home/model/home_dashboard_metrics.dart';
+import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
 import 'package:pauza/src/features/home/widget/home_current_mode_card.dart';
 import 'package:pauza/src/features/home/widget/home_pause_pill.dart';
 import 'package:pauza/src/features/home/widget/home_pause_ring.dart';
@@ -60,10 +60,16 @@ class HomeDefaultWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const metrics = HomeDashboardMetrics(streakDays: 5, focusedDuration: Duration(hours: 2, minutes: 15));
     return Column(
-      children: [
-        const Center(child: HomeStatsPill(metrics: metrics)),
+      children: <Widget>[
+        BlocSelector<HomeStatsBloc, HomeStatsState, ({int? streakDays, Duration? focusedDuration})>(
+          selector: (state) => (streakDays: state.streakDays, focusedDuration: state.focusedDuration),
+          builder: (context, stats) {
+            return Center(
+              child: HomeStatsPill(streakDays: stats.streakDays, focusedDuration: stats.focusedDuration),
+            );
+          },
+        ),
         const SizedBox(height: PauzaSpacing.extraLarge),
         BlocSelector<ModesListBloc, ModesListState, Mode?>(
           selector: (state) => state.selectedMode,

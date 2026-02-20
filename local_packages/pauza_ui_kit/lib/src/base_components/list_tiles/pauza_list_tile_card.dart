@@ -28,10 +28,7 @@ final class PauzaListTileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16),
-      side: BorderSide(
-        color: borderColor ?? context.colorScheme.outline,
-        width: borderWidth,
-      ),
+      side: BorderSide(color: borderColor ?? context.colorScheme.outline, width: borderWidth),
     );
 
     return Material(
@@ -54,9 +51,7 @@ final class PauzaListTileCard extends StatelessWidget {
                     Text(title, style: context.textTheme.titleLarge),
                     Text(
                       subtitle,
-                      style: context.textTheme.bodyLarge?.copyWith(
-                        color: context.colorScheme.onSurfaceVariant,
-                      ),
+                      style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onSurfaceVariant),
                     ),
                   ],
                 ),

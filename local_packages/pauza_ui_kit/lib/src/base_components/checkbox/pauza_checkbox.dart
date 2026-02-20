@@ -42,12 +42,8 @@ final class PauzaCheckbox extends StatelessWidget {
     final isSelected = value == true;
     final isMixed = value == null && tristate;
 
-    final activeColor = isError
-        ? context.colorScheme.error
-        : context.colorScheme.primary;
-    final borderColor = isError
-        ? context.colorScheme.error
-        : context.colorScheme.outlineVariant;
+    final activeColor = isError ? context.colorScheme.error : context.colorScheme.primary;
+    final borderColor = isError ? context.colorScheme.error : context.colorScheme.outlineVariant;
 
     final backgroundColor = switch ((isSelected, isMixed)) {
       (true, _) => activeColor,
@@ -76,27 +72,14 @@ final class PauzaCheckbox extends StatelessWidget {
             decoration: BoxDecoration(
               color: backgroundColor,
               borderRadius: BorderRadius.circular(radius),
-              border: Border.all(
-                color: isSelected || isMixed ? activeColor : borderColor,
-                width: 2,
-              ),
+              border: Border.all(color: isSelected || isMixed ? activeColor : borderColor, width: 2),
             ),
             child: Center(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 120),
                 child: switch ((isSelected, isMixed)) {
-                  (true, _) => Icon(
-                    Icons.check,
-                    key: const ValueKey<String>('check'),
-                    size: 18,
-                    color: iconColor,
-                  ),
-                  (false, true) => Icon(
-                    Icons.remove,
-                    key: const ValueKey<String>('dash'),
-                    size: 18,
-                    color: iconColor,
-                  ),
+                  (true, _) => Icon(Icons.check, key: const ValueKey<String>('check'), size: 18, color: iconColor),
+                  (false, true) => Icon(Icons.remove, key: const ValueKey<String>('dash'), size: 18, color: iconColor),
                   _ => const SizedBox.shrink(),
                 },
               ),

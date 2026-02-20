@@ -4,6 +4,7 @@ import 'package:helm/helm.dart';
 import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
+import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
 import 'package:pauza/src/features/home/widget/home_content.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
 
@@ -26,6 +27,12 @@ class HomeScreen extends StatelessWidget {
         BlocProvider(
           create: (context) =>
               BlockingBloc(blockingRepository: rootScope.blockingRepository)..add(const BlockingSyncRequested()),
+        ),
+        BlocProvider(
+          create: (context) => HomeStatsBloc(
+            streaksRepository: rootScope.streaksRepository,
+            lifecycleActions: rootScope.blockingRepository.lifecycleActions,
+          ),
         ),
       ],
       child: const HomeContent(),

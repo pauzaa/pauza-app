@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/extensions.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
-import 'package:pauza/src/features/home/model/home_dashboard_metrics.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class HomeStatsPill extends StatelessWidget {
-  const HomeStatsPill({required this.metrics, super.key});
+  const HomeStatsPill({required this.streakDays, required this.focusedDuration, super.key});
 
-  final HomeDashboardMetrics metrics;
+  final int? streakDays;
+  final Duration? focusedDuration;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final streakLabel = metrics.streakDays == null ? '--' : l10n.homeDayStreakLabel(metrics.streakDays!);
-    final durationLabel = metrics.focusedDuration?.formatDurationLabel(l10n) ?? '--';
+    final streakLabel = streakDays == null ? '--' : l10n.homeDayStreakLabel(streakDays!);
+    final durationLabel = focusedDuration?.formatDurationLabel(l10n) ?? '--';
 
     return DecoratedBox(
       decoration: BoxDecoration(

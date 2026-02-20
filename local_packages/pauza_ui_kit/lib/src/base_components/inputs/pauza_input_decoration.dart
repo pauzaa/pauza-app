@@ -45,10 +45,7 @@ class PauzaInputDecoration {
     this.suffixIconVisibility = PauzaTextFieldIconVisibility.always,
     this.automaticallyImplyClear = false,
     this.disabledColor,
-  }) : assert(
-         !(label != null && labelText != null),
-         'Declaring both label and labelText is not supported.',
-       );
+  }) : assert(!(label != null && labelText != null), 'Declaring both label and labelText is not supported.');
 
   final Widget? icon;
   final Color? iconColor;
@@ -190,8 +187,7 @@ class PauzaInputDecoration {
       filled: filled ?? this.filled,
       prefixIconVisibility: prefixIconVisibility ?? this.prefixIconVisibility,
       suffixIconVisibility: suffixIconVisibility ?? this.suffixIconVisibility,
-      automaticallyImplyClear:
-          automaticallyImplyClear ?? this.automaticallyImplyClear,
+      automaticallyImplyClear: automaticallyImplyClear ?? this.automaticallyImplyClear,
       disabledColor: disabledColor ?? this.disabledColor,
     );
   }
@@ -228,10 +224,7 @@ class PauzaInputDecoration {
       case (PauzaTextFieldIconVisibility.onFocus, true):
         if (suffixIcon case final icon?) {
           effectiveSuffixIcon = IconTheme(
-            data: IconThemeData(
-              color: effectiveSuffixIconColor,
-              size: PauzaIconSizes.small,
-            ),
+            data: IconThemeData(color: effectiveSuffixIconColor, size: PauzaIconSizes.small),
             child: icon,
           );
         } else if (automaticallyImplyClear && controller.text.isNotEmpty) {
@@ -275,8 +268,7 @@ class PauzaInputDecoration {
       filled: filled ?? theme.filled,
       fillColor: isEnabled
           ? (fillColor ?? theme.fillColor)
-          : ((disabledColor ?? context.colorScheme.surfaceContainerLow)
-                .withValues(alpha: 0.6)),
+          : ((disabledColor ?? context.colorScheme.surfaceContainerLow).withValues(alpha: 0.6)),
       focusColor: focusColor ?? theme.focusColor,
       hoverColor: hoverColor ?? theme.hoverColor,
       errorBorder: errorBorder ?? theme.errorBorder,

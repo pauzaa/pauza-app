@@ -3,9 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
-  testWidgets('PauzaSwitch toggles in stateful host', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PauzaSwitch toggles in stateful host', (WidgetTester tester) async {
     var value = false;
     await tester.pumpWidget(
       MaterialApp(

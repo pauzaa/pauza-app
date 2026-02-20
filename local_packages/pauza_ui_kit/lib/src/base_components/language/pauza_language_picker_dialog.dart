@@ -53,12 +53,8 @@ final class PauzaLanguagePickerDialog extends StatelessWidget {
             return ListTile(
               title: Text(entry.value),
               trailing: Icon(
-                isSelected
-                    ? Icons.radio_button_checked_rounded
-                    : Icons.radio_button_off_rounded,
-                color: isSelected
-                    ? context.colorScheme.primary
-                    : context.colorScheme.onSurfaceVariant,
+                isSelected ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded,
+                color: isSelected ? context.colorScheme.primary : context.colorScheme.onSurfaceVariant,
               ),
               onTap: () {
                 Navigator.of(context).pop(entry.key);
@@ -67,12 +63,7 @@ final class PauzaLanguagePickerDialog extends StatelessWidget {
           },
         ),
       ),
-      actions: <Widget>[
-        PauzaTextButton(
-          onPressed: Navigator.of(context).pop,
-          title: Text(cancelLabel),
-        ),
-      ],
+      actions: <Widget>[PauzaTextButton(onPressed: Navigator.of(context).pop, title: Text(cancelLabel))],
     );
   }
 }

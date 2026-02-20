@@ -15,9 +15,7 @@ void main() {
     return button.style!.textStyle!.resolve(const <WidgetState>{})!;
   }
 
-  testWidgets('PauzaFilledButton triggers onPressed', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PauzaFilledButton triggers onPressed', (WidgetTester tester) async {
     var tapped = false;
     await tester.pumpWidget(
       buildTestApp(
@@ -34,35 +32,18 @@ void main() {
     expect(tapped, isTrue);
   });
 
-  testWidgets('PauzaButtonSize text styles map to expected text theme tokens', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PauzaButtonSize text styles map to expected text theme tokens', (WidgetTester tester) async {
     await tester.pumpWidget(
       buildTestApp(
         Builder(
           builder: (context) {
             final textTheme = context.textTheme;
 
-            expect(
-              PauzaButtonSize.xxSmall.textStyle(context),
-              textTheme.labelSmall,
-            );
-            expect(
-              PauzaButtonSize.xSmall.textStyle(context),
-              textTheme.labelLarge,
-            );
-            expect(
-              PauzaButtonSize.small.textStyle(context),
-              textTheme.labelLarge,
-            );
-            expect(
-              PauzaButtonSize.medium.textStyle(context),
-              textTheme.titleLarge,
-            );
-            expect(
-              PauzaButtonSize.large.textStyle(context),
-              textTheme.headlineSmall,
-            );
+            expect(PauzaButtonSize.xxSmall.textStyle(context), textTheme.labelSmall);
+            expect(PauzaButtonSize.xSmall.textStyle(context), textTheme.labelLarge);
+            expect(PauzaButtonSize.small.textStyle(context), textTheme.labelLarge);
+            expect(PauzaButtonSize.medium.textStyle(context), textTheme.titleLarge);
+            expect(PauzaButtonSize.large.textStyle(context), textTheme.headlineSmall);
 
             return const SizedBox.shrink();
           },
@@ -71,27 +52,15 @@ void main() {
     );
   });
 
-  testWidgets('PauzaFilledButton uses mapped text style defaults by size', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      buildTestApp(
-        PauzaFilledButton(title: const Text('Medium'), onPressed: () {}),
-      ),
-    );
+  testWidgets('PauzaFilledButton uses mapped text style defaults by size', (WidgetTester tester) async {
+    await tester.pumpWidget(buildTestApp(PauzaFilledButton(title: const Text('Medium'), onPressed: () {})));
 
     final mediumStyle = buttonTextStyle(tester);
     expect(mediumStyle.fontSize, 22);
     expect(mediumStyle.fontWeight, FontWeight.w700);
 
     await tester.pumpWidget(
-      buildTestApp(
-        PauzaFilledButton(
-          title: const Text('Large'),
-          onPressed: () {},
-          size: PauzaButtonSize.large,
-        ),
-      ),
+      buildTestApp(PauzaFilledButton(title: const Text('Large'), onPressed: () {}, size: PauzaButtonSize.large)),
     );
 
     final largeStyle = buttonTextStyle(tester);
@@ -99,19 +68,11 @@ void main() {
     expect(largeStyle.fontWeight, FontWeight.w700);
   });
 
-  testWidgets('PauzaFilledButton honors explicit textStyle override', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PauzaFilledButton honors explicit textStyle override', (WidgetTester tester) async {
     const overrideStyle = TextStyle(fontSize: 17, fontWeight: FontWeight.w400);
 
     await tester.pumpWidget(
-      buildTestApp(
-        PauzaFilledButton(
-          title: const Text('Override'),
-          onPressed: () {},
-          textStyle: overrideStyle,
-        ),
-      ),
+      buildTestApp(PauzaFilledButton(title: const Text('Override'), onPressed: () {}, textStyle: overrideStyle)),
     );
 
     final style = buttonTextStyle(tester);
@@ -119,9 +80,7 @@ void main() {
     expect(style.fontWeight, overrideStyle.fontWeight);
   });
 
-  testWidgets('PauzaFilledButton disabled/loading does not trigger', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PauzaFilledButton disabled/loading does not trigger', (WidgetTester tester) async {
     var taps = 0;
     await tester.pumpWidget(
       buildTestApp(

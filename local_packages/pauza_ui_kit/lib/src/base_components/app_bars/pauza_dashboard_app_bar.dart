@@ -38,12 +38,7 @@ final class PauzaDashboardAppBar extends StatelessWidget {
                   ),
                 ),
 
-                Text(
-                  title,
-                  style: context.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                Text(title, style: context.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w700)),
               ],
             ),
           ),

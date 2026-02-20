@@ -3,13 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 void main() {
-  testWidgets('shifts date range by inclusive span with arrows', (
-    tester,
-  ) async {
-    var selected = DateTimeRange(
-      start: DateTime(2025),
-      end: DateTime(2025, 1, 14),
-    );
+  testWidgets('shifts date range by inclusive span with arrows', (tester) async {
+    var selected = DateTimeRange(start: DateTime(2025), end: DateTime(2025, 1, 14));
 
     await tester.pumpWidget(
       MaterialApp(
@@ -48,10 +43,7 @@ void main() {
   });
 
   testWidgets('caps right shift at max date', (tester) async {
-    var selected = DateTimeRange(
-      start: DateTime(2025, 2, 9),
-      end: DateTime(2025, 2, 15),
-    );
+    var selected = DateTimeRange(start: DateTime(2025, 2, 9), end: DateTime(2025, 2, 15));
 
     await tester.pumpWidget(
       MaterialApp(
@@ -78,10 +70,7 @@ void main() {
   });
 
   testWidgets('caps left shift at min date', (tester) async {
-    var selected = DateTimeRange(
-      start: DateTime(2025, 2, 2),
-      end: DateTime(2025, 2, 8),
-    );
+    var selected = DateTimeRange(start: DateTime(2025, 2, 2), end: DateTime(2025, 2, 8));
 
     await tester.pumpWidget(
       MaterialApp(
@@ -108,10 +97,7 @@ void main() {
   });
 
   testWidgets('supports nullable min and max dates', (tester) async {
-    var selected = DateTimeRange(
-      start: DateTime(2025),
-      end: DateTime(2025, 1, 14),
-    );
+    var selected = DateTimeRange(start: DateTime(2025), end: DateTime(2025, 1, 14));
 
     await tester.pumpWidget(
       MaterialApp(

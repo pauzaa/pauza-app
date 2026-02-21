@@ -38,6 +38,7 @@ dependencies:
   material_symbols_icons: ^4.2906.0
   android_intent_plus: ^6.0.0
   nfc_util: 1.0.3
+  qr: ^3.0.2
   image_picker: ^1.2.0
 
 workspace:

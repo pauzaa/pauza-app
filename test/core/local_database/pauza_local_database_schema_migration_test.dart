@@ -53,6 +53,16 @@ void main() {
       isTrue,
     );
   });
+
+  test('onUpgrade from v3 to v4 adds qr_linked_codes table', () async {
+    final database = _FakeDatabase();
+    const schema = PauzaLocalDatabaseSchemaV1();
+
+    await schema.onUpgrade(database, 3, 4);
+
+    expect(database.executedSql, hasLength(1));
+    expect(database.executedSql.single, contains('CREATE TABLE qr_linked_codes'));
+  });
 }
 
 final class _FakeDatabase implements Database {

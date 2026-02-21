@@ -88,6 +88,17 @@ CREATE TABLE nfc_linked_chips (
 );
 ''';
 
+  static const String createQrLinkedCodesTable = '''
+CREATE TABLE qr_linked_codes (
+  id TEXT PRIMARY KEY NOT NULL,
+  scan_value TEXT NOT NULL UNIQUE
+    CHECK (length(trim(scan_value)) > 0),
+  name TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+''';
+
   static const String createStreakSessionDailyRollupsTable = '''
 CREATE TABLE streak_session_daily_rollups (
   session_id TEXT NOT NULL REFERENCES restriction_sessions(session_id) ON DELETE CASCADE,
@@ -142,6 +153,7 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
     batch.execute(LocalDatabaseSqlStatements.createRestrictionLifecycleEventsTable);
     batch.execute(LocalDatabaseSqlStatements.createRestrictionSessionsTable);
     batch.execute(LocalDatabaseSqlStatements.createNfcLinkedChipsTable);
+    batch.execute(LocalDatabaseSqlStatements.createQrLinkedCodesTable);
     batch.execute(LocalDatabaseSqlStatements.createStreakSessionDailyRollupsTable);
     batch.execute(LocalDatabaseSqlStatements.createStreakDailyAggregatesTable);
     batch.execute(LocalDatabaseSqlStatements.createStreakRollupStateTable);
@@ -160,6 +172,10 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
       await database.execute(LocalDatabaseSqlStatements.createStreakDailyAggregatesTable);
       await database.execute(LocalDatabaseSqlStatements.createStreakRollupStateTable);
       await database.execute(LocalDatabaseSqlStatements.seedStreakRollupStateRow);
+    }
+
+    if (oldVersion < 4 && newVersion >= 4) {
+      await database.execute(LocalDatabaseSqlStatements.createQrLinkedCodesTable);
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc_chip_config/data/nfc_linked_chips_repository.dart';
 import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
+import 'package:pauza/src/features/qr_code_config/data/qr_linked_codes_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
@@ -30,6 +31,7 @@ class RootScopeState extends State<RootScope> {
   late final InstalledAppsRepository installedAppsRepository;
   late final NfcRepository nfcRepository;
   late final NfcLinkedChipsRepository nfcLinkedChipsRepository;
+  late final QrLinkedCodesRepository qrLinkedCodesRepository;
   late final StatsUsageRepository statsUsageRepository;
   late final CurrentUserBloc currentUserBloc;
   late final AuthBloc authBloc;
@@ -58,6 +60,7 @@ class RootScopeState extends State<RootScope> {
 
     nfcRepository = PauzaDependencies.of(context).nfcRepository;
     nfcLinkedChipsRepository = NfcLinkedChipsRepositoryImpl(localDatabase: PauzaDependencies.of(context).localDatabase);
+    qrLinkedCodesRepository = QrLinkedCodesRepositoryImpl(localDatabase: PauzaDependencies.of(context).localDatabase);
     // UI-level session/profile composition lives in RootScope (runtime scope),
     // not in infra dependencies.
     currentUserBloc = CurrentUserBloc(

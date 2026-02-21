@@ -14,9 +14,10 @@ import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
 
 class RootScope extends StatefulWidget {
-  const RootScope({required this.child, super.key});
+  const RootScope({required this.child, this.dependencies, super.key});
 
   final Widget child;
+  final PauzaDependencies? dependencies;
 
   @override
   State<RootScope> createState() => RootScopeState();
@@ -30,6 +31,7 @@ class RootScopeState extends State<RootScope> {
   late final ModesRepository modesRepository;
   late final InstalledAppsRepository installedAppsRepository;
   late final NfcRepository nfcRepository;
+  late final bool hasNfcSupport;
   late final NfcLinkedChipsRepository nfcLinkedChipsRepository;
   late final QrLinkedCodesRepository qrLinkedCodesRepository;
   late final StatsUsageRepository statsUsageRepository;
@@ -40,44 +42,44 @@ class RootScopeState extends State<RootScope> {
 
   @override
   void initState() {
+    final dependencies = widget.dependencies ?? PauzaDependencies.of(context);
+
     blockingRepository = PauzaBlockingRepository(
-      restrictions: PauzaDependencies.of(context).appRestrictionManager,
-      restrictionLifecycleRepository: PauzaDependencies.of(context).restrictionLifecycleRepository,
+      restrictions: dependencies.appRestrictionManager,
+      restrictionLifecycleRepository: dependencies.restrictionLifecycleRepository,
     );
 
-    modesRepository = ModesRepositoryImpl(
-      localDatabase: PauzaDependencies.of(context).localDatabase,
-      platform: kPauzaPlatform,
-    );
+    modesRepository = ModesRepositoryImpl(localDatabase: dependencies.localDatabase, platform: kPauzaPlatform);
 
     installedAppsRepository = PauzaScreenTimeInstalledAppsRepository(
-      installedAppsManager: PauzaDependencies.of(context).installedAppsManager,
+      installedAppsManager: dependencies.installedAppsManager,
     );
     statsUsageRepository = StatsUsageRepositoryImpl(
-      usageStatsManager: PauzaDependencies.of(context).usageStatsManager,
-      installedAppsManager: PauzaDependencies.of(context).installedAppsManager,
+      usageStatsManager: dependencies.usageStatsManager,
+      installedAppsManager: dependencies.installedAppsManager,
     );
 
-    nfcRepository = PauzaDependencies.of(context).nfcRepository;
-    nfcLinkedChipsRepository = NfcLinkedChipsRepositoryImpl(localDatabase: PauzaDependencies.of(context).localDatabase);
-    qrLinkedCodesRepository = QrLinkedCodesRepositoryImpl(localDatabase: PauzaDependencies.of(context).localDatabase);
+    nfcRepository = dependencies.nfcRepository;
+    hasNfcSupport = dependencies.hasNfcSupport;
+    nfcLinkedChipsRepository = NfcLinkedChipsRepositoryImpl(localDatabase: dependencies.localDatabase);
+    qrLinkedCodesRepository = QrLinkedCodesRepositoryImpl(localDatabase: dependencies.localDatabase);
     // UI-level session/profile composition lives in RootScope (runtime scope),
     // not in infra dependencies.
     currentUserBloc = CurrentUserBloc(
-      authRepository: PauzaDependencies.of(context).authRepository,
-      userProfileRepository: PauzaDependencies.of(context).userProfileRepository,
+      authRepository: dependencies.authRepository,
+      userProfileRepository: dependencies.userProfileRepository,
       ttl: const Duration(minutes: 15),
       nowUtc: () => DateTime.now().toUtc(),
     );
 
-    authBloc = AuthBloc(authRepository: PauzaDependencies.of(context).authRepository);
+    authBloc = AuthBloc(authRepository: dependencies.authRepository);
 
     restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
-      repository: PauzaDependencies.of(context).restrictionLifecycleRepository,
+      repository: dependencies.restrictionLifecycleRepository,
     );
     restrictionLifecycleSyncCoordinator.attach();
 
-    streaksRepository = PauzaDependencies.of(context).streaksRepository;
+    streaksRepository = dependencies.streaksRepository;
 
     super.initState();
   }

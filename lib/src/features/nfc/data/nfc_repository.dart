@@ -12,6 +12,8 @@ abstract interface class NfcRepository {
 
   bool get canOpenSystemSettingsForNfc;
 
+  Future<bool> hasNfcSupport();
+
   Future<NfcChipAvailability> getAvailability();
 
   Future<bool> openSystemSettingsForNfc();
@@ -34,6 +36,21 @@ final class NfcRepositoryImpl implements NfcRepository {
 
   @override
   bool get canOpenSystemSettingsForNfc => _managerClient.canOpenSystemSettingsForNfc;
+
+  @override
+  Future<bool> hasNfcSupport() async {
+    try {
+      final availability = await getAvailability();
+      return switch (availability) {
+        NfcChipAvailability.available => true,
+        NfcChipAvailability.disabled => true,
+        NfcChipAvailability.notSupported => false,
+        NfcChipAvailability.unknown => false,
+      };
+    } on Object {
+      return false;
+    }
+  }
 
   @override
   Future<NfcChipAvailability> getAvailability() async {

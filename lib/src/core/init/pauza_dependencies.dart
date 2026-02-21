@@ -28,6 +28,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final RestrictionLifecycleRepository restrictionLifecycleRepository;
   late final StreaksRepository streaksRepository;
   late final NfcRepository nfcRepository;
+  late final bool hasNfcSupport;
   late final AuthSessionStorage authSessionStorage;
   late final FlutterSecureStorage secureStorage;
   late final IAppFuseStorage appFuseStorage;
@@ -78,6 +79,7 @@ class PauzaDependencies with AppFuseInitialization {
       appRestrictionManager = AppRestrictionManager();
       usageStatsManager = UsageStatsManager();
       nfcRepository = NfcRepositoryImpl(managerClient: NfcUtilClient());
+      hasNfcSupport = await nfcRepository.hasNfcSupport();
     },
     'init restriction lifecycle sync coordinator': (_) async {
       restrictionLifecycleRepository = RestrictionLifecycleRepositoryImpl(

@@ -32,6 +32,54 @@ void main() {
       expect(availability, NfcChipAvailability.unknown);
     });
 
+    test('hasNfcSupport returns true when availability is available', () async {
+      final repository = NfcRepositoryImpl(managerClient: _FakeNfcManagerClient());
+
+      final hasNfcSupport = await repository.hasNfcSupport();
+
+      expect(hasNfcSupport, isTrue);
+    });
+
+    test('hasNfcSupport returns true when availability is disabled', () async {
+      final repository = NfcRepositoryImpl(
+        managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.disabled),
+      );
+
+      final hasNfcSupport = await repository.hasNfcSupport();
+
+      expect(hasNfcSupport, isTrue);
+    });
+
+    test('hasNfcSupport returns false when availability is not supported', () async {
+      final repository = NfcRepositoryImpl(
+        managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.notSupported),
+      );
+
+      final hasNfcSupport = await repository.hasNfcSupport();
+
+      expect(hasNfcSupport, isFalse);
+    });
+
+    test('hasNfcSupport returns false when availability is unknown', () async {
+      final repository = NfcRepositoryImpl(
+        managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.unknown),
+      );
+
+      final hasNfcSupport = await repository.hasNfcSupport();
+
+      expect(hasNfcSupport, isFalse);
+    });
+
+    test('hasNfcSupport returns false when availability check throws', () async {
+      final repository = NfcRepositoryImpl(
+        managerClient: _FakeNfcManagerClient(checkAvailabilityError: Exception('boom')),
+      );
+
+      final hasNfcSupport = await repository.hasNfcSupport();
+
+      expect(hasNfcSupport, isFalse);
+    });
+
     test('maps discovered tag snapshot to NFC card DTO', () async {
       final repository = NfcRepositoryImpl(
         managerClient: _FakeNfcManagerClient(

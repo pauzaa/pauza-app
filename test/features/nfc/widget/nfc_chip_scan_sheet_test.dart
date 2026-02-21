@@ -96,6 +96,9 @@ final class _FakeNfcRepository implements NfcRepository {
   bool get isScanInProgress => false;
 
   @override
+  Future<bool> hasNfcSupport() async => availability != NfcChipAvailability.notSupported;
+
+  @override
   Future<NfcChipAvailability> getAvailability() async => availability;
 
   @override

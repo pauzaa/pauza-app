@@ -4,6 +4,7 @@ import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
 import 'package:pauza/src/features/nfc/model/nfc_platform_types.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_availability.dart';
+import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc/model/nfc_errors.dart';
 import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_tag_tech.dart';
@@ -21,22 +22,21 @@ void main() {
       expect(availability, NfcChipAvailability.disabled);
     });
 
-    test('throws unknown when availability cannot be determined', () async {
+    test('returns unknown when availability cannot be determined', () async {
       final repository = NfcRepositoryImpl(
         managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.unknown),
       );
 
-      expect(
-        repository.getAvailability,
-        throwsA(isA<NfcException>().having((exception) => exception.code, 'code', NfcErrorCode.unknown)),
-      );
+      final availability = await repository.getAvailability();
+
+      expect(availability, NfcChipAvailability.unknown);
     });
 
     test('maps discovered tag snapshot to NFC card DTO', () async {
       final repository = NfcRepositoryImpl(
         managerClient: _FakeNfcManagerClient(
           scanResult: NfcTagSnapshot(
-            uidHex: '01020304',
+            uidHex: NfcChipIdentifier.parse('01020304'),
             techTypes: IList(const <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA]),
             isNdefFormatted: true,
             ndefRecords: IList(const <NfcNdefRecordDto>[
@@ -56,7 +56,7 @@ void main() {
 
       final card = await repository.scanSingleCard();
 
-      expect(card.uidHex, '01020304');
+      expect(card.uidHex, NfcChipIdentifier.parse('01020304'));
       expect(card.techTypes, <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA]);
       expect(card.isNdefFormatted, isTrue);
       expect(card.ndefRecords.length, 1);

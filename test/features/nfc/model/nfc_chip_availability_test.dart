@@ -539,6 +539,10 @@ void main() {
       test('notSupported shows guidance', () {
         expect(NfcChipAvailability.notSupported.showGuidance, isTrue);
       });
+
+      test('unknown shows guidance', () {
+        expect(NfcChipAvailability.unknown.showGuidance, isTrue);
+      });
     });
 
     group('showOpenSettingsAction', () {
@@ -552,6 +556,10 @@ void main() {
 
       test('notSupported does not show open settings action', () {
         expect(NfcChipAvailability.notSupported.showOpenSettingsAction, isFalse);
+      });
+
+      test('unknown does not show open settings action', () {
+        expect(NfcChipAvailability.unknown.showOpenSettingsAction, isFalse);
       });
     });
 
@@ -567,6 +575,10 @@ void main() {
       test('notSupported has error severity', () {
         expect(NfcChipAvailability.notSupported.severity, NfcAvailabilitySeverity.error);
       });
+
+      test('unknown has warning severity', () {
+        expect(NfcChipAvailability.unknown.severity, NfcAvailabilitySeverity.warning);
+      });
     });
 
     group('shouldShowOpenSettings', () {
@@ -581,6 +593,7 @@ void main() {
       test('other values always return false regardless of canOpenSettings', () {
         expect(NfcChipAvailability.available.shouldShowOpenSettings(canOpenSettings: true), isFalse);
         expect(NfcChipAvailability.notSupported.shouldShowOpenSettings(canOpenSettings: true), isFalse);
+        expect(NfcChipAvailability.unknown.shouldShowOpenSettings(canOpenSettings: true), isFalse);
       });
     });
 
@@ -595,6 +608,10 @@ void main() {
 
       test('notSupported returns correct title', () {
         expect(NfcChipAvailability.notSupported.localizedTitle(l10n), 'NFC is not supported');
+      });
+
+      test('unknown returns correct title', () {
+        expect(NfcChipAvailability.unknown.localizedTitle(l10n), 'NFC status unavailable');
       });
     });
 
@@ -613,6 +630,13 @@ void main() {
       test('notSupported returns correct body', () {
         expect(NfcChipAvailability.notSupported.localizedBody(l10n), 'This device does not support NFC scanning.');
       });
+
+      test('unknown returns correct body', () {
+        expect(
+          NfcChipAvailability.unknown.localizedBody(l10n),
+          'We could not determine NFC availability right now. Try again in a moment.',
+        );
+      });
     });
 
     group('localizedActionLabel', () {
@@ -630,6 +654,10 @@ void main() {
 
       test('notSupported returns null', () {
         expect(NfcChipAvailability.notSupported.localizedActionLabel(l10n, canOpenSettings: true), isNull);
+      });
+
+      test('unknown returns null', () {
+        expect(NfcChipAvailability.unknown.localizedActionLabel(l10n, canOpenSettings: true), isNull);
       });
     });
   });

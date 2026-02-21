@@ -27,7 +27,6 @@ class QrCodeConfContent extends StatelessWidget {
         switch (state) {
           case QrCodeConfIdle():
           case QrCodeConfLoading():
-          case QrCodeConfSuccess():
             break;
           case QrCodeConfError():
             if (state.error case final Localizable localizableError) {

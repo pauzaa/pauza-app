@@ -43,10 +43,7 @@ final class NfcRepositoryImpl implements NfcRepository {
         NfcPlatformAvailability.available => NfcChipAvailability.available,
         NfcPlatformAvailability.disabled => NfcChipAvailability.disabled,
         NfcPlatformAvailability.notSupported => NfcChipAvailability.notSupported,
-        NfcPlatformAvailability.unknown => throw const NfcException(
-          code: NfcErrorCode.unknown,
-          message: 'Could not determine NFC availability.',
-        ),
+        NfcPlatformAvailability.unknown => NfcChipAvailability.unknown,
       };
     } on Object catch (error) {
       throw NfcException.fromError(error);
@@ -75,6 +72,13 @@ final class NfcRepositoryImpl implements NfcRepository {
         code: NfcErrorCode.disabled,
         nfcAvailability: availability,
         message: 'NFC is disabled on this device.',
+      );
+    }
+    if (availability == NfcChipAvailability.unknown) {
+      throw NfcException(
+        code: NfcErrorCode.unknown,
+        nfcAvailability: availability,
+        message: 'Could not determine NFC availability.',
       );
     }
 

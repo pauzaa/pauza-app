@@ -28,7 +28,6 @@ class NfcChipConfContent extends StatelessWidget {
         switch (state) {
           case NfcChipConfIdle():
           case NfcChipConfLoading():
-          case NfcChipConfSuccess():
             break;
           case NfcChipConfError():
             if (state.error case final Localizable localizableError) {

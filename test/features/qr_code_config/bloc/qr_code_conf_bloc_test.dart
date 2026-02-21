@@ -6,6 +6,35 @@ import 'package:pauza/src/features/qr_code_config/model/qr_linked_code.dart';
 import 'package:pauza/src/features/qr_code_config/model/qr_unlock_token.dart';
 
 void main() {
+  group('QrCodeConfState semantics', () {
+    test('idle and loading state equality includes linkedCodes', () {
+      final firstCodes = [_code(id: 'code-1', name: 'Desk')].lock;
+      final secondCodes = [_code(id: 'code-2', name: 'Office')].lock;
+
+      expect(QrCodeConfIdle(linkedCodes: firstCodes), isNot(QrCodeConfIdle(linkedCodes: secondCodes)));
+      expect(QrCodeConfLoading(linkedCodes: firstCodes), isNot(QrCodeConfLoading(linkedCodes: secondCodes)));
+    });
+
+    test('error state equality includes both error and linkedCodes', () {
+      final error = StateError('failed');
+      final firstCodes = [_code(id: 'code-1', name: 'Desk')].lock;
+      final secondCodes = [_code(id: 'code-2', name: 'Office')].lock;
+
+      expect(
+        QrCodeConfError(error: error, linkedCodes: firstCodes),
+        QrCodeConfError(error: error, linkedCodes: firstCodes),
+      );
+      expect(
+        QrCodeConfError(error: error, linkedCodes: firstCodes),
+        isNot(QrCodeConfError(error: error, linkedCodes: secondCodes)),
+      );
+      expect(
+        QrCodeConfError(error: StateError('failed'), linkedCodes: firstCodes),
+        isNot(QrCodeConfError(error: StateError('failed-2'), linkedCodes: firstCodes)),
+      );
+    });
+  });
+
   group('QrCodeConfBloc', () {
     test('load success emits idle with fetched codes', () async {
       final repository = _FakeQrLinkedCodesRepository(
@@ -64,6 +93,25 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state, isA<QrCodeConfError>());
+
+      await bloc.close();
+    });
+
+    test('loading to error transition retains linked codes', () async {
+      final expectedCode = _code(id: 'code-1', name: 'Desk');
+      final repository = _FakeQrLinkedCodesRepository(
+        linkedCodes: [expectedCode].lock,
+        generateError: StateError('generate_failed'),
+      );
+      final bloc = QrCodeConfBloc(linkedCodesRepository: repository);
+
+      bloc.add(const QrCodeLoadCodesRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const QrCodeGenerateCodeRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(bloc.state, isA<QrCodeConfError>());
+      expect(bloc.state.linkedCodes, [expectedCode].lock);
 
       await bloc.close();
     });

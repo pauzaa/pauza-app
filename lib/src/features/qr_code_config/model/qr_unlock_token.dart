@@ -1,6 +1,6 @@
 import 'package:uuid/uuid.dart';
 
-extension type const QrUnlockToken._(String value) {
+extension type const QrUnlockToken._(String value) implements String {
   static const String _prefix = 'pauza:qr:v1:';
   static final RegExp _uuidV4Pattern = RegExp(r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
 

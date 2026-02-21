@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nfc_util/nfc_util.dart';
 import 'package:nfc_util/platform_tags.dart';
+import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_tag_tech.dart';
 
@@ -19,7 +20,7 @@ class NfcTagSnapshot {
     required this.rawSnapshot,
   });
 
-  final String? uidHex;
+  final NfcChipIdentifier? uidHex;
   final bool isNdefFormatted;
   final IList<NfcTagTech> techTypes;
   final IList<NfcNdefRecordDto> ndefRecords;
@@ -31,7 +32,7 @@ class NfcTagSnapshot {
     final ndefRecords = await _extractNdefRecords(tag);
 
     final rawSnapshot = <String, Object?>{
-      'uidHex': uidHex,
+      'uidHex': uidHex?.normalized,
       'techTypes': techTypes.map((tech) => tech.name).toList(growable: false),
       'platform': defaultTargetPlatform.name,
       'rawTagData': _normalizeRawValue(tag.data),
@@ -100,63 +101,71 @@ List<NfcTagTech> _extractTechTypes(NfcTag tag) {
   return types;
 }
 
-String? _extractUidHex(NfcTag tag) {
+NfcChipIdentifier? _extractUidHex(NfcTag tag) {
   final iosMifare = MiFare.from(tag);
   if (iosMifare != null) {
-    return _bytesToHex(iosMifare.identifier);
+    return _identifierFromBytes(iosMifare.identifier);
   }
 
   final iso7816 = Iso7816.from(tag);
   if (iso7816 != null) {
-    return _bytesToHex(iso7816.identifier);
+    return _identifierFromBytes(iso7816.identifier);
   }
 
   final iso15693 = Iso15693.from(tag);
   if (iso15693 != null) {
-    return _bytesToHex(iso15693.identifier);
+    return _identifierFromBytes(iso15693.identifier);
   }
 
   final felica = FeliCa.from(tag);
   if (felica != null) {
-    return _bytesToHex(felica.currentIDm);
+    return _identifierFromBytes(felica.currentIDm);
   }
 
   final nfcA = NfcA.from(tag);
   if (nfcA != null) {
-    return _bytesToHex(nfcA.identifier);
+    return _identifierFromBytes(nfcA.identifier);
   }
 
   final nfcB = NfcB.from(tag);
   if (nfcB != null) {
-    return _bytesToHex(nfcB.identifier);
+    return _identifierFromBytes(nfcB.identifier);
   }
 
   final nfcF = NfcF.from(tag);
   if (nfcF != null) {
-    return _bytesToHex(nfcF.identifier);
+    return _identifierFromBytes(nfcF.identifier);
   }
 
   final nfcV = NfcV.from(tag);
   if (nfcV != null) {
-    return _bytesToHex(nfcV.identifier);
+    return _identifierFromBytes(nfcV.identifier);
   }
 
   final isoDep = IsoDep.from(tag);
   if (isoDep != null) {
-    return _bytesToHex(isoDep.identifier);
+    return _identifierFromBytes(isoDep.identifier);
   }
 
   final mifareClassic = MifareClassic.from(tag);
   if (mifareClassic != null) {
-    return _bytesToHex(mifareClassic.identifier);
+    return _identifierFromBytes(mifareClassic.identifier);
   }
 
   final mifareUltralight = MifareUltralight.from(tag);
   if (mifareUltralight != null) {
-    return _bytesToHex(mifareUltralight.identifier);
+    return _identifierFromBytes(mifareUltralight.identifier);
   }
 
   return null;
+}
+
+NfcChipIdentifier? _identifierFromBytes(Uint8List bytes) {
+  if (bytes.isEmpty) {
+    return null;
+  }
+
+  return NfcChipIdentifier.parse(_bytesToHex(bytes));
 }
 
 Future<List<NfcNdefRecordDto>> _extractNdefRecords(NfcTag tag) async {

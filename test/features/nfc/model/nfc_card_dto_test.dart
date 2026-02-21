@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/nfc/model/nfc_card_dto.dart';
+import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_tag_tech.dart';
 
@@ -19,7 +20,7 @@ void main() {
       final dto = NfcCardDto(
         id: 'card-id-1',
         detectedAt: detectedAt,
-        uidHex: 'a1b2c3d4',
+        uidHex: NfcChipIdentifier.parse('a1b2c3d4'),
         techTypes: IList(const <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA]),
         isNdefFormatted: true,
         ndefRecords: IList(const <NfcNdefRecordDto>[record]),

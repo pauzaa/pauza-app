@@ -60,7 +60,10 @@ class NfcChipConfBloc extends Bloc<NfcChipConfEvent, NfcChipConfState> {
       if (uidHex == null || uidHex.isEmpty) {
         throw const NfcChipConfigMissingIdentifierError();
       }
-      await _linkedChipsRepository.linkChipIfAbsent(chipIdentifier: uidHex);
+      final inserted = await _linkedChipsRepository.linkChipIfAbsent(chipIdentifier: uidHex);
+      if (!inserted) {
+        throw const NfcChipConfigAlreadyLinkedError();
+      }
       await _onLoadCards(emit);
     } on Object catch (error) {
       emit(state.setError(error));

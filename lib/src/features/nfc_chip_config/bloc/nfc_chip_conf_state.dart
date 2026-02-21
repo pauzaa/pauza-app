@@ -5,37 +5,27 @@ sealed class NfcChipConfState extends Equatable {
   final IList<NfcLinkedChip> linkedChips;
 
   bool get isLoading => this is NfcChipConfLoading;
-  bool get isSuccess => this is NfcChipConfSuccess;
   bool get isError => this is NfcChipConfError;
 
   NfcChipConfState loading({IList<NfcLinkedChip>? newLinkedChips}) =>
       NfcChipConfLoading(linkedChips: newLinkedChips ?? linkedChips);
-  NfcChipConfState success({IList<NfcLinkedChip>? newLinkedChips}) =>
-      NfcChipConfSuccess(linkedChips: newLinkedChips ?? linkedChips);
   NfcChipConfState setError(Object error, {IList<NfcLinkedChip>? newLinkedChips}) =>
       NfcChipConfError(error: error, linkedChips: newLinkedChips ?? linkedChips);
-  NfcChipConfState idle(IList<NfcLinkedChip> newLinedList) => NfcChipConfIdle(linkedChips: newLinedList);
+  NfcChipConfState idle(IList<NfcLinkedChip> newLinkedChips) => NfcChipConfIdle(linkedChips: newLinkedChips);
 }
 
 final class NfcChipConfIdle extends NfcChipConfState {
   const NfcChipConfIdle({required super.linkedChips});
 
   @override
-  List<Object?> get props => const <Object?>[];
+  List<Object?> get props => [linkedChips];
 }
 
 final class NfcChipConfLoading extends NfcChipConfState {
   const NfcChipConfLoading({required super.linkedChips});
 
   @override
-  List<Object?> get props => const <Object?>[];
-}
-
-final class NfcChipConfSuccess extends NfcChipConfState {
-  const NfcChipConfSuccess({required super.linkedChips});
-
-  @override
-  List<Object?> get props => const <Object?>[];
+  List<Object?> get props => [linkedChips];
 }
 
 final class NfcChipConfError extends NfcChipConfState {
@@ -44,5 +34,5 @@ final class NfcChipConfError extends NfcChipConfState {
   final Object? error;
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [error, linkedChips];
 }

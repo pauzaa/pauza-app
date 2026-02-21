@@ -1,17 +1,18 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
-import 'package:pauza/src/features/nfc_chip_config/data/nfc_chip_config_error.dart';
+import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc_chip_config/model/nfc_linked_chip.dart';
 import 'package:uuid/uuid.dart';
 
 abstract interface class NfcLinkedChipsRepository {
   Future<IList<NfcLinkedChip>> getLinkedChips();
 
-  Future<bool> linkChipIfAbsent({required String chipIdentifier});
+  /// Returns `true` when the chip was linked, `false` when it already exists.
+  Future<bool> linkChipIfAbsent({required NfcChipIdentifier chipIdentifier});
 
   Future<void> deleteChip({required String id});
 
-  Future<bool> hasChip({required String chipIdentifier});
+  Future<bool> hasChip({required NfcChipIdentifier chipIdentifier});
 
   Future<void> renameChip({required String id, required String name});
 }
@@ -41,12 +42,8 @@ ORDER BY created_at DESC
   }
 
   @override
-  Future<bool> linkChipIfAbsent({required String chipIdentifier}) async {
-    if (chipIdentifier.isEmpty) {
-      throw const NfcChipConfigMissingIdentifierError();
-    }
-
-    final normalizedChipIdentifier = _normalizeChipIdentifier(chipIdentifier);
+  Future<bool> linkChipIfAbsent({required NfcChipIdentifier chipIdentifier}) async {
+    final normalizedChipIdentifier = chipIdentifier.normalized;
     final now = DateTime.now().toUtc().millisecondsSinceEpoch;
 
     final inserted = await _localDatabase.rawInsert(
@@ -71,11 +68,9 @@ INSERT OR IGNORE INTO nfc_linked_chips (
   }
 
   @override
-  Future<bool> hasChip({required String chipIdentifier}) async {
-    final normalizedChipIdentifier = _normalizeChipIdentifier(chipIdentifier);
-
+  Future<bool> hasChip({required NfcChipIdentifier chipIdentifier}) async {
     final rows = await _localDatabase.rawQuery('SELECT 1 FROM nfc_linked_chips WHERE chip_identifier = ? LIMIT 1', [
-      normalizedChipIdentifier,
+      chipIdentifier.normalized,
     ]);
 
     return rows.isNotEmpty;
@@ -98,14 +93,5 @@ WHERE id = ?
 ''',
       [normalizedName, DateTime.now().toUtc().millisecondsSinceEpoch, id],
     );
-  }
-
-  String _normalizeChipIdentifier(String value) {
-    final normalized = value.trim().toLowerCase();
-    if (normalized.isEmpty) {
-      throw ArgumentError.value(value, 'chipIdentifier', 'chipIdentifier must not be empty');
-    }
-
-    return normalized;
   }
 }

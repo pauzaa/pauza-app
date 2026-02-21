@@ -5,7 +5,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
 import 'package:pauza/src/features/nfc/model/nfc_card_dto.dart';
+import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc_chip_config/bloc/nfc_chip_conf_bloc.dart';
+import 'package:pauza/src/features/nfc_chip_config/data/nfc_chip_config_error.dart';
 import 'package:pauza/src/features/nfc_chip_config/data/nfc_linked_chips_repository.dart';
 import 'package:pauza/src/features/nfc_chip_config/model/nfc_linked_chip.dart';
 import 'package:pauza/src/features/nfc_chip_config/widget/nfc_chip_conf_content.dart';
@@ -121,6 +123,18 @@ void main() {
     );
     expect(popupMenuButton.enabled, isFalse);
   });
+
+  testWidgets('shows already linked toast on duplicate link error', (tester) async {
+    final bloc = _RecordingNfcChipConfBloc();
+    addTearDown(bloc.close);
+
+    await tester.pumpWidget(_TestApp(bloc: bloc));
+
+    bloc.emitState(const NfcChipConfError(error: NfcChipConfigAlreadyLinkedError(), linkedChips: IList.empty()));
+    await tester.pump();
+
+    expect(find.text('This NFC tag is already linked.'), findsOneWidget);
+  });
 }
 
 class _TestApp extends StatelessWidget {
@@ -182,12 +196,12 @@ final class _NoopNfcLinkedChipsRepository implements NfcLinkedChipsRepository {
   }
 
   @override
-  Future<bool> hasChip({required String chipIdentifier}) async {
+  Future<bool> hasChip({required NfcChipIdentifier chipIdentifier}) async {
     return false;
   }
 
   @override
-  Future<bool> linkChipIfAbsent({required String chipIdentifier}) async {
+  Future<bool> linkChipIfAbsent({required NfcChipIdentifier chipIdentifier}) async {
     return false;
   }
 

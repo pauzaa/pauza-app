@@ -5,7 +5,8 @@ enum NfcAvailabilitySeverity { info, warning, error }
 enum NfcChipAvailability {
   available(showGuidance: false, showOpenSettingsAction: false, severity: NfcAvailabilitySeverity.info),
   disabled(showGuidance: true, showOpenSettingsAction: true, severity: NfcAvailabilitySeverity.warning),
-  notSupported(showGuidance: true, showOpenSettingsAction: false, severity: NfcAvailabilitySeverity.error);
+  notSupported(showGuidance: true, showOpenSettingsAction: false, severity: NfcAvailabilitySeverity.error),
+  unknown(showGuidance: true, showOpenSettingsAction: false, severity: NfcAvailabilitySeverity.warning);
 
   const NfcChipAvailability({required this.showGuidance, required this.showOpenSettingsAction, required this.severity});
 
@@ -22,6 +23,7 @@ enum NfcChipAvailability {
       NfcChipAvailability.available => l10n.nfcGuidanceAvailableTitle,
       NfcChipAvailability.disabled => l10n.nfcGuidanceDisabledTitle,
       NfcChipAvailability.notSupported => l10n.nfcGuidanceNotSupportedTitle,
+      NfcChipAvailability.unknown => l10n.nfcGuidanceUnknownTitle,
     };
   }
 
@@ -30,6 +32,7 @@ enum NfcChipAvailability {
       NfcChipAvailability.available => l10n.nfcGuidanceAvailableBody,
       NfcChipAvailability.disabled => l10n.nfcGuidanceDisabledBody,
       NfcChipAvailability.notSupported => l10n.nfcGuidanceNotSupportedBody,
+      NfcChipAvailability.unknown => l10n.nfcGuidanceUnknownBody,
     };
   }
 

@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_tag_tech.dart';
 
@@ -17,7 +18,7 @@ class NfcCardDto {
 
   final String id;
   final DateTime detectedAt;
-  final String? uidHex;
+  final NfcChipIdentifier? uidHex;
   final bool isNdefFormatted;
   final IList<NfcTagTech> techTypes;
   final IList<NfcNdefRecordDto> ndefRecords;
@@ -27,7 +28,7 @@ class NfcCardDto {
     return <String, Object?>{
       'id': id,
       'detectedAt': detectedAt.toUtc().toIso8601String(),
-      'uidHex': uidHex,
+      'uidHex': uidHex?.normalized,
       'techTypes': techTypes.map((tech) => tech.name).toList(growable: false),
       'isNdefFormatted': isNdefFormatted,
       'ndefRecords': ndefRecords.map((record) => record.toJson()).toList(growable: false),
@@ -70,7 +71,10 @@ class NfcCardDto {
       id: json['id'] as String? ?? '',
       detectedAt:
           DateTime.tryParse(json['detectedAt'] as String? ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
-      uidHex: json['uidHex'] as String?,
+      uidHex: switch (json['uidHex']) {
+        final String uidHex => NfcChipIdentifier.tryParse(uidHex),
+        _ => null,
+      },
       techTypes: techTypeValues.lock,
       isNdefFormatted: json['isNdefFormatted'] as bool? ?? false,
       ndefRecords: ndefRecordValues.lock,

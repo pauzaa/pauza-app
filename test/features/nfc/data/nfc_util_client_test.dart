@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nfc_util/nfc_util.dart';
 import 'package:pauza/src/features/nfc/model/nfc_platform_types.dart';
+import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc/data/nfc_system_settings_launcher.dart';
 import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
 import 'package:pauza/src/features/nfc/model/nfc_errors.dart';
@@ -64,7 +65,7 @@ void main() {
 
       final snapshot = await pending;
 
-      expect(snapshot.uidHex, '01020304');
+      expect(snapshot.uidHex, NfcChipIdentifier.parse('01020304'));
       expect(snapshot.isNdefFormatted, isTrue);
       expect(snapshot.techTypes, contains(NfcTagTech.ndef));
       expect(snapshot.techTypes, contains(NfcTagTech.nfcA));

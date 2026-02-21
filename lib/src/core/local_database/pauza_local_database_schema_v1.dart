@@ -162,20 +162,5 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
   }
 
   @override
-  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {
-    if (oldVersion < 2 && newVersion >= 2) {
-      await database.execute(LocalDatabaseSqlStatements.createNfcLinkedChipsTable);
-    }
-
-    if (oldVersion < 3 && newVersion >= 3) {
-      await database.execute(LocalDatabaseSqlStatements.createStreakSessionDailyRollupsTable);
-      await database.execute(LocalDatabaseSqlStatements.createStreakDailyAggregatesTable);
-      await database.execute(LocalDatabaseSqlStatements.createStreakRollupStateTable);
-      await database.execute(LocalDatabaseSqlStatements.seedStreakRollupStateRow);
-    }
-
-    if (oldVersion < 4 && newVersion >= 4) {
-      await database.execute(LocalDatabaseSqlStatements.createQrLinkedCodesTable);
-    }
-  }
+  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {}
 }

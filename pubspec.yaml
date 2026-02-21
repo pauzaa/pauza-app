@@ -39,6 +39,7 @@ dependencies:
   android_intent_plus: ^6.0.0
   nfc_util: 1.0.3
   qr: ^3.0.2
+  qr_flutter: ^4.1.0
   image_picker: ^1.2.0
 
 workspace:

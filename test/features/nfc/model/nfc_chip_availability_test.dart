@@ -74,6 +74,43 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get nfcChipConfigNoTagsBody => 'Link your first NFC tag to manage focus session unlocking.';
   @override
+  String get qrCodeConfigTagsTitle => 'Your QR Codes';
+  @override
+  String get qrCodeConfigTagsBody =>
+      'Manage your linked QR codes. Open any code to preview and use it for focus session unlocking.';
+  @override
+  String get qrCodeConfigGenerateNewCodeButton => 'Generate New QR';
+  @override
+  String qrCodeConfigLinkedOnDate(String date) => 'Linked on $date';
+  @override
+  String get qrCodeConfigRenameAction => 'Rename';
+  @override
+  String get qrCodeConfigDeleteAction => 'Delete';
+  @override
+  String get qrCodeConfigRenameDialogTitle => 'Rename QR Code';
+  @override
+  String get qrCodeConfigRenameFieldLabel => 'QR code name';
+  @override
+  String get qrCodeConfigRenameFieldHint => 'Enter QR code name';
+  @override
+  String get qrCodeConfigRenameSaveButton => 'Save';
+  @override
+  String get qrCodeConfigNoCodesTitle => 'No linked QR codes yet';
+  @override
+  String get qrCodeConfigNoCodesBody => 'Generate your first QR code to manage focus session unlocking.';
+  @override
+  String get qrCodeConfigPreviewDialogTitle => 'QR Code Preview';
+  @override
+  String get qrCodeConfigPreviewDialogBody => 'Show this QR code when you need to unlock your focus session.';
+  @override
+  String get qrCodeConfigActionFailed => 'Unable to update QR code configuration. Please try again.';
+  @override
+  String get qrCodeConfigGenerateFailed => 'Unable to generate a new QR code. Please try again.';
+  @override
+  String get qrCodeConfigRenameFailed => 'Unable to rename QR code. Please try again.';
+  @override
+  String get qrCodeConfigDeleteFailed => 'Unable to delete QR code. Please try again.';
+  @override
   String get readyToScanNfcTag => 'Ready to Scan';
   @override
   String get nfcChipHoldCardNearDevice => 'Hold your device near the NFC tag to scan';

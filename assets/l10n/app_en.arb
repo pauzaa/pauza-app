@@ -510,6 +510,83 @@
   "@nfcChipConfigNoTagsBody": {
     "description": "Body for empty state when there are no linked NFC tags."
   },
+  "qrCodeConfigTagsTitle": "Your QR Codes",
+  "@qrCodeConfigTagsTitle": {
+    "description": "Title shown on QR code management screen."
+  },
+  "qrCodeConfigTagsBody": "Manage your linked QR codes. Open any code to preview and use it for focus session unlocking.",
+  "@qrCodeConfigTagsBody": {
+    "description": "Body text shown on QR code management screen."
+  },
+  "qrCodeConfigGenerateNewCodeButton": "Generate New QR",
+  "@qrCodeConfigGenerateNewCodeButton": {
+    "description": "Primary action label to generate a new QR code."
+  },
+  "qrCodeConfigLinkedOnDate": "Linked on {date}",
+  "@qrCodeConfigLinkedOnDate": {
+    "description": "Subtitle shown under QR code name with linked date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "qrCodeConfigRenameAction": "Rename",
+  "@qrCodeConfigRenameAction": {
+    "description": "Menu action label to rename a linked QR code."
+  },
+  "qrCodeConfigDeleteAction": "Delete",
+  "@qrCodeConfigDeleteAction": {
+    "description": "Menu action label to delete a linked QR code."
+  },
+  "qrCodeConfigRenameDialogTitle": "Rename QR Code",
+  "@qrCodeConfigRenameDialogTitle": {
+    "description": "Title for the rename QR code dialog."
+  },
+  "qrCodeConfigRenameFieldLabel": "QR code name",
+  "@qrCodeConfigRenameFieldLabel": {
+    "description": "Label for QR code rename text field."
+  },
+  "qrCodeConfigRenameFieldHint": "Enter QR code name",
+  "@qrCodeConfigRenameFieldHint": {
+    "description": "Hint text for QR code rename input."
+  },
+  "qrCodeConfigRenameSaveButton": "Save",
+  "@qrCodeConfigRenameSaveButton": {
+    "description": "Primary action label on rename QR code dialog."
+  },
+  "qrCodeConfigNoCodesTitle": "No linked QR codes yet",
+  "@qrCodeConfigNoCodesTitle": {
+    "description": "Title for empty state when there are no linked QR codes."
+  },
+  "qrCodeConfigNoCodesBody": "Generate your first QR code to manage focus session unlocking.",
+  "@qrCodeConfigNoCodesBody": {
+    "description": "Body for empty state when there are no linked QR codes."
+  },
+  "qrCodeConfigPreviewDialogTitle": "QR Code Preview",
+  "@qrCodeConfigPreviewDialogTitle": {
+    "description": "Title shown on QR preview dialog."
+  },
+  "qrCodeConfigPreviewDialogBody": "Show this QR code when you need to unlock your focus session.",
+  "@qrCodeConfigPreviewDialogBody": {
+    "description": "Body text shown on QR preview dialog."
+  },
+  "qrCodeConfigActionFailed": "Unable to update QR code configuration. Please try again.",
+  "@qrCodeConfigActionFailed": {
+    "description": "Generic fallback error shown when QR config action fails."
+  },
+  "qrCodeConfigGenerateFailed": "Unable to generate a new QR code. Please try again.",
+  "@qrCodeConfigGenerateFailed": {
+    "description": "Error shown when generating a new QR code fails."
+  },
+  "qrCodeConfigRenameFailed": "Unable to rename QR code. Please try again.",
+  "@qrCodeConfigRenameFailed": {
+    "description": "Error shown when renaming QR code fails."
+  },
+  "qrCodeConfigDeleteFailed": "Unable to delete QR code. Please try again.",
+  "@qrCodeConfigDeleteFailed": {
+    "description": "Error shown when deleting QR code fails."
+  },
   "blockedAppsCountLabel": "Blocked apps: {count}",
   "@blockedAppsCountLabel": {
     "placeholders": {

@@ -9,6 +9,7 @@ import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
 import 'package:pauza/src/features/nfc_chip_config/widget/nfc_chip_conf_screen.dart';
+import 'package:pauza/src/features/qr_code_config/widget/qr_code_conf_screen.dart';
 import 'package:pauza/src/features/settings/widget/settings_footer.dart';
 import 'package:pauza/src/features/settings/widget/settings_language_tile.dart';
 import 'package:pauza/src/features/settings/widget/settings_navigation_tile.dart';
@@ -65,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
                 icon: Icons.qr_code_scanner_rounded,
                 title: l10n.settingsQrCodeConfiguring,
                 onTap: () {
-                  HelmRouter.push(context, PauzaRoutes.qrCodeConfig);
+                  QrCodeConfScreen.show(context);
                 },
               ),
             ),

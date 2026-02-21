@@ -94,7 +94,7 @@ void main() {
       await repository.renameCode(id: 'id-1', name: '  New Name  ');
       expect(localDatabase.rowsById['id-1']?['name'], 'New Name');
 
-      expect(() => repository.renameCode(id: 'id-1', name: '   '), throwsArgumentError);
+      expect(() => repository.renameCode(id: 'id-1', name: '   '), throwsA(isA<QrCodeConfigRenameFailedError>()));
     });
 
     test('deleteCode removes row', () async {

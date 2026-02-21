@@ -52,6 +52,31 @@
   "nfcChipConfigRenameSaveButton": "Сохранить",
   "nfcChipConfigNoTagsTitle": "Пока нет привязанных меток",
   "nfcChipConfigNoTagsBody": "Привяжите первую NFC-метку для управления разблокировкой фокус-сессий.",
+  "qrCodeConfigTagsTitle": "Your QR Codes",
+  "qrCodeConfigTagsBody": "Manage your linked QR codes. Open any code to preview and use it for focus session unlocking.",
+  "qrCodeConfigGenerateNewCodeButton": "Generate New QR",
+  "qrCodeConfigLinkedOnDate": "Linked on {date}",
+  "@qrCodeConfigLinkedOnDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "qrCodeConfigRenameAction": "Rename",
+  "qrCodeConfigDeleteAction": "Delete",
+  "qrCodeConfigRenameDialogTitle": "Rename QR Code",
+  "qrCodeConfigRenameFieldLabel": "QR code name",
+  "qrCodeConfigRenameFieldHint": "Enter QR code name",
+  "qrCodeConfigRenameSaveButton": "Save",
+  "qrCodeConfigNoCodesTitle": "No linked QR codes yet",
+  "qrCodeConfigNoCodesBody": "Generate your first QR code to manage focus session unlocking.",
+  "qrCodeConfigPreviewDialogTitle": "QR Code Preview",
+  "qrCodeConfigPreviewDialogBody": "Show this QR code when you need to unlock your focus session.",
+  "qrCodeConfigActionFailed": "Unable to update QR code configuration. Please try again.",
+  "qrCodeConfigGenerateFailed": "Unable to generate a new QR code. Please try again.",
+  "qrCodeConfigRenameFailed": "Unable to rename QR code. Please try again.",
+  "qrCodeConfigDeleteFailed": "Unable to delete QR code. Please try again.",
   "settingsSignOut": "Выйти",
   "settingsVersionFallback": "Pauza",
   "settingsVersionLabel": "Pauza v{version}",

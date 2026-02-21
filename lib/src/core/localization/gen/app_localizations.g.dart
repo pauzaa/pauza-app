@@ -830,6 +830,114 @@ abstract class AppLocalizations {
   /// **'Link your first NFC tag to manage focus session unlocking.'**
   String get nfcChipConfigNoTagsBody;
 
+  /// Title shown on QR code management screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Your QR Codes'**
+  String get qrCodeConfigTagsTitle;
+
+  /// Body text shown on QR code management screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your linked QR codes. Open any code to preview and use it for focus session unlocking.'**
+  String get qrCodeConfigTagsBody;
+
+  /// Primary action label to generate a new QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate New QR'**
+  String get qrCodeConfigGenerateNewCodeButton;
+
+  /// Subtitle shown under QR code name with linked date.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked on {date}'**
+  String qrCodeConfigLinkedOnDate(String date);
+
+  /// Menu action label to rename a linked QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get qrCodeConfigRenameAction;
+
+  /// Menu action label to delete a linked QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get qrCodeConfigDeleteAction;
+
+  /// Title for the rename QR code dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename QR Code'**
+  String get qrCodeConfigRenameDialogTitle;
+
+  /// Label for QR code rename text field.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code name'**
+  String get qrCodeConfigRenameFieldLabel;
+
+  /// Hint text for QR code rename input.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter QR code name'**
+  String get qrCodeConfigRenameFieldHint;
+
+  /// Primary action label on rename QR code dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get qrCodeConfigRenameSaveButton;
+
+  /// Title for empty state when there are no linked QR codes.
+  ///
+  /// In en, this message translates to:
+  /// **'No linked QR codes yet'**
+  String get qrCodeConfigNoCodesTitle;
+
+  /// Body for empty state when there are no linked QR codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate your first QR code to manage focus session unlocking.'**
+  String get qrCodeConfigNoCodesBody;
+
+  /// Title shown on QR preview dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'QR Code Preview'**
+  String get qrCodeConfigPreviewDialogTitle;
+
+  /// Body text shown on QR preview dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this QR code when you need to unlock your focus session.'**
+  String get qrCodeConfigPreviewDialogBody;
+
+  /// Generic fallback error shown when QR config action fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to update QR code configuration. Please try again.'**
+  String get qrCodeConfigActionFailed;
+
+  /// Error shown when generating a new QR code fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to generate a new QR code. Please try again.'**
+  String get qrCodeConfigGenerateFailed;
+
+  /// Error shown when renaming QR code fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to rename QR code. Please try again.'**
+  String get qrCodeConfigRenameFailed;
+
+  /// Error shown when deleting QR code fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to delete QR code. Please try again.'**
+  String get qrCodeConfigDeleteFailed;
+
   /// No description provided for @blockedAppsCountLabel.
   ///
   /// In en, this message translates to:

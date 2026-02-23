@@ -10,6 +10,10 @@ CREATE TABLE modes (
   description TEXT,
   allowed_pauses_count INTEGER NOT NULL DEFAULT 0
     CHECK (allowed_pauses_count >= 0),
+  minimum_duration_ms INTEGER
+    CHECK (minimum_duration_ms IS NULL OR minimum_duration_ms >= 1000),
+  ending_pausing_scenario TEXT NOT NULL
+    CHECK (ending_pausing_scenario IN ('nfc', 'qr', 'manual')),
   icon_token TEXT NOT NULL DEFAULT 'ms:v1:tune'
     CHECK (length(trim(icon_token)) > 0),
   created_at INTEGER NOT NULL,

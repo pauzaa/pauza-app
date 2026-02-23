@@ -53,7 +53,7 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
                       Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
                       Text(
                         subtitle,
-                        style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
+                        style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onSurfaceVariant),
                       ),
                     ],
                   ),

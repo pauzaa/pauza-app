@@ -194,6 +194,25 @@
   "modeStrictnessTitle": "Строгость",
   "modeAllowedPausesTitle": "Разрешенные паузы",
   "modeAllowedPausesSubtitle": "Короткие перерывы во время сессии",
+  "modeMinimumDurationTitle": "Минимальная длительность",
+  "modeMinimumDurationSubtitle": "Необязательно. Сессию нельзя завершить раньше этого времени.",
+  "modeMinimumDurationSetButton": "Установить длительность",
+  "modeMinimumDurationClearButton": "Очистить",
+  "modeMinimumDurationNotSet": "Не задано",
+  "modeMinimumDurationValueMinutes": "{minutes} мин",
+  "@modeMinimumDurationValueMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "modeEndingPausingScenarioTitle": "Сценарий завершения / паузы",
+  "modeEndingPausingScenarioSubtitle": "Выберите, как можно завершить или поставить на паузу этот режим.",
+  "modeEndingPausingScenarioNfc": "NFC",
+  "modeEndingPausingScenarioQrCode": "QR",
+  "modeEndingPausingScenarioManual": "Вручную",
+  "modeEndingPausingScenarioNfcDisabled": "NFC не поддерживается на этом устройстве.",
   "modeAllowedPausesOutOfRangeError": "Разрешенные паузы должны быть от {min} до {max}",
   "@modeAllowedPausesOutOfRangeError": {
     "placeholders": {

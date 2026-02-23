@@ -114,6 +114,30 @@ class _FakeAppLocalizations extends AppLocalizations {
   String get readyToScanNfcTag => 'Ready to Scan';
   @override
   String get nfcChipHoldCardNearDevice => 'Hold your device near the NFC tag to scan';
+  @override
+  String get modeMinimumDurationTitle => 'Minimum duration';
+  @override
+  String get modeMinimumDurationSubtitle => 'Optional. Session can\'t be ended earlier than this.';
+  @override
+  String get modeMinimumDurationSetButton => 'Set duration';
+  @override
+  String get modeMinimumDurationClearButton => 'Clear';
+  @override
+  String get modeMinimumDurationNotSet => 'Not set';
+  @override
+  String modeMinimumDurationValueMinutes(int minutes) => '$minutes min';
+  @override
+  String get modeEndingPausingScenarioTitle => 'Ending / pausing scenario';
+  @override
+  String get modeEndingPausingScenarioSubtitle => 'Choose how this mode can be ended or paused.';
+  @override
+  String get modeEndingPausingScenarioNfc => 'NFC';
+  @override
+  String get modeEndingPausingScenarioQrCode => 'QR';
+  @override
+  String get modeEndingPausingScenarioManual => 'Manual';
+  @override
+  String get modeEndingPausingScenarioNfcDisabled => 'NFC is not supported on this device.';
 
   // Stub implementations for other abstract members
   @override

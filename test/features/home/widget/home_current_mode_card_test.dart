@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
 import 'package:pauza/src/features/home/widget/home_current_mode_card.dart';
+import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
@@ -17,6 +18,8 @@ void main() {
       textOnScreen: 'Stay focused',
       description: null,
       allowedPausesCount: 1,
+      minimumDuration: null,
+      endingPausingScenario: ModeEndingPausingScenario.manual,
       icon: ModeIcon.fromToken('ms:v1:rocket_launch'),
       schedule: null,
       blockedAppIds: const ISet<AppIdentifier>.empty(),

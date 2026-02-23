@@ -50,8 +50,8 @@ class PauzaBlockingRepository implements BlockingRepository {
   }
 
   @override
-  Future<void> stopBlocking() async {
-    await _restrictions.endSession();
+  Future<void> stopBlocking({Duration? cooldownDuration}) async {
+    await _restrictions.endSession(duration: cooldownDuration);
     await syncRestrictionLifecycleEvents();
     _lifecycleActionsController.add(RestrictionLifecycleAction.end);
   }

@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
@@ -7,7 +8,9 @@ import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
-  ModeUpsertDraftNotifier() : super(const ModeUpsertDTO.initial());
+  ModeUpsertDraftNotifier({required bool hasNfcSupport})
+    : _hasNfcSupport = hasNfcSupport,
+      super(ModeUpsertDTO.initialForDevice(hasNfcSupport: hasNfcSupport));
 
   static const int minAllowedPauses = 0;
   static const int maxAllowedPauses = 5;
@@ -17,6 +20,7 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
   bool _hadInitialSchedule = false;
   bool _submitted = false;
   ModeUpsertValidationResult _validation = const ModeUpsertValidationResult.valid();
+  final bool _hasNfcSupport;
 
   int get revision => _revision;
   bool get isEditMode => _isEditMode;
@@ -59,6 +63,28 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
 
   void updateIcon(ModeIcon icon) {
     update((current) => current.copyWith(icon: icon));
+  }
+
+  void updateMinimumDuration(Duration? minimumDuration) {
+    update(
+      (current) => minimumDuration == null
+          ? current.copyWith(clearMinimumDuration: true)
+          : current.copyWith(minimumDuration: minimumDuration),
+    );
+  }
+
+  void updateEndingPausingScenario(ModeEndingPausingScenario endingPausingScenario) {
+    if (endingPausingScenario == ModeEndingPausingScenario.nfc && !_hasNfcSupport) {
+      update((current) => current.copyWith(endingPausingScenario: ModeEndingPausingScenario.qrCode));
+      return;
+    }
+    update((current) => current.copyWith(endingPausingScenario: endingPausingScenario));
+  }
+
+  void ensureEndingPausingScenarioCompatibility() {
+    if (!_hasNfcSupport && value.endingPausingScenario == ModeEndingPausingScenario.nfc) {
+      updateEndingPausingScenario(ModeEndingPausingScenario.qrCode);
+    }
   }
 
   void updateBlockedApps(ISet<AppIdentifier> blockedAppIds) {
@@ -144,6 +170,8 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
       textOnScreen: current.textOnScreen.trim(),
       description: current.description?.trim(),
       allowedPausesCount: current.allowedPausesCount,
+      minimumDuration: current.minimumDuration,
+      endingPausingScenario: current.endingPausingScenario,
       icon: current.icon,
       schedule: normalizedSchedule,
       blockedAppIds: current.blockedAppIds,
@@ -195,6 +223,8 @@ class ModeUpsertDraftNotifier extends ValueNotifier<ModeUpsertDTO> {
       textOnScreen: draft.textOnScreen,
       description: draft.description,
       allowedPausesCount: draft.allowedPausesCount,
+      minimumDuration: draft.minimumDuration,
+      endingPausingScenario: draft.endingPausingScenario,
       icon: draft.icon,
       blockedAppIds: draft.blockedAppIds,
       schedule: schedule,

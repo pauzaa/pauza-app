@@ -739,6 +739,59 @@
   "@modeAllowedPausesSubtitle": {
     "description": "Subtitle for allowed pauses control."
   },
+  "modeMinimumDurationTitle": "Minimum duration",
+  "@modeMinimumDurationTitle": {
+    "description": "Title for optional minimum duration control."
+  },
+  "modeMinimumDurationSubtitle": "Optional. Session can't be ended earlier than this.",
+  "@modeMinimumDurationSubtitle": {
+    "description": "Subtitle for minimum duration control."
+  },
+  "modeMinimumDurationSetButton": "Set duration",
+  "@modeMinimumDurationSetButton": {
+    "description": "Action button label to pick minimum duration."
+  },
+  "modeMinimumDurationClearButton": "Clear",
+  "@modeMinimumDurationClearButton": {
+    "description": "Action button label to clear minimum duration."
+  },
+  "modeMinimumDurationNotSet": "Not set",
+  "@modeMinimumDurationNotSet": {
+    "description": "Label shown when minimum duration is empty."
+  },
+  "modeMinimumDurationValueMinutes": "{minutes} min",
+  "@modeMinimumDurationValueMinutes": {
+    "description": "Label showing selected minimum duration in minutes.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "modeEndingPausingScenarioTitle": "Ending / pausing scenario",
+  "@modeEndingPausingScenarioTitle": {
+    "description": "Title for ending/pausing scenario section."
+  },
+  "modeEndingPausingScenarioSubtitle": "Choose how this mode can be ended or paused.",
+  "@modeEndingPausingScenarioSubtitle": {
+    "description": "Subtitle for ending/pausing scenario section."
+  },
+  "modeEndingPausingScenarioNfc": "NFC",
+  "@modeEndingPausingScenarioNfc": {
+    "description": "Scenario option label for NFC."
+  },
+  "modeEndingPausingScenarioQrCode": "QR",
+  "@modeEndingPausingScenarioQrCode": {
+    "description": "Scenario option label for QR code."
+  },
+  "modeEndingPausingScenarioManual": "Manual",
+  "@modeEndingPausingScenarioManual": {
+    "description": "Scenario option label for manual action."
+  },
+  "modeEndingPausingScenarioNfcDisabled": "NFC is not supported on this device.",
+  "@modeEndingPausingScenarioNfcDisabled": {
+    "description": "Hint shown when NFC option is disabled."
+  },
   "modeAllowedPausesOutOfRangeError": "Allowed pauses must be between {min} and {max}",
   "@modeAllowedPausesOutOfRangeError": {
     "description": "Error shown when allowed pauses count is out of range.",

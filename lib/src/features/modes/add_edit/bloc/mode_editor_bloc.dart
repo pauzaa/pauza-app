@@ -7,8 +7,9 @@ part 'mode_editor_event.dart';
 part 'mode_editor_state.dart';
 
 class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
-  ModeEditorBloc({required ModesRepository modesRepository})
+  ModeEditorBloc({required ModesRepository modesRepository, required bool hasNfcSupport})
     : _modesRepository = modesRepository,
+      _hasNfcSupport = hasNfcSupport,
       super(const ModeEditorInitial()) {
     on<ModeEditorLoadRequested>(_onLoadRequested);
     on<ModeEditorSaveRequested>(_onSaveRequested);
@@ -16,12 +17,13 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
   }
 
   final ModesRepository _modesRepository;
+  final bool _hasNfcSupport;
 
   Future<void> _onLoadRequested(ModeEditorLoadRequested event, Emitter<ModeEditorState> emit) async {
     emit(const ModeEditorLoading());
 
     if (event.modeId == null) {
-      emit(const ModeEditorReady(modeId: null, request: ModeUpsertDTO.initial()));
+      emit(ModeEditorReady(modeId: null, request: ModeUpsertDTO.initialForDevice(hasNfcSupport: _hasNfcSupport)));
       return;
     }
 
@@ -36,6 +38,8 @@ class ModeEditorBloc extends Bloc<ModeEditorEvent, ModeEditorState> {
             textOnScreen: mode.textOnScreen,
             description: mode.description,
             allowedPausesCount: mode.allowedPausesCount,
+            minimumDuration: mode.minimumDuration,
+            endingPausingScenario: mode.endingPausingScenario,
             icon: mode.icon,
             blockedAppIds: mode.blockedAppIds,
             schedule: mode.schedule,

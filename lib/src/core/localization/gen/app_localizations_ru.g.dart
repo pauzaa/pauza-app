@@ -581,6 +581,44 @@ class AppLocalizationsRu extends AppLocalizations {
   String get modeAllowedPausesSubtitle => 'Короткие перерывы во время сессии';
 
   @override
+  String get modeMinimumDurationTitle => 'Минимальная длительность';
+
+  @override
+  String get modeMinimumDurationSubtitle => 'Необязательно. Сессию нельзя завершить раньше этого времени.';
+
+  @override
+  String get modeMinimumDurationSetButton => 'Установить длительность';
+
+  @override
+  String get modeMinimumDurationClearButton => 'Очистить';
+
+  @override
+  String get modeMinimumDurationNotSet => 'Не задано';
+
+  @override
+  String modeMinimumDurationValueMinutes(int minutes) {
+    return '$minutes мин';
+  }
+
+  @override
+  String get modeEndingPausingScenarioTitle => 'Сценарий завершения / паузы';
+
+  @override
+  String get modeEndingPausingScenarioSubtitle => 'Выберите, как можно завершить или поставить на паузу этот режим.';
+
+  @override
+  String get modeEndingPausingScenarioNfc => 'NFC';
+
+  @override
+  String get modeEndingPausingScenarioQrCode => 'QR';
+
+  @override
+  String get modeEndingPausingScenarioManual => 'Вручную';
+
+  @override
+  String get modeEndingPausingScenarioNfcDisabled => 'NFC не поддерживается на этом устройстве.';
+
+  @override
   String modeAllowedPausesOutOfRangeError(int min, int max) {
     return 'Разрешенные паузы должны быть от $min до $max';
   }

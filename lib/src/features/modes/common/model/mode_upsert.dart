@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -11,17 +12,21 @@ class ModeUpsertDTO {
     required this.textOnScreen,
     required this.description,
     required this.allowedPausesCount,
+    required this.minimumDuration,
+    required this.endingPausingScenario,
     required this.icon,
     required this.schedule,
     required this.blockedAppIds,
   });
 
-  const ModeUpsertDTO.initial()
+  const ModeUpsertDTO.initialForDevice({required bool hasNfcSupport})
     : this(
         title: '',
         textOnScreen: '',
         description: '',
         allowedPausesCount: 0,
+        minimumDuration: null,
+        endingPausingScenario: hasNfcSupport ? ModeEndingPausingScenario.nfc : ModeEndingPausingScenario.qrCode,
         icon: ModeIconCatalog.defaultIcon,
         schedule: null,
         blockedAppIds: const ISet<AppIdentifier>.empty(),
@@ -31,6 +36,8 @@ class ModeUpsertDTO {
   final String textOnScreen;
   final String? description;
   final int allowedPausesCount;
+  final Duration? minimumDuration;
+  final ModeEndingPausingScenario endingPausingScenario;
   final ModeIcon icon;
   final Schedule? schedule;
   final ISet<AppIdentifier> blockedAppIds;
@@ -40,14 +47,19 @@ class ModeUpsertDTO {
     String? textOnScreen,
     String? description,
     int? allowedPausesCount,
+    Duration? minimumDuration,
+    ModeEndingPausingScenario? endingPausingScenario,
     ModeIcon? icon,
     Schedule? schedule,
     ISet<AppIdentifier>? blockedAppIds,
+    bool clearMinimumDuration = false,
   }) => ModeUpsertDTO(
     title: title ?? this.title,
     textOnScreen: textOnScreen ?? this.textOnScreen,
     description: description ?? this.description,
     allowedPausesCount: allowedPausesCount ?? this.allowedPausesCount,
+    minimumDuration: clearMinimumDuration ? null : minimumDuration ?? this.minimumDuration,
+    endingPausingScenario: endingPausingScenario ?? this.endingPausingScenario,
     icon: icon ?? this.icon,
     schedule: schedule ?? this.schedule,
     blockedAppIds: blockedAppIds ?? this.blockedAppIds,

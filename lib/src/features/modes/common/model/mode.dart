@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
@@ -13,6 +14,8 @@ class Mode {
     required this.textOnScreen,
     required this.description,
     required this.allowedPausesCount,
+    required this.minimumDuration,
+    required this.endingPausingScenario,
     required this.icon,
     required this.schedule,
     required this.blockedAppIds,
@@ -25,6 +28,8 @@ class Mode {
   final String textOnScreen;
   final String? description;
   final int allowedPausesCount;
+  final Duration? minimumDuration;
+  final ModeEndingPausingScenario endingPausingScenario;
   final ModeIcon icon;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -36,6 +41,8 @@ class Mode {
     String? textOnScreen,
     String? description,
     int? allowedPausesCount,
+    Duration? minimumDuration,
+    ModeEndingPausingScenario? endingPausingScenario,
     ModeIcon? icon,
     bool? isEnabled,
     DateTime? createdAt,
@@ -48,6 +55,8 @@ class Mode {
     textOnScreen: textOnScreen ?? this.textOnScreen,
     description: description ?? this.description,
     allowedPausesCount: allowedPausesCount ?? this.allowedPausesCount,
+    minimumDuration: minimumDuration ?? this.minimumDuration,
+    endingPausingScenario: endingPausingScenario ?? this.endingPausingScenario,
     icon: icon ?? this.icon,
     schedule: schedule ?? this.schedule,
     blockedAppIds: blockedAppIds ?? this.blockedAppIds,
@@ -83,6 +92,8 @@ class Mode {
     final blockedAppsRaw = row['blocked_apps'] as String?;
     final blockedAppIds = _parseBlockedApps(blockedAppsRaw);
     final rawIconToken = row['icon_token'] as String?;
+    final minimumDurationMilliseconds = row['minimum_duration_ms'] as int?;
+    final endingPausingScenario = ModeEndingPausingScenario.fromDbValue(row['ending_pausing_scenario'] as String?);
 
     return Mode(
       id: row['id'] as String,
@@ -90,6 +101,8 @@ class Mode {
       textOnScreen: row['text_on_screen'] as String,
       description: row['description'] as String?,
       allowedPausesCount: row['allowed_pauses_count'] as int,
+      minimumDuration: minimumDurationMilliseconds == null ? null : Duration(milliseconds: minimumDurationMilliseconds),
+      endingPausingScenario: endingPausingScenario,
       icon: ModeIcon.fromToken(ModeIconCatalog.normalizeToken(rawIconToken)),
       schedule: schedule,
       blockedAppIds: blockedAppIds,
@@ -118,6 +131,7 @@ class Mode {
   String toString() =>
       'Mode(id: $id, title: $title, textOnScreen: $textOnScreen, '
       'description: $description, allowedPausesCount: $allowedPausesCount, '
+      'minimumDuration: $minimumDuration, endingPausingScenario: $endingPausingScenario, '
       'icon: $icon, schedule: $schedule, blockedAppIds: $blockedAppIds, '
       'createdAt: $createdAt, updatedAt: $updatedAt'
       ')';
@@ -132,6 +146,8 @@ class Mode {
           textOnScreen == other.textOnScreen &&
           description == other.description &&
           allowedPausesCount == other.allowedPausesCount &&
+          minimumDuration == other.minimumDuration &&
+          endingPausingScenario == other.endingPausingScenario &&
           icon == other.icon &&
           schedule == other.schedule &&
           blockedAppIds == other.blockedAppIds &&
@@ -145,6 +161,8 @@ class Mode {
     textOnScreen,
     description,
     allowedPausesCount,
+    minimumDuration,
+    endingPausingScenario,
     icon,
     schedule,
     Object.hashAllUnordered(blockedAppIds),

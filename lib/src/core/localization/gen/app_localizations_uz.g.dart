@@ -581,6 +581,44 @@ class AppLocalizationsUz extends AppLocalizations {
   String get modeAllowedPausesSubtitle => 'Sessiya davomida qisqa tanaffuslar';
 
   @override
+  String get modeMinimumDurationTitle => 'Minimal davomiylik';
+
+  @override
+  String get modeMinimumDurationSubtitle => 'Ixtiyoriy. Sessiyani bu vaqtdan oldin tugatib bo\'lmaydi.';
+
+  @override
+  String get modeMinimumDurationSetButton => 'Davomiylikni sozlash';
+
+  @override
+  String get modeMinimumDurationClearButton => 'Tozalash';
+
+  @override
+  String get modeMinimumDurationNotSet => 'Sozlanmagan';
+
+  @override
+  String modeMinimumDurationValueMinutes(int minutes) {
+    return '$minutes daq';
+  }
+
+  @override
+  String get modeEndingPausingScenarioTitle => 'Tugatish / pauza ssenariysi';
+
+  @override
+  String get modeEndingPausingScenarioSubtitle => 'Bu rejimni qanday tugatish yoki pauza qilish mumkinligini tanlang.';
+
+  @override
+  String get modeEndingPausingScenarioNfc => 'NFC';
+
+  @override
+  String get modeEndingPausingScenarioQrCode => 'QR';
+
+  @override
+  String get modeEndingPausingScenarioManual => 'Qo\'lda';
+
+  @override
+  String get modeEndingPausingScenarioNfcDisabled => 'Bu qurilmada NFC qo\'llab-quvvatlanmaydi.';
+
+  @override
   String modeAllowedPausesOutOfRangeError(int min, int max) {
     return 'Ruxsat etilgan tanaffuslar $min va $max oralig\'ida bo\'lishi kerak';
   }
@@ -1304,6 +1342,44 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get modeAllowedPausesSubtitle => 'Сессия давомида қисқа танаффуслар';
+
+  @override
+  String get modeMinimumDurationTitle => 'Минимал давомийлик';
+
+  @override
+  String get modeMinimumDurationSubtitle => 'Ихтиёрий. Сессияни бу вақтдан олдин тугатиб бўлмайди.';
+
+  @override
+  String get modeMinimumDurationSetButton => 'Давомийликни созлаш';
+
+  @override
+  String get modeMinimumDurationClearButton => 'Тозалаш';
+
+  @override
+  String get modeMinimumDurationNotSet => 'Созланмаган';
+
+  @override
+  String modeMinimumDurationValueMinutes(int minutes) {
+    return '$minutes дақ';
+  }
+
+  @override
+  String get modeEndingPausingScenarioTitle => 'Тугатиш / пауза сценарийси';
+
+  @override
+  String get modeEndingPausingScenarioSubtitle => 'Бу режимни қандай тугатиш ёки пауза қилиш мумкинлигини танланг.';
+
+  @override
+  String get modeEndingPausingScenarioNfc => 'NFC';
+
+  @override
+  String get modeEndingPausingScenarioQrCode => 'QR';
+
+  @override
+  String get modeEndingPausingScenarioManual => 'Қўлда';
+
+  @override
+  String get modeEndingPausingScenarioNfcDisabled => 'Бу қурилмада NFC қўллаб-қувватланмайди.';
 
   @override
   String modeAllowedPausesOutOfRangeError(int min, int max) {

@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
@@ -10,13 +11,11 @@ void main() {
   group('ModeEditorBloc', () {
     test('save create calls repository createMode', () async {
       final repository = _FakeModesRepository();
-      final bloc = ModeEditorBloc(modesRepository: repository);
+      final bloc = ModeEditorBloc(modesRepository: repository, hasNfcSupport: true);
 
-      final request = const ModeUpsertDTO.initial().copyWith(
-        title: 'Deep Work',
-        textOnScreen: 'Stay focused',
-        blockedAppIds: const ISet.empty(),
-      );
+      final request = const ModeUpsertDTO.initialForDevice(
+        hasNfcSupport: true,
+      ).copyWith(title: 'Deep Work', textOnScreen: 'Stay focused', blockedAppIds: const ISet.empty());
 
       bloc.add(ModeEditorSaveRequested(modeId: null, request: request));
       await Future<void>.delayed(const Duration(milliseconds: 20));
@@ -29,7 +28,7 @@ void main() {
 
     test('delete success emits ModeEditorDeleteSuccess', () async {
       final repository = _FakeModesRepository();
-      final bloc = ModeEditorBloc(modesRepository: repository);
+      final bloc = ModeEditorBloc(modesRepository: repository, hasNfcSupport: true);
       final emitted = <ModeEditorState>[];
       final sub = bloc.stream.listen(emitted.add);
 
@@ -45,7 +44,7 @@ void main() {
 
     test('delete with null id emits failure', () async {
       final repository = _FakeModesRepository();
-      final bloc = ModeEditorBloc(modesRepository: repository);
+      final bloc = ModeEditorBloc(modesRepository: repository, hasNfcSupport: true);
       final emitted = <ModeEditorState>[];
       final sub = bloc.stream.listen(emitted.add);
 
@@ -60,7 +59,7 @@ void main() {
 
     test('load maps mode icon token to request icon token', () async {
       final repository = _FakeModesRepository();
-      final bloc = ModeEditorBloc(modesRepository: repository);
+      final bloc = ModeEditorBloc(modesRepository: repository, hasNfcSupport: true);
       final emitted = <ModeEditorState>[];
       final sub = bloc.stream.listen(emitted.add);
 
@@ -98,6 +97,8 @@ class _FakeModesRepository implements ModesRepository {
       textOnScreen: 'Stay focused',
       description: null,
       allowedPausesCount: 2,
+      minimumDuration: null,
+      endingPausingScenario: ModeEndingPausingScenario.manual,
       icon: ModeIconCatalog.defaultIcon,
       schedule: null,
       blockedAppIds: const ISet.empty(),

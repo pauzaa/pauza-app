@@ -1154,6 +1154,78 @@ abstract class AppLocalizations {
   /// **'Short breaks during session'**
   String get modeAllowedPausesSubtitle;
 
+  /// Title for optional minimum duration control.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum duration'**
+  String get modeMinimumDurationTitle;
+
+  /// Subtitle for minimum duration control.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Session can\'t be ended earlier than this.'**
+  String get modeMinimumDurationSubtitle;
+
+  /// Action button label to pick minimum duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Set duration'**
+  String get modeMinimumDurationSetButton;
+
+  /// Action button label to clear minimum duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get modeMinimumDurationClearButton;
+
+  /// Label shown when minimum duration is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get modeMinimumDurationNotSet;
+
+  /// Label showing selected minimum duration in minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String modeMinimumDurationValueMinutes(int minutes);
+
+  /// Title for ending/pausing scenario section.
+  ///
+  /// In en, this message translates to:
+  /// **'Ending / pausing scenario'**
+  String get modeEndingPausingScenarioTitle;
+
+  /// Subtitle for ending/pausing scenario section.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how this mode can be ended or paused.'**
+  String get modeEndingPausingScenarioSubtitle;
+
+  /// Scenario option label for NFC.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC'**
+  String get modeEndingPausingScenarioNfc;
+
+  /// Scenario option label for QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'QR'**
+  String get modeEndingPausingScenarioQrCode;
+
+  /// Scenario option label for manual action.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get modeEndingPausingScenarioManual;
+
+  /// Hint shown when NFC option is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC is not supported on this device.'**
+  String get modeEndingPausingScenarioNfcDisabled;
+
   /// Error shown when allowed pauses count is out of range.
   ///
   /// In en, this message translates to:

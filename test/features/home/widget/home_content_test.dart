@@ -14,6 +14,7 @@ import 'package:pauza/src/features/home/widget/home_current_mode_card.dart';
 import 'package:pauza/src/features/home/widget/home_session_button.dart';
 import 'package:pauza/src/features/home/widget/home_stats_pill.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
@@ -181,6 +182,8 @@ class _NoopModesRepository implements ModesRepository {
     textOnScreen: 'Focus',
     description: null,
     allowedPausesCount: 3,
+    minimumDuration: null,
+    endingPausingScenario: ModeEndingPausingScenario.manual,
     icon: ModeIconCatalog.defaultIcon,
     schedule: null,
     blockedAppIds: const ISet<AppIdentifier>.empty(),

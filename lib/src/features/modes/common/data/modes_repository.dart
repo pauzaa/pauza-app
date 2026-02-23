@@ -44,6 +44,8 @@ SELECT
   m.text_on_screen,
   m.description,
   m.allowed_pauses_count,
+  m.minimum_duration_ms,
+  m.ending_pausing_scenario,
   m.icon_token,
   m.created_at,
   m.updated_at,
@@ -79,6 +81,8 @@ SELECT
   m.text_on_screen,
   m.description,
   m.allowed_pauses_count,
+  m.minimum_duration_ms,
+  m.ending_pausing_scenario,
   m.icon_token,
   m.created_at,
   m.updated_at,
@@ -125,10 +129,12 @@ INSERT INTO modes (
   text_on_screen,
           description,
           allowed_pauses_count,
+          minimum_duration_ms,
+          ending_pausing_scenario,
           icon_token,
           created_at,
           updated_at
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''',
         [
           modeId,
@@ -136,6 +142,8 @@ INSERT INTO modes (
           request.textOnScreen,
           request.description,
           request.allowedPausesCount,
+          request.minimumDuration?.inMilliseconds,
+          request.endingPausingScenario.dbValue,
           request.icon.token,
           now,
           now,
@@ -222,6 +230,8 @@ SET
   text_on_screen = ?,
   description = ?,
   allowed_pauses_count = ?,
+  minimum_duration_ms = ?,
+  ending_pausing_scenario = ?,
   icon_token = ?,
   updated_at = ?
 WHERE id = ?
@@ -231,6 +241,8 @@ WHERE id = ?
           request.textOnScreen,
           request.description,
           request.allowedPausesCount,
+          request.minimumDuration?.inMilliseconds,
+          request.endingPausingScenario.dbValue,
           request.icon.token,
           now,
           modeId,

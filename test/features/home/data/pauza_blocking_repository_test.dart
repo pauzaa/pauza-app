@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
+import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
@@ -82,6 +83,8 @@ final Mode _mode = Mode(
   textOnScreen: 'Focus',
   description: null,
   allowedPausesCount: 1,
+  minimumDuration: null,
+  endingPausingScenario: ModeEndingPausingScenario.manual,
   icon: ModeIconCatalog.defaultIcon,
   schedule: null,
   blockedAppIds: const ISet<AppIdentifier>.empty(),
@@ -91,10 +94,10 @@ final Mode _mode = Mode(
 
 class _FakeAppRestrictionManager extends AppRestrictionManager {
   @override
-  Future<void> startSession(RestrictionMode mode) async {}
+  Future<void> startSession(RestrictionMode mode, {Duration? duration}) async {}
 
   @override
-  Future<void> endSession() async {}
+  Future<void> endSession({Duration? duration}) async {}
 
   @override
   Future<void> pauseEnforcement(Duration duration) async {}

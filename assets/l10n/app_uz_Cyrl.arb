@@ -194,6 +194,25 @@
   "modeStrictnessTitle": "Қатъийлик",
   "modeAllowedPausesTitle": "Рухсат этилган танаффуслар",
   "modeAllowedPausesSubtitle": "Сессия давомида қисқа танаффуслар",
+  "modeMinimumDurationTitle": "Минимал давомийлик",
+  "modeMinimumDurationSubtitle": "Ихтиёрий. Сессияни бу вақтдан олдин тугатиб бўлмайди.",
+  "modeMinimumDurationSetButton": "Давомийликни созлаш",
+  "modeMinimumDurationClearButton": "Тозалаш",
+  "modeMinimumDurationNotSet": "Созланмаган",
+  "modeMinimumDurationValueMinutes": "{minutes} дақ",
+  "@modeMinimumDurationValueMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "modeEndingPausingScenarioTitle": "Тугатиш / пауза сценарийси",
+  "modeEndingPausingScenarioSubtitle": "Бу режимни қандай тугатиш ёки пауза қилиш мумкинлигини танланг.",
+  "modeEndingPausingScenarioNfc": "NFC",
+  "modeEndingPausingScenarioQrCode": "QR",
+  "modeEndingPausingScenarioManual": "Қўлда",
+  "modeEndingPausingScenarioNfcDisabled": "Бу қурилмада NFC қўллаб-қувватланмайди.",
   "modeAllowedPausesOutOfRangeError": "Рухсат этилган танаффуслар {min} ва {max} оралиғида бўлиши керак",
   "@modeAllowedPausesOutOfRangeError": {
     "placeholders": {

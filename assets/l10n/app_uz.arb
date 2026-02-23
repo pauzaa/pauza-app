@@ -194,6 +194,25 @@
   "modeStrictnessTitle": "Qat'iylik",
   "modeAllowedPausesTitle": "Ruxsat etilgan tanaffuslar",
   "modeAllowedPausesSubtitle": "Sessiya davomida qisqa tanaffuslar",
+  "modeMinimumDurationTitle": "Minimal davomiylik",
+  "modeMinimumDurationSubtitle": "Ixtiyoriy. Sessiyani bu vaqtdan oldin tugatib bo'lmaydi.",
+  "modeMinimumDurationSetButton": "Davomiylikni sozlash",
+  "modeMinimumDurationClearButton": "Tozalash",
+  "modeMinimumDurationNotSet": "Sozlanmagan",
+  "modeMinimumDurationValueMinutes": "{minutes} daq",
+  "@modeMinimumDurationValueMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "modeEndingPausingScenarioTitle": "Tugatish / pauza ssenariysi",
+  "modeEndingPausingScenarioSubtitle": "Bu rejimni qanday tugatish yoki pauza qilish mumkinligini tanlang.",
+  "modeEndingPausingScenarioNfc": "NFC",
+  "modeEndingPausingScenarioQrCode": "QR",
+  "modeEndingPausingScenarioManual": "Qo'lda",
+  "modeEndingPausingScenarioNfcDisabled": "Bu qurilmada NFC qo'llab-quvvatlanmaydi.",
   "modeAllowedPausesOutOfRangeError": "Ruxsat etilgan tanaffuslar {min} va {max} oralig'ida bo'lishi kerak",
   "@modeAllowedPausesOutOfRangeError": {
     "placeholders": {

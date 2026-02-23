@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -14,7 +15,7 @@ void main() {
       final database = _FakeLocalDatabase();
       final repository = ModesRepositoryImpl(localDatabase: database, platform: PauzaPlatform.android);
 
-      final request = const ModeUpsertDTO.initial().copyWith(
+      final request = const ModeUpsertDTO.initialForDevice(hasNfcSupport: true).copyWith(
         title: 'Focus',
         textOnScreen: 'Stay focused',
         blockedAppIds: const ISet<AppIdentifier>.empty(),
@@ -27,13 +28,15 @@ void main() {
         (operation) => operation.sql.contains('INSERT INTO modes'),
       );
       expect(modesInsert.arguments, contains(ModeIconCatalog.defaultToken));
+      expect(modesInsert.arguments, contains(request.minimumDuration?.inMilliseconds));
+      expect(modesInsert.arguments, contains(request.endingPausingScenario.dbValue));
     });
 
     test('updateMode persists normalized icon token', () async {
       final database = _FakeLocalDatabase();
       final repository = ModesRepositoryImpl(localDatabase: database, platform: PauzaPlatform.android);
 
-      final request = const ModeUpsertDTO.initial().copyWith(
+      final request = const ModeUpsertDTO.initialForDevice(hasNfcSupport: true).copyWith(
         title: 'Focus',
         textOnScreen: 'Stay focused',
         blockedAppIds: const ISet<AppIdentifier>.empty(),
@@ -46,6 +49,8 @@ void main() {
         (operation) => operation.sql.contains('UPDATE modes'),
       );
       expect(update.arguments, contains(ModeIconCatalog.defaultToken));
+      expect(update.arguments, contains(request.minimumDuration?.inMilliseconds));
+      expect(update.arguments, contains(request.endingPausingScenario.dbValue));
     });
 
     test('getModes maps invalid icon token to default token', () async {
@@ -58,6 +63,8 @@ void main() {
             'text_on_screen': 'Stay focused',
             'description': null,
             'allowed_pauses_count': 1,
+            'minimum_duration_ms': 900000,
+            'ending_pausing_scenario': 'manual',
             'icon_token': 'invalid',
             'created_at': now,
             'updated_at': now,
@@ -74,17 +81,17 @@ void main() {
 
       expect(modes, hasLength(1));
       expect(modes.first.icon, ModeIconCatalog.defaultIcon);
+      expect(modes.first.minimumDuration, const Duration(minutes: 15));
+      expect(modes.first.endingPausingScenario, ModeEndingPausingScenario.manual);
     });
 
     test('watchModes emits on changes', () async {
       final database = _FakeLocalDatabase();
       final repository = ModesRepositoryImpl(localDatabase: database, platform: PauzaPlatform.android);
 
-      final request = const ModeUpsertDTO.initial().copyWith(
-        title: 'Focus',
-        textOnScreen: 'Stay focused',
-        blockedAppIds: const ISet<AppIdentifier>.empty(),
-      );
+      final request = const ModeUpsertDTO.initialForDevice(
+        hasNfcSupport: true,
+      ).copyWith(title: 'Focus', textOnScreen: 'Stay focused', blockedAppIds: const ISet<AppIdentifier>.empty());
 
       final stream = repository.watchModes();
 

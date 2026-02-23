@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helm/helm.dart';
@@ -10,11 +11,13 @@ import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_allowed_pauses_tile.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_apps_selector_tile.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_ending_pausing_scenario_panel.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_icon_picker.dart';
-import 'package:pauza/src/features/modes/add_edit/widgets/mode_icon_picker_sheet.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_minimum_duration_tile.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_schedule_panel.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_section_label.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_sticky_action_bar.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_icon_picker_sheet.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
@@ -50,29 +53,32 @@ class ModeEditorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final rootScope = RootScope.of(context);
     return BlocProvider(
-      create: (context) => ModeEditorBloc(modesRepository: rootScope.modesRepository),
-      child: ModeEditorMainScreen(modeId: modeId),
+      create: (context) =>
+          ModeEditorBloc(modesRepository: rootScope.modesRepository, hasNfcSupport: rootScope.hasNfcSupport),
+      child: ModeEditorMainScreen(modeId: modeId, hasNfcSupport: rootScope.hasNfcSupport),
     );
   }
 }
 
 class ModeEditorMainScreen extends StatefulWidget {
-  const ModeEditorMainScreen({required this.modeId, super.key});
+  const ModeEditorMainScreen({required this.modeId, required this.hasNfcSupport, super.key});
 
   final String? modeId;
+  final bool hasNfcSupport;
 
   @override
   State<ModeEditorMainScreen> createState() => _ModeEditorMainScreenState();
 }
 
 class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
-  final ModeUpsertDraftNotifier _draftNotifier = ModeUpsertDraftNotifier();
+  late final ModeUpsertDraftNotifier _draftNotifier;
 
   bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
+    _draftNotifier = ModeUpsertDraftNotifier(hasNfcSupport: widget.hasNfcSupport);
     _loadDraft();
   }
 
@@ -97,6 +103,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
           listener: (context, state) {
             if (state is ModeEditorReady) {
               _draftNotifier.configureForMode(initialDraft: state.request, isEditMode: state.modeId != null);
+              _draftNotifier.ensureEndingPausingScenarioCompatibility();
               if (!_initialized && mounted) {
                 setState(() {
                   _initialized = true;
@@ -218,7 +225,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                           ModeEditorAppsSelectorTile(
                             title: l10n.modeBlockedAppsChooseButton,
                             subtitle: l10n.modeBlockedAppsSubtitle,
-                            selectedCountLabel: l10n.modeBlockedAppsSelectedCountLabel(draft.blockedAppIds.length),
+                            selectedCountLabel: draft.blockedAppIds.length.toString(),
                             errorText: _errorForField(context, validation[ModeUpsertValidationField.blockedApps]),
                             onTap: isBusy
                                 ? () {}
@@ -266,6 +273,30 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           ModeEditorSectionLabel(label: l10n.modeStrictnessTitle),
+                          ModeEditorMinimumDurationTile(
+                            title: l10n.modeMinimumDurationTitle,
+                            subtitle: l10n.modeMinimumDurationSubtitle,
+                            duration: draft.minimumDuration,
+                            actionLabel: l10n.modeMinimumDurationSetButton,
+                            clearLabel: draft.minimumDuration == null ? null : l10n.modeMinimumDurationClearButton,
+                            onPickPressed: isBusy
+                                ? () {}
+                                : () => _onPickMinimumDuration(context, draft.minimumDuration),
+                            onClearPressed: isBusy || draft.minimumDuration == null
+                                ? null
+                                : () => _draftNotifier.updateMinimumDuration(null),
+                          ),
+                          ModeEditorEndingPausingScenarioPanel(
+                            title: l10n.modeEndingPausingScenarioTitle,
+                            subtitle: l10n.modeEndingPausingScenarioSubtitle,
+                            nfcLabel: l10n.modeEndingPausingScenarioNfc,
+                            qrLabel: l10n.modeEndingPausingScenarioQrCode,
+                            manualLabel: l10n.modeEndingPausingScenarioManual,
+                            selectedScenario: draft.endingPausingScenario,
+                            nfcDisabled: !widget.hasNfcSupport,
+                            nfcDisabledHint: !widget.hasNfcSupport ? l10n.modeEndingPausingScenarioNfcDisabled : null,
+                            onScenarioPressed: isBusy ? (_) {} : _draftNotifier.updateEndingPausingScenario,
+                          ),
                           ModeEditorAllowedPausesTile(
                             title: l10n.modeAllowedPausesTitle,
                             subtitle: l10n.modeAllowedPausesSubtitle,
@@ -322,6 +353,15 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
     } else {
       _draftNotifier.updateScheduleEnd(picked);
     }
+  }
+
+  Future<void> _onPickMinimumDuration(BuildContext context, Duration? initialDuration) async {
+    final picked = await _showMinimumDurationBottomSheet(context: context, initialDuration: initialDuration);
+    if (!mounted || picked == null) {
+      return;
+    }
+
+    _draftNotifier.updateMinimumDuration(picked);
   }
 
   Future<void> onChooseAppsPressed({
@@ -407,5 +447,67 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
       ),
       ModeUpsertValidationCode.scheduleDaysRequired => l10n.modeScheduleDaysRequiredError,
     };
+  }
+
+  Future<Duration?> _showMinimumDurationBottomSheet({
+    required BuildContext context,
+    required Duration? initialDuration,
+  }) {
+    const minimum = Duration(minutes: 1);
+    const maximum = Duration(hours: 24);
+    final defaultDuration = initialDuration ?? const Duration(minutes: 30);
+
+    Duration clamp(Duration value) {
+      if (value < minimum) {
+        return minimum;
+      }
+      if (value > maximum) {
+        return maximum;
+      }
+      return value;
+    }
+
+    var selectedDuration = clamp(defaultDuration);
+
+    return showModalBottomSheet<Duration?>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: SizedBox(
+          height: 360,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium),
+                child: Row(
+                  children: <Widget>[
+                    PauzaTextButton(
+                      size: PauzaButtonSize.small,
+                      onPressed: Navigator.of(context).pop,
+                      title: Text(context.l10n.modeMinimumDurationClearButton),
+                    ),
+                    const Spacer(),
+                    PauzaFilledButton(
+                      size: PauzaButtonSize.small,
+                      onPressed: () => Navigator.of(context).pop(selectedDuration),
+                      title: Text(context.l10n.doneButton),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: CupertinoTimerPicker(
+                  mode: CupertinoTimerPickerMode.hm,
+                  initialTimerDuration: selectedDuration,
+                  onTimerDurationChanged: (value) {
+                    selectedDuration = clamp(value);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

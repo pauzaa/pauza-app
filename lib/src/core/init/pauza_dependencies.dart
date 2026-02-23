@@ -97,7 +97,7 @@ class PauzaDependencies with AppFuseInitialization {
       try {
         await streaksRepository.refreshAggregates();
       } on Object {
-        // Ignore startup refresh failures. Snapshot reads can refresh later.
+        // Ignore startup refresh failures. Next resume/manual flow retries refresh.
       }
     },
   };

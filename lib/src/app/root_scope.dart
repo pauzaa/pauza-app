@@ -80,8 +80,8 @@ class RootScopeState extends State<RootScope> {
 
     restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
       repository: dependencies.restrictionLifecycleRepository,
-    );
-    restrictionLifecycleSyncCoordinator.attach();
+      streaksRepository: dependencies.streaksRepository,
+    )..attach();
 
     streaksRepository = dependencies.streaksRepository;
 

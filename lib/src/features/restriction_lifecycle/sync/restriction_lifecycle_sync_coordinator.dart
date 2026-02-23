@@ -2,11 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
+import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 
 final class RestrictionLifecycleSyncCoordinator with WidgetsBindingObserver {
-  RestrictionLifecycleSyncCoordinator({required RestrictionLifecycleRepository repository}) : _repository = repository;
+  RestrictionLifecycleSyncCoordinator({
+    required RestrictionLifecycleRepository repository,
+    required StreaksRepository streaksRepository,
+  }) : _repository = repository,
+       _streaksRepository = streaksRepository;
 
   final RestrictionLifecycleRepository _repository;
+  final StreaksRepository _streaksRepository;
 
   bool _isAttached = false;
   Future<void>? _inFlightSync;
@@ -44,7 +50,7 @@ final class RestrictionLifecycleSyncCoordinator with WidgetsBindingObserver {
       return inFlight;
     }
 
-    final syncFuture = _repository.syncFromPluginQueue(batchSize: batchSize);
+    final syncFuture = _syncAndRefresh(batchSize: batchSize);
     _inFlightSync = syncFuture;
 
     return syncFuture.whenComplete(() {
@@ -52,5 +58,10 @@ final class RestrictionLifecycleSyncCoordinator with WidgetsBindingObserver {
         _inFlightSync = null;
       }
     });
+  }
+
+  Future<void> _syncAndRefresh({required int batchSize}) async {
+    await _repository.syncFromPluginQueue(batchSize: batchSize);
+    await _streaksRepository.refreshAggregates();
   }
 }

@@ -1,5 +1,13 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:pauza/src/app/root_scope.dart';
+import 'package:pauza/src/core/common/pauza_platform.dart';
+import 'package:pauza/src/core/common_ui/pauza_toast.dart';
+import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_card.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
+import 'package:pauza/src/features/modes/select_apps/widgets/android_apps_bottom_sheet.dart';
+import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 final class ModeEditorAppsSelectorTile extends StatelessWidget {
@@ -7,7 +15,7 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.selectedCountLabel,
-    required this.onTap,
+    required this.enabled,
     super.key,
     this.errorText,
   });
@@ -16,7 +24,39 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
   final String subtitle;
   final String selectedCountLabel;
   final String? errorText;
-  final VoidCallback onTap;
+  final bool enabled;
+
+  Future<void> _onChooseAppsPressed(BuildContext context) async {
+    final notifier = ModeUpsertScope.watch(context);
+    final currentSelection = notifier.value.blockedAppIds;
+    final l10n = AppLocalizations.of(context);
+    final rootScope = RootScope.of(context);
+
+    try {
+      if (kPauzaPlatform == PauzaPlatform.android) {
+        final selectedIds = await AndroidAppsBottomSheet.show(context, initialSelectedAppIds: currentSelection);
+        if (!context.mounted || selectedIds == null) {
+          return;
+        }
+        notifier.updateBlockedApps(selectedIds.toISet());
+        return;
+      }
+
+      final preSelectedApps = currentSelection
+          .map((token) => IOSAppInfo(applicationToken: token))
+          .toList(growable: false);
+      final selectedApps = await rootScope.installedAppsRepository.selectIOSApps(preSelectedApps: preSelectedApps);
+      if (!context.mounted) {
+        return;
+      }
+      notifier.updateBlockedApps(selectedApps.map((app) => app.identifier).toISet());
+    } on Object {
+      if (!context.mounted) {
+        return;
+      }
+      context.showToast(l10n.modeAppsLoadFailedMessage);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +69,7 @@ final class ModeEditorAppsSelectorTile extends StatelessWidget {
         ModeEditorCard(
           borderColor: hasError ? context.colorScheme.error.withValues(alpha: 0.8) : null,
           child: InkWell(
-            onTap: onTap,
+            onTap: enabled ? () => _onChooseAppsPressed(context) : null,
             borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
             child: Row(
               spacing: PauzaSpacing.medium,

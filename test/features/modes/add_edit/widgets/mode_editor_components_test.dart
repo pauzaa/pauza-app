@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_allowed_pauses_tile.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_apps_selector_tile.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_ending_pausing_scenario_panel.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_minimum_duration_tile.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_section_label.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
 import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
@@ -24,13 +26,13 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: PauzaTheme.dark,
-        home: Scaffold(
+        home: const Scaffold(
           body: ModeEditorAppsSelectorTile(
             title: 'Select Apps',
             subtitle: 'Customize what to block',
             selectedCountLabel: '2 apps',
             errorText: 'Select at least one app',
-            onTap: () {},
+            enabled: true,
           ),
         ),
       ),
@@ -126,22 +128,25 @@ void main() {
   });
 
   testWidgets('ModeEditorMinimumDurationTile shows value and clear action', (tester) async {
-    var cleared = false;
+    final draftNotifier = ModeUpsertDraftNotifier(hasNfcSupport: true);
+    draftNotifier.updateMinimumDuration(const Duration(minutes: 20));
 
     await tester.pumpWidget(
       MaterialApp(
         theme: PauzaTheme.dark,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
-          body: ModeEditorMinimumDurationTile(
-            title: 'Minimum duration',
-            subtitle: 'Optional',
-            valueLabel: '20 min',
-            actionLabel: 'Set',
-            clearLabel: 'Clear',
-            onPickPressed: () {},
-            onClearPressed: () {
-              cleared = true;
-            },
+          body: ModeUpsertScope(
+            notifier: draftNotifier,
+            child: const ModeEditorMinimumDurationTile(
+              title: 'Minimum duration',
+              subtitle: 'Optional',
+              duration: Duration(minutes: 20),
+              actionLabel: 'Set',
+              clearLabel: 'Clear',
+              enabled: true,
+            ),
           ),
         ),
       ),
@@ -151,7 +156,7 @@ void main() {
     await tester.pump();
 
     expect(find.text('20 min'), findsOneWidget);
-    expect(cleared, isTrue);
+    expect(draftNotifier.value.minimumDuration, isNull);
   });
 }
 

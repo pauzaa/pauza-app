@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_card.dart';
+import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
+import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
-@immutable
 class ModeEditorDayChipItem {
   const ModeEditorDayChipItem({required this.id, required this.label, required this.isSelected});
 
@@ -14,36 +16,62 @@ class ModeEditorDayChipItem {
 final class ModeEditorSchedulePanel extends StatelessWidget {
   const ModeEditorSchedulePanel({
     required this.title,
-    required this.enabled,
-    required this.onToggle,
-    required this.days,
-    required this.onDayPressed,
     required this.startTitle,
     required this.endTitle,
-    required this.startValue,
-    required this.endValue,
-    required this.onStartPressed,
-    required this.onEndPressed,
+    required this.enabled,
     super.key,
     this.errorText,
   });
 
   final String title;
-  final bool enabled;
-  final ValueChanged<bool> onToggle;
-  final List<ModeEditorDayChipItem> days;
-  final ValueChanged<String> onDayPressed;
   final String startTitle;
   final String endTitle;
-  final String startValue;
-  final String endValue;
+  final bool enabled;
   final String? errorText;
-  final VoidCallback onStartPressed;
-  final VoidCallback onEndPressed;
+
+  String _formatTime(BuildContext context, TimeOfDay? time) {
+    final resolvedTime = time ?? const TimeOfDay(hour: 9, minute: 0);
+    return MaterialLocalizations.of(context).formatTimeOfDay(resolvedTime);
+  }
+
+  Future<void> _onPickStartTime({
+    required BuildContext context,
+    required TimeOfDay? initial,
+    required bool isStart,
+  }) async {
+    final draftNotifier = ModeUpsertScope.watch(context);
+    final picked = await showCupertinoTimePicker(
+      context,
+      doneButtonLabel: context.l10n.doneButton,
+      initialTime: initial,
+    );
+    if (!context.mounted || picked == null) {
+      return;
+    }
+    if (isStart) {
+      draftNotifier.updateScheduleStart(picked);
+    } else {
+      draftNotifier.updateScheduleEnd(picked);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final hasError = errorText != null;
+    final draftNotifier = ModeUpsertScope.watch(context);
+    final schedule = draftNotifier.value.schedule;
+    final isScheduleEnabled = schedule?.enabled ?? false;
+    final l10n = context.l10n;
+
+    final days = WeekDay.values
+        .map(
+          (day) => ModeEditorDayChipItem(
+            id: day.name,
+            label: day.localizeShort(l10n).substring(0, 1),
+            isSelected: schedule?.days.contains(day) ?? false,
+          ),
+        )
+        .toList(growable: false);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,25 +89,49 @@ final class ModeEditorSchedulePanel extends StatelessWidget {
                   Expanded(
                     child: Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
                   ),
-                  PauzaSwitch(value: enabled, onChanged: onToggle),
+                  PauzaSwitch(
+                    value: isScheduleEnabled,
+                    onChanged: enabled ? draftNotifier.toggleScheduleEnabled : (_) {},
+                  ),
                 ],
               ),
-              if (enabled) ...<Widget>[
+              if (isScheduleEnabled) ...<Widget>[
                 Wrap(
                   spacing: PauzaSpacing.small,
                   runSpacing: PauzaSpacing.small,
                   children: days
-                      .map((item) => _ModeEditorDayChip(item: item, onPressed: () => onDayPressed(item.id)))
+                      .map(
+                        (item) => _ModeEditorDayChip(
+                          item: item,
+                          onPressed: enabled
+                              ? () => draftNotifier.toggleScheduleDay(
+                                  WeekDay.values.firstWhere((day) => day.name == item.id),
+                                )
+                              : () {},
+                        ),
+                      )
                       .toList(growable: false),
                 ),
                 Row(
                   spacing: PauzaSpacing.medium,
                   children: <Widget>[
                     Expanded(
-                      child: _ModeEditorTimeField(title: startTitle, value: startValue, onPressed: onStartPressed),
+                      child: _ModeEditorTimeField(
+                        title: startTitle,
+                        value: _formatTime(context, schedule?.start),
+                        onPressed: enabled
+                            ? () => _onPickStartTime(context: context, initial: schedule?.start, isStart: true)
+                            : () {},
+                      ),
                     ),
                     Expanded(
-                      child: _ModeEditorTimeField(title: endTitle, value: endValue, onPressed: onEndPressed),
+                      child: _ModeEditorTimeField(
+                        title: endTitle,
+                        value: _formatTime(context, schedule?.end),
+                        onPressed: enabled
+                            ? () => _onPickStartTime(context: context, initial: schedule?.end, isStart: false)
+                            : () {},
+                      ),
                     ),
                   ],
                 ),

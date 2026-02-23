@@ -1,11 +1,8 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helm/helm.dart';
 import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/common/extensions.dart';
-import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
@@ -17,14 +14,9 @@ import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_minimum_du
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_schedule_panel.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_section_label.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_sticky_action_bar.dart';
-import 'package:pauza/src/features/modes/add_edit/widgets/mode_icon_picker_sheet.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
-import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
-import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza/src/features/modes/list/widget/confirm_delete_mode_dialog.dart';
-import 'package:pauza/src/features/modes/select_apps/widgets/android_apps_bottom_sheet.dart';
-import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class ModeEditorScreen extends StatelessWidget {
@@ -147,8 +139,6 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
             final draftNotifier = ModeUpsertScope.watch(context);
             final draft = draftNotifier.value;
             final validation = draftNotifier.validation;
-            final schedule = draft.schedule;
-            final isScheduleEnabled = schedule?.enabled ?? false;
 
             return Column(
               children: <Widget>[
@@ -164,10 +154,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                       Row(
                         spacing: PauzaSpacing.small,
                         children: [
-                          ModeEditorIconPicker(
-                            selectedIcon: draft.icon,
-                            onTap: isBusy ? () {} : () => _onChooseIconPressed(context, draft.icon),
-                          ),
+                          ModeEditorIconPicker(selectedIcon: draft.icon, enabled: !isBusy),
                           Expanded(
                             child: PauzaTextFormField(
                               key: ValueKey<int>(draftNotifier.revision),
@@ -227,47 +214,17 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                             subtitle: l10n.modeBlockedAppsSubtitle,
                             selectedCountLabel: draft.blockedAppIds.length.toString(),
                             errorText: _errorForField(context, validation[ModeUpsertValidationField.blockedApps]),
-                            onTap: isBusy
-                                ? () {}
-                                : () {
-                                    onChooseAppsPressed(
-                                      currentSelection: draft.blockedAppIds,
-                                      onChanged: _draftNotifier.updateBlockedApps,
-                                    );
-                                  },
+                            enabled: !isBusy,
                           ),
                         ],
                       ),
 
                       ModeEditorSchedulePanel(
                         title: l10n.modeScheduleTitle,
-                        enabled: isScheduleEnabled,
-                        onToggle: isBusy ? (_) {} : _draftNotifier.toggleScheduleEnabled,
-                        days: WeekDay.values
-                            .map(
-                              (day) => ModeEditorDayChipItem(
-                                id: day.name,
-                                label: day.localizeShort(l10n).substring(0, 1),
-                                isSelected: schedule?.days.contains(day) ?? false,
-                              ),
-                            )
-                            .toList(growable: false),
-                        onDayPressed: isBusy
-                            ? (_) {}
-                            : (dayName) {
-                                _draftNotifier.toggleScheduleDay(
-                                  WeekDay.values.firstWhere((day) => day.name == dayName),
-                                );
-                              },
                         startTitle: l10n.modeScheduleStartTimeLabel,
                         endTitle: l10n.modeScheduleEndTimeLabel,
-                        startValue: _formatTime(context, schedule?.start),
-                        endValue: _formatTime(context, schedule?.end),
-                        onStartPressed: isBusy
-                            ? () {}
-                            : () => _onPickStartTime(context, schedule?.start, isStart: true),
-                        onEndPressed: isBusy ? () {} : () => _onPickStartTime(context, schedule?.end, isStart: false),
                         errorText: _errorForField(context, validation[ModeUpsertValidationField.scheduleDays]),
+                        enabled: !isBusy,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -279,12 +236,7 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                             duration: draft.minimumDuration,
                             actionLabel: l10n.modeMinimumDurationSetButton,
                             clearLabel: draft.minimumDuration == null ? null : l10n.modeMinimumDurationClearButton,
-                            onPickPressed: isBusy
-                                ? () {}
-                                : () => _onPickMinimumDuration(context, draft.minimumDuration),
-                            onClearPressed: isBusy || draft.minimumDuration == null
-                                ? null
-                                : () => _draftNotifier.updateMinimumDuration(null),
+                            enabled: !isBusy,
                           ),
                           ModeEditorEndingPausingScenarioPanel(
                             title: l10n.modeEndingPausingScenarioTitle,
@@ -334,85 +286,6 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
     );
   }
 
-  String _formatTime(BuildContext context, TimeOfDay? time) {
-    final resolvedTime = time ?? const TimeOfDay(hour: 9, minute: 0);
-    return MaterialLocalizations.of(context).formatTimeOfDay(resolvedTime);
-  }
-
-  Future<void> _onPickStartTime(BuildContext context, TimeOfDay? initial, {required bool isStart}) async {
-    final picked = await showCupertinoTimePicker(
-      context,
-      doneButtonLabel: context.l10n.doneButton,
-      initialTime: initial,
-    );
-    if (!mounted || picked == null) {
-      return;
-    }
-    if (isStart) {
-      _draftNotifier.updateScheduleStart(picked);
-    } else {
-      _draftNotifier.updateScheduleEnd(picked);
-    }
-  }
-
-  Future<void> _onPickMinimumDuration(BuildContext context, Duration? initialDuration) async {
-    final picked = await _showMinimumDurationBottomSheet(context: context, initialDuration: initialDuration);
-    if (!mounted || picked == null) {
-      return;
-    }
-
-    _draftNotifier.updateMinimumDuration(picked);
-  }
-
-  Future<void> onChooseAppsPressed({
-    required ISet<AppIdentifier> currentSelection,
-    required ValueChanged<ISet<AppIdentifier>> onChanged,
-  }) async {
-    final l10n = AppLocalizations.of(context);
-    final rootScope = RootScope.of(context);
-
-    try {
-      if (kPauzaPlatform == PauzaPlatform.android) {
-        final selectedIds = await AndroidAppsBottomSheet.show(context, initialSelectedAppIds: currentSelection);
-        if (!mounted || selectedIds == null) {
-          return;
-        }
-        onChanged(selectedIds.toISet());
-        return;
-      }
-
-      final preSelectedApps = currentSelection
-          .map((token) => IOSAppInfo(applicationToken: token))
-          .toList(growable: false);
-      final selectedApps = await rootScope.installedAppsRepository.selectIOSApps(preSelectedApps: preSelectedApps);
-      if (!mounted) {
-        return;
-      }
-      onChanged(selectedApps.map((app) => app.identifier).toISet());
-    } on Object {
-      if (!mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(l10n.modeAppsLoadFailedMessage)));
-    }
-  }
-
-  Future<void> _onChooseIconPressed(BuildContext context, ModeIcon selectedIcon) async {
-    final l10n = context.l10n;
-    final nextIcon = await ModeIconPickerSheet.show(
-      context,
-      title: l10n.modeIconPickerTitle,
-      subtitle: l10n.modeIconPickerSubtitle,
-      selectedIcon: selectedIcon,
-    );
-    if (!mounted || nextIcon == null) {
-      return;
-    }
-    _draftNotifier.updateIcon(nextIcon);
-  }
-
   Future<void> _onDeletePressed() async {
     final shouldDelete = await ConfirmDeleteModeDialog.show(context);
     if (!mounted || shouldDelete != true) {
@@ -420,17 +293,6 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
     }
 
     context.read<ModeEditorBloc>().add(ModeEditorDeleteRequested(modeId: widget.modeId));
-  }
-
-  void _onSavePressed(BuildContext context) {
-    final validation = _draftNotifier.validateForSubmit();
-    if (!validation.isValid) {
-      return;
-    }
-
-    context.read<ModeEditorBloc>().add(
-      ModeEditorSaveRequested(modeId: widget.modeId, request: _draftNotifier.buildSubmitRequest()),
-    );
   }
 
   String? _errorForField(BuildContext context, ModeUpsertValidationCode? error) {
@@ -449,65 +311,14 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
     };
   }
 
-  Future<Duration?> _showMinimumDurationBottomSheet({
-    required BuildContext context,
-    required Duration? initialDuration,
-  }) {
-    const minimum = Duration(minutes: 1);
-    const maximum = Duration(hours: 24);
-    final defaultDuration = initialDuration ?? const Duration(minutes: 30);
-
-    Duration clamp(Duration value) {
-      if (value < minimum) {
-        return minimum;
-      }
-      if (value > maximum) {
-        return maximum;
-      }
-      return value;
+  void _onSavePressed(BuildContext context) {
+    final validation = _draftNotifier.validateForSubmit();
+    if (!validation.isValid) {
+      return;
     }
 
-    var selectedDuration = clamp(defaultDuration);
-
-    return showModalBottomSheet<Duration?>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
-        child: SizedBox(
-          height: 360,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium),
-                child: Row(
-                  children: <Widget>[
-                    PauzaTextButton(
-                      size: PauzaButtonSize.small,
-                      onPressed: Navigator.of(context).pop,
-                      title: Text(context.l10n.modeMinimumDurationClearButton),
-                    ),
-                    const Spacer(),
-                    PauzaFilledButton(
-                      size: PauzaButtonSize.small,
-                      onPressed: () => Navigator.of(context).pop(selectedDuration),
-                      title: Text(context.l10n.doneButton),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: CupertinoTimerPicker(
-                  mode: CupertinoTimerPickerMode.hm,
-                  initialTimerDuration: selectedDuration,
-                  onTimerDurationChanged: (value) {
-                    selectedDuration = clamp(value);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    context.read<ModeEditorBloc>().add(
+      ModeEditorSaveRequested(modeId: widget.modeId, request: _draftNotifier.buildSubmitRequest()),
     );
   }
 }

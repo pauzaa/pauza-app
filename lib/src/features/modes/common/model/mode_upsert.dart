@@ -42,6 +42,15 @@ class ModeUpsertDTO {
   final Schedule? schedule;
   final ISet<AppIdentifier> blockedAppIds;
 
+  RestrictionMode toRestrictionMode({required String modeId}) {
+    final restrictionSchedule = switch (schedule) {
+      final schedule? when schedule.enabled => schedule.toRestrictionSchedule(),
+      _ => null,
+    };
+
+    return RestrictionMode(modeId: modeId, blockedAppIds: blockedAppIds.toList(), schedule: restrictionSchedule);
+  }
+
   ModeUpsertDTO copyWith({
     String? title,
     String? textOnScreen,

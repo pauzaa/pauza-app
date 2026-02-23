@@ -49,7 +49,11 @@ class RootScopeState extends State<RootScope> {
       restrictionLifecycleRepository: dependencies.restrictionLifecycleRepository,
     );
 
-    modesRepository = ModesRepositoryImpl(localDatabase: dependencies.localDatabase, platform: kPauzaPlatform);
+    modesRepository = ModesRepositoryImpl(
+      localDatabase: dependencies.localDatabase,
+      platform: kPauzaPlatform,
+      restrictions: dependencies.appRestrictionManager,
+    );
 
     installedAppsRepository = PauzaScreenTimeInstalledAppsRepository(
       installedAppsManager: dependencies.installedAppsManager,

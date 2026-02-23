@@ -64,8 +64,14 @@ class Mode {
     updatedAt: updatedAt ?? this.updatedAt,
   );
 
-  RestrictionMode toRestrictionMode() =>
-      RestrictionMode(modeId: id, blockedAppIds: blockedAppIds.toList(), schedule: schedule?.toRestrictionSchedule());
+  RestrictionMode toRestrictionMode() {
+    final restrictionSchedule = switch (schedule) {
+      final schedule? when schedule.enabled => schedule.toRestrictionSchedule(),
+      _ => null,
+    };
+
+    return RestrictionMode(modeId: id, blockedAppIds: blockedAppIds.toList(), schedule: restrictionSchedule);
+  }
 
   factory Mode.fromDbRow(Map<String, Object?> row) {
     final createdAtMillis = row['created_at'] as int;

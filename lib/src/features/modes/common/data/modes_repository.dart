@@ -7,6 +7,7 @@ import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
+import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:uuid/uuid.dart';
 
 abstract interface class ModesRepository implements Disposable {
@@ -24,11 +25,17 @@ abstract interface class ModesRepository implements Disposable {
 }
 
 class ModesRepositoryImpl implements ModesRepository {
-  ModesRepositoryImpl({required LocalDatabase localDatabase, required this.platform, Uuid? uuid})
-    : _localDatabase = localDatabase,
-      _uuid = uuid ?? const Uuid();
+  ModesRepositoryImpl({
+    required LocalDatabase localDatabase,
+    required this.platform,
+    required AppRestrictionManager restrictions,
+    Uuid? uuid,
+  }) : _localDatabase = localDatabase,
+       _restrictions = restrictions,
+       _uuid = uuid ?? const Uuid();
 
   final LocalDatabase _localDatabase;
+  final AppRestrictionManager _restrictions;
   final Uuid _uuid;
   final PauzaPlatform platform;
 
@@ -110,7 +117,20 @@ GROUP BY m.id;
 
   @override
   Future<void> deleteMode(String modeId) async {
-    await _localDatabase.rawDelete('DELETE FROM modes WHERE id = ?', [modeId]);
+    final previousMode = await getMode(modeId);
+    await _restrictions.removeMode(modeId);
+
+    try {
+      await _localDatabase.rawDelete('DELETE FROM modes WHERE id = ?', [modeId]);
+    } on Object {
+      try {
+        await _restrictions.upsertMode(previousMode.toRestrictionMode());
+      } on Object {
+        // Best-effort rollback to reduce plugin/DB drift.
+      }
+      rethrow;
+    }
+
     await _notifyListeners();
   }
 
@@ -118,11 +138,13 @@ GROUP BY m.id;
   Future<void> createMode(ModeUpsertDTO request) async {
     final modeId = _uuid.v4();
     final now = DateTime.now().toUtc().millisecondsSinceEpoch;
+    await _restrictions.upsertMode(request.toRestrictionMode(modeId: modeId));
 
-    await _localDatabase.transaction((transaction) async {
-      final batch = transaction.batch();
-      batch.rawInsert(
-        '''
+    try {
+      await _localDatabase.transaction((transaction) async {
+        final batch = transaction.batch();
+        batch.rawInsert(
+          '''
 INSERT INTO modes (
   id,
   title,
@@ -136,24 +158,24 @@ INSERT INTO modes (
           updated_at
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''',
-        [
-          modeId,
-          request.title,
-          request.textOnScreen,
-          request.description,
-          request.allowedPausesCount,
-          request.minimumDuration?.inMilliseconds,
-          request.endingPausingScenario.dbValue,
-          request.icon.token,
-          now,
-          now,
-        ],
-      );
+          [
+            modeId,
+            request.title,
+            request.textOnScreen,
+            request.description,
+            request.allowedPausesCount,
+            request.minimumDuration?.inMilliseconds,
+            request.endingPausingScenario.dbValue,
+            request.icon.token,
+            now,
+            now,
+          ],
+        );
 
-      final schedule = request.schedule;
-      if (schedule != null) {
-        batch.rawInsert(
-          '''
+        final schedule = request.schedule;
+        if (schedule != null) {
+          batch.rawInsert(
+            '''
 INSERT INTO schedules (
   id,
   mode_id,
@@ -165,23 +187,23 @@ INSERT INTO schedules (
   updated_at
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 ''',
-          [
-            modeId,
-            modeId,
-            WeekDay.encodeDays(schedule.days),
-            schedule.start.toMinutesFromMidnight,
-            schedule.end.toMinutesFromMidnight,
-            schedule.enabled ? 1 : 0,
-            now,
-            now,
-          ],
-        );
-      }
+            [
+              modeId,
+              modeId,
+              WeekDay.encodeDays(schedule.days),
+              schedule.start.toMinutesFromMidnight,
+              schedule.end.toMinutesFromMidnight,
+              schedule.enabled ? 1 : 0,
+              now,
+              now,
+            ],
+          );
+        }
 
-      if (request.blockedAppIds.isNotEmpty) {
-        for (final appId in request.blockedAppIds) {
-          batch.rawInsert(
-            '''
+        if (request.blockedAppIds.isNotEmpty) {
+          for (final appId in request.blockedAppIds) {
+            batch.rawInsert(
+              '''
 INSERT INTO mode_blocked_apps (
   mode_id,
   platform,
@@ -190,40 +212,52 @@ INSERT INTO mode_blocked_apps (
   updated_at
 ) VALUES (?, ?, ?, ?, ?)
 ''',
-            [modeId, platform.dbValue, appId.raw, now, now],
-          );
+              [modeId, platform.dbValue, appId.raw, now, now],
+            );
+          }
         }
-      }
 
-      await batch.commit(noResult: true);
-    });
+        await batch.commit(noResult: true);
+      });
+    } on Object {
+      try {
+        await _restrictions.removeMode(modeId);
+      } on Object {
+        // Best-effort rollback to reduce plugin/DB drift.
+      }
+      rethrow;
+    }
+
     await _notifyListeners();
   }
 
   @override
   Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {
     final now = DateTime.now().toUtc().millisecondsSinceEpoch;
+    final previousMode = await getMode(modeId);
+    await _restrictions.upsertMode(request.toRestrictionMode(modeId: modeId));
 
-    await _localDatabase.transaction((transaction) async {
-      final schedule = request.schedule;
-      final existingScheduleRows = await transaction.rawQuery('SELECT created_at FROM schedules WHERE mode_id = ?', [
-        modeId,
-      ]);
-      final scheduleExists =
-          existingScheduleRows.isNotEmpty && (existingScheduleRows.first['created_at'] as int?) != null;
+    try {
+      await _localDatabase.transaction((transaction) async {
+        final schedule = request.schedule;
+        final existingScheduleRows = await transaction.rawQuery('SELECT created_at FROM schedules WHERE mode_id = ?', [
+          modeId,
+        ]);
+        final scheduleExists =
+            existingScheduleRows.isNotEmpty && (existingScheduleRows.first['created_at'] as int?) != null;
 
-      final existingBlockedRows = await transaction.rawQuery(
-        'SELECT app_identifier FROM mode_blocked_apps WHERE mode_id = ? AND platform = ?',
-        [modeId, platform.dbValue],
-      );
-      final existingBlocked = existingBlockedRows.map((row) => row['app_identifier']).whereType<String>().toSet();
-      final requestedBlocked = request.blockedAppIds.map((id) => id.raw).toSet();
-      final removedBlocked = existingBlocked.difference(requestedBlocked);
-      final addedBlocked = requestedBlocked.difference(existingBlocked);
+        final existingBlockedRows = await transaction.rawQuery(
+          'SELECT app_identifier FROM mode_blocked_apps WHERE mode_id = ? AND platform = ?',
+          [modeId, platform.dbValue],
+        );
+        final existingBlocked = existingBlockedRows.map((row) => row['app_identifier']).whereType<String>().toSet();
+        final requestedBlocked = request.blockedAppIds.map((id) => id.raw).toSet();
+        final removedBlocked = existingBlocked.difference(requestedBlocked);
+        final addedBlocked = requestedBlocked.difference(existingBlocked);
 
-      final batch = transaction.batch();
-      batch.rawUpdate(
-        '''
+        final batch = transaction.batch();
+        batch.rawUpdate(
+          '''
 UPDATE modes
 SET
   title = ?,
@@ -236,26 +270,26 @@ SET
   updated_at = ?
 WHERE id = ?
 ''',
-        [
-          request.title,
-          request.textOnScreen,
-          request.description,
-          request.allowedPausesCount,
-          request.minimumDuration?.inMilliseconds,
-          request.endingPausingScenario.dbValue,
-          request.icon.token,
-          now,
-          modeId,
-        ],
-      );
+          [
+            request.title,
+            request.textOnScreen,
+            request.description,
+            request.allowedPausesCount,
+            request.minimumDuration?.inMilliseconds,
+            request.endingPausingScenario.dbValue,
+            request.icon.token,
+            now,
+            modeId,
+          ],
+        );
 
-      if (schedule == null) {
-        if (scheduleExists) {
-          batch.rawDelete('DELETE FROM schedules WHERE mode_id = ?', [modeId]);
-        }
-      } else if (scheduleExists) {
-        batch.rawUpdate(
-          '''
+        if (schedule == null) {
+          if (scheduleExists) {
+            batch.rawDelete('DELETE FROM schedules WHERE mode_id = ?', [modeId]);
+          }
+        } else if (scheduleExists) {
+          batch.rawUpdate(
+            '''
 UPDATE schedules
 SET
   days = ?,
@@ -265,18 +299,18 @@ SET
   updated_at = ?
 WHERE mode_id = ?
 ''',
-          [
-            WeekDay.encodeDays(schedule.days),
-            schedule.start.toMinutesFromMidnight,
-            schedule.end.toMinutesFromMidnight,
-            schedule.enabled ? 1 : 0,
-            now,
-            modeId,
-          ],
-        );
-      } else {
-        batch.rawInsert(
-          '''
+            [
+              WeekDay.encodeDays(schedule.days),
+              schedule.start.toMinutesFromMidnight,
+              schedule.end.toMinutesFromMidnight,
+              schedule.enabled ? 1 : 0,
+              now,
+              modeId,
+            ],
+          );
+        } else {
+          batch.rawInsert(
+            '''
 INSERT INTO schedules (
   id,
   mode_id,
@@ -288,30 +322,30 @@ INSERT INTO schedules (
   updated_at
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 ''',
-          [
-            modeId,
-            modeId,
-            WeekDay.encodeDays(schedule.days),
-            schedule.start.toMinutesFromMidnight,
-            schedule.end.toMinutesFromMidnight,
-            schedule.enabled ? 1 : 0,
-            now,
-            now,
-          ],
-        );
-      }
+            [
+              modeId,
+              modeId,
+              WeekDay.encodeDays(schedule.days),
+              schedule.start.toMinutesFromMidnight,
+              schedule.end.toMinutesFromMidnight,
+              schedule.enabled ? 1 : 0,
+              now,
+              now,
+            ],
+          );
+        }
 
-      for (final appId in removedBlocked) {
-        batch.rawDelete('DELETE FROM mode_blocked_apps WHERE mode_id = ? AND platform = ? AND app_identifier = ?', [
-          modeId,
-          platform.dbValue,
-          appId,
-        ]);
-      }
+        for (final appId in removedBlocked) {
+          batch.rawDelete('DELETE FROM mode_blocked_apps WHERE mode_id = ? AND platform = ? AND app_identifier = ?', [
+            modeId,
+            platform.dbValue,
+            appId,
+          ]);
+        }
 
-      for (final appId in addedBlocked) {
-        batch.rawInsert(
-          '''
+        for (final appId in addedBlocked) {
+          batch.rawInsert(
+            '''
 INSERT INTO mode_blocked_apps (
   mode_id,
   platform,
@@ -320,12 +354,21 @@ INSERT INTO mode_blocked_apps (
   updated_at
 ) VALUES (?, ?, ?, ?, ?)
 ''',
-          [modeId, platform.dbValue, appId, now, now],
-        );
-      }
+            [modeId, platform.dbValue, appId, now, now],
+          );
+        }
 
-      await batch.commit(noResult: true);
-    });
+        await batch.commit(noResult: true);
+      });
+    } on Object {
+      try {
+        await _restrictions.upsertMode(previousMode.toRestrictionMode());
+      } on Object {
+        // Best-effort rollback to reduce plugin/DB drift.
+      }
+      rethrow;
+    }
+
     await _notifyListeners();
   }
 

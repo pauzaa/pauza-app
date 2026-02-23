@@ -902,6 +902,23 @@
   "@homeQuickPauseLabel": {
     "description": "Label for the quick pause feature."
   },
+  "homePauseBlockedByLimit": "Pause limit reached for this session.",
+  "@homePauseBlockedByLimit": {
+    "description": "Toast shown when pause request is rejected because session pause limit was reached."
+  },
+  "homeActionBlockedByMinimumDuration": "Action unavailable. Try again in {remaining}.",
+  "@homeActionBlockedByMinimumDuration": {
+    "description": "Toast shown when pause or stop is blocked by minimum duration.",
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "homeActionBlockedModeUnavailable": "Mode data is unavailable. Please sync and try again.",
+  "@homeActionBlockedModeUnavailable": {
+    "description": "Toast shown when active mode configuration cannot be resolved for validation."
+  },
   "pausedTitle": "Paused",
   "@pausedTitle": {
     "description": "Title for the paused session."

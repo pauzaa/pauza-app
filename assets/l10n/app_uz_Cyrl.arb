@@ -277,6 +277,16 @@
       }
     }
   },
+  "homePauseBlockedByLimit": "Ушбу сессия учун пауза лимити тугади.",
+  "homeActionBlockedByMinimumDuration": "Амал ҳозирча мавжуд эмас. {remaining} дан кейин уриниб кўринг.",
+  "@homeActionBlockedByMinimumDuration": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "homeActionBlockedModeUnavailable": "Режим маълумотлари мавжуд эмас. Синхронлаб, қайта уриниб кўринг.",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",

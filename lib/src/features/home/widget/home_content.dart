@@ -22,33 +22,47 @@ class HomeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          padding: const EdgeInsets.symmetric(vertical: PauzaSpacing.large, horizontal: PauzaSpacing.large),
-          children: <Widget>[
-            PauzaDashboardAppBar(
-              greeting: l10n.homeGreeting(DateTime.now().hour.toString()),
-              title: l10n.homeDashboardTitle,
-            ),
+    return BlocListener<BlockingBloc, BlockingState>(
+      listenWhen: (previous, current) {
+        return previous.actionError != current.actionError && current.hasActionError;
+      },
+      listener: (context, state) {
+        final actionError = state.actionError;
+        if (actionError == null) {
+          return;
+        }
 
-            Padding(
-              padding: const EdgeInsets.only(top: PauzaSpacing.xLarge),
-              child: BlocBuilder<BlockingBloc, BlockingState>(
-                builder: (context, blockingState) {
-                  if (blockingState.isPaused) {
-                    return const HomePauseSession();
-                  } else if (blockingState.isBlocking) {
-                    return const HomeActiveSession();
-                  }
-
-                  return const HomeDefaultWidget();
-                },
+        final message = actionError.localize(l10n);
+        context.showToast(message);
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(vertical: PauzaSpacing.large, horizontal: PauzaSpacing.large),
+            children: <Widget>[
+              PauzaDashboardAppBar(
+                greeting: l10n.homeGreeting(DateTime.now().hour.toString()),
+                title: l10n.homeDashboardTitle,
               ),
-            ),
-          ],
+
+              Padding(
+                padding: const EdgeInsets.only(top: PauzaSpacing.xLarge),
+                child: BlocBuilder<BlockingBloc, BlockingState>(
+                  builder: (context, blockingState) {
+                    if (blockingState.isPaused) {
+                      return const HomePauseSession();
+                    } else if (blockingState.isBlocking) {
+                      return const HomeActiveSession();
+                    }
+
+                    return const HomeDefaultWidget();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

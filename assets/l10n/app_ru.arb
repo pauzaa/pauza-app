@@ -277,6 +277,16 @@
       }
     }
   },
+  "homePauseBlockedByLimit": "Достигнут лимит пауз для этой сессии.",
+  "homeActionBlockedByMinimumDuration": "Действие недоступно. Попробуйте через {remaining}.",
+  "@homeActionBlockedByMinimumDuration": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "homeActionBlockedModeUnavailable": "Данные режима недоступны. Обновите состояние и попробуйте снова.",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",

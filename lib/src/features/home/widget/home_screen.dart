@@ -26,7 +26,8 @@ class HomeScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) =>
-              BlockingBloc(blockingRepository: rootScope.blockingRepository)..add(const BlockingSyncRequested()),
+              BlockingBloc(blockingRepository: rootScope.blockingRepository, modesRepository: rootScope.modesRepository)
+                ..add(const BlockingSyncRequested()),
         ),
         BlocProvider(
           create: (context) => HomeStatsBloc(

@@ -9,6 +9,7 @@ import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
+import 'package:pauza/src/features/home/model/blocking_action_error.dart';
 import 'package:pauza/src/features/home/widget/home_content.dart';
 import 'package:pauza/src/features/home/widget/home_current_mode_card.dart';
 import 'package:pauza/src/features/home/widget/home_session_button.dart';
@@ -97,6 +98,26 @@ void main() {
       addTearDown(modesBloc.close);
       addTearDown(blockingBloc.close);
     });
+
+    testWidgets('shows toast when pause is blocked by limit', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 3000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final modesBloc = _TestModesListBloc();
+      final blockingBloc = _TestBlockingBloc();
+
+      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
+      await tester.pump();
+
+      blockingBloc.emitForTest(const BlockingState.initial().setActionError(const PauseLimitReachedError()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+
+      expect(find.text('Pause limit reached for this session.'), findsOneWidget);
+
+      addTearDown(modesBloc.close);
+      addTearDown(blockingBloc.close);
+    });
   });
 }
 
@@ -145,7 +166,7 @@ class _TestModesListBloc extends ModesListBloc {
 }
 
 class _TestBlockingBloc extends BlockingBloc {
-  _TestBlockingBloc() : super(blockingRepository: _NoopBlockingRepository());
+  _TestBlockingBloc() : super(blockingRepository: _NoopBlockingRepository(), modesRepository: _NoopModesRepository());
 
   BlockingEvent? lastEvent;
 
@@ -215,7 +236,11 @@ class _NoopBlockingRepository implements BlockingRepository {
   }
 
   @override
-  Future<void> pauseBlocking(Duration duration) async {}
+  Future<void> pauseBlocking(
+    Duration duration, {
+    required Mode? mode,
+    required RestrictionState restrictionState,
+  }) async {}
 
   @override
   Future<void> resumeBlocking() async {}
@@ -224,7 +249,11 @@ class _NoopBlockingRepository implements BlockingRepository {
   Future<void> startBlocking({required Mode mode, required ShieldConfiguration? shield}) async {}
 
   @override
-  Future<void> stopBlocking() async {}
+  Future<void> stopBlocking({
+    required Mode? mode,
+    required RestrictionState restrictionState,
+    Duration? cooldownDuration,
+  }) async {}
 
   @override
   Future<void> syncRestrictionLifecycleEvents() async {}

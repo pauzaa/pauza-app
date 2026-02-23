@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
+import 'package:pauza/src/features/home/model/blocking_action_error.dart';
+import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
@@ -10,8 +12,9 @@ part 'blocking_event.dart';
 part 'blocking_state.dart';
 
 class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
-  BlockingBloc({required BlockingRepository blockingRepository})
+  BlockingBloc({required BlockingRepository blockingRepository, required ModesRepository modesRepository})
     : _blockingRepository = blockingRepository,
+      _modesRepository = modesRepository,
       super(const BlockingState.initial()) {
     on<BlockingSyncRequested>(_onSyncRequested);
     on<BlockingStartRequested>(_onStartRequested);
@@ -21,6 +24,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
   }
 
   final BlockingRepository _blockingRepository;
+  final ModesRepository _modesRepository;
   Timer? _syncTimer;
 
   @override
@@ -60,8 +64,10 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
   Future<void> _onStopRequested(BlockingStopRequested event, Emitter<BlockingState> emit) async {
     try {
       emit(state.loading());
-      await _blockingRepository.stopBlocking();
+      await _blockingRepository.stopBlocking(mode: state.activeMode, restrictionState: state.restrictionState);
       await _syncSessionState(emit: emit);
+    } on BlockingActionError catch (error) {
+      emit(state.setActionError(error));
     } catch (error) {
       emit(state.setError(error));
     }
@@ -70,8 +76,14 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
   Future<void> _onQuickPauseRequested(BlockingQuickPauseRequested event, Emitter<BlockingState> emit) async {
     try {
       emit(state.loading());
-      await _blockingRepository.pauseBlocking(event.duration);
+      await _blockingRepository.pauseBlocking(
+        event.duration,
+        mode: state.activeMode,
+        restrictionState: state.restrictionState,
+      );
       await _syncSessionState(emit: emit);
+    } on BlockingActionError catch (error) {
+      emit(state.setActionError(error));
     } catch (error) {
       emit(state.setError(error));
     }
@@ -89,12 +101,22 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
 
   Future<void> _syncSessionState({required Emitter<BlockingState> emit}) async {
     final restrictionSession = await _blockingRepository.getRestrictionSession();
-    emit(state.setSessionState(restrictionState: restrictionSession, isLoading: false));
+    final activeMode = await _resolveActiveMode(restrictionState: restrictionSession);
+    emit(state.setSessionState(restrictionState: restrictionSession, activeMode: activeMode, isLoading: false));
     if (state.pauseRemainingDuration case final pauseRemainingDuration? when restrictionSession.isPausedNow) {
       _syncTimer = Timer(pauseRemainingDuration, () {
         if (isClosed) return;
         add(const BlockingResumeRequested());
       });
     }
+  }
+
+  Future<Mode?> _resolveActiveMode({required RestrictionState restrictionState}) async {
+    final modeId = restrictionState.activeMode?.modeId;
+    if (modeId == null || modeId.isEmpty) {
+      return null;
+    }
+
+    return await _modesRepository.getMode(modeId);
   }
 }

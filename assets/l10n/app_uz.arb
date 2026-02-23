@@ -277,6 +277,16 @@
       }
     }
   },
+  "homePauseBlockedByLimit": "Ushbu sessiya uchun pauza limiti tugadi.",
+  "homeActionBlockedByMinimumDuration": "Amal hozircha mavjud emas. {remaining} dan keyin urinib ko'ring.",
+  "@homeActionBlockedByMinimumDuration": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "homeActionBlockedModeUnavailable": "Rejim ma'lumotlari mavjud emas. Sinxronlab, qayta urinib ko'ring.",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",

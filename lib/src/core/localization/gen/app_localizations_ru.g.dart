@@ -721,6 +721,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeQuickPauseLabel => 'Quick Pause';
 
   @override
+  String get homePauseBlockedByLimit => 'Достигнут лимит пауз для этой сессии.';
+
+  @override
+  String homeActionBlockedByMinimumDuration(String remaining) {
+    return 'Действие недоступно. Попробуйте через $remaining.';
+  }
+
+  @override
+  String get homeActionBlockedModeUnavailable => 'Данные режима недоступны. Обновите состояние и попробуйте снова.';
+
+  @override
   String get pausedTitle => 'Paused';
 
   @override

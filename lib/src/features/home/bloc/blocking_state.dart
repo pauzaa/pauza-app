@@ -1,7 +1,13 @@
 part of 'blocking_bloc.dart';
 
 final class BlockingState extends Equatable {
-  const BlockingState({required this.restrictionState, this.error, this.isLoading = false});
+  const BlockingState({
+    required this.restrictionState,
+    required this.activeMode,
+    this.error,
+    this.actionError,
+    this.isLoading = false,
+  });
 
   const BlockingState.initial()
     : this(
@@ -13,11 +19,14 @@ final class BlockingState extends Equatable {
           isScheduleEnabled: false,
           pausedUntil: null,
         ),
+        activeMode: null,
         isLoading: true,
       );
 
   final RestrictionState restrictionState;
+  final Mode? activeMode;
   final Object? error;
+  final BlockingActionError? actionError;
   final bool isLoading;
 
   bool get isBlocking => restrictionState.isActiveNow;
@@ -30,24 +39,57 @@ final class BlockingState extends Equatable {
   DateTime? get pausedUntil => restrictionState.pausedUntil;
   Duration? get sessionDuration => restrictionState.startedAt?.difference(DateTime.now());
   bool get hasError => error != null;
+  bool get hasActionError => actionError != null;
 
-  BlockingState loading() => copyWith(isLoading: true);
+  BlockingState loading() => copyWith(isLoading: true, clearActionError: true);
 
-  BlockingState setError(Object error) => copyWith(error: error, isLoading: false);
+  BlockingState setError(Object error) => copyWith(error: error, isLoading: false, clearActionError: true);
 
-  BlockingState clearError() => copyWith(isLoading: false);
+  BlockingState setActionError(BlockingActionError actionError) =>
+      copyWith(actionError: actionError, isLoading: false, clearError: true);
 
-  BlockingState setSessionState({required RestrictionState restrictionState, bool? isLoading}) =>
-      copyWith(restrictionState: restrictionState, isLoading: isLoading);
+  BlockingState clearError() => copyWith(isLoading: false, clearActionError: true);
 
-  BlockingState copyWith({RestrictionState? restrictionState, Object? error, bool? isLoading}) {
+  BlockingState setSessionState({
+    required RestrictionState restrictionState,
+    required Mode? activeMode,
+    bool? isLoading,
+  }) => copyWith(
+    restrictionState: restrictionState,
+    activeMode: activeMode,
+    clearActiveMode: true,
+    isLoading: isLoading,
+    clearActionError: true,
+  );
+
+  BlockingState copyWith({
+    RestrictionState? restrictionState,
+    Mode? activeMode,
+    bool clearActiveMode = false,
+    Object? error,
+    bool clearError = false,
+    BlockingActionError? actionError,
+    bool clearActionError = false,
+    bool? isLoading,
+  }) {
     return BlockingState(
       restrictionState: restrictionState ?? this.restrictionState,
-      error: error,
+      activeMode: clearActiveMode ? activeMode : (activeMode ?? this.activeMode),
+      error: clearError ? null : (error ?? this.error),
+      actionError: clearActionError ? null : (actionError ?? this.actionError),
       isLoading: isLoading ?? this.isLoading,
     );
   }
 
   @override
-  List<Object?> get props => <Object?>[restrictionState, sessionStartedAt, pausedUntil, error, isBlocking, isLoading];
+  List<Object?> get props => <Object?>[
+    restrictionState,
+    activeMode,
+    sessionStartedAt,
+    pausedUntil,
+    error,
+    actionError,
+    isBlocking,
+    isLoading,
+  ];
 }

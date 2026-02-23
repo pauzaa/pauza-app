@@ -721,6 +721,17 @@ class AppLocalizationsUz extends AppLocalizations {
   String get homeQuickPauseLabel => 'Quick Pause';
 
   @override
+  String get homePauseBlockedByLimit => 'Ushbu sessiya uchun pauza limiti tugadi.';
+
+  @override
+  String homeActionBlockedByMinimumDuration(String remaining) {
+    return 'Amal hozircha mavjud emas. $remaining dan keyin urinib ko\'ring.';
+  }
+
+  @override
+  String get homeActionBlockedModeUnavailable => 'Rejim ma\'lumotlari mavjud emas. Sinxronlab, qayta urinib ko\'ring.';
+
+  @override
   String get pausedTitle => 'Paused';
 
   @override
@@ -1470,6 +1481,17 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get homePauzaSessionLabel => 'Pauza Session';
+
+  @override
+  String get homePauseBlockedByLimit => 'Ушбу сессия учун пауза лимити тугади.';
+
+  @override
+  String homeActionBlockedByMinimumDuration(String remaining) {
+    return 'Амал ҳозирча мавжуд эмас. $remaining дан кейин уриниб кўринг.';
+  }
+
+  @override
+  String get homeActionBlockedModeUnavailable => 'Режим маълумотлари мавжуд эмас. Синхронлаб, қайта уриниб кўринг.';
 
   @override
   String get homeCurrentModeLabel => 'Жорий режим';

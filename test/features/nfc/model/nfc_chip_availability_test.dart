@@ -541,6 +541,17 @@ class _FakeAppLocalizations extends AppLocalizations {
   String get reminaingLabel => 'Remaining';
 
   @override
+  String get homePauseBlockedByLimit => 'Pause limit reached for this session.';
+
+  @override
+  String homeActionBlockedByMinimumDuration(String remaining) {
+    return 'Action unavailable. Try again in $remaining.';
+  }
+
+  @override
+  String get homeActionBlockedModeUnavailable => 'Mode data is unavailable. Please sync and try again.';
+
+  @override
   String get scanNfcChipTitle => 'Scan NFC Tag';
 
   @override

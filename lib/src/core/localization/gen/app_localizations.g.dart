@@ -1364,6 +1364,24 @@ abstract class AppLocalizations {
   /// **'Quick Pause'**
   String get homeQuickPauseLabel;
 
+  /// Toast shown when pause request is rejected because session pause limit was reached.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause limit reached for this session.'**
+  String get homePauseBlockedByLimit;
+
+  /// Toast shown when pause or stop is blocked by minimum duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Action unavailable. Try again in {remaining}.'**
+  String homeActionBlockedByMinimumDuration(String remaining);
+
+  /// Toast shown when active mode configuration cannot be resolved for validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode data is unavailable. Please sync and try again.'**
+  String get homeActionBlockedModeUnavailable;
+
   /// Title for the paused session.
   ///
   /// In en, this message translates to:

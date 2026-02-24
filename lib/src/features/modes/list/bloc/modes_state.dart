@@ -30,14 +30,13 @@ final class ModesListState extends Equatable {
     List<Mode>? items,
     String? selectedModeId,
     Object? error,
-    bool clearError = false,
   }) {
     return ModesListState(
       isLoading: isLoading ?? this.isLoading,
       platform: platform ?? this.platform,
       items: items ?? this.items,
       selectedModeId: selectedModeId ?? this.selectedModeId,
-      error: clearError ? null : error ?? this.error,
+      error: error,
     );
   }
 

@@ -45,13 +45,9 @@ class HomeDefaultWidget extends StatelessWidget {
         const SizedBox(height: PauzaSpacing.extraLarge),
         BlocBuilder<ModesListBloc, ModesListState>(
           builder: (context, modesState) {
-            return BlocBuilder<BlockingBloc, BlockingState>(
-              builder: (context, state) {
-                return HomeCurrentModeCard(
-                  modesState.selectedMode,
-                  onTap: () => _onCurrentModePressed(context, modesState.items, modesState.selectedMode),
-                );
-              },
+            return HomeCurrentModeCard(
+              modesState.selectedMode,
+              onTap: () => _onCurrentModePressed(context, modesState.items, modesState.selectedMode),
             );
           },
         ),

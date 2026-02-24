@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:equatable/equatable.dart';
 import 'package:collection/collection.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
@@ -51,9 +51,11 @@ class ModesListBloc extends Bloc<ModesListEvent, ModesListState> {
     emit(state.loading());
 
     try {
-      final summaries = await _modesRepository.getModes();
+      final modes = await _modesRepository.getModes();
 
-      emit(state.copyWith(items: summaries, isLoading: false, clearError: true));
+      emit(
+        state.copyWith(items: modes, isLoading: false, selectedModeId: state.selectedModeId ?? modes.firstOrNull?.id),
+      );
     } on Object catch (error) {
       emit(state.setError(error));
     }

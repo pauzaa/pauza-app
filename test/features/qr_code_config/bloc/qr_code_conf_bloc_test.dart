@@ -253,6 +253,11 @@ final class _FakeQrLinkedCodesRepository implements QrLinkedCodesRepository {
   Future<bool> hasScanValue({required String scanValue}) async {
     return false;
   }
+
+  @override
+  Future<bool> hasLinkedCodes() async {
+    return false;
+  }
 }
 
 QrLinkedCode _code({required String id, required String name}) {

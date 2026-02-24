@@ -292,6 +292,8 @@
   "homeActionNfcNotLinked": "Эта NFC-метка не привязана. Используйте привязанную метку, чтобы продолжить.",
   "homeActionQrInvalid": "Неверный QR-код. Попробуйте отсканировать привязанный QR-код Pauza.",
   "homeActionQrNotLinked": "Этот QR-код не привязан. Используйте привязанный код, чтобы продолжить.",
+  "homeActionStartNfcConfigRequired": "Чтобы начать эту сессию, привяжите хотя бы одну NFC-метку в настройках.",
+  "homeActionStartQrConfigRequired": "Чтобы начать эту сессию, привяжите хотя бы один QR-код в настройках.",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",

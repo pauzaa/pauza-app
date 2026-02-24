@@ -201,6 +201,11 @@ final class _NoopNfcLinkedChipsRepository implements NfcLinkedChipsRepository {
   }
 
   @override
+  Future<bool> hasLinkedChips() async {
+    return false;
+  }
+
+  @override
   Future<bool> linkChipIfAbsent({required NfcChipIdentifier chipIdentifier}) async {
     return false;
   }

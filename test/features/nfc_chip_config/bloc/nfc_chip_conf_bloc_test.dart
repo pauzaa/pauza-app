@@ -117,6 +117,9 @@ final class _FakeNfcLinkedChipsRepository implements NfcLinkedChipsRepository {
   Future<bool> hasChip({required NfcChipIdentifier chipIdentifier}) async => false;
 
   @override
+  Future<bool> hasLinkedChips() async => false;
+
+  @override
   Future<bool> linkChipIfAbsent({required NfcChipIdentifier chipIdentifier}) async => linkChipIfAbsentResult;
 
   @override

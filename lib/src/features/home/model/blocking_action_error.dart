@@ -78,3 +78,21 @@ final class QrCodeNotLinkedError extends BlockingActionError {
     return localizations.homeActionQrNotLinked;
   }
 }
+
+final class NfcStartConfigurationMissingError extends BlockingActionError {
+  const NfcStartConfigurationMissingError();
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.homeActionStartNfcConfigRequired;
+  }
+}
+
+final class QrStartConfigurationMissingError extends BlockingActionError {
+  const QrStartConfigurationMissingError();
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.homeActionStartQrConfigRequired;
+  }
+}

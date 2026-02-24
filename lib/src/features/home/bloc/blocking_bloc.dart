@@ -64,6 +64,7 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
       if (blockedAppIds.isEmpty) {
         throw StateError('No blocked apps configured for this mode');
       }
+      await _validateStartScenarioConfiguration(mode: event.mode);
 
       final shield = ShieldConfiguration(title: event.mode.textOnScreen, subtitle: event.mode.title);
 
@@ -143,6 +144,25 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
         return await _validateNfcProof(proof);
       case ModeEndingPausingScenario.qrCode:
         return await _validateQrProof(proof);
+    }
+  }
+
+  Future<void> _validateStartScenarioConfiguration({required Mode mode}) async {
+    switch (mode.endingPausingScenario) {
+      case ModeEndingPausingScenario.manual:
+        return;
+      case ModeEndingPausingScenario.nfc:
+        final hasLinkedChips = await _nfcLinkedChipsRepository.hasLinkedChips();
+        if (!hasLinkedChips) {
+          throw const NfcStartConfigurationMissingError();
+        }
+        return;
+      case ModeEndingPausingScenario.qrCode:
+        final hasLinkedCodes = await _qrLinkedCodesRepository.hasLinkedCodes();
+        if (!hasLinkedCodes) {
+          throw const QrStartConfigurationMissingError();
+        }
+        return;
     }
   }
 

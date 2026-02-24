@@ -14,6 +14,8 @@ abstract interface class NfcLinkedChipsRepository {
 
   Future<bool> hasChip({required NfcChipIdentifier chipIdentifier});
 
+  Future<bool> hasLinkedChips();
+
   Future<void> renameChip({required String id, required String name});
 }
 
@@ -73,6 +75,12 @@ INSERT OR IGNORE INTO nfc_linked_chips (
       chipIdentifier.normalized,
     ]);
 
+    return rows.isNotEmpty;
+  }
+
+  @override
+  Future<bool> hasLinkedChips() async {
+    final rows = await _localDatabase.rawQuery('SELECT 1 FROM nfc_linked_chips LIMIT 1');
     return rows.isNotEmpty;
   }
 

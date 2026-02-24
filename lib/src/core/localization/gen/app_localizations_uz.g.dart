@@ -69,10 +69,12 @@ class AppLocalizationsUz extends AppLocalizations {
   String get profileEditChooseFromGalleryTitle => 'Galereyadan tanlash';
 
   @override
-  String get profileEditChooseFromGallerySubtitle => 'Telefon galereyasidan rasm tanlang';
+  String get profileEditChooseFromGallerySubtitle =>
+      'Telefon galereyasidan rasm tanlang';
 
   @override
-  String get profileEditInvalidUsernameError => '3-30 ta kichik harf, raqam yoki _ ishlating';
+  String get profileEditInvalidUsernameError =>
+      '3-30 ta kichik harf, raqam yoki _ ishlating';
 
   @override
   String get profileEditUsernameTakenError => 'Bu username band';
@@ -81,7 +83,8 @@ class AppLocalizationsUz extends AppLocalizations {
   String get profileEditValidationError => 'Profil ma\'lumotlarini tekshiring';
 
   @override
-  String get profileEditNetworkError => 'Profilni yangilab bo\'lmadi. Aloqani tekshiring';
+  String get profileEditNetworkError =>
+      'Profilni yangilab bo\'lmadi. Aloqani tekshiring';
 
   @override
   String get profileSettingsNavTitle => 'Sozlamalar';
@@ -269,7 +272,8 @@ class AppLocalizationsUz extends AppLocalizations {
       'Aniq signal (exact alarm) jadval va pauza taymerlarini aniq ishlatib, bloklashni o\'z vaqtida boshlatadi va tugatadi.';
 
   @override
-  String get permissionFamilyControlsTitle => 'Family Controls (Screen Time) ruxsatini bering';
+  String get permissionFamilyControlsTitle =>
+      'Family Controls (Screen Time) ruxsatini bering';
 
   @override
   String get permissionFamilyControlsBody =>
@@ -283,16 +287,20 @@ class AppLocalizationsUz extends AppLocalizations {
       'Diqqatingizni jamlash va chalg\'ituvchi ilovalarni samarali bloklash uchun Pauza\'ga quyida keltirilgan ruxsatlar kerak. Ma\'lumotlaringiz qurilmangizda qoladi.';
 
   @override
-  String get permissionUsageAccessShortBody => 'Foydalanishni kuzatish va limitlarni qo\'llash';
+  String get permissionUsageAccessShortBody =>
+      'Foydalanishni kuzatish va limitlarni qo\'llash';
 
   @override
-  String get permissionAccessibilityShortBody => 'Cheklangan ilovalarni aniqlash va bloklash';
+  String get permissionAccessibilityShortBody =>
+      'Cheklangan ilovalarni aniqlash va bloklash';
 
   @override
-  String get permissionExactAlarmShortBody => 'Jadval va taymerlarni aniq ishlatish';
+  String get permissionExactAlarmShortBody =>
+      'Jadval va taymerlarni aniq ishlatish';
 
   @override
-  String get permissionFamilyControlsShortBody => 'iOS\'da ilova cheklovlarini boshqarish';
+  String get permissionFamilyControlsShortBody =>
+      'iOS\'da ilova cheklovlarini boshqarish';
 
   @override
   String permissionCurrentStatusLabel(String status) {
@@ -324,25 +332,29 @@ class AppLocalizationsUz extends AppLocalizations {
   String get nfcGuidanceAvailableTitle => 'NFC is ready';
 
   @override
-  String get nfcGuidanceAvailableBody => 'Your device is ready to scan NFC tags.';
+  String get nfcGuidanceAvailableBody =>
+      'Your device is ready to scan NFC tags.';
 
   @override
   String get nfcGuidanceDisabledTitle => 'Turn on NFC';
 
   @override
-  String get nfcGuidanceDisabledBody => 'NFC is turned off on this device. Enable it in system settings to continue.';
+  String get nfcGuidanceDisabledBody =>
+      'NFC is turned off on this device. Enable it in system settings to continue.';
 
   @override
   String get nfcGuidanceNotSupportedTitle => 'NFC is not supported';
 
   @override
-  String get nfcGuidanceNotSupportedBody => 'This device does not support NFC scanning.';
+  String get nfcGuidanceNotSupportedBody =>
+      'This device does not support NFC scanning.';
 
   @override
   String get nfcGuidanceUnknownTitle => 'NFC status unavailable';
 
   @override
-  String get nfcGuidanceUnknownBody => 'We could not determine NFC availability right now. Try again in a moment.';
+  String get nfcGuidanceUnknownBody =>
+      'We could not determine NFC availability right now. Try again in a moment.';
 
   @override
   String get nfcChipConfigTitle => 'Configure NFC Tag';
@@ -364,13 +376,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get nfcChipConfigAlreadyLinked => 'This NFC tag is already linked.';
 
   @override
-  String get nfcChipHoldCardNearDevice => 'Hold your device near the NFC tag to scan';
+  String get nfcChipHoldCardNearDevice =>
+      'Hold your device near the NFC tag to scan';
 
   @override
-  String get nfcChipConfigUidMissingError => 'This NFC tag cannot be linked because it does not provide an identifier.';
+  String get nfcChipConfigUidMissingError =>
+      'This NFC tag cannot be linked because it does not provide an identifier.';
 
   @override
-  String get nfcChipConfigScanFailed => 'Unable to link NFC tag. Please try again.';
+  String get nfcChipConfigScanFailed =>
+      'Unable to link NFC tag. Please try again.';
 
   @override
   String get nfcChipConfigTagsTitle => 'NFC teglaringiz';
@@ -409,7 +424,8 @@ class AppLocalizationsUz extends AppLocalizations {
   String get nfcChipConfigNoTagsTitle => 'Hali ulangan teglar yo\'q';
 
   @override
-  String get nfcChipConfigNoTagsBody => 'Fokus sessiyalarini boshqarish uchun birinchi NFC tegni ulang.';
+  String get nfcChipConfigNoTagsBody =>
+      'Fokus sessiyalarini boshqarish uchun birinchi NFC tegni ulang.';
 
   @override
   String get qrCodeConfigTagsTitle => 'Your QR Codes';
@@ -448,25 +464,31 @@ class AppLocalizationsUz extends AppLocalizations {
   String get qrCodeConfigNoCodesTitle => 'No linked QR codes yet';
 
   @override
-  String get qrCodeConfigNoCodesBody => 'Generate your first QR code to manage focus session unlocking.';
+  String get qrCodeConfigNoCodesBody =>
+      'Generate your first QR code to manage focus session unlocking.';
 
   @override
   String get qrCodeConfigPreviewDialogTitle => 'QR Code Preview';
 
   @override
-  String get qrCodeConfigPreviewDialogBody => 'Show this QR code when you need to unlock your focus session.';
+  String get qrCodeConfigPreviewDialogBody =>
+      'Show this QR code when you need to unlock your focus session.';
 
   @override
-  String get qrCodeConfigActionFailed => 'Unable to update QR code configuration. Please try again.';
+  String get qrCodeConfigActionFailed =>
+      'Unable to update QR code configuration. Please try again.';
 
   @override
-  String get qrCodeConfigGenerateFailed => 'Unable to generate a new QR code. Please try again.';
+  String get qrCodeConfigGenerateFailed =>
+      'Unable to generate a new QR code. Please try again.';
 
   @override
-  String get qrCodeConfigRenameFailed => 'Unable to rename QR code. Please try again.';
+  String get qrCodeConfigRenameFailed =>
+      'Unable to rename QR code. Please try again.';
 
   @override
-  String get qrCodeConfigDeleteFailed => 'Unable to delete QR code. Please try again.';
+  String get qrCodeConfigDeleteFailed =>
+      'Unable to delete QR code. Please try again.';
 
   @override
   String blockedAppsCountLabel(int count) {
@@ -584,7 +606,8 @@ class AppLocalizationsUz extends AppLocalizations {
   String get modeMinimumDurationTitle => 'Minimal davomiylik';
 
   @override
-  String get modeMinimumDurationSubtitle => 'Ixtiyoriy. Sessiyani bu vaqtdan oldin tugatib bo\'lmaydi.';
+  String get modeMinimumDurationSubtitle =>
+      'Ixtiyoriy. Sessiyani bu vaqtdan oldin tugatib bo\'lmaydi.';
 
   @override
   String get modeMinimumDurationSetButton => 'Davomiylikni sozlash';
@@ -604,7 +627,8 @@ class AppLocalizationsUz extends AppLocalizations {
   String get modeEndingPausingScenarioTitle => 'Tugatish / pauza ssenariysi';
 
   @override
-  String get modeEndingPausingScenarioSubtitle => 'Bu rejimni qanday tugatish yoki pauza qilish mumkinligini tanlang.';
+  String get modeEndingPausingScenarioSubtitle =>
+      'Bu rejimni qanday tugatish yoki pauza qilish mumkinligini tanlang.';
 
   @override
   String get modeEndingPausingScenarioNfc => 'NFC';
@@ -616,7 +640,8 @@ class AppLocalizationsUz extends AppLocalizations {
   String get modeEndingPausingScenarioManual => 'Qo\'lda';
 
   @override
-  String get modeEndingPausingScenarioNfcDisabled => 'Bu qurilmada NFC qo\'llab-quvvatlanmaydi.';
+  String get modeEndingPausingScenarioNfcDisabled =>
+      'Bu qurilmada NFC qo\'llab-quvvatlanmaydi.';
 
   @override
   String modeAllowedPausesOutOfRangeError(int min, int max) {
@@ -721,7 +746,8 @@ class AppLocalizationsUz extends AppLocalizations {
   String get homeQuickPauseLabel => 'Quick Pause';
 
   @override
-  String get homePauseBlockedByLimit => 'Ushbu sessiya uchun pauza limiti tugadi.';
+  String get homePauseBlockedByLimit =>
+      'Ushbu sessiya uchun pauza limiti tugadi.';
 
   @override
   String homeActionBlockedByMinimumDuration(String remaining) {
@@ -729,22 +755,36 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get homeActionBlockedModeUnavailable => 'Rejim ma\'lumotlari mavjud emas. Sinxronlab, qayta urinib ko\'ring.';
+  String get homeActionBlockedModeUnavailable =>
+      'Rejim ma\'lumotlari mavjud emas. Sinxronlab, qayta urinib ko\'ring.';
 
   @override
-  String get homeActionScenarioProofRequired => 'Bu amal uchun skanerlash talab qilinadi.';
+  String get homeActionScenarioProofRequired =>
+      'Bu amal uchun skanerlash talab qilinadi.';
 
   @override
-  String get homeActionNfcMissingIdentifier => 'Bu NFC tegdan foydalanib bo\'lmaydi, chunki unda identifikator yo\'q.';
+  String get homeActionNfcMissingIdentifier =>
+      'Bu NFC tegdan foydalanib bo\'lmaydi, chunki unda identifikator yo\'q.';
 
   @override
-  String get homeActionNfcNotLinked => 'Bu NFC teg ulanmagan. Davom etish uchun ulangan tegdan foydalaning.';
+  String get homeActionNfcNotLinked =>
+      'Bu NFC teg ulanmagan. Davom etish uchun ulangan tegdan foydalaning.';
 
   @override
-  String get homeActionQrInvalid => 'Yaroqsiz QR kod. Ulangan Pauza QR kodini skanerlab ko\'ring.';
+  String get homeActionQrInvalid =>
+      'Yaroqsiz QR kod. Ulangan Pauza QR kodini skanerlab ko\'ring.';
 
   @override
-  String get homeActionQrNotLinked => 'Bu QR kod ulanmagan. Davom etish uchun ulangan koddan foydalaning.';
+  String get homeActionQrNotLinked =>
+      'Bu QR kod ulanmagan. Davom etish uchun ulangan koddan foydalaning.';
+
+  @override
+  String get homeActionStartNfcConfigRequired =>
+      'Bu sessiyani boshlash uchun Sozlamalarda kamida bitta NFC tegni ulang.';
+
+  @override
+  String get homeActionStartQrConfigRequired =>
+      'Bu sessiyani boshlash uchun Sozlamalarda kamida bitta QR kodni ulang.';
 
   @override
   String get pausedTitle => 'Paused';
@@ -830,7 +870,8 @@ class AppLocalizationsUz extends AppLocalizations {
   String get statsPermissionRequiredTitle => 'Usage permission required';
 
   @override
-  String get statsPermissionRequiredBody => 'Allow Usage Access to view Android usage statistics.';
+  String get statsPermissionRequiredBody =>
+      'Allow Usage Access to view Android usage statistics.';
 
   @override
   String get statsLoadFailed => 'Failed to load usage statistics.';
@@ -867,7 +908,8 @@ class AppLocalizationsUz extends AppLocalizations {
   String get authOtpTitle => 'Emailni tasdiqlang';
 
   @override
-  String get authOtpSubtitlePrefix => 'Email manzilingizga yuborgan 6 xonali kodni kiriting ';
+  String get authOtpSubtitlePrefix =>
+      'Email manzilingizga yuborgan 6 xonali kodni kiriting ';
 
   @override
   String get authOtpSubtitleSuffix => '.';
@@ -899,13 +941,15 @@ class AppLocalizationsUz extends AppLocalizations {
   String get authFailureInvalidOtp => 'Tasdiqlash kodi noto\'g\'ri.';
 
   @override
-  String get authFailureOtpChallengeMissing => 'Tasdiqlash sessiyasi tugagan. Qayta urinib ko\'ring.';
+  String get authFailureOtpChallengeMissing =>
+      'Tasdiqlash sessiyasi tugagan. Qayta urinib ko\'ring.';
 
   @override
   String get authFailureStorage => 'Xavfsiz xotiraga kirib bo\'lmadi.';
 
   @override
-  String get authFailureUnknown => 'Kirish amalga oshmadi. Qayta urinib ko\'ring.';
+  String get authFailureUnknown =>
+      'Kirish amalga oshmadi. Qayta urinib ko\'ring.';
 }
 
 /// The translations for Uzbek, using the Cyrillic script (`uz_Cyrl`).
@@ -973,10 +1017,12 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get profileEditChooseFromGalleryTitle => 'Галереядан танлаш';
 
   @override
-  String get profileEditChooseFromGallerySubtitle => 'Телефон галереясидан расм танланг';
+  String get profileEditChooseFromGallerySubtitle =>
+      'Телефон галереясидан расм танланг';
 
   @override
-  String get profileEditInvalidUsernameError => '3-30 та кичик ҳарф, рақам ёки _ ишлатинг';
+  String get profileEditInvalidUsernameError =>
+      '3-30 та кичик ҳарф, рақам ёки _ ишлатинг';
 
   @override
   String get profileEditUsernameTakenError => 'Бу username банд';
@@ -985,7 +1031,8 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get profileEditValidationError => 'Профил маълумотларини текширинг';
 
   @override
-  String get profileEditNetworkError => 'Профилни янгилаб бўлмади. Алоқани текширинг';
+  String get profileEditNetworkError =>
+      'Профилни янгилаб бўлмади. Алоқани текширинг';
 
   @override
   String get profileSettingsNavTitle => 'Созламалар';
@@ -1161,7 +1208,8 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
       'Аниқ сигнал (exact alarm) жадвал ва пауза таймерларини аниқ ишлатиб, блоклашни ўз вақтида бошлади ва тугатади.';
 
   @override
-  String get permissionFamilyControlsTitle => 'Family Controls (Screen Time) рухсатини беринг';
+  String get permissionFamilyControlsTitle =>
+      'Family Controls (Screen Time) рухсатини беринг';
 
   @override
   String get permissionFamilyControlsBody =>
@@ -1175,16 +1223,20 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
       'Диққатингизни жамлаш ва чалғитувчи иловаларни самарали блоклаш учун Pauza\'га қуйида келтирилган рухсатлар керак. Маълумотларингиз қурилмангизда қолади.';
 
   @override
-  String get permissionUsageAccessShortBody => 'Фойдаланишни кузатиш ва лимитларни қўллаш';
+  String get permissionUsageAccessShortBody =>
+      'Фойдаланишни кузатиш ва лимитларни қўллаш';
 
   @override
-  String get permissionAccessibilityShortBody => 'Чекланган иловаларни аниқлаш ва блоклаш';
+  String get permissionAccessibilityShortBody =>
+      'Чекланган иловаларни аниқлаш ва блоклаш';
 
   @override
-  String get permissionExactAlarmShortBody => 'Жадвал ва таймерларни аниқ ишлатиш';
+  String get permissionExactAlarmShortBody =>
+      'Жадвал ва таймерларни аниқ ишлатиш';
 
   @override
-  String get permissionFamilyControlsShortBody => 'iOS\'да илова чекловларини бошқариш';
+  String get permissionFamilyControlsShortBody =>
+      'iOS\'да илова чекловларини бошқариш';
 
   @override
   String permissionCurrentStatusLabel(String status) {
@@ -1246,7 +1298,8 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get nfcChipConfigNoTagsTitle => 'Ҳали уланган теглар йўқ';
 
   @override
-  String get nfcChipConfigNoTagsBody => 'Фокус сессияларини бошқариш учун биринчи NFC тегни уланг.';
+  String get nfcChipConfigNoTagsBody =>
+      'Фокус сессияларини бошқариш учун биринчи NFC тегни уланг.';
 
   @override
   String get qrCodeConfigTagsTitle => 'Your QR Codes';
@@ -1285,25 +1338,31 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get qrCodeConfigNoCodesTitle => 'No linked QR codes yet';
 
   @override
-  String get qrCodeConfigNoCodesBody => 'Generate your first QR code to manage focus session unlocking.';
+  String get qrCodeConfigNoCodesBody =>
+      'Generate your first QR code to manage focus session unlocking.';
 
   @override
   String get qrCodeConfigPreviewDialogTitle => 'QR Code Preview';
 
   @override
-  String get qrCodeConfigPreviewDialogBody => 'Show this QR code when you need to unlock your focus session.';
+  String get qrCodeConfigPreviewDialogBody =>
+      'Show this QR code when you need to unlock your focus session.';
 
   @override
-  String get qrCodeConfigActionFailed => 'Unable to update QR code configuration. Please try again.';
+  String get qrCodeConfigActionFailed =>
+      'Unable to update QR code configuration. Please try again.';
 
   @override
-  String get qrCodeConfigGenerateFailed => 'Unable to generate a new QR code. Please try again.';
+  String get qrCodeConfigGenerateFailed =>
+      'Unable to generate a new QR code. Please try again.';
 
   @override
-  String get qrCodeConfigRenameFailed => 'Unable to rename QR code. Please try again.';
+  String get qrCodeConfigRenameFailed =>
+      'Unable to rename QR code. Please try again.';
 
   @override
-  String get qrCodeConfigDeleteFailed => 'Unable to delete QR code. Please try again.';
+  String get qrCodeConfigDeleteFailed =>
+      'Unable to delete QR code. Please try again.';
 
   @override
   String blockedAppsCountLabel(int count) {
@@ -1373,7 +1432,8 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get modeMinimumDurationTitle => 'Минимал давомийлик';
 
   @override
-  String get modeMinimumDurationSubtitle => 'Ихтиёрий. Сессияни бу вақтдан олдин тугатиб бўлмайди.';
+  String get modeMinimumDurationSubtitle =>
+      'Ихтиёрий. Сессияни бу вақтдан олдин тугатиб бўлмайди.';
 
   @override
   String get modeMinimumDurationSetButton => 'Давомийликни созлаш';
@@ -1393,7 +1453,8 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get modeEndingPausingScenarioTitle => 'Тугатиш / пауза сценарийси';
 
   @override
-  String get modeEndingPausingScenarioSubtitle => 'Бу режимни қандай тугатиш ёки пауза қилиш мумкинлигини танланг.';
+  String get modeEndingPausingScenarioSubtitle =>
+      'Бу режимни қандай тугатиш ёки пауза қилиш мумкинлигини танланг.';
 
   @override
   String get modeEndingPausingScenarioNfc => 'NFC';
@@ -1405,7 +1466,8 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get modeEndingPausingScenarioManual => 'Қўлда';
 
   @override
-  String get modeEndingPausingScenarioNfcDisabled => 'Бу қурилмада NFC қўллаб-қувватланмайди.';
+  String get modeEndingPausingScenarioNfcDisabled =>
+      'Бу қурилмада NFC қўллаб-қувватланмайди.';
 
   @override
   String modeAllowedPausesOutOfRangeError(int min, int max) {
@@ -1506,22 +1568,36 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   }
 
   @override
-  String get homeActionBlockedModeUnavailable => 'Режим маълумотлари мавжуд эмас. Синхронлаб, қайта уриниб кўринг.';
+  String get homeActionBlockedModeUnavailable =>
+      'Режим маълумотлари мавжуд эмас. Синхронлаб, қайта уриниб кўринг.';
 
   @override
-  String get homeActionScenarioProofRequired => 'Бу амал учун сканерлаш талаб қилинади.';
+  String get homeActionScenarioProofRequired =>
+      'Бу амал учун сканерлаш талаб қилинади.';
 
   @override
-  String get homeActionNfcMissingIdentifier => 'Бу NFC тегдан фойдаланиб бўлмайди, чунки унда идентификатор йўқ.';
+  String get homeActionNfcMissingIdentifier =>
+      'Бу NFC тегдан фойдаланиб бўлмайди, чунки унда идентификатор йўқ.';
 
   @override
-  String get homeActionNfcNotLinked => 'Бу NFC тег уланмаган. Давом этиш учун уланган тегдан фойдаланинг.';
+  String get homeActionNfcNotLinked =>
+      'Бу NFC тег уланмаган. Давом этиш учун уланган тегдан фойдаланинг.';
 
   @override
-  String get homeActionQrInvalid => 'Яроқсиз QR код. Уланган Pauza QR кодини сканерлаб кўринг.';
+  String get homeActionQrInvalid =>
+      'Яроқсиз QR код. Уланган Pauza QR кодини сканерлаб кўринг.';
 
   @override
-  String get homeActionQrNotLinked => 'Бу QR код уланмаган. Давом этиш учун уланган коддан фойдаланинг.';
+  String get homeActionQrNotLinked =>
+      'Бу QR код уланмаган. Давом этиш учун уланган коддан фойдаланинг.';
+
+  @override
+  String get homeActionStartNfcConfigRequired =>
+      'Бу сессияни бошлаш учун Созламаларда камида битта NFC тегни уланг.';
+
+  @override
+  String get homeActionStartQrConfigRequired =>
+      'Бу сессияни бошлаш учун Созламаларда камида битта QR кодни уланг.';
 
   @override
   String get homeCurrentModeLabel => 'Жорий режим';
@@ -1590,7 +1666,8 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get statsPermissionRequiredTitle => 'Usage permission required';
 
   @override
-  String get statsPermissionRequiredBody => 'Allow Usage Access to view Android usage statistics.';
+  String get statsPermissionRequiredBody =>
+      'Allow Usage Access to view Android usage statistics.';
 
   @override
   String get statsLoadFailed => 'Failed to load usage statistics.';
@@ -1627,7 +1704,8 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get authOtpTitle => 'Emailни тасдиқланг';
 
   @override
-  String get authOtpSubtitlePrefix => 'Email манзилингизга юборган 6 хонали кодни киритинг ';
+  String get authOtpSubtitlePrefix =>
+      'Email манзилингизга юборган 6 хонали кодни киритинг ';
 
   @override
   String get authOtpSubtitleSuffix => '.';
@@ -1659,7 +1737,8 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   String get authFailureInvalidOtp => 'Тасдиқлаш коди нотўғри.';
 
   @override
-  String get authFailureOtpChallengeMissing => 'Тасдиқлаш сессияси тугаган. Қайта уриниб кўринг.';
+  String get authFailureOtpChallengeMissing =>
+      'Тасдиқлаш сессияси тугаган. Қайта уриниб кўринг.';
 
   @override
   String get authFailureStorage => 'Хавфсиз хотирага кириб бўлмади.';

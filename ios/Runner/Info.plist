@@ -49,5 +49,13 @@
 	<true/>
 	<key>NFCReaderUsageDescription</key>
 	<string>Pauza uses NFC to scan supported tags when you start NFC-based actions.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>processing</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.menace.pauza.restriction_lifecycle_daily_sync</string>
+	</array>
 </dict>
 </plist>

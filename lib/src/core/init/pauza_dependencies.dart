@@ -14,6 +14,7 @@ import 'package:pauza/src/features/profile/data/user_profile_remote_data_source.
 import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_plugin_client.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
+import 'package:pauza/src/features/restriction_lifecycle/sync/background/restriction_lifecycle_background_scheduler.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
     show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
@@ -26,6 +27,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final AppRestrictionManager appRestrictionManager;
   late final UsageStatsManager usageStatsManager;
   late final RestrictionLifecycleRepository restrictionLifecycleRepository;
+  late final RestrictionLifecycleBackgroundScheduler restrictionLifecycleBackgroundScheduler;
   late final StreaksRepository streaksRepository;
   late final NfcRepository nfcRepository;
   late final bool hasNfcSupport;
@@ -45,7 +47,7 @@ class PauzaDependencies with AppFuseInitialization {
   Map<String, InitializationStep> get steps => <String, InitializationStep>{
     'init local database': (_) async {
       localDatabase = SqfliteLocalDatabase(
-        config: const LocalDatabaseConfig(version: 4),
+        config: LocalDatabaseConfig.pauza,
         schema: const PauzaLocalDatabaseSchemaV1(),
       );
       await localDatabase.open();
@@ -98,6 +100,14 @@ class PauzaDependencies with AppFuseInitialization {
         await streaksRepository.refreshAggregates();
       } on Object {
         // Ignore startup refresh failures. Next resume/manual flow retries refresh.
+      }
+    },
+    'init restriction lifecycle background sync': (_) async {
+      restrictionLifecycleBackgroundScheduler = WorkmanagerRestrictionLifecycleBackgroundScheduler();
+      try {
+        await restrictionLifecycleBackgroundScheduler.initializeAndScheduleDailySync();
+      } on Object {
+        // Ignore scheduling failures. Foreground startup/resume sync remains active.
       }
     },
   };

@@ -41,6 +41,7 @@ dependencies:
   qr: ^3.0.2
   qr_flutter: ^4.1.0
   image_picker: ^1.2.0
+  workmanager: ^0.9.0+3
 
 workspace:
   - local_packages/pauza_ui_kit

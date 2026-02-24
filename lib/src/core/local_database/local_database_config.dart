@@ -9,6 +9,12 @@ class LocalDatabaseConfig {
     this.logSql = false,
   });
 
+  /// The canonical database configuration for the Pauza app.
+  ///
+  /// Both the foreground [PauzaDependencies] and background worker must use
+  /// this constant to guarantee the same schema version is opened.
+  static const LocalDatabaseConfig pauza = LocalDatabaseConfig(version: 4);
+
   final String name;
   final int version;
   final bool enableForeignKeys;

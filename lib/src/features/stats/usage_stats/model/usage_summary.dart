@@ -1,27 +1,9 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/usage_category_bucket.dart';
+import 'package:pauza/src/features/stats/usage_stats/model/usage_trend_point.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
-
-@immutable
-class UsageTrendPoint {
-  const UsageTrendPoint({required this.day, required this.duration});
-
-  final DateTime day;
-  final Duration duration;
-
-  @override
-  String toString() => 'UsageTrendPoint(day: $day, duration: $duration)';
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is UsageTrendPoint && other.day == day && other.duration == duration;
-
-  @override
-  int get hashCode => Object.hash(day, duration);
-}
 
 @immutable
 class UsageSummary {
@@ -92,16 +74,16 @@ class UsageSummary {
         milliseconds: window.inclusiveDays == 0 ? 0 : currentTotal.inMilliseconds ~/ window.inclusiveDays,
       ),
       deltaPercent: deltaPercent,
-      buckets: bucketTotals,
-      trend: trend,
+      buckets: IMap(bucketTotals),
+      trend: IList(trend),
     );
   }
 
   final Duration totalDuration;
   final Duration dailyAverage;
   final double? deltaPercent;
-  final Map<UsageCategoryBucket, Duration> buckets;
-  final List<UsageTrendPoint> trend;
+  final IMap<UsageCategoryBucket, Duration> buckets;
+  final IList<UsageTrendPoint> trend;
 
   @override
   String toString() {
@@ -116,11 +98,10 @@ class UsageSummary {
             other.totalDuration == totalDuration &&
             other.dailyAverage == dailyAverage &&
             other.deltaPercent == deltaPercent &&
-            mapEquals(other.buckets, buckets) &&
-            listEquals(other.trend, trend);
+            other.buckets == buckets &&
+            other.trend == trend;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(totalDuration, dailyAverage, deltaPercent, Object.hashAll(buckets.entries), Object.hashAll(trend));
+  int get hashCode => Object.hash(totalDuration, dailyAverage, deltaPercent, buckets, trend);
 }

@@ -1,153 +1,63 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_bloc.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_event.dart';
-import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
-import 'package:pauza/src/features/stats/usage_stats/model/app_engagement_insight.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/device_usage_insights.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_tab_content.dart';
-import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
+import '../helpers/fake_stats_usage_repository.dart';
+import '../helpers/pump_stats_widget.dart';
+
 void main() {
-  testWidgets('renders without crashing', (tester) async {
-    final bloc = StatsBloc(
-      usageRepository: _WidgetStatsUsageRepository(),
-      platform: PauzaPlatform.android,
-    )..add(const StatsStarted());
+  testWidgets('renders expanded android stats content', (tester) async {
+    final repo = FakeStatsUsageRepository(
+      current: <UsageStats>[
+        UsageStats(
+          appInfo: const AndroidAppInfo(
+            packageId: AppIdentifier.android('social.app'),
+            name: 'social.app',
+            category: 'Social',
+          ),
+          totalDuration: const Duration(minutes: 120),
+          totalLaunchCount: 10,
+          bucketStart: DateTime(2026, 2, 10),
+          bucketEnd: DateTime(2026, 2, 16),
+          lastTimeUsed: DateTime(2026, 2, 10),
+        ),
+      ],
+      deviceInsights: const DeviceUsageInsights(
+        unlockCount: 11,
+        lockCount: 11,
+        pickupCount: 16,
+        screenOnDuration: Duration(minutes: 180),
+        unlockedDuration: Duration(minutes: 150),
+        screenOnSessionAverage: Duration(minutes: 12),
+        unlocksPerDayAverage: 2.2,
+        firstUnlockAt: null,
+        lastUnlockAt: null,
+        source: DeviceUsageInsightsSource.eventStats,
+      ),
+    );
+
+    final bloc = StatsBloc(usageRepository: repo, platform: PauzaPlatform.android)..add(const StatsStarted());
     addTearDown(bloc.close);
 
-    await tester.pumpWidget(_TestApp(bloc: bloc));
+    await pumpStatsWidget(
+      tester,
+      BlocProvider<StatsBloc>.value(value: bloc, child: const StatsUsageTabContent()),
+      scrollable: true,
+    );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    // Verify the widget renders without crashing
     expect(find.byType(StatsUsageTabContent), findsOneWidget);
+    expect(find.text('TOTAL TIME'), findsOneWidget);
+    expect(find.text('USAGE TREND'), findsOneWidget);
+    expect(find.text('DEVICE INSIGHTS'), findsOneWidget);
+    expect(find.text('HOURLY HEATMAP'), findsOneWidget);
+    expect(find.text('TOP ENGAGEMENT APPS'), findsOneWidget);
     expect(find.text('APP USAGE'), findsOneWidget);
-    expect(find.text('App'), findsOneWidget);
-    expect(find.text('Usage'), findsOneWidget);
-    expect(find.text('Launches'), findsOneWidget);
-    expect(find.text('Last used'), findsOneWidget);
   });
-}
-
-class _TestApp extends StatelessWidget {
-  const _TestApp({required this.bloc});
-
-  final StatsBloc bloc;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      locale: const Locale('en'),
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: PauzaTheme.dark,
-      home: Scaffold(
-        body: SingleChildScrollView(
-          child: BlocProvider<StatsBloc>.value(
-            value: bloc,
-            child: const StatsUsageTabContent(),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _WidgetStatsUsageRepository implements StatsUsageRepository {
-  @override
-  Future<IList<UsageStats>> getUsageStats({
-    required DateTime start,
-    required DateTime end,
-    bool includeIcons = false,
-  }) async {
-    return <UsageStats>[
-      UsageStats(
-        appInfo: const AndroidAppInfo(
-          packageId: AppIdentifier.android('social.app'),
-          name: 'social.app',
-          category: 'Social',
-        ),
-        totalDuration: const Duration(minutes: 120),
-        totalLaunchCount: 1,
-        bucketStart: start,
-        bucketEnd: end,
-        lastTimeUsed: start,
-      ),
-    ].lock;
-  }
-
-  @override
-  Future<UsageStats?> getAppUsageStats({
-    required String packageId,
-    required DateTime start,
-    required DateTime end,
-    bool includeIcons = false,
-  }) async {
-    return null;
-  }
-
-  @override
-  Future<IList<UsageEvent>> getUsageEvents({
-    required DateTime start,
-    required DateTime end,
-    IList<UsageEventType>? eventTypes,
-  }) async {
-    return const IListConst<UsageEvent>(<UsageEvent>[]);
-  }
-
-  @override
-  Future<IList<DeviceEventStats>> getEventStats({
-    required DateTime start,
-    required DateTime end,
-    UsageStatsInterval interval = UsageStatsInterval.daily,
-  }) async {
-    return const IListConst<DeviceEventStats>(<DeviceEventStats>[]);
-  }
-
-  @override
-  Future<bool> isAppInactive({required String packageId}) async {
-    return false;
-  }
-
-  @override
-  Future<AppStandbyBucket> getAppStandbyBucket() async {
-    return AppStandbyBucket.active;
-  }
-
-  @override
-  Future<DeviceUsageInsights> getDeviceUsageInsights({
-    required DateTime start,
-    required DateTime end,
-  }) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<IList<AppEngagementInsight>> getTopAppEngagementInsights({
-    required DateTime start,
-    required DateTime end,
-    int limit = 5,
-  }) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<IMap<int, Duration>> getHourlyScreenTimeHeatmap({
-    required DateTime start,
-    required DateTime end,
-  }) {
-    throw UnimplementedError();
-  }
 }

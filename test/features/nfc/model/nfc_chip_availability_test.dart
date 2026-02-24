@@ -529,6 +529,53 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get statsIosReportUnavailableBody => 'Ensure iOS report extension is configured.';
   @override
+  String get statsDeviceInsights => 'Device Insights';
+  @override
+  String get statsUnlockCount => 'Unlock count';
+  @override
+  String get statsUnlocksPerDay => 'Unlocks per day';
+  @override
+  String get statsPickupCount => 'Pickups';
+  @override
+  String get statsAvgScreenOnSession => 'Avg screen-on session';
+  @override
+  String get statsScreenOnDuration => 'Screen-on';
+  @override
+  String get statsUnlockedDuration => 'Unlocked';
+  @override
+  String get statsScreenOnVsUnlocked => 'Screen-on vs unlocked';
+  @override
+  String get statsHourlyHeatmap => 'Hourly Heatmap';
+  @override
+  String get statsHourlyHeatmapSubtitle => 'Screen-time intensity by hour (00-23).';
+  @override
+  String get statsHeatmapLegendLow => 'Low';
+  @override
+  String get statsHeatmapLegendHigh => 'High';
+  @override
+  String get statsTopEngagementApps => 'Top Engagement Apps';
+  @override
+  String get statsEngagementScore => 'Score';
+  @override
+  String get statsLaunchIntensity => 'Launch intensity';
+  @override
+  String get statsAvgSession => 'Avg session';
+  @override
+  String get statsNoInsightData => 'No insight data for the selected period.';
+  @override
+  String get statsInsightLoadFailed => 'Failed to load this insight.';
+  @override
+  String statsPerDayValue(String value) => '$value/day';
+  @override
+  String statsLaunchesPerHourValue(String value) => '$value/h';
+  @override
+  String statsPercentValue(String value) => value;
+  @override
+  String statsHeatmapHourSemantics(String hour, String duration) => 'Hour $hour, usage $duration';
+  @override
+  String statsEngagementRowSemantics(String app, String score, String launchIntensity) =>
+      '$app: score $score, launch intensity $launchIntensity';
+  @override
   String get settingsSessionEndingConfSectionTitle => 'Session Ending';
 
   @override
@@ -577,6 +624,9 @@ class _FakeAppLocalizations extends AppLocalizations {
 
   @override
   String get scanNfcTagActionLabel => 'Scan your NFC tag.';
+
+  @override
+  String get statsIosScreenTimeReport => 'Screen Time Report';
 }
 
 void main() {

@@ -44,40 +44,40 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large, vertical: PauzaSpacing.large),
-          children: <Widget>[
-            PauzaDashboardAppBar(title: l10n.deviceUsage),
-            ValueListenableBuilder(
-              valueListenable: _selectedTab,
-              builder: (context, value, child) {
-                return StatsTabs(
-                  usageLabel: l10n.usageStatsTab,
-                  blockingLabel: l10n.blockingStatsTab,
-                  selectedTab: value,
-                  onChanged: (tab) {
-                    _selectedTab.value = tab;
-                  },
-                );
-              },
-            ),
-            ValueListenableBuilder(
-              valueListenable: _selectedTab,
-              builder: (context, value, child) {
-                return switch (value) {
-                  StatsTab.usage => BlocProvider(
-                    create: (context) =>
-                        StatsBloc(usageRepository: RootScope.of(context).statsUsageRepository, platform: kPauzaPlatform)
-                          ..add(const StatsStarted()),
-                    child: const StatsUsageTabContent(),
-                  ),
-                  StatsTab.blocking => const StatsBlockingTabPlaceholder(),
-                };
-              },
-            ),
-          ].interleaved(const SizedBox(height: PauzaSpacing.large)).toList(),
+    return BlocProvider(
+      create: (context) =>
+          StatsBloc(usageRepository: RootScope.of(context).statsUsageRepository, platform: kPauzaPlatform)
+            ..add(const StatsStarted()),
+      child: Scaffold(
+        body: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large, vertical: PauzaSpacing.large),
+            children: <Widget>[
+              PauzaDashboardAppBar(title: l10n.deviceUsage),
+              ValueListenableBuilder(
+                valueListenable: _selectedTab,
+                builder: (context, value, child) {
+                  return StatsTabs(
+                    usageLabel: l10n.usageStatsTab,
+                    blockingLabel: l10n.blockingStatsTab,
+                    selectedTab: value,
+                    onChanged: (tab) {
+                      _selectedTab.value = tab;
+                    },
+                  );
+                },
+              ),
+              ValueListenableBuilder(
+                valueListenable: _selectedTab,
+                builder: (context, value, child) {
+                  return switch (value) {
+                    StatsTab.usage => const StatsUsageTabContent(),
+                    StatsTab.blocking => const StatsBlockingTabPlaceholder(),
+                  };
+                },
+              ),
+            ].interleaved(const SizedBox(height: PauzaSpacing.large)).toList(),
+          ),
         ),
       ),
     );

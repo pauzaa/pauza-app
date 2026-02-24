@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pauza/src/features/stats/common/model/stats_tab.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_card.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class StatsTabs extends StatelessWidget {
@@ -18,33 +19,26 @@ class StatsTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: context.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
-        border: Border.all(color: context.colorScheme.outlineVariant),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(PauzaSpacing.small),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: _StatsTabButton(
-                title: usageLabel,
-                onTap: () => onChanged(StatsTab.usage),
-                isSelected: selectedTab == StatsTab.usage,
-              ),
+    return StatsCard(
+      padding: PauzaSpacing.small,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: _StatsTabButton(
+              title: usageLabel,
+              onTap: () => onChanged(StatsTab.usage),
+              isSelected: selectedTab == StatsTab.usage,
             ),
-            const SizedBox(width: PauzaSpacing.small),
-            Expanded(
-              child: _StatsTabButton(
-                title: blockingLabel,
-                onTap: () => onChanged(StatsTab.blocking),
-                isSelected: selectedTab == StatsTab.blocking,
-              ),
+          ),
+          const SizedBox(width: PauzaSpacing.small),
+          Expanded(
+            child: _StatsTabButton(
+              title: blockingLabel,
+              onTap: () => onChanged(StatsTab.blocking),
+              isSelected: selectedTab == StatsTab.blocking,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

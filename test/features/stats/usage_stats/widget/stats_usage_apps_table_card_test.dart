@@ -1,11 +1,9 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_apps_table_card.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
-import 'package:pauza_ui_kit/pauza_ui_kit.dart';
+
+import '../helpers/pump_stats_widget.dart';
 
 void main() {
   testWidgets('renders localized headers', (tester) async {
@@ -52,22 +50,7 @@ void main() {
 }
 
 Future<void> _pumpCard(WidgetTester tester, {required IList<UsageStats> usageStats}) async {
-  await tester.pumpWidget(
-    MaterialApp(
-      locale: const Locale('en'),
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: PauzaTheme.dark,
-      home: Scaffold(
-        body: SingleChildScrollView(child: StatsUsageAppsTableCard(usageStats: usageStats)),
-      ),
-    ),
-  );
+  await pumpStatsWidget(tester, StatsUsageAppsTableCard(usageStats: usageStats), scrollable: true);
   await tester.pump();
 }
 

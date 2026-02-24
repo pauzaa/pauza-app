@@ -1079,6 +1079,10 @@
   "@statsNoUsageData": {
     "description": "Message shown when no usage data is available."
   },
+  "statsIosScreenTimeReport": "Screen time report",
+  "@statsIosScreenTimeReport": {
+    "description": "Section header for the iOS Screen Time report card."
+  },
   "statsIosReportUnavailableTitle": "iOS report unavailable",
   "@statsIosReportUnavailableTitle": {
     "description": "Title for iOS report unavailable message."
@@ -1086,6 +1090,132 @@
   "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured.",
   "@statsIosReportUnavailableBody": {
     "description": "Body text for iOS report unavailable message."
+  },
+  "statsDeviceInsights": "Device Insights",
+  "@statsDeviceInsights": {
+    "description": "Title for device interaction insights card."
+  },
+  "statsUnlockCount": "Unlock count",
+  "@statsUnlockCount": {
+    "description": "Metric label for total unlock count."
+  },
+  "statsUnlocksPerDay": "Unlocks per day",
+  "@statsUnlocksPerDay": {
+    "description": "Metric label for average unlocks per day."
+  },
+  "statsPickupCount": "Pickups",
+  "@statsPickupCount": {
+    "description": "Metric label for pickup count."
+  },
+  "statsAvgScreenOnSession": "Avg screen-on session",
+  "@statsAvgScreenOnSession": {
+    "description": "Metric label for average screen-on session duration."
+  },
+  "statsScreenOnDuration": "Screen-on",
+  "@statsScreenOnDuration": {
+    "description": "Label for total screen-on duration."
+  },
+  "statsUnlockedDuration": "Unlocked",
+  "@statsUnlockedDuration": {
+    "description": "Label for total unlocked duration."
+  },
+  "statsScreenOnVsUnlocked": "Screen-on vs unlocked",
+  "@statsScreenOnVsUnlocked": {
+    "description": "Label for screen-on versus unlocked comparison bar."
+  },
+  "statsHourlyHeatmap": "Hourly Heatmap",
+  "@statsHourlyHeatmap": {
+    "description": "Title for hourly screen time heatmap card."
+  },
+  "statsHourlyHeatmapSubtitle": "Screen-time intensity by hour (00-23).",
+  "@statsHourlyHeatmapSubtitle": {
+    "description": "Subtitle explaining the hourly heatmap."
+  },
+  "statsHeatmapLegendLow": "Low",
+  "@statsHeatmapLegendLow": {
+    "description": "Low end label for heatmap legend."
+  },
+  "statsHeatmapLegendHigh": "High",
+  "@statsHeatmapLegendHigh": {
+    "description": "High end label for heatmap legend."
+  },
+  "statsTopEngagementApps": "Top Engagement Apps",
+  "@statsTopEngagementApps": {
+    "description": "Title for top engagement apps card."
+  },
+  "statsEngagementScore": "Score",
+  "@statsEngagementScore": {
+    "description": "Label for engagement score."
+  },
+  "statsLaunchIntensity": "Launch intensity",
+  "@statsLaunchIntensity": {
+    "description": "Label for launches per hour."
+  },
+  "statsAvgSession": "Avg session",
+  "@statsAvgSession": {
+    "description": "Label for average session duration."
+  },
+  "statsNoInsightData": "No insight data for the selected period.",
+  "@statsNoInsightData": {
+    "description": "Message shown when an insight section has no data."
+  },
+  "statsInsightLoadFailed": "Failed to load this insight.",
+  "@statsInsightLoadFailed": {
+    "description": "Error message when a specific insight section fails."
+  },
+  "statsPerDayValue": "{value}/day",
+  "@statsPerDayValue": {
+    "description": "Formats numeric per-day values.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsLaunchesPerHourValue": "{value}/h",
+  "@statsLaunchesPerHourValue": {
+    "description": "Formats launches-per-hour values.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsPercentValue": "{value}",
+  "@statsPercentValue": {
+    "description": "Formats percentage display values.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsHeatmapHourSemantics": "Hour {hour}, usage {duration}",
+  "@statsHeatmapHourSemantics": {
+    "description": "Accessibility label for one heatmap hour cell.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "statsEngagementRowSemantics": "{app}: score {score}, launch intensity {launchIntensity}",
+  "@statsEngagementRowSemantics": {
+    "description": "Accessibility label for one top engagement app row.",
+    "placeholders": {
+      "app": {
+        "type": "String"
+      },
+      "score": {
+        "type": "String"
+      },
+      "launchIntensity": {
+        "type": "String"
+      }
+    }
   },
   "authTagline": "Focus & Wellbeing",
   "@authTagline": {

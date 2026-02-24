@@ -8,9 +8,13 @@ import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_bloc.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_event.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_state.dart';
+import 'package:pauza/src/features/stats/usage_stats/model/stats_section_status.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_device_activity_insights_card.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_hourly_heatmap_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_inline_fallback_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_apps_table_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_ios_usage_report_card.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_top_engagement_apps_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_total_time_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_trend_card.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -79,6 +83,33 @@ class StatsUsageTabContent extends StatelessWidget {
                   children: <Widget>[
                     StatsTotalTimeCard(summary: state.summary!),
                     StatsUsageTrendCard(summary: state.summary!),
+                    if (state.deviceInsightsStatus == StatsSectionStatus.success && state.deviceInsights != null)
+                      StatsDeviceActivityInsightsCard(insights: state.deviceInsights!)
+                    else
+                      StatsInlineFallbackCard(
+                        title: l10n.statsDeviceInsights,
+                        message: _resolveInsightMessage(l10n: l10n, status: state.deviceInsightsStatus),
+                        actionLabel: state.deviceInsightsStatus == StatsSectionStatus.failure ? l10n.retryButton : null,
+                        onActionPressed: state.deviceInsightsStatus == StatsSectionStatus.failure
+                            ? () {
+                                context.read<StatsBloc>().add(const StatsRefreshRequested());
+                              }
+                            : null,
+                      ),
+                    StatsHourlyHeatmapCard(
+                      status: state.heatmapStatus,
+                      heatmap: state.hourlyHeatmap,
+                      onRetry: () {
+                        context.read<StatsBloc>().add(const StatsRefreshRequested());
+                      },
+                    ),
+                    StatsTopEngagementAppsCard(
+                      status: state.topEngagementStatus,
+                      apps: state.topEngagementApps,
+                      onRetry: () {
+                        context.read<StatsBloc>().add(const StatsRefreshRequested());
+                      },
+                    ),
                     StatsUsageAppsTableCard(usageStats: state.usageStats),
                   ],
                 );
@@ -90,5 +121,15 @@ class StatsUsageTabContent extends StatelessWidget {
         },
       ],
     );
+  }
+
+  String _resolveInsightMessage({required AppLocalizations l10n, required StatsSectionStatus status}) {
+    if (status == StatsSectionStatus.loading) {
+      return l10n.loadingLabel;
+    }
+    if (status == StatsSectionStatus.failure) {
+      return l10n.statsInsightLoadFailed;
+    }
+    return l10n.statsNoInsightData;
   }
 }

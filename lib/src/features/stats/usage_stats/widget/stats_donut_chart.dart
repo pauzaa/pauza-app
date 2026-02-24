@@ -1,4 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/usage_category_bucket.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
@@ -6,7 +7,7 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 class StatsDonutChart extends StatelessWidget {
   const StatsDonutChart({required this.buckets, super.key});
 
-  final Map<UsageCategoryBucket, Duration> buckets;
+  final IMap<UsageCategoryBucket, Duration> buckets;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +36,11 @@ class StatsDonutChart extends StatelessWidget {
 
   PieChartSectionData _section(BuildContext context, UsageCategoryBucket bucket, Duration total) {
     final value = buckets[bucket]?.inMilliseconds.toDouble() ?? 0;
-    final fallback = total.inMilliseconds == 0 ? 1.0 : value;
+    // When total is zero, give each section equal weight (1.0) to show an empty ring.
+    final sectionValue = total.inMilliseconds == 0 ? 1.0 : value;
 
     return PieChartSectionData(
-      value: fallback,
+      value: sectionValue,
       color: bucket.colorForBucket(context.colorScheme),
       title: '',
       radius: 28,

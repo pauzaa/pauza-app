@@ -77,18 +77,19 @@ class StatsUsageTabContent extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              if (state.summary != null) {
+              if (state.summary case final summary?) {
                 return Column(
                   spacing: PauzaSpacing.large,
                   children: <Widget>[
-                    StatsTotalTimeCard(summary: state.summary!),
-                    StatsUsageTrendCard(summary: state.summary!),
-                    if (state.deviceInsightsStatus == StatsSectionStatus.success && state.deviceInsights != null)
-                      StatsDeviceActivityInsightsCard(insights: state.deviceInsights!)
+                    StatsTotalTimeCard(summary: summary),
+                    StatsUsageTrendCard(summary: summary),
+                    if (state.deviceInsights case final deviceInsights?
+                        when state.deviceInsightsStatus == StatsSectionStatus.success)
+                      StatsDeviceActivityInsightsCard(insights: deviceInsights)
                     else
                       StatsInlineFallbackCard(
                         title: l10n.statsDeviceInsights,
-                        message: _resolveInsightMessage(l10n: l10n, status: state.deviceInsightsStatus),
+                        message: state.deviceInsightsStatus.localize(l10n),
                         actionLabel: state.deviceInsightsStatus == StatsSectionStatus.failure ? l10n.retryButton : null,
                         onActionPressed: state.deviceInsightsStatus == StatsSectionStatus.failure
                             ? () {
@@ -123,13 +124,4 @@ class StatsUsageTabContent extends StatelessWidget {
     );
   }
 
-  String _resolveInsightMessage({required AppLocalizations l10n, required StatsSectionStatus status}) {
-    if (status == StatsSectionStatus.loading) {
-      return l10n.loadingLabel;
-    }
-    if (status == StatsSectionStatus.failure) {
-      return l10n.statsInsightLoadFailed;
-    }
-    return l10n.statsNoInsightData;
-  }
 }

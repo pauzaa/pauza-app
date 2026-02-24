@@ -18,6 +18,8 @@ import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/model/restriction_lifecycle_event_log.dart';
 import 'package:pauza/src/features/restriction_lifecycle/model/restriction_session_log.dart';
+import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
+import 'package:pauza/src/features/stats/blocking_stats/model/blocking_stats_snapshot.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_snapshot.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -71,6 +73,7 @@ final class _TestPauzaDependencies extends PauzaDependencies {
     authRepository = _FakeAuthRepository();
     userProfileRepository = _FakeUserProfileRepository();
     streaksRepository = _FakeStreaksRepository();
+    statsBlockingRepository = _FakeStatsBlockingRepository();
     this.hasNfcSupport = hasNfcSupport;
   }
 }
@@ -227,4 +230,11 @@ final class _FakeStreaksRepository implements StreaksRepository {
 
   @override
   Future<void> refreshAggregates() async {}
+}
+
+final class _FakeStatsBlockingRepository implements StatsBlockingRepository {
+  @override
+  Future<BlockingStatsSnapshot> getBlockingSnapshot({required DateTimeRange window, required DateTime nowLocal}) {
+    throw UnimplementedError();
+  }
 }

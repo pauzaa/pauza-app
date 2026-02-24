@@ -1214,6 +1214,93 @@
       }
     }
   },
+  "statsBlockingLoadFailed": "Failed to load blocking statistics.",
+  "@statsBlockingLoadFailed": {
+    "description": "Error message when blocking stats fail to load."
+  },
+  "statsBlockingNoData": "No blocking data for the selected period.",
+  "@statsBlockingNoData": {
+    "description": "Message shown when no blocking data is available."
+  },
+  "statsBlockingKpis": "Blocking KPIs",
+  "@statsBlockingKpis": {
+    "description": "Title for blocking KPI section."
+  },
+  "statsBlockingCurrentStreak": "Current streak",
+  "@statsBlockingCurrentStreak": {
+    "description": "Metric label for current streak."
+  },
+  "statsBlockingLongestStreak": "Longest streak",
+  "@statsBlockingLongestStreak": {
+    "description": "Metric label for longest streak."
+  },
+  "statsBlockingAvgSessionDuration": "Avg restriction session duration",
+  "@statsBlockingAvgSessionDuration": {
+    "description": "Metric label for average restriction session duration."
+  },
+  "statsBlockingLongestSessionDuration": "Longest restriction session duration",
+  "@statsBlockingLongestSessionDuration": {
+    "description": "Metric label for longest restriction session duration."
+  },
+  "statsBlockingAvgPausesPerSession": "Avg pauses per session",
+  "@statsBlockingAvgPausesPerSession": {
+    "description": "Metric label for average pauses per session."
+  },
+  "statsBlockingAvgPauseDuration": "Avg pause duration",
+  "@statsBlockingAvgPauseDuration": {
+    "description": "Metric label for average pause duration."
+  },
+  "statsBlockingOverview": "Range Overview",
+  "@statsBlockingOverview": {
+    "description": "Title for range overview section."
+  },
+  "statsBlockingCompletedSessions": "Completed sessions",
+  "@statsBlockingCompletedSessions": {
+    "description": "Metric label for completed sessions in selected range."
+  },
+  "statsBlockingEffectiveDuration": "Effective blocked",
+  "@statsBlockingEffectiveDuration": {
+    "description": "Metric label for total effective blocked duration."
+  },
+  "statsBlockingPausedDuration": "Paused",
+  "@statsBlockingPausedDuration": {
+    "description": "Metric label for total paused duration."
+  },
+  "statsBlockingDailyTrend": "Daily Effective Blocking",
+  "@statsBlockingDailyTrend": {
+    "description": "Title for daily effective blocking trend chart."
+  },
+  "statsBlockingPauseComposition": "Pause Composition",
+  "@statsBlockingPauseComposition": {
+    "description": "Title for pause composition donut chart."
+  },
+  "statsBlockingPerSessionValue": "{value}/session",
+  "@statsBlockingPerSessionValue": {
+    "description": "Formats average pauses per session values.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsBlockingDaysValue": "{count} days",
+  "@statsBlockingDaysValue": {
+    "description": "Formats streak values in days.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsBlockingSessionCountValue": "{count} sessions",
+  "@statsBlockingSessionCountValue": {
+    "description": "Formats completed session count value.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "statsEngagementRowSemantics": "{app}: score {score}, launch intensity {launchIntensity}",
   "@statsEngagementRowSemantics": {
     "description": "Accessibility label for one top engagement app row.",

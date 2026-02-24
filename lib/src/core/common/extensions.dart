@@ -37,14 +37,20 @@ extension DateTimeX on DateTime {
   }
 }
 
-extension DurationX on Duration {
+extension DurationNX on Duration? {
   String formatDurationLabel(AppLocalizations localizations) {
-    final totalMinutes = inMinutes;
+    final duration = this;
+    if (duration == null) {
+      return '--';
+    }
+    final totalMinutes = duration.inMinutes;
     final hours = totalMinutes ~/ 60;
     final minutes = totalMinutes % 60;
     return localizations.homeDurationHoursMinutesLabel(hours, minutes);
   }
+}
 
+extension DurationX on Duration {
   String formatTimerHhMmSs() {
     final hours = inHours.toString().padLeft(2, '0');
     final minutes = (inMinutes % 60).toString().padLeft(2, '0');

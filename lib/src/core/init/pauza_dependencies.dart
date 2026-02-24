@@ -15,6 +15,7 @@ import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_plugin_client.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/background/restriction_lifecycle_background_scheduler.dart';
+import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
     show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
@@ -29,6 +30,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final RestrictionLifecycleRepository restrictionLifecycleRepository;
   late final RestrictionLifecycleBackgroundScheduler restrictionLifecycleBackgroundScheduler;
   late final StreaksRepository streaksRepository;
+  late final StatsBlockingRepository statsBlockingRepository;
   late final NfcRepository nfcRepository;
   late final bool hasNfcSupport;
   late final AuthSessionStorage authSessionStorage;
@@ -101,6 +103,12 @@ class PauzaDependencies with AppFuseInitialization {
       } on Object {
         // Ignore startup refresh failures. Next resume/manual flow retries refresh.
       }
+    },
+    'init blocking stats repository': (_) async {
+      statsBlockingRepository = StatsBlockingRepositoryImpl(
+        localDatabase: localDatabase,
+        streaksRepository: streaksRepository,
+      );
     },
     'init restriction lifecycle background sync': (_) async {
       restrictionLifecycleBackgroundScheduler = WorkmanagerRestrictionLifecycleBackgroundScheduler();

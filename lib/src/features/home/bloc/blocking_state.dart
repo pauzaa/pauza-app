@@ -1,13 +1,7 @@
 part of 'blocking_bloc.dart';
 
 final class BlockingState extends Equatable {
-  const BlockingState({
-    required this.restrictionState,
-    required this.activeMode,
-    this.error,
-    this.actionError,
-    this.isLoading = false,
-  });
+  const BlockingState({required this.restrictionState, required this.activeMode, this.error, this.isLoading = false});
 
   const BlockingState.initial()
     : this(
@@ -26,7 +20,6 @@ final class BlockingState extends Equatable {
   final RestrictionState restrictionState;
   final Mode? activeMode;
   final Object? error;
-  final BlockingActionError? actionError;
   final bool isLoading;
 
   bool get isBlocking => restrictionState.isActiveNow;
@@ -39,16 +32,12 @@ final class BlockingState extends Equatable {
   DateTime? get pausedUntil => restrictionState.pausedUntil;
   Duration? get sessionDuration => restrictionState.startedAt?.difference(DateTime.now());
   bool get hasError => error != null;
-  bool get hasActionError => actionError != null;
 
-  BlockingState loading() => copyWith(isLoading: true, clearActionError: true);
+  BlockingState loading() => copyWith(isLoading: true, clearError: true);
 
-  BlockingState setError(Object error) => copyWith(error: error, isLoading: false, clearActionError: true);
+  BlockingState setError(Object error) => copyWith(error: error, isLoading: false);
 
-  BlockingState setActionError(BlockingActionError actionError) =>
-      copyWith(actionError: actionError, isLoading: false, clearError: true);
-
-  BlockingState clearError() => copyWith(isLoading: false, clearActionError: true);
+  BlockingState clearError() => copyWith(isLoading: false, clearError: true);
 
   BlockingState setSessionState({
     required RestrictionState restrictionState,
@@ -59,7 +48,7 @@ final class BlockingState extends Equatable {
     activeMode: activeMode,
     clearActiveMode: true,
     isLoading: isLoading,
-    clearActionError: true,
+    clearError: true,
   );
 
   BlockingState copyWith({
@@ -68,15 +57,12 @@ final class BlockingState extends Equatable {
     bool clearActiveMode = false,
     Object? error,
     bool clearError = false,
-    BlockingActionError? actionError,
-    bool clearActionError = false,
     bool? isLoading,
   }) {
     return BlockingState(
       restrictionState: restrictionState ?? this.restrictionState,
       activeMode: clearActiveMode ? activeMode : (activeMode ?? this.activeMode),
       error: clearError ? null : (error ?? this.error),
-      actionError: clearActionError ? null : (actionError ?? this.actionError),
       isLoading: isLoading ?? this.isLoading,
     );
   }
@@ -88,7 +74,6 @@ final class BlockingState extends Equatable {
     sessionStartedAt,
     pausedUntil,
     error,
-    actionError,
     isBlocking,
     isLoading,
   ];

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
-import 'package:pauza/src/features/home/model/blocking_action_error.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -66,8 +65,6 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
       emit(state.loading());
       await _blockingRepository.stopBlocking(mode: state.activeMode, restrictionState: state.restrictionState);
       await _syncSessionState(emit: emit);
-    } on BlockingActionError catch (error) {
-      emit(state.setActionError(error));
     } catch (error) {
       emit(state.setError(error));
     }
@@ -82,8 +79,6 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
         restrictionState: state.restrictionState,
       );
       await _syncSessionState(emit: emit);
-    } on BlockingActionError catch (error) {
-      emit(state.setActionError(error));
     } catch (error) {
       emit(state.setError(error));
     }

@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/home/model/blocking_action_error.dart';
@@ -170,8 +170,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(emitted, isNotEmpty);
-      expect(emitted.last.actionError, isA<PauseLimitReachedError>());
-      expect(emitted.last.error, isNull);
+      expect(emitted.last.error, isA<PauseLimitReachedError>());
 
       await sub.cancel();
       await bloc.close();

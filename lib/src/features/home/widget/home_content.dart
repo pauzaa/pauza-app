@@ -5,6 +5,7 @@ import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
+import 'package:pauza/src/features/home/model/blocking_action_error.dart';
 import 'package:pauza/src/features/home/widget/home_current_mode_card.dart';
 import 'package:pauza/src/features/home/widget/home_pause_pill.dart';
 import 'package:pauza/src/features/home/widget/home_pause_ring.dart';
@@ -24,16 +25,14 @@ class HomeContent extends StatelessWidget {
 
     return BlocListener<BlockingBloc, BlockingState>(
       listenWhen: (previous, current) {
-        return previous.actionError != current.actionError && current.hasActionError;
+        return previous.error != current.error && current.hasError;
       },
       listener: (context, state) {
-        final actionError = state.actionError;
-        if (actionError == null) {
-          return;
+        final error = state.error;
+        if (error is BlockingActionError) {
+          final message = error.localize(l10n);
+          context.showToast(message);
         }
-
-        final message = actionError.localize(l10n);
-        context.showToast(message);
       },
       child: Scaffold(
         body: SafeArea(

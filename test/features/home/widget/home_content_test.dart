@@ -15,13 +15,13 @@ import 'package:pauza/src/features/home/widget/home_current_mode_card.dart';
 import 'package:pauza/src/features/home/widget/home_session_button.dart';
 import 'package:pauza/src/features/home/widget/home_stats_pill.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
-import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
+import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
-import 'package:pauza/src/features/streaks/common/model/streak_types.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_snapshot.dart';
+import 'package:pauza/src/features/streaks/common/model/streak_types.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
@@ -109,7 +109,7 @@ void main() {
       await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
       await tester.pump();
 
-      blockingBloc.emitForTest(const BlockingState.initial().setActionError(const PauseLimitReachedError()));
+      blockingBloc.emitForTest(const BlockingState.initial().setError(const PauseLimitReachedError()));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
 

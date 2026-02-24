@@ -42,12 +42,11 @@ final class AuthRepositoryImpl implements AuthRepository {
   // created after app bootstrap).
   final BehaviorSubject<Session> _sessionController = BehaviorSubject<Session>.seeded(const Session.empty());
 
-  Session _currentSession = const Session.empty();
   String? _pendingOtpChallengeId;
   String? _pendingOtpEmail;
 
   @override
-  Session get currentSession => _currentSession;
+  Session get currentSession => _sessionController.value;
 
   @override
   Stream<Session> get sessionStream => _sessionController.stream;
@@ -57,7 +56,7 @@ final class AuthRepositoryImpl implements AuthRepository {
     try {
       final session = await _sessionStorage.readSession();
       // Avoid duplicate emission on initialize when seed/current already matches storage.
-      if (_currentSession != session) {
+      if (currentSession != session) {
         _emitSession(session);
       }
     } on AuthException {
@@ -147,7 +146,6 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   void _emitSession(Session session) {
-    _currentSession = session;
     if (!_sessionController.isClosed) {
       _sessionController.add(session);
     }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pauza/src/common/const/assets.gen.dart';
 
 extension $PauzaConfigX on BuildContext {
-  // BazmConfig get appEnv => readSettings.getCurrentConfig<BazmConfig>()!;
+  PauzaConfig get appEnv => readFuseState.getCurrentConfig<PauzaConfig>()!;
 }
 
 class PauzaConfig extends JsonAssetConfig {

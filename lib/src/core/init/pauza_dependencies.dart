@@ -2,6 +2,11 @@ import 'package:appfuse/appfuse.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:pauza/src/core/api_client/api_client.dart';
+import 'package:pauza/src/core/api_client/middleware/auth_mw.dart';
+import 'package:pauza/src/core/api_client/middleware/logger_mw.dart';
+import 'package:pauza/src/core/api_client/middleware/retry_mw.dart';
+import 'package:pauza/src/core/init/config.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
@@ -42,6 +47,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final UserProfileRemoteDataSource userProfileRemoteDataSource;
   late final UserProfileRepository userProfileRepository;
   late final PackageInfo packageInfo;
+  late final ApiClient apiClient;
 
   static PauzaDependencies of(BuildContext context) => AppFuseScope.of(context).init as PauzaDependencies;
 
@@ -53,6 +59,16 @@ class PauzaDependencies with AppFuseInitialization {
         schema: const PauzaLocalDatabaseSchemaV1(),
       );
       await localDatabase.open();
+    },
+    'init api client': (state) async {
+      apiClient = ApiClient(
+        baseUrl: state.getCurrentConfig<PauzaConfig>()!.apiBaseUrl,
+        middlewares: [
+          const ApiClientLoggerMiddleware(),
+          ApiClientAuthMiddleware(tokenProvider: () async => authRepository.currentSession.accessToken),
+          const ApiClientRetryMiddleware(),
+        ],
+      );
     },
     'init package info': (_) async {
       packageInfo = await PackageInfo.fromPlatform();
@@ -68,7 +84,8 @@ class PauzaDependencies with AppFuseInitialization {
       authRepository = AuthRepositoryImpl(sessionStorage: authSessionStorage);
       await authRepository.initialize();
       authGate = PauzaAuthGateNotifier(authRepository: authRepository);
-
+    },
+    'init user profile': (_) async {
       appFuseStorage = await AppFuseShPrStorage.init();
       userProfileCacheStorage = AppFuseUserProfileCacheStorage(storage: appFuseStorage);
       userProfileRemoteDataSource = const UserProfileRemoteDataSourceImpl();

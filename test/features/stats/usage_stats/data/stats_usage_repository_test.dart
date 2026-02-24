@@ -27,7 +27,7 @@ void main() {
     test('getDailyUsageDurations performs explicit day-level aggregation', () async {
       final platform = _FakeUsageStatsPlatform()
         ..usageStatsByRangeStart = <int, List<UsageStats>>{
-          DateTime(2026, 2, 1).millisecondsSinceEpoch: <UsageStats>[
+          DateTime(2026, 2).millisecondsSinceEpoch: <UsageStats>[
             _usage(packageId: 'a', minutes: 30, launches: 2),
           ],
           DateTime(2026, 2, 2).millisecondsSinceEpoch: <UsageStats>[
@@ -37,10 +37,10 @@ void main() {
         };
       final repository = _repository(platform);
 
-      final daily = await repository.getDailyUsageDurations(start: DateTime(2026, 2, 1), end: DateTime(2026, 2, 2, 23));
+      final daily = await repository.getDailyUsageDurations(start: DateTime(2026, 2), end: DateTime(2026, 2, 2, 23));
 
       expect(daily.length, 2);
-      expect(daily[DateTime(2026, 2, 1)], const Duration(minutes: 30));
+      expect(daily[DateTime(2026, 2)], const Duration(minutes: 30));
       expect(daily[DateTime(2026, 2, 2)], const Duration(minutes: 30));
       expect(platform.getUsageStatsCallCount, 2);
     });
@@ -154,7 +154,7 @@ void main() {
         ];
       final repository = _repository(platform);
 
-      final insights = await repository.getDeviceUsageInsights(start: DateTime(2026, 2, 1), end: DateTime(2026, 2, 2));
+      final insights = await repository.getDeviceUsageInsights(start: DateTime(2026, 2), end: DateTime(2026, 2, 2));
 
       expect(insights.screenOnDuration, const Duration(minutes: 90));
     });

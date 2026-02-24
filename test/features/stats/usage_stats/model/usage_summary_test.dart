@@ -11,19 +11,17 @@ void main() {
         _usage(packageId: 'a', minutes: 50, launches: 4),
         _usage(packageId: 'b', minutes: 10, launches: 1),
       ].lock,
-      previous: <UsageStats>[
-        _usage(packageId: 'a', minutes: 30, launches: 2),
-      ].lock,
-      window: DateTimeRange(start: DateTime(2026, 2, 1), end: DateTime(2026, 2, 3, 23, 59, 59, 999)),
+      previous: <UsageStats>[_usage(packageId: 'a', minutes: 30, launches: 2)].lock,
+      window: DateTimeRange(start: DateTime(2026, 2), end: DateTime(2026, 2, 3, 23, 59, 59, 999)),
       dailyDurations: IMap<DateTime, Duration>(<DateTime, Duration>{
-        DateTime(2026, 2, 1): const Duration(minutes: 20),
+        DateTime(2026, 2): const Duration(minutes: 20),
         DateTime(2026, 2, 2): const Duration(minutes: 10),
         DateTime(2026, 2, 3): const Duration(minutes: 30),
       }),
     );
 
     expect(summary.trend.length, 3);
-    expect(summary.trend[0].day, DateTime(2026, 2, 1));
+    expect(summary.trend[0].day, DateTime(2026, 2));
     expect(summary.trend[0].duration, const Duration(minutes: 20));
     expect(summary.trend[1].day, DateTime(2026, 2, 2));
     expect(summary.trend[1].duration, const Duration(minutes: 10));

@@ -34,6 +34,7 @@ migrate_working_dir/
 /coverage/
 **/pubspec_overrides.yaml
 pubspec.lock
+lib/src/core/localization/gen/
 
 # Symbolication related
 app.*.symbols

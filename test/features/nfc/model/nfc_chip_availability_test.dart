@@ -103,6 +103,12 @@ class _FakeAppLocalizations extends AppLocalizations {
   @override
   String get qrCodeConfigPreviewDialogBody => 'Show this QR code when you need to unlock your focus session.';
   @override
+  String get qrCodeConfigPreviewDialogDownloadButton => 'Download';
+  @override
+  String get qrCodeConfigPreviewDialogDownloadReady => 'Choose where to save your QR image.';
+  @override
+  String get qrCodeConfigPreviewDialogDownloadFailed => 'Unable to export QR image. Please try again.';
+  @override
   String get qrCodeConfigActionFailed => 'Unable to update QR code configuration. Please try again.';
   @override
   String get qrCodeConfigGenerateFailed => 'Unable to generate a new QR code. Please try again.';

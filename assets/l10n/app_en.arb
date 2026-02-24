@@ -571,6 +571,18 @@
   "@qrCodeConfigPreviewDialogBody": {
     "description": "Body text shown on QR preview dialog."
   },
+  "qrCodeConfigPreviewDialogDownloadButton": "Download",
+  "@qrCodeConfigPreviewDialogDownloadButton": {
+    "description": "Button label to download or share the QR image from preview dialog."
+  },
+  "qrCodeConfigPreviewDialogDownloadReady": "Choose where to save your QR image.",
+  "@qrCodeConfigPreviewDialogDownloadReady": {
+    "description": "Toast shown when share sheet opens for saving QR image."
+  },
+  "qrCodeConfigPreviewDialogDownloadFailed": "Unable to export QR image. Please try again.",
+  "@qrCodeConfigPreviewDialogDownloadFailed": {
+    "description": "Toast shown when QR image export fails."
+  },
   "qrCodeConfigActionFailed": "Unable to update QR code configuration. Please try again.",
   "@qrCodeConfigActionFailed": {
     "description": "Generic fallback error shown when QR config action fails."

@@ -47,6 +47,7 @@ void main() {
 
     expect(find.text('QR Code Preview'), findsOneWidget);
     expect(find.text('Office QR'), findsOneWidget);
+    expect(find.text('Download'), findsOneWidget);
 
     expect(find.byType(QrImageView), findsOneWidget);
     expect(find.text('pauza:qr:v1:3f2504e0-4f89-41d3-9a0c-0305e82c3301'), findsOneWidget);

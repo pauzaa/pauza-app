@@ -567,6 +567,12 @@ class _FakeAppLocalizations extends AppLocalizations {
   String get homeActionQrNotLinked => 'This QR code is not linked. Use a linked code to continue.';
 
   @override
+  String get homeActionStartNfcConfigRequired => 'To start this session, link at least one NFC tag in Settings.';
+
+  @override
+  String get homeActionStartQrConfigRequired => 'To start this session, link at least one QR code in Settings.';
+
+  @override
   String get scanNfcChipTitle => 'Scan NFC Tag';
 
   @override

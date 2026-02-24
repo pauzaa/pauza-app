@@ -245,6 +245,11 @@ final class _NoopQrLinkedCodesRepository implements QrLinkedCodesRepository {
   }
 
   @override
+  Future<bool> hasLinkedCodes() async {
+    return false;
+  }
+
+  @override
   Future<void> renameCode({required String id, required String name}) async {}
 }
 

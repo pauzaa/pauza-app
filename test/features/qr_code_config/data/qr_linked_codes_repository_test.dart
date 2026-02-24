@@ -70,6 +70,31 @@ void main() {
       expect(found, isFalse);
     });
 
+    test('hasLinkedCodes returns false when no codes exist', () async {
+      final localDatabase = _FakeLocalDatabase();
+      final repository = QrLinkedCodesRepositoryImpl(localDatabase: localDatabase);
+
+      final hasLinkedCodes = await repository.hasLinkedCodes();
+
+      expect(hasLinkedCodes, isFalse);
+    });
+
+    test('hasLinkedCodes returns true when at least one code exists', () async {
+      final localDatabase = _FakeLocalDatabase();
+      localDatabase.insertDirect(
+        id: 'id-1',
+        scanValue: 'pauza:qr:v1:3f2504e0-4f89-41d3-9a0c-0305e82c3301',
+        name: 'code-1',
+        createdAt: 100,
+        updatedAt: 100,
+      );
+      final repository = QrLinkedCodesRepositoryImpl(localDatabase: localDatabase);
+
+      final hasLinkedCodes = await repository.hasLinkedCodes();
+
+      expect(hasLinkedCodes, isTrue);
+    });
+
     test('hasScanValue throws for malformed scan value', () async {
       final localDatabase = _FakeLocalDatabase();
       final repository = QrLinkedCodesRepositoryImpl(localDatabase: localDatabase);
@@ -180,6 +205,14 @@ final class _FakeLocalDatabase implements LocalDatabase {
       final scanValue = arguments?.first as String;
       final exists = rowsById.values.any((row) => row['scan_value'] == scanValue);
       return exists
+          ? <Map<String, Object?>>[
+              <String, Object?>{'1': 1},
+            ]
+          : const <Map<String, Object?>>[];
+    }
+
+    if (sql.contains('SELECT 1 FROM qr_linked_codes LIMIT 1')) {
+      return rowsById.isNotEmpty
           ? <Map<String, Object?>>[
               <String, Object?>{'1': 1},
             ]

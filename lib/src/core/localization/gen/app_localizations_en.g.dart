@@ -63,16 +63,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileEditTakePhotoTitle => 'Take Photo';
 
   @override
-  String get profileEditTakePhotoSubtitle => 'Use your camera to snap a new one';
+  String get profileEditTakePhotoSubtitle =>
+      'Use your camera to snap a new one';
 
   @override
   String get profileEditChooseFromGalleryTitle => 'Choose from Gallery';
 
   @override
-  String get profileEditChooseFromGallerySubtitle => 'Pick a photo from your phone\'s library';
+  String get profileEditChooseFromGallerySubtitle =>
+      'Pick a photo from your phone\'s library';
 
   @override
-  String get profileEditInvalidUsernameError => 'Use 3-30 lowercase letters, digits, or underscore';
+  String get profileEditInvalidUsernameError =>
+      'Use 3-30 lowercase letters, digits, or underscore';
 
   @override
   String get profileEditUsernameTakenError => 'This username is already taken';
@@ -81,7 +84,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileEditValidationError => 'Please check your profile details';
 
   @override
-  String get profileEditNetworkError => 'Unable to update profile. Check your connection';
+  String get profileEditNetworkError =>
+      'Unable to update profile. Check your connection';
 
   @override
   String get profileSettingsNavTitle => 'Settings';
@@ -269,7 +273,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Exact alarms keep schedules and pause timers accurate so blocks start and end on time.';
 
   @override
-  String get permissionFamilyControlsTitle => 'Allow Family Controls (Screen Time)';
+  String get permissionFamilyControlsTitle =>
+      'Allow Family Controls (Screen Time)';
 
   @override
   String get permissionFamilyControlsBody =>
@@ -283,16 +288,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'To help you stay focused and block distracting apps effectively, Pauza needs the permissions listed below. Your data stays private on your device.';
 
   @override
-  String get permissionUsageAccessShortBody => 'Monitor usage and enforce limits';
+  String get permissionUsageAccessShortBody =>
+      'Monitor usage and enforce limits';
 
   @override
-  String get permissionAccessibilityShortBody => 'Identify and block restricted apps';
+  String get permissionAccessibilityShortBody =>
+      'Identify and block restricted apps';
 
   @override
-  String get permissionExactAlarmShortBody => 'Keep schedules and timers accurate';
+  String get permissionExactAlarmShortBody =>
+      'Keep schedules and timers accurate';
 
   @override
-  String get permissionFamilyControlsShortBody => 'Manage app restrictions on iOS';
+  String get permissionFamilyControlsShortBody =>
+      'Manage app restrictions on iOS';
 
   @override
   String permissionCurrentStatusLabel(String status) {
@@ -324,25 +333,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nfcGuidanceAvailableTitle => 'NFC is ready';
 
   @override
-  String get nfcGuidanceAvailableBody => 'Your device is ready to scan NFC tags.';
+  String get nfcGuidanceAvailableBody =>
+      'Your device is ready to scan NFC tags.';
 
   @override
   String get nfcGuidanceDisabledTitle => 'Turn on NFC';
 
   @override
-  String get nfcGuidanceDisabledBody => 'NFC is turned off on this device. Enable it in system settings to continue.';
+  String get nfcGuidanceDisabledBody =>
+      'NFC is turned off on this device. Enable it in system settings to continue.';
 
   @override
   String get nfcGuidanceNotSupportedTitle => 'NFC is not supported';
 
   @override
-  String get nfcGuidanceNotSupportedBody => 'This device does not support NFC scanning.';
+  String get nfcGuidanceNotSupportedBody =>
+      'This device does not support NFC scanning.';
 
   @override
   String get nfcGuidanceUnknownTitle => 'NFC status unavailable';
 
   @override
-  String get nfcGuidanceUnknownBody => 'We could not determine NFC availability right now. Try again in a moment.';
+  String get nfcGuidanceUnknownBody =>
+      'We could not determine NFC availability right now. Try again in a moment.';
 
   @override
   String get nfcChipConfigTitle => 'Configure NFC Tag';
@@ -364,13 +377,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nfcChipConfigAlreadyLinked => 'This NFC tag is already linked.';
 
   @override
-  String get nfcChipHoldCardNearDevice => 'Hold your device near the NFC tag to scan';
+  String get nfcChipHoldCardNearDevice =>
+      'Hold your device near the NFC tag to scan';
 
   @override
-  String get nfcChipConfigUidMissingError => 'This NFC tag cannot be linked because it does not provide an identifier.';
+  String get nfcChipConfigUidMissingError =>
+      'This NFC tag cannot be linked because it does not provide an identifier.';
 
   @override
-  String get nfcChipConfigScanFailed => 'Unable to link NFC tag. Please try again.';
+  String get nfcChipConfigScanFailed =>
+      'Unable to link NFC tag. Please try again.';
 
   @override
   String get nfcChipConfigTagsTitle => 'Your NFC Tags';
@@ -409,7 +425,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nfcChipConfigNoTagsTitle => 'No linked tags yet';
 
   @override
-  String get nfcChipConfigNoTagsBody => 'Link your first NFC tag to manage focus session unlocking.';
+  String get nfcChipConfigNoTagsBody =>
+      'Link your first NFC tag to manage focus session unlocking.';
 
   @override
   String get qrCodeConfigTagsTitle => 'Your QR Codes';
@@ -448,25 +465,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get qrCodeConfigNoCodesTitle => 'No linked QR codes yet';
 
   @override
-  String get qrCodeConfigNoCodesBody => 'Generate your first QR code to manage focus session unlocking.';
+  String get qrCodeConfigNoCodesBody =>
+      'Generate your first QR code to manage focus session unlocking.';
 
   @override
   String get qrCodeConfigPreviewDialogTitle => 'QR Code Preview';
 
   @override
-  String get qrCodeConfigPreviewDialogBody => 'Show this QR code when you need to unlock your focus session.';
+  String get qrCodeConfigPreviewDialogBody =>
+      'Show this QR code when you need to unlock your focus session.';
 
   @override
-  String get qrCodeConfigActionFailed => 'Unable to update QR code configuration. Please try again.';
+  String get qrCodeConfigActionFailed =>
+      'Unable to update QR code configuration. Please try again.';
 
   @override
-  String get qrCodeConfigGenerateFailed => 'Unable to generate a new QR code. Please try again.';
+  String get qrCodeConfigGenerateFailed =>
+      'Unable to generate a new QR code. Please try again.';
 
   @override
-  String get qrCodeConfigRenameFailed => 'Unable to rename QR code. Please try again.';
+  String get qrCodeConfigRenameFailed =>
+      'Unable to rename QR code. Please try again.';
 
   @override
-  String get qrCodeConfigDeleteFailed => 'Unable to delete QR code. Please try again.';
+  String get qrCodeConfigDeleteFailed =>
+      'Unable to delete QR code. Please try again.';
 
   @override
   String blockedAppsCountLabel(int count) {
@@ -584,7 +607,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get modeMinimumDurationTitle => 'Minimum duration';
 
   @override
-  String get modeMinimumDurationSubtitle => 'Optional. Session can\'t be ended earlier than this.';
+  String get modeMinimumDurationSubtitle =>
+      'Optional. Session can\'t be ended earlier than this.';
 
   @override
   String get modeMinimumDurationSetButton => 'Set duration';
@@ -604,7 +628,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get modeEndingPausingScenarioTitle => 'Ending / pausing scenario';
 
   @override
-  String get modeEndingPausingScenarioSubtitle => 'Choose how this mode can be ended or paused.';
+  String get modeEndingPausingScenarioSubtitle =>
+      'Choose how this mode can be ended or paused.';
 
   @override
   String get modeEndingPausingScenarioNfc => 'NFC';
@@ -616,7 +641,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get modeEndingPausingScenarioManual => 'Manual';
 
   @override
-  String get modeEndingPausingScenarioNfcDisabled => 'NFC is not supported on this device.';
+  String get modeEndingPausingScenarioNfcDisabled =>
+      'NFC is not supported on this device.';
 
   @override
   String modeAllowedPausesOutOfRangeError(int min, int max) {
@@ -729,22 +755,36 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get homeActionBlockedModeUnavailable => 'Mode data is unavailable. Please sync and try again.';
+  String get homeActionBlockedModeUnavailable =>
+      'Mode data is unavailable. Please sync and try again.';
 
   @override
-  String get homeActionScenarioProofRequired => 'Scan is required for this action.';
+  String get homeActionScenarioProofRequired =>
+      'Scan is required for this action.';
 
   @override
-  String get homeActionNfcMissingIdentifier => 'This NFC tag cannot be used because it has no identifier.';
+  String get homeActionNfcMissingIdentifier =>
+      'This NFC tag cannot be used because it has no identifier.';
 
   @override
-  String get homeActionNfcNotLinked => 'This NFC tag is not linked. Use a linked tag to continue.';
+  String get homeActionNfcNotLinked =>
+      'This NFC tag is not linked. Use a linked tag to continue.';
 
   @override
-  String get homeActionQrInvalid => 'Invalid QR code. Try scanning a linked Pauza QR code.';
+  String get homeActionQrInvalid =>
+      'Invalid QR code. Try scanning a linked Pauza QR code.';
 
   @override
-  String get homeActionQrNotLinked => 'This QR code is not linked. Use a linked code to continue.';
+  String get homeActionQrNotLinked =>
+      'This QR code is not linked. Use a linked code to continue.';
+
+  @override
+  String get homeActionStartNfcConfigRequired =>
+      'To start this session, link at least one NFC tag in Settings.';
+
+  @override
+  String get homeActionStartQrConfigRequired =>
+      'To start this session, link at least one QR code in Settings.';
 
   @override
   String get pausedTitle => 'Paused';
@@ -830,7 +870,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statsPermissionRequiredTitle => 'Usage permission required';
 
   @override
-  String get statsPermissionRequiredBody => 'Allow Usage Access to view Android usage statistics.';
+  String get statsPermissionRequiredBody =>
+      'Allow Usage Access to view Android usage statistics.';
 
   @override
   String get statsLoadFailed => 'Failed to load usage statistics.';
@@ -867,7 +908,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authOtpTitle => 'Verify Your Email';
 
   @override
-  String get authOtpSubtitlePrefix => 'Enter the 6-digit code we sent to your email address ';
+  String get authOtpSubtitlePrefix =>
+      'Enter the 6-digit code we sent to your email address ';
 
   @override
   String get authOtpSubtitleSuffix => '.';
@@ -899,10 +941,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authFailureInvalidOtp => 'Invalid verification code.';
 
   @override
-  String get authFailureOtpChallengeMissing => 'Verification challenge expired. Try again.';
+  String get authFailureOtpChallengeMissing =>
+      'Verification challenge expired. Try again.';
 
   @override
-  String get authFailureStorage => 'Could not access secure storage. Please try again.';
+  String get authFailureStorage =>
+      'Could not access secure storage. Please try again.';
 
   @override
   String get authFailureUnknown => 'Could not sign in. Please try again.';

@@ -292,6 +292,8 @@
   "homeActionNfcNotLinked": "Bu NFC teg ulanmagan. Davom etish uchun ulangan tegdan foydalaning.",
   "homeActionQrInvalid": "Yaroqsiz QR kod. Ulangan Pauza QR kodini skanerlab ko'ring.",
   "homeActionQrNotLinked": "Bu QR kod ulanmagan. Davom etish uchun ulangan koddan foydalaning.",
+  "homeActionStartNfcConfigRequired": "Bu sessiyani boshlash uchun Sozlamalarda kamida bitta NFC tegni ulang.",
+  "homeActionStartQrConfigRequired": "Bu sessiyani boshlash uchun Sozlamalarda kamida bitta QR kodni ulang.",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",

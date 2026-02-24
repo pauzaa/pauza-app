@@ -939,6 +939,14 @@
   "@homeActionQrNotLinked": {
     "description": "Toast shown when scanned QR code is valid but not linked in settings."
   },
+  "homeActionStartNfcConfigRequired": "To start this session, link at least one NFC tag in Settings.",
+  "@homeActionStartNfcConfigRequired": {
+    "description": "Toast shown when starting a session that requires NFC scenario but no linked NFC tags are configured."
+  },
+  "homeActionStartQrConfigRequired": "To start this session, link at least one QR code in Settings.",
+  "@homeActionStartQrConfigRequired": {
+    "description": "Toast shown when starting a session that requires QR scenario but no linked QR codes are configured."
+  },
   "pausedTitle": "Paused",
   "@pausedTitle": {
     "description": "Title for the paused session."

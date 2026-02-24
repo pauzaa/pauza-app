@@ -292,6 +292,8 @@
   "homeActionNfcNotLinked": "Бу NFC тег уланмаган. Давом этиш учун уланган тегдан фойдаланинг.",
   "homeActionQrInvalid": "Яроқсиз QR код. Уланган Pauza QR кодини сканерлаб кўринг.",
   "homeActionQrNotLinked": "Бу QR код уланмаган. Давом этиш учун уланган коддан фойдаланинг.",
+  "homeActionStartNfcConfigRequired": "Бу сессияни бошлаш учун Созламаларда камида битта NFC тегни уланг.",
+  "homeActionStartQrConfigRequired": "Бу сессияни бошлаш учун Созламаларда камида битта QR кодни уланг.",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",

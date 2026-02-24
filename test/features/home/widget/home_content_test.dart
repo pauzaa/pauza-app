@@ -123,6 +123,30 @@ void main() {
       addTearDown(modesBloc.close);
       addTearDown(blockingBloc.close);
     });
+
+    testWidgets('shows toast for start configuration validation errors', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 3000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final modesBloc = _TestModesListBloc();
+      final blockingBloc = _TestBlockingBloc();
+
+      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
+      await tester.pump();
+
+      blockingBloc.emitForTest(const BlockingState.initial().setError(const NfcStartConfigurationMissingError()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(find.text('To start this session, link at least one NFC tag in Settings.'), findsOneWidget);
+
+      blockingBloc.emitForTest(const BlockingState.initial().setError(const QrStartConfigurationMissingError()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(find.text('To start this session, link at least one QR code in Settings.'), findsOneWidget);
+
+      addTearDown(modesBloc.close);
+      addTearDown(blockingBloc.close);
+    });
   });
 }
 
@@ -286,6 +310,9 @@ final class _NoopNfcLinkedChipsRepository implements NfcLinkedChipsRepository {
   Future<bool> hasChip({required NfcChipIdentifier chipIdentifier}) async => true;
 
   @override
+  Future<bool> hasLinkedChips() async => true;
+
+  @override
   Future<bool> linkChipIfAbsent({required NfcChipIdentifier chipIdentifier}) async => true;
 
   @override
@@ -308,6 +335,9 @@ final class _NoopQrLinkedCodesRepository implements QrLinkedCodesRepository {
 
   @override
   Future<bool> hasScanValue({required String scanValue}) async => true;
+
+  @override
+  Future<bool> hasLinkedCodes() async => true;
 
   @override
   Future<void> renameCode({required String id, required String name}) async {}

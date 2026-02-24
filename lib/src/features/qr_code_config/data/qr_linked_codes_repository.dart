@@ -16,6 +16,8 @@ abstract interface class QrLinkedCodesRepository {
   Future<void> renameCode({required String id, required String name});
 
   Future<bool> hasScanValue({required String scanValue});
+
+  Future<bool> hasLinkedCodes();
 }
 
 final class QrLinkedCodesRepositoryImpl implements QrLinkedCodesRepository {
@@ -128,6 +130,12 @@ WHERE id = ?
     final rows = await _localDatabase.rawQuery('SELECT 1 FROM qr_linked_codes WHERE scan_value = ? LIMIT 1', [
       token.normalized,
     ]);
+    return rows.isNotEmpty;
+  }
+
+  @override
+  Future<bool> hasLinkedCodes() async {
+    final rows = await _localDatabase.rawQuery('SELECT 1 FROM qr_linked_codes LIMIT 1');
     return rows.isNotEmpty;
   }
 

@@ -5,7 +5,7 @@ enum UsageCategoryBucket {
   productivity,
   other;
 
-  Color getColorForFonutBucket(ColorScheme colorScheme) {
+  Color colorForBucket(ColorScheme colorScheme) {
     return switch (this) {
       UsageCategoryBucket.social => colorScheme.primary,
       UsageCategoryBucket.productivity => colorScheme.onSurfaceVariant,

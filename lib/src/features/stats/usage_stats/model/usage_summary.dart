@@ -33,6 +33,15 @@ class UsageSummary {
     required this.trend,
   });
 
+  /// Builds a [UsageSummary] from [current] and [previous] usage lists.
+  ///
+  /// **Trend attribution note:** when [current] spans multiple days (e.g. a
+  /// 7-day window), the UsageStats API returns a single aggregated total per
+  /// app for the whole window. Each app's [totalDuration] is therefore
+  /// attributed entirely to the day of [UsageStats.lastTimeUsed]. This makes
+  /// [trend] data approximate for windows > 1 day — an app used on Monday and
+  /// Friday will show its entire usage on Friday. To get accurate day-level
+  /// data, issue one query per day in the window instead.
   factory UsageSummary.buildSummary({
     required IList<UsageStats> current,
     required IList<UsageStats> previous,

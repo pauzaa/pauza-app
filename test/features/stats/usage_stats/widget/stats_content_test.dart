@@ -8,14 +8,18 @@ import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_bloc.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_event.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
+import 'package:pauza/src/features/stats/usage_stats/model/app_engagement_insight.dart';
+import 'package:pauza/src/features/stats/usage_stats/model/device_usage_insights.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_tab_content.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 void main() {
   testWidgets('renders without crashing', (tester) async {
-    final bloc = StatsBloc(usageRepository: _WidgetStatsUsageRepository(), platform: PauzaPlatform.android)
-      ..add(const StatsStarted());
+    final bloc = StatsBloc(
+      usageRepository: _WidgetStatsUsageRepository(),
+      platform: PauzaPlatform.android,
+    )..add(const StatsStarted());
     addTearDown(bloc.close);
 
     await tester.pumpWidget(_TestApp(bloc: bloc));
@@ -51,7 +55,10 @@ class _TestApp extends StatelessWidget {
       theme: PauzaTheme.dark,
       home: Scaffold(
         body: SingleChildScrollView(
-          child: BlocProvider<StatsBloc>.value(value: bloc, child: const StatsUsageTabContent()),
+          child: BlocProvider<StatsBloc>.value(
+            value: bloc,
+            child: const StatsUsageTabContent(),
+          ),
         ),
       ),
     );
@@ -60,7 +67,11 @@ class _TestApp extends StatelessWidget {
 
 class _WidgetStatsUsageRepository implements StatsUsageRepository {
   @override
-  Future<IList<UsageStats>> getUsageStats({required DateTime start, required DateTime end}) async {
+  Future<IList<UsageStats>> getUsageStats({
+    required DateTime start,
+    required DateTime end,
+    bool includeIcons = false,
+  }) async {
     return <UsageStats>[
       UsageStats(
         appInfo: const AndroidAppInfo(
@@ -75,5 +86,68 @@ class _WidgetStatsUsageRepository implements StatsUsageRepository {
         lastTimeUsed: start,
       ),
     ].lock;
+  }
+
+  @override
+  Future<UsageStats?> getAppUsageStats({
+    required String packageId,
+    required DateTime start,
+    required DateTime end,
+    bool includeIcons = false,
+  }) async {
+    return null;
+  }
+
+  @override
+  Future<IList<UsageEvent>> getUsageEvents({
+    required DateTime start,
+    required DateTime end,
+    IList<UsageEventType>? eventTypes,
+  }) async {
+    return const IListConst<UsageEvent>(<UsageEvent>[]);
+  }
+
+  @override
+  Future<IList<DeviceEventStats>> getEventStats({
+    required DateTime start,
+    required DateTime end,
+    UsageStatsInterval interval = UsageStatsInterval.daily,
+  }) async {
+    return const IListConst<DeviceEventStats>(<DeviceEventStats>[]);
+  }
+
+  @override
+  Future<bool> isAppInactive({required String packageId}) async {
+    return false;
+  }
+
+  @override
+  Future<AppStandbyBucket> getAppStandbyBucket() async {
+    return AppStandbyBucket.active;
+  }
+
+  @override
+  Future<DeviceUsageInsights> getDeviceUsageInsights({
+    required DateTime start,
+    required DateTime end,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<IList<AppEngagementInsight>> getTopAppEngagementInsights({
+    required DateTime start,
+    required DateTime end,
+    int limit = 5,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<IMap<int, Duration>> getHourlyScreenTimeHeatmap({
+    required DateTime start,
+    required DateTime end,
+  }) {
+    throw UnimplementedError();
   }
 }

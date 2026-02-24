@@ -287,6 +287,11 @@
     }
   },
   "homeActionBlockedModeUnavailable": "Данные режима недоступны. Обновите состояние и попробуйте снова.",
+  "homeActionScenarioProofRequired": "Для этого действия нужно сканирование.",
+  "homeActionNfcMissingIdentifier": "Эта NFC-метка не может быть использована, потому что у нее нет идентификатора.",
+  "homeActionNfcNotLinked": "Эта NFC-метка не привязана. Используйте привязанную метку, чтобы продолжить.",
+  "homeActionQrInvalid": "Неверный QR-код. Попробуйте отсканировать привязанный QR-код Pauza.",
+  "homeActionQrNotLinked": "Этот QR-код не привязан. Используйте привязанный код, чтобы продолжить.",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",

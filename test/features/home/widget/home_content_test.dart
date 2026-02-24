@@ -20,6 +20,11 @@ import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenar
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
+import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
+import 'package:pauza/src/features/nfc_chip_config/data/nfc_linked_chips_repository.dart';
+import 'package:pauza/src/features/nfc_chip_config/model/nfc_linked_chip.dart';
+import 'package:pauza/src/features/qr_code_config/data/qr_linked_codes_repository.dart';
+import 'package:pauza/src/features/qr_code_config/model/qr_linked_code.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_snapshot.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_types.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
@@ -166,7 +171,13 @@ class _TestModesListBloc extends ModesListBloc {
 }
 
 class _TestBlockingBloc extends BlockingBloc {
-  _TestBlockingBloc() : super(blockingRepository: _NoopBlockingRepository(), modesRepository: _NoopModesRepository());
+  _TestBlockingBloc()
+    : super(
+        blockingRepository: _NoopBlockingRepository(),
+        modesRepository: _NoopModesRepository(),
+        nfcLinkedChipsRepository: const _NoopNfcLinkedChipsRepository(),
+        qrLinkedCodesRepository: const _NoopQrLinkedCodesRepository(),
+      );
 
   BlockingEvent? lastEvent;
 
@@ -260,6 +271,46 @@ class _NoopBlockingRepository implements BlockingRepository {
 
   @override
   void dispose() {}
+}
+
+final class _NoopNfcLinkedChipsRepository implements NfcLinkedChipsRepository {
+  const _NoopNfcLinkedChipsRepository();
+
+  @override
+  Future<void> deleteChip({required String id}) async {}
+
+  @override
+  Future<IList<NfcLinkedChip>> getLinkedChips() async => const IListConst<NfcLinkedChip>(<NfcLinkedChip>[]);
+
+  @override
+  Future<bool> hasChip({required NfcChipIdentifier chipIdentifier}) async => true;
+
+  @override
+  Future<bool> linkChipIfAbsent({required NfcChipIdentifier chipIdentifier}) async => true;
+
+  @override
+  Future<void> renameChip({required String id, required String name}) async {}
+}
+
+final class _NoopQrLinkedCodesRepository implements QrLinkedCodesRepository {
+  const _NoopQrLinkedCodesRepository();
+
+  @override
+  Future<void> deleteCode({required String id}) async {}
+
+  @override
+  Future<QrLinkedCode> generateAndLinkCode() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<IList<QrLinkedCode>> getLinkedCodes() async => const IListConst<QrLinkedCode>(<QrLinkedCode>[]);
+
+  @override
+  Future<bool> hasScanValue({required String scanValue}) async => true;
+
+  @override
+  Future<void> renameCode({required String id, required String name}) async {}
 }
 
 final class _NoopStreaksRepository implements StreaksRepository {

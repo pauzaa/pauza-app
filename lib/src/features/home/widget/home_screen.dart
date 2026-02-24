@@ -25,15 +25,18 @@ class HomeScreen extends StatelessWidget {
               ModesListBloc(modesRepository: rootScope.modesRepository)..add(const ModesListRequested()),
         ),
         BlocProvider(
-          create: (context) =>
-              BlockingBloc(blockingRepository: rootScope.blockingRepository, modesRepository: rootScope.modesRepository)
-                ..add(const BlockingSyncRequested()),
+          create: (context) => BlockingBloc(
+            blockingRepository: rootScope.blockingRepository,
+            modesRepository: rootScope.modesRepository,
+            nfcLinkedChipsRepository: rootScope.nfcLinkedChipsRepository,
+            qrLinkedCodesRepository: rootScope.qrLinkedCodesRepository,
+          )..add(const BlockingSyncRequested()),
         ),
         BlocProvider(
           create: (context) => HomeStatsBloc(
             streaksRepository: rootScope.streaksRepository,
             lifecycleActions: rootScope.blockingRepository.lifecycleActions,
-          ),
+          )..add(const HomeStatsLoadRequested()),
         ),
       ],
       child: const HomeContent(),

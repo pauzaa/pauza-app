@@ -919,6 +919,26 @@
   "@homeActionBlockedModeUnavailable": {
     "description": "Toast shown when active mode configuration cannot be resolved for validation."
   },
+  "homeActionScenarioProofRequired": "Scan is required for this action.",
+  "@homeActionScenarioProofRequired": {
+    "description": "Toast shown when stop or pause requires NFC or QR proof."
+  },
+  "homeActionNfcMissingIdentifier": "This NFC tag cannot be used because it has no identifier.",
+  "@homeActionNfcMissingIdentifier": {
+    "description": "Toast shown when scanned NFC tag does not include a stable identifier."
+  },
+  "homeActionNfcNotLinked": "This NFC tag is not linked. Use a linked tag to continue.",
+  "@homeActionNfcNotLinked": {
+    "description": "Toast shown when scanned NFC tag is not linked in settings."
+  },
+  "homeActionQrInvalid": "Invalid QR code. Try scanning a linked Pauza QR code.",
+  "@homeActionQrInvalid": {
+    "description": "Toast shown when scanned QR payload is malformed or unsupported."
+  },
+  "homeActionQrNotLinked": "This QR code is not linked. Use a linked code to continue.",
+  "@homeActionQrNotLinked": {
+    "description": "Toast shown when scanned QR code is valid but not linked in settings."
+  },
   "pausedTitle": "Paused",
   "@pausedTitle": {
     "description": "Title for the paused session."

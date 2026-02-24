@@ -21,16 +21,22 @@ final class BlockingStartRequested extends BlockingEvent {
 }
 
 final class BlockingStopRequested extends BlockingEvent {
-  const BlockingStopRequested();
+  const BlockingStopRequested({this.proof});
+
+  final BlockingActionProof? proof;
+
+  @override
+  List<Object?> get props => <Object?>[proof];
 }
 
 final class BlockingQuickPauseRequested extends BlockingEvent {
-  const BlockingQuickPauseRequested(this.duration);
+  const BlockingQuickPauseRequested(this.duration, {this.proof});
 
   final Duration duration;
+  final BlockingActionProof? proof;
 
   @override
-  List<Object?> get props => <Object?>[duration];
+  List<Object?> get props => <Object?>[duration, proof];
 }
 
 final class BlockingResumeRequested extends BlockingEvent {

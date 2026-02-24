@@ -33,3 +33,48 @@ final class MinimumDurationNotReachedError extends BlockingActionError {
     return localizations.homeActionBlockedByMinimumDuration(remaining.formatTimerHhMmSs());
   }
 }
+
+final class ScenarioProofRequiredError extends BlockingActionError {
+  const ScenarioProofRequiredError();
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.homeActionScenarioProofRequired;
+  }
+}
+
+final class NfcScanMissingIdentifierError extends BlockingActionError {
+  const NfcScanMissingIdentifierError();
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.homeActionNfcMissingIdentifier;
+  }
+}
+
+final class NfcChipNotLinkedError extends BlockingActionError {
+  const NfcChipNotLinkedError();
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.homeActionNfcNotLinked;
+  }
+}
+
+final class QrCodeInvalidError extends BlockingActionError {
+  const QrCodeInvalidError();
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.homeActionQrInvalid;
+  }
+}
+
+final class QrCodeNotLinkedError extends BlockingActionError {
+  const QrCodeNotLinkedError();
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.homeActionQrNotLinked;
+  }
+}

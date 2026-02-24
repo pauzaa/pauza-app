@@ -1382,6 +1382,36 @@ abstract class AppLocalizations {
   /// **'Mode data is unavailable. Please sync and try again.'**
   String get homeActionBlockedModeUnavailable;
 
+  /// Toast shown when stop or pause requires NFC or QR proof.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan is required for this action.'**
+  String get homeActionScenarioProofRequired;
+
+  /// Toast shown when scanned NFC tag does not include a stable identifier.
+  ///
+  /// In en, this message translates to:
+  /// **'This NFC tag cannot be used because it has no identifier.'**
+  String get homeActionNfcMissingIdentifier;
+
+  /// Toast shown when scanned NFC tag is not linked in settings.
+  ///
+  /// In en, this message translates to:
+  /// **'This NFC tag is not linked. Use a linked tag to continue.'**
+  String get homeActionNfcNotLinked;
+
+  /// Toast shown when scanned QR payload is malformed or unsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid QR code. Try scanning a linked Pauza QR code.'**
+  String get homeActionQrInvalid;
+
+  /// Toast shown when scanned QR code is valid but not linked in settings.
+  ///
+  /// In en, this message translates to:
+  /// **'This QR code is not linked. Use a linked code to continue.'**
+  String get homeActionQrNotLinked;
+
   /// Title for the paused session.
   ///
   /// In en, this message translates to:

@@ -732,6 +732,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeActionBlockedModeUnavailable => 'Данные режима недоступны. Обновите состояние и попробуйте снова.';
 
   @override
+  String get homeActionScenarioProofRequired => 'Для этого действия нужно сканирование.';
+
+  @override
+  String get homeActionNfcMissingIdentifier =>
+      'Эта NFC-метка не может быть использована, потому что у нее нет идентификатора.';
+
+  @override
+  String get homeActionNfcNotLinked => 'Эта NFC-метка не привязана. Используйте привязанную метку, чтобы продолжить.';
+
+  @override
+  String get homeActionQrInvalid => 'Неверный QR-код. Попробуйте отсканировать привязанный QR-код Pauza.';
+
+  @override
+  String get homeActionQrNotLinked => 'Этот QR-код не привязан. Используйте привязанный код, чтобы продолжить.';
+
+  @override
   String get pausedTitle => 'Paused';
 
   @override

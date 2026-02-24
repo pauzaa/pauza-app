@@ -732,6 +732,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeActionBlockedModeUnavailable => 'Mode data is unavailable. Please sync and try again.';
 
   @override
+  String get homeActionScenarioProofRequired => 'Scan is required for this action.';
+
+  @override
+  String get homeActionNfcMissingIdentifier => 'This NFC tag cannot be used because it has no identifier.';
+
+  @override
+  String get homeActionNfcNotLinked => 'This NFC tag is not linked. Use a linked tag to continue.';
+
+  @override
+  String get homeActionQrInvalid => 'Invalid QR code. Try scanning a linked Pauza QR code.';
+
+  @override
+  String get homeActionQrNotLinked => 'This QR code is not linked. Use a linked code to continue.';
+
+  @override
   String get pausedTitle => 'Paused';
 
   @override

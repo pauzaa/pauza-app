@@ -49,6 +49,8 @@
 	<true/>
 	<key>NFCReaderUsageDescription</key>
 	<string>Pauza uses NFC to scan supported tags when you start NFC-based actions.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Pauza uses your camera to scan linked QR codes for ending or pausing sessions.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>

@@ -287,6 +287,11 @@
     }
   },
   "homeActionBlockedModeUnavailable": "Rejim ma'lumotlari mavjud emas. Sinxronlab, qayta urinib ko'ring.",
+  "homeActionScenarioProofRequired": "Bu amal uchun skanerlash talab qilinadi.",
+  "homeActionNfcMissingIdentifier": "Bu NFC tegdan foydalanib bo'lmaydi, chunki unda identifikator yo'q.",
+  "homeActionNfcNotLinked": "Bu NFC teg ulanmagan. Davom etish uchun ulangan tegdan foydalaning.",
+  "homeActionQrInvalid": "Yaroqsiz QR kod. Ulangan Pauza QR kodini skanerlab ko'ring.",
+  "homeActionQrNotLinked": "Bu QR kod ulanmagan. Davom etish uchun ulangan koddan foydalaning.",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",

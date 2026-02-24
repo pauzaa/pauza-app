@@ -287,6 +287,11 @@
     }
   },
   "homeActionBlockedModeUnavailable": "Режим маълумотлари мавжуд эмас. Синхронлаб, қайта уриниб кўринг.",
+  "homeActionScenarioProofRequired": "Бу амал учун сканерлаш талаб қилинади.",
+  "homeActionNfcMissingIdentifier": "Бу NFC тегдан фойдаланиб бўлмайди, чунки унда идентификатор йўқ.",
+  "homeActionNfcNotLinked": "Бу NFC тег уланмаган. Давом этиш учун уланган тегдан фойдаланинг.",
+  "homeActionQrInvalid": "Яроқсиз QR код. Уланган Pauza QR кодини сканерлаб кўринг.",
+  "homeActionQrNotLinked": "Бу QR код уланмаган. Давом этиш учун уланган коддан фойдаланинг.",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",

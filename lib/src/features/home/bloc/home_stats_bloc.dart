@@ -25,8 +25,6 @@ class HomeStatsBloc extends Bloc<HomeStatsEvent, HomeStatsState> {
       }
       add(HomeStatsLifecycleActionReceived(action));
     });
-
-    add(const HomeStatsLoadRequested());
   }
 
   final StreaksRepository _streaksRepository;

@@ -3,11 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/home/model/blocking_action_error.dart';
+import 'package:pauza/src/features/home/model/blocking_action_proof.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
+import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
+import 'package:pauza/src/features/nfc_chip_config/data/nfc_linked_chips_repository.dart';
+import 'package:pauza/src/features/nfc_chip_config/model/nfc_linked_chip.dart';
+import 'package:pauza/src/features/qr_code_config/data/qr_linked_codes_repository.dart';
+import 'package:pauza/src/features/qr_code_config/model/qr_linked_code.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 void main() {
@@ -23,7 +29,7 @@ void main() {
         ),
       );
       final modesRepository = _FakeModesRepository();
-      final bloc = BlockingBloc(blockingRepository: repository, modesRepository: modesRepository);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository);
       final emitted = <BlockingState>[];
       final sub = bloc.stream.listen(emitted.add);
 
@@ -49,7 +55,7 @@ void main() {
         ),
       );
       final modesRepository = _FakeModesRepository();
-      final bloc = BlockingBloc(blockingRepository: repository, modesRepository: modesRepository);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository);
 
       bloc.add(const BlockingSyncRequested());
       await Future<void>.delayed(const Duration(milliseconds: 20));
@@ -78,7 +84,7 @@ void main() {
         restrictionState: _restrictionState(activeModeId: 'mode-1', startedAt: startedAt),
       );
       final modesRepository = _FakeModesRepository();
-      final bloc = BlockingBloc(blockingRepository: repository, modesRepository: modesRepository);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository);
 
       bloc.add(const BlockingSyncRequested());
       await Future<void>.delayed(const Duration(milliseconds: 20));
@@ -106,7 +112,7 @@ void main() {
         ),
       );
       final modesRepository = _FakeModesRepository();
-      final bloc = BlockingBloc(blockingRepository: repository, modesRepository: modesRepository);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository);
       final emitted = <BlockingState>[];
       final sub = bloc.stream.listen(emitted.add);
 
@@ -135,7 +141,7 @@ void main() {
         ),
       );
       final modesRepository = _FakeModesRepository();
-      final bloc = BlockingBloc(blockingRepository: repository, modesRepository: modesRepository);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository);
 
       bloc.add(const BlockingSyncRequested());
       await Future<void>.delayed(const Duration(milliseconds: 20));
@@ -159,7 +165,7 @@ void main() {
         restrictionState: _restrictionState(activeModeId: 'mode-1', startedAt: DateTime.now().toUtc()),
       )..pauseError = const PauseLimitReachedError();
       final modesRepository = _FakeModesRepository();
-      final bloc = BlockingBloc(blockingRepository: repository, modesRepository: modesRepository);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository);
 
       bloc.add(const BlockingSyncRequested());
       await Future<void>.delayed(const Duration(milliseconds: 20));
@@ -181,7 +187,7 @@ void main() {
         restrictionState: _restrictionState(activeModeId: 'missing-mode', startedAt: DateTime.now().toUtc()),
       );
       final modesRepository = _FakeModesRepository(shouldThrowOnGetMode: true);
-      final bloc = BlockingBloc(blockingRepository: repository, modesRepository: modesRepository);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository);
 
       final emitted = <BlockingState>[];
       final sub = bloc.stream.listen(emitted.add);
@@ -194,7 +200,153 @@ void main() {
       await sub.cancel();
       await bloc.close();
     });
+
+    test('nfc scenario requires scan proof', () async {
+      final repository = _FakeBlockingRepository(
+        restrictionState: _restrictionState(activeModeId: 'mode-1', startedAt: DateTime.now().toUtc()),
+      );
+      final modesRepository = _FakeModesRepository(mode: _modeFor(ModeEndingPausingScenario.nfc));
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository);
+      final emitted = <BlockingState>[];
+      final sub = bloc.stream.listen(emitted.add);
+
+      bloc.add(const BlockingSyncRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const BlockingQuickPauseRequested(Duration(minutes: 5)));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(emitted.last.error, isA<ScenarioProofRequiredError>());
+      expect(repository.pauseDurations, isEmpty);
+
+      await sub.cancel();
+      await bloc.close();
+    });
+
+    test('nfc scenario rejects unlinked chip', () async {
+      final repository = _FakeBlockingRepository(
+        restrictionState: _restrictionState(activeModeId: 'mode-1', startedAt: DateTime.now().toUtc()),
+      );
+      final modesRepository = _FakeModesRepository(mode: _modeFor(ModeEndingPausingScenario.nfc));
+      const nfcRepository = _FakeNfcLinkedChipsRepository(hasChipResult: false);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository, nfcRepository: nfcRepository);
+      final emitted = <BlockingState>[];
+      final sub = bloc.stream.listen(emitted.add);
+
+      bloc.add(const BlockingSyncRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(
+        BlockingQuickPauseRequested(
+          const Duration(minutes: 5),
+          proof: NfcActionProof(chipIdentifier: NfcChipIdentifier.parse('a1b2')),
+        ),
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(emitted.last.error, isA<NfcChipNotLinkedError>());
+      expect(repository.pauseDurations, isEmpty);
+
+      await sub.cancel();
+      await bloc.close();
+    });
+
+    test('nfc scenario accepts linked chip', () async {
+      final repository = _FakeBlockingRepository(
+        restrictionState: _restrictionState(activeModeId: 'mode-1', startedAt: DateTime.now().toUtc()),
+      );
+      final modesRepository = _FakeModesRepository(mode: _modeFor(ModeEndingPausingScenario.nfc));
+      const nfcRepository = _FakeNfcLinkedChipsRepository(hasChipResult: true);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository, nfcRepository: nfcRepository);
+
+      bloc.add(const BlockingSyncRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(
+        BlockingQuickPauseRequested(
+          const Duration(minutes: 5),
+          proof: NfcActionProof(chipIdentifier: NfcChipIdentifier.parse('a1b2')),
+        ),
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(repository.pauseDurations, <Duration>[const Duration(minutes: 5)]);
+
+      await bloc.close();
+    });
+
+    test('qr scenario rejects invalid payload', () async {
+      final repository = _FakeBlockingRepository(
+        restrictionState: _restrictionState(activeModeId: 'mode-1', startedAt: DateTime.now().toUtc()),
+      );
+      final modesRepository = _FakeModesRepository(mode: _modeFor(ModeEndingPausingScenario.qrCode));
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository);
+      final emitted = <BlockingState>[];
+      final sub = bloc.stream.listen(emitted.add);
+
+      bloc.add(const BlockingSyncRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const BlockingStopRequested(proof: QrActionProof(rawValue: 'bad-value')));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(emitted.last.error, isA<QrCodeInvalidError>());
+      expect(repository.stopCallCount, 0);
+
+      await sub.cancel();
+      await bloc.close();
+    });
+
+    test('qr scenario rejects non-linked code', () async {
+      final repository = _FakeBlockingRepository(
+        restrictionState: _restrictionState(activeModeId: 'mode-1', startedAt: DateTime.now().toUtc()),
+      );
+      final modesRepository = _FakeModesRepository(mode: _modeFor(ModeEndingPausingScenario.qrCode));
+      const qrRepository = _FakeQrLinkedCodesRepository(hasScanValueResult: false);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository, qrRepository: qrRepository);
+      final emitted = <BlockingState>[];
+      final sub = bloc.stream.listen(emitted.add);
+
+      bloc.add(const BlockingSyncRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const BlockingStopRequested(proof: QrActionProof(rawValue: _validQrToken)));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(emitted.last.error, isA<QrCodeNotLinkedError>());
+      expect(repository.stopCallCount, 0);
+
+      await sub.cancel();
+      await bloc.close();
+    });
+
+    test('qr scenario accepts linked code', () async {
+      final repository = _FakeBlockingRepository(
+        restrictionState: _restrictionState(activeModeId: 'mode-1', startedAt: DateTime.now().toUtc()),
+      );
+      final modesRepository = _FakeModesRepository(mode: _modeFor(ModeEndingPausingScenario.qrCode));
+      const qrRepository = _FakeQrLinkedCodesRepository(hasScanValueResult: true);
+      final bloc = _createBloc(repository: repository, modesRepository: modesRepository, qrRepository: qrRepository);
+
+      bloc.add(const BlockingSyncRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      bloc.add(const BlockingStopRequested(proof: QrActionProof(rawValue: _validQrToken)));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(repository.stopCallCount, 1);
+
+      await bloc.close();
+    });
   });
+}
+
+BlockingBloc _createBloc({
+  required BlockingRepository repository,
+  required ModesRepository modesRepository,
+  NfcLinkedChipsRepository? nfcRepository,
+  QrLinkedCodesRepository? qrRepository,
+}) {
+  return BlockingBloc(
+    blockingRepository: repository,
+    modesRepository: modesRepository,
+    nfcLinkedChipsRepository: nfcRepository ?? const _FakeNfcLinkedChipsRepository(hasChipResult: true),
+    qrLinkedCodesRepository: qrRepository ?? const _FakeQrLinkedCodesRepository(hasScanValueResult: true),
+  );
 }
 
 class _FakeBlockingRepository implements BlockingRepository {
@@ -268,9 +420,10 @@ class _FakeBlockingRepository implements BlockingRepository {
 }
 
 class _FakeModesRepository implements ModesRepository {
-  _FakeModesRepository({this.shouldThrowOnGetMode = false});
+  _FakeModesRepository({this.shouldThrowOnGetMode = false, Mode? mode}) : _mode = mode ?? _defaultMode;
 
   final bool shouldThrowOnGetMode;
+  final Mode _mode;
 
   @override
   Future<void> createMode(ModeUpsertDTO request) async {}
@@ -298,7 +451,7 @@ class _FakeModesRepository implements ModesRepository {
   @override
   void dispose() {}
 
-  static final Mode _mode = Mode(
+  static final Mode _defaultMode = Mode(
     id: 'mode-1',
     title: 'Mode',
     textOnScreen: 'Focus',
@@ -313,6 +466,56 @@ class _FakeModesRepository implements ModesRepository {
     updatedAt: DateTime(2026, 2, 20).toUtc(),
   );
 }
+
+final class _FakeNfcLinkedChipsRepository implements NfcLinkedChipsRepository {
+  const _FakeNfcLinkedChipsRepository({required this.hasChipResult});
+
+  final bool hasChipResult;
+
+  @override
+  Future<void> deleteChip({required String id}) async {}
+
+  @override
+  Future<IList<NfcLinkedChip>> getLinkedChips() async => const IListConst<NfcLinkedChip>(<NfcLinkedChip>[]);
+
+  @override
+  Future<bool> hasChip({required NfcChipIdentifier chipIdentifier}) async => hasChipResult;
+
+  @override
+  Future<bool> linkChipIfAbsent({required NfcChipIdentifier chipIdentifier}) async => true;
+
+  @override
+  Future<void> renameChip({required String id, required String name}) async {}
+}
+
+final class _FakeQrLinkedCodesRepository implements QrLinkedCodesRepository {
+  const _FakeQrLinkedCodesRepository({required this.hasScanValueResult});
+
+  final bool hasScanValueResult;
+
+  @override
+  Future<void> deleteCode({required String id}) async {}
+
+  @override
+  Future<QrLinkedCode> generateAndLinkCode() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<IList<QrLinkedCode>> getLinkedCodes() async => const IListConst<QrLinkedCode>(<QrLinkedCode>[]);
+
+  @override
+  Future<bool> hasScanValue({required String scanValue}) async => hasScanValueResult;
+
+  @override
+  Future<void> renameCode({required String id, required String name}) async {}
+}
+
+Mode _modeFor(ModeEndingPausingScenario scenario) {
+  return _FakeModesRepository._defaultMode.copyWith(endingPausingScenario: scenario);
+}
+
+const String _validQrToken = 'pauza:qr:v1:123e4567-e89b-42d3-a456-426614174000';
 
 RestrictionState _restrictionState({required String? activeModeId, DateTime? startedAt, DateTime? pausedUntil}) {
   final currentSessionEvents = startedAt == null || activeModeId == null

@@ -732,6 +732,21 @@ class AppLocalizationsUz extends AppLocalizations {
   String get homeActionBlockedModeUnavailable => 'Rejim ma\'lumotlari mavjud emas. Sinxronlab, qayta urinib ko\'ring.';
 
   @override
+  String get homeActionScenarioProofRequired => 'Bu amal uchun skanerlash talab qilinadi.';
+
+  @override
+  String get homeActionNfcMissingIdentifier => 'Bu NFC tegdan foydalanib bo\'lmaydi, chunki unda identifikator yo\'q.';
+
+  @override
+  String get homeActionNfcNotLinked => 'Bu NFC teg ulanmagan. Davom etish uchun ulangan tegdan foydalaning.';
+
+  @override
+  String get homeActionQrInvalid => 'Yaroqsiz QR kod. Ulangan Pauza QR kodini skanerlab ko\'ring.';
+
+  @override
+  String get homeActionQrNotLinked => 'Bu QR kod ulanmagan. Davom etish uchun ulangan koddan foydalaning.';
+
+  @override
   String get pausedTitle => 'Paused';
 
   @override
@@ -1492,6 +1507,21 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
 
   @override
   String get homeActionBlockedModeUnavailable => 'Режим маълумотлари мавжуд эмас. Синхронлаб, қайта уриниб кўринг.';
+
+  @override
+  String get homeActionScenarioProofRequired => 'Бу амал учун сканерлаш талаб қилинади.';
+
+  @override
+  String get homeActionNfcMissingIdentifier => 'Бу NFC тегдан фойдаланиб бўлмайди, чунки унда идентификатор йўқ.';
+
+  @override
+  String get homeActionNfcNotLinked => 'Бу NFC тег уланмаган. Давом этиш учун уланган тегдан фойдаланинг.';
+
+  @override
+  String get homeActionQrInvalid => 'Яроқсиз QR код. Уланган Pauza QR кодини сканерлаб кўринг.';
+
+  @override
+  String get homeActionQrNotLinked => 'Бу QR код уланмаган. Давом этиш учун уланган коддан фойдаланинг.';
 
   @override
   String get homeCurrentModeLabel => 'Жорий режим';

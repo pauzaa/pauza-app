@@ -39,7 +39,7 @@ class StatsDonutChart extends StatelessWidget {
 
     return PieChartSectionData(
       value: fallback,
-      color: bucket.getColorForFonutBucket(context.colorScheme),
+      color: bucket.colorForBucket(context.colorScheme),
       title: '',
       radius: 28,
     );

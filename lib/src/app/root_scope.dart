@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
+import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
-import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc_chip_config/data/nfc_linked_chips_repository.dart';
 import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
 import 'package:pauza/src/features/qr_code_config/data/qr_linked_codes_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
-import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
+import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 
 class RootScope extends StatefulWidget {
   const RootScope({required this.child, this.dependencies, super.key});
@@ -58,10 +58,7 @@ class RootScopeState extends State<RootScope> {
     installedAppsRepository = PauzaScreenTimeInstalledAppsRepository(
       installedAppsManager: dependencies.installedAppsManager,
     );
-    statsUsageRepository = StatsUsageRepositoryImpl(
-      usageStatsManager: dependencies.usageStatsManager,
-      installedAppsManager: dependencies.installedAppsManager,
-    );
+    statsUsageRepository = StatsUsageRepositoryImpl(usageStatsManager: dependencies.usageStatsManager);
 
     nfcRepository = dependencies.nfcRepository;
     hasNfcSupport = dependencies.hasNfcSupport;

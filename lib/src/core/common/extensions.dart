@@ -43,6 +43,9 @@ extension DurationNX on Duration? {
     if (duration == null) {
       return '--';
     }
+    if (duration > Duration.zero && duration < const Duration(minutes: 1)) {
+      return localizations.statsDurationLessThanMinute;
+    }
     final totalMinutes = duration.inMinutes;
     final hours = totalMinutes ~/ 60;
     final minutes = totalMinutes % 60;

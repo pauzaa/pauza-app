@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helm/helm.dart';
-import 'package:intl/intl.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
+import 'package:pauza/src/features/stats/common/widget/stats_date_range_picker_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_bloc.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_event.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_state.dart';
@@ -12,10 +12,11 @@ import 'package:pauza/src/features/stats/usage_stats/model/stats_section_status.
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_device_activity_insights_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_hourly_heatmap_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_inline_fallback_card.dart';
-import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_apps_table_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_ios_usage_report_card.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_section_state_content.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_top_engagement_apps_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_total_time_card.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_apps_table_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_trend_card.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
@@ -34,12 +35,9 @@ class StatsUsageTabContent extends StatelessWidget {
             return (dateTimeRange: state.window, maxDate: state.maxDate);
           },
           builder: (context, state) {
-            return PauzaDateRangePickerCard(
+            return StatsDateRangePickerCard(
               selectedRange: state.dateTimeRange,
-              minDate: DateTime(2020),
               maxDate: state.maxDate,
-              rangeTextBuilder: (range) =>
-                  '${DateFormat('MMM d').format(range.start)} - ${DateFormat('MMM d').format(range.end)}',
               onRangeChanged: (range) {
                 context.read<StatsBloc>().add(StatsDateRangePicked(range));
               },
@@ -83,20 +81,38 @@ class StatsUsageTabContent extends StatelessWidget {
                   children: <Widget>[
                     StatsTotalTimeCard(summary: summary),
                     StatsUsageTrendCard(summary: summary),
-                    if (state.deviceInsights case final deviceInsights?
-                        when state.deviceInsightsStatus == StatsSectionStatus.success)
-                      StatsDeviceActivityInsightsCard(insights: deviceInsights)
-                    else
-                      StatsInlineFallbackCard(
-                        title: l10n.statsDeviceInsights,
-                        message: state.deviceInsightsStatus.localize(l10n),
-                        actionLabel: state.deviceInsightsStatus == StatsSectionStatus.failure ? l10n.retryButton : null,
-                        onActionPressed: state.deviceInsightsStatus == StatsSectionStatus.failure
-                            ? () {
-                                context.read<StatsBloc>().add(const StatsRefreshRequested());
-                              }
-                            : null,
-                      ),
+                    StatsSectionStateContent(
+                      status: state.deviceInsightsStatus,
+                      successBuilder: (context) {
+                        if (state.deviceInsights case final deviceInsights?) {
+                          return StatsDeviceActivityInsightsCard(insights: deviceInsights);
+                        }
+                        return StatsInlineFallbackCard(
+                          title: l10n.statsDeviceInsights,
+                          message: l10n.statsNoInsightData,
+                        );
+                      },
+                      emptyBuilder: (context) {
+                        return StatsInlineFallbackCard(
+                          title: l10n.statsDeviceInsights,
+                          message: l10n.statsNoInsightData,
+                        );
+                      },
+                      failureBuilder: (context, onRetry) {
+                        return StatsInlineFallbackCard(
+                          title: l10n.statsDeviceInsights,
+                          message: StatsSectionStatus.failure.fallbackMessage(l10n)!,
+                          actionLabel: l10n.retryButton,
+                          onActionPressed: onRetry,
+                        );
+                      },
+                      loadingBuilder: (context) {
+                        return const SizedBox(height: 120, child: Center(child: CircularProgressIndicator()));
+                      },
+                      onRetry: () {
+                        context.read<StatsBloc>().add(const StatsRefreshRequested());
+                      },
+                    ),
                     StatsHourlyHeatmapCard(
                       status: state.heatmapStatus,
                       heatmap: state.hourlyHeatmap,
@@ -123,5 +139,4 @@ class StatsUsageTabContent extends StatelessWidget {
       ],
     );
   }
-
 }

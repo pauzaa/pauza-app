@@ -39,6 +39,8 @@ abstract interface class StatsUsageRepository {
     int limit = 5,
   });
 
+  Future<IMap<DateTime, Duration>> getDailyUsageDurations({required DateTime start, required DateTime end});
+
   Future<IMap<int, Duration>> getHourlyScreenTimeHeatmap({required DateTime start, required DateTime end});
 }
 
@@ -59,13 +61,8 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
     required DateTime start,
     required DateTime end,
     bool includeIcons = false,
-  }) async {
-    final usage = await _usageStatsManager.getUsageStats(startDate: start, endDate: end, includeIcons: includeIcons);
-
-    return usage
-        .where((stat) => stat.totalDuration > Duration.zero)
-        .toIList()
-        .sort((a, b) => b.totalDuration.compareTo(a.totalDuration));
+  }) {
+    return _fetchNormalizedUsageStats(start: start, end: end, includeIcons: includeIcons);
   }
 
   @override
@@ -130,7 +127,6 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
     final DateTime? lastUnlockAt;
 
     if (source == DeviceUsageInsightsSource.eventStats && eventStats != null) {
-      // Index the event-stats once to avoid O(n) scans per lookup.
       final statsMap = Map<UsageEventType, DeviceEventStats>.fromEntries(
         eventStats.map((s) => MapEntry(s.eventType, s)),
       );
@@ -139,11 +135,9 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
       pickupCount = statsMap[UsageEventType.screenInteractive]?.count ?? 0;
       screenOnDuration = statsMap[UsageEventType.screenInteractive]?.totalTime ?? Duration.zero;
       unlockedDuration = statsMap[UsageEventType.keyguardHidden]?.totalTime ?? Duration.zero;
-      // Derive timestamps from the event-stats model — no extra IPC call needed.
       firstUnlockAt = statsMap[UsageEventType.keyguardHidden]?.firstTimestamp;
       lastUnlockAt = statsMap[UsageEventType.keyguardHidden]?.lastTimestamp;
     } else {
-      // Fallback path: compute everything from raw usage events.
       final relevantEvents = fallbackEvents!;
       final unlockEvents = relevantEvents
           .where((event) => event.eventType == UsageEventType.keyguardHidden)
@@ -179,7 +173,6 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
       pickupCount: pickupCount,
       screenOnDuration: screenOnDuration,
       unlockedDuration: unlockedDuration,
-      // Returns null (not a fabricated value) when there are no pickups.
       screenOnSessionAverage: pickupCount <= 0
           ? null
           : Duration(milliseconds: screenOnDuration.inMilliseconds ~/ pickupCount),
@@ -203,10 +196,6 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
     final usageStats = await getUsageStats(start: start, end: end);
     final windowHours = _windowHours(start: start, end: end);
 
-    // getUsageStats guarantees totalDuration > zero, so no extra filter is needed.
-    // Engagement score: both dimensions are normalized to [0, 1] relative to the
-    // window's max values so they are on the same scale.
-    // Score = 0.4 * (duration / maxDuration) + 0.6 * (launches / maxLaunches)
     final maxDuration = usageStats.fold<int>(1, (m, u) => math.max(m, u.totalDuration.inMilliseconds));
     final maxLaunches = usageStats.fold<int>(1, (m, u) => math.max(m, u.totalLaunchCount));
 
@@ -229,8 +218,24 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
         .toIList()
         .sort((a, b) => b.engagementScore.compareTo(a.engagementScore));
 
-    // take() on a list shorter than limit is a no-op — no branch needed.
     return insights.take(limit).toIList();
+  }
+
+  @override
+  Future<IMap<DateTime, Duration>> getDailyUsageDurations({required DateTime start, required DateTime end}) async {
+    final result = <DateTime, Duration>{};
+    final startDay = _dayStart(start);
+    final endDay = _dayStart(end);
+
+    for (var day = startDay; !day.isAfter(endDay); day = day.add(const Duration(days: 1))) {
+      final dayStart = day;
+      final dayEnd = _minDateTime(_dayEnd(day), end);
+      final dayUsage = await _fetchNormalizedUsageStats(start: dayStart, end: dayEnd, includeIcons: false);
+      final total = dayUsage.fold<Duration>(Duration.zero, (sum, item) => sum + item.totalDuration);
+      result[dayStart] = total;
+    }
+
+    return IMap<DateTime, Duration>(result);
   }
 
   @override
@@ -250,8 +255,6 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
       return _accumulateDurationsByHour(intervals: intervals, start: start, end: end);
     }
 
-    // Fallback: event-level data unavailable. Spread each app's total duration
-    // evenly across all 24 hours as an approximation.
     final fallbackUsageStats = await getUsageStats(start: start, end: end);
     final buckets = _emptyHeatmapBuckets();
     for (final usage in fallbackUsageStats) {
@@ -264,6 +267,49 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
       }
     }
     return buckets.lock;
+  }
+
+  Future<IList<UsageStats>> _fetchNormalizedUsageStats({
+    required DateTime start,
+    required DateTime end,
+    required bool includeIcons,
+  }) async {
+    final usage = await _usageStatsManager.getUsageStats(startDate: start, endDate: end, includeIcons: includeIcons);
+    return _normalizeUsageStats(usage.toIList());
+  }
+
+  IList<UsageStats> _normalizeUsageStats(IList<UsageStats> rawUsageStats) {
+    final byIdentity = <String, _UsageAggregation>{};
+
+    for (final stat in rawUsageStats) {
+      if (stat.totalDuration <= Duration.zero) {
+        continue;
+      }
+      final key = stat.appInfo.identifier.raw;
+      final existing = byIdentity[key];
+      if (existing == null) {
+        byIdentity[key] = _UsageAggregation.from(stat);
+        continue;
+      }
+      byIdentity[key] = existing.merge(stat);
+    }
+
+    return byIdentity.values
+        .map((aggregation) => aggregation.toUsageStats())
+        .toIList()
+        .sort((a, b) {
+          final duration = b.totalDuration.compareTo(a.totalDuration);
+          if (duration != 0) {
+            return duration;
+          }
+
+          final launches = b.totalLaunchCount.compareTo(a.totalLaunchCount);
+          if (launches != 0) {
+            return launches;
+          }
+
+          return a.appInfo.identifier.raw.compareTo(b.appInfo.identifier.raw);
+        });
   }
 
   Future<(IList<DeviceEventStats>?, IList<UsageEvent>?, DeviceUsageInsightsSource)> _safeGetEventStatsOrFallback({
@@ -285,12 +331,28 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
     required DateTime end,
   }) {
     final byTimestamp = events.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-    final activeStartByPackage = <String, DateTime>{};
     final intervals = <({DateTime start, DateTime end})>[];
+
+    String? activePackage;
+    DateTime? activeStart;
+
+    void closeActiveAt(DateTime closeTime) {
+      if (activeStart == null) {
+        return;
+      }
+      final clipped = _clipInterval(start: activeStart!, end: closeTime, min: start, max: end);
+      if (clipped != null) {
+        intervals.add(clipped);
+      }
+      activeStart = null;
+      activePackage = null;
+    }
 
     for (final event in byTimestamp) {
       if (event.eventType == UsageEventType.activityResumed) {
-        activeStartByPackage[event.packageName] = event.timestamp;
+        closeActiveAt(event.timestamp);
+        activePackage = event.packageName;
+        activeStart = _maxDateTime(event.timestamp, start);
         continue;
       }
 
@@ -300,18 +362,13 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
         continue;
       }
 
-      final activeStart = activeStartByPackage.remove(event.packageName);
-      if (activeStart == null) {
-        continue;
-      }
-      final clipped = _clipInterval(start: activeStart, end: event.timestamp, min: start, max: end);
-      if (clipped != null) {
-        intervals.add(clipped);
+      if (activePackage == event.packageName) {
+        closeActiveAt(event.timestamp);
       }
     }
 
-    for (final activeStart in activeStartByPackage.values) {
-      final clipped = _clipInterval(start: activeStart, end: end, min: start, max: end);
+    if (activeStart != null) {
+      final clipped = _clipInterval(start: activeStart!, end: end, min: start, max: end);
       if (clipped != null) {
         intervals.add(clipped);
       }
@@ -327,8 +384,6 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
   }) {
     final buckets = _emptyHeatmapBuckets();
 
-    // Intervals are already clipped by _buildIntervalsFromUsageEvents — no
-    // need to clip again here.
     for (final interval in intervals) {
       var cursor = interval.start;
       final intervalEnd = interval.end;
@@ -358,9 +413,6 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
     for (final event in sortedEvents) {
       if (event.eventType == startType) {
         if (activeStart != null) {
-          // Two consecutive start events without an intervening end (e.g. a
-          // re-wake without a sleep). Close the previous interval at the new
-          // event's timestamp to avoid losing that time.
           final clippedEnd = event.timestamp.isBefore(end) ? event.timestamp : end;
           if (clippedEnd.isAfter(activeStart)) {
             total += clippedEnd.difference(activeStart);
@@ -416,5 +468,122 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
       return 1;
     }
     return minutes / 60;
+  }
+
+  DateTime _dayStart(DateTime value) {
+    return DateTime(value.year, value.month, value.day);
+  }
+
+  DateTime _dayEnd(DateTime value) {
+    return DateTime(value.year, value.month, value.day, 23, 59, 59, 999);
+  }
+
+  DateTime _minDateTime(DateTime a, DateTime b) {
+    return a.isBefore(b) ? a : b;
+  }
+
+  DateTime _maxDateTime(DateTime a, DateTime b) {
+    return a.isAfter(b) ? a : b;
+  }
+}
+
+final class _UsageAggregation {
+  const _UsageAggregation({
+    required this.appInfo,
+    required this.totalDuration,
+    required this.totalLaunchCount,
+    required this.bucketStart,
+    required this.bucketEnd,
+    required this.lastTimeUsed,
+    required this.lastTimeVisible,
+  });
+
+  factory _UsageAggregation.from(UsageStats usage) {
+    return _UsageAggregation(
+      appInfo: usage.appInfo,
+      totalDuration: usage.totalDuration,
+      totalLaunchCount: usage.totalLaunchCount,
+      bucketStart: usage.bucketStart,
+      bucketEnd: usage.bucketEnd,
+      lastTimeUsed: usage.lastTimeUsed,
+      lastTimeVisible: usage.lastTimeVisible,
+    );
+  }
+
+  final AndroidAppInfo appInfo;
+  final Duration totalDuration;
+  final int totalLaunchCount;
+  final DateTime? bucketStart;
+  final DateTime? bucketEnd;
+  final DateTime? lastTimeUsed;
+  final DateTime? lastTimeVisible;
+
+  _UsageAggregation merge(UsageStats next) {
+    return _UsageAggregation(
+      appInfo: _pickPreferredAppInfo(current: appInfo, candidate: next.appInfo),
+      totalDuration: totalDuration + next.totalDuration,
+      totalLaunchCount: totalLaunchCount + next.totalLaunchCount,
+      bucketStart: _minNullableDateTime(bucketStart, next.bucketStart),
+      bucketEnd: _maxNullableDateTime(bucketEnd, next.bucketEnd),
+      lastTimeUsed: _maxNullableDateTime(lastTimeUsed, next.lastTimeUsed),
+      lastTimeVisible: _maxNullableDateTime(lastTimeVisible, next.lastTimeVisible),
+    );
+  }
+
+  UsageStats toUsageStats() {
+    return UsageStats(
+      appInfo: appInfo,
+      totalDuration: totalDuration,
+      totalLaunchCount: totalLaunchCount,
+      bucketStart: bucketStart,
+      bucketEnd: bucketEnd,
+      lastTimeUsed: lastTimeUsed,
+      lastTimeVisible: lastTimeVisible,
+    );
+  }
+
+  AndroidAppInfo _pickPreferredAppInfo({required AndroidAppInfo current, required AndroidAppInfo candidate}) {
+    final currentScore = _infoScore(current);
+    final candidateScore = _infoScore(candidate);
+
+    if (candidateScore > currentScore) {
+      return candidate;
+    }
+    if (candidateScore < currentScore) {
+      return current;
+    }
+
+    if (candidate.name.compareTo(current.name) < 0) {
+      return candidate;
+    }
+
+    return current;
+  }
+
+  int _infoScore(AndroidAppInfo info) {
+    final hasIcon = info.icon != null ? 4 : 0;
+    final hasCategory = (info.category?.isNotEmpty ?? false) ? 2 : 0;
+    final hasName = info.name.isNotEmpty ? 1 : 0;
+    return hasIcon + hasCategory + hasName;
+  }
+
+  DateTime? _minNullableDateTime(DateTime? a, DateTime? b) {
+    if (a == null) {
+      return b;
+    }
+    if (b == null) {
+      return a;
+    }
+    return a.isBefore(b) ? a : b;
+  }
+
+  DateTime? _maxNullableDateTime(DateTime? a, DateTime? b) {
+    if (a == null) {
+      return b;
+    }
+    if (b == null) {
+      return a;
+    }
+    return a.isAfter(b) ? a : b;
   }
 }

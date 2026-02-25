@@ -13,8 +13,8 @@ void main() {
       final database = _FakeLocalDatabase(
         sessionRows: <Map<String, Object?>>[
           {
-            'started_at': _utc(2026, 2, 10, 10).millisecondsSinceEpoch,
-            'ended_at': _utc(2026, 2, 10, 11).millisecondsSinceEpoch,
+            'started_at': _localUtcMs(2026, 2, 10, 10),
+            'ended_at': _localUtcMs(2026, 2, 10, 11),
             'pause_count': 2,
             'total_paused_ms': const Duration(minutes: 10).inMilliseconds,
           },
@@ -42,12 +42,41 @@ void main() {
       expect(snapshot.longestStreakDays, 8);
     });
 
+    test('includes overlapping sessions and clips to selected window', () async {
+      final database = _FakeLocalDatabase(
+        sessionRows: <Map<String, Object?>>[
+          {
+            'started_at': _localUtcMs(2026, 2, 10, 22),
+            'ended_at': _localUtcMs(2026, 2, 11, 2),
+            'pause_count': 1,
+            'total_paused_ms': const Duration(minutes: 60).inMilliseconds,
+          },
+        ],
+        dailyRows: const <Map<String, Object?>>[],
+      );
+
+      final repository = StatsBlockingRepositoryImpl(
+        localDatabase: database,
+        streaksRepository: _FakeStreaksRepository(streakDays: 0, longestDays: 0),
+      );
+
+      final snapshot = await repository.getBlockingSnapshot(
+        window: DateTimeRange(start: DateTime(2026, 2, 11), end: DateTime(2026, 2, 11)),
+        nowLocal: DateTime(2026, 2, 11),
+      );
+
+      // Overlap span is 2h (00:00-02:00). Paused is clipped proportionally (30m).
+      expect(snapshot.completedSessionsCount, 1);
+      expect(snapshot.totalEffectiveBlockedDuration, const Duration(hours: 1, minutes: 30));
+      expect(snapshot.totalPausedDuration, const Duration(minutes: 30));
+    });
+
     test('average pause duration is null when no pauses exist', () async {
       final database = _FakeLocalDatabase(
         sessionRows: <Map<String, Object?>>[
           {
-            'started_at': _utc(2026, 2, 10, 10).millisecondsSinceEpoch,
-            'ended_at': _utc(2026, 2, 10, 11).millisecondsSinceEpoch,
+            'started_at': _localUtcMs(2026, 2, 10, 10),
+            'ended_at': _localUtcMs(2026, 2, 10, 11),
             'pause_count': 0,
             'total_paused_ms': 0,
           },
@@ -69,12 +98,12 @@ void main() {
       expect(snapshot.averagePausesPerSession, 0);
     });
 
-    test('effective duration clamps to zero when paused exceeds span', () async {
+    test('effective duration clamps to zero when clipped paused exceeds overlap span', () async {
       final database = _FakeLocalDatabase(
         sessionRows: <Map<String, Object?>>[
           {
-            'started_at': _utc(2026, 2, 10, 10).millisecondsSinceEpoch,
-            'ended_at': _utc(2026, 2, 10, 10, 10).millisecondsSinceEpoch,
+            'started_at': _localUtcMs(2026, 2, 10, 10),
+            'ended_at': _localUtcMs(2026, 2, 10, 10, 10),
             'pause_count': 1,
             'total_paused_ms': const Duration(minutes: 30).inMilliseconds,
           },
@@ -96,7 +125,7 @@ void main() {
       expect(snapshot.longestRestrictionSessionDuration, Duration.zero);
     });
 
-    test('uses ended_at range bounds for session query', () async {
+    test('uses overlap bounds for session query', () async {
       final database = _FakeLocalDatabase(
         sessionRows: const <Map<String, Object?>>[],
         dailyRows: const <Map<String, Object?>>[],
@@ -111,8 +140,8 @@ void main() {
 
       await repository.getBlockingSnapshot(window: range, nowLocal: DateTime(2026, 2, 3, 23));
 
-      expect(database.lastSessionRangeStart, DateTime(2026, 2).toUtc().millisecondsSinceEpoch);
-      expect(database.lastSessionRangeEnd, DateTime(2026, 2, 3, 23, 59, 59, 999).toUtc().millisecondsSinceEpoch);
+      expect(database.lastSessionRangeStart, DateTime(2026, 2, 3, 23, 59, 59, 999).toUtc().millisecondsSinceEpoch);
+      expect(database.lastSessionRangeEnd, DateTime(2026, 2).toUtc().millisecondsSinceEpoch);
     });
 
     test('reads daily trend from streak_daily_aggregates table', () async {
@@ -142,8 +171,8 @@ void main() {
   });
 }
 
-DateTime _utc(int year, int month, int day, [int hour = 0, int minute = 0]) {
-  return DateTime.utc(year, month, day, hour, minute);
+int _localUtcMs(int year, int month, int day, [int hour = 0, int minute = 0]) {
+  return DateTime(year, month, day, hour, minute).toUtc().millisecondsSinceEpoch;
 }
 
 final class _FakeLocalDatabase implements LocalDatabase {

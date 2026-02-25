@@ -14,6 +14,7 @@ class StatsTopEngagementAppRow extends StatelessWidget {
     final score = (insight.engagementScore * 100).round();
     final scoreLabel = context.l10n.statsPercentValue('$score%');
     final launchesPerHour = context.l10n.statsLaunchesPerHourValue(insight.launchesPerHour.toStringAsFixed(1));
+    final averageSessionLabel = insight.averageSessionDuration.formatDurationLabel(context.l10n);
 
     return Semantics(
       label: context.l10n.statsEngagementRowSemantics(insight.appInfo.name, scoreLabel, launchesPerHour),
@@ -36,8 +37,7 @@ class StatsTopEngagementAppRow extends StatelessWidget {
                 Text('${context.l10n.statsEngagementScore}: $scoreLabel', style: context.textTheme.bodyMedium),
                 Text('${context.l10n.statsLaunchIntensity}: $launchesPerHour', style: context.textTheme.bodyMedium),
                 Text(
-                  '${context.l10n.statsAvgSession}: '
-                  '${insight.averageSessionDuration.formatDurationLabel(context.l10n)}',
+                  '${context.l10n.statsAvgSession}: $averageSessionLabel',
                   style: context.textTheme.bodyMedium,
                 ),
                 Text(

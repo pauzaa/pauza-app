@@ -5,19 +5,44 @@ import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 void main() {
   group('StatsUsageRepositoryImpl', () {
-    test('getUsageStats keeps filtering/sorting behavior and forwards includeIcons=false by default', () async {
+    test('getUsageStats deduplicates by app identity and keeps deterministic order', () async {
       final platform = _FakeUsageStatsPlatform()
         ..usageStatsResult = <UsageStats>[
-          _usage(packageId: 'zero', minutes: 0, launches: 5),
-          _usage(packageId: 'mid', minutes: 10, launches: 1),
-          _usage(packageId: 'top', minutes: 30, launches: 2),
+          _usage(packageId: 'a', minutes: 10, launches: 1, lastUsed: DateTime(2026, 2, 1, 10)),
+          _usage(packageId: 'b', minutes: 30, launches: 5, lastUsed: DateTime(2026, 2, 1, 9)),
+          _usage(packageId: 'a', minutes: 20, launches: 3, lastUsed: DateTime(2026, 2, 1, 12)),
+          _usage(packageId: 'zero', minutes: 0, launches: 7),
         ];
       final repository = _repository(platform);
 
       final result = await repository.getUsageStats(start: DateTime(2026, 2), end: DateTime(2026, 2, 2));
 
       expect(platform.lastGetUsageStatsIncludeIcons, isFalse);
-      expect(result.map((e) => e.appInfo.name).toList(), <String>['top', 'mid']);
+      expect(result.map((e) => e.appInfo.identifier.raw).toList(), <String>['b', 'a']);
+      expect(result.last.totalDuration, const Duration(minutes: 30));
+      expect(result.last.totalLaunchCount, 4);
+      expect(result.last.lastTimeUsed, DateTime(2026, 2, 1, 12));
+    });
+
+    test('getDailyUsageDurations performs explicit day-level aggregation', () async {
+      final platform = _FakeUsageStatsPlatform()
+        ..usageStatsByRangeStart = <int, List<UsageStats>>{
+          DateTime(2026, 2, 1).millisecondsSinceEpoch: <UsageStats>[
+            _usage(packageId: 'a', minutes: 30, launches: 2),
+          ],
+          DateTime(2026, 2, 2).millisecondsSinceEpoch: <UsageStats>[
+            _usage(packageId: 'a', minutes: 10, launches: 1),
+            _usage(packageId: 'b', minutes: 20, launches: 2),
+          ],
+        };
+      final repository = _repository(platform);
+
+      final daily = await repository.getDailyUsageDurations(start: DateTime(2026, 2, 1), end: DateTime(2026, 2, 2, 23));
+
+      expect(daily.length, 2);
+      expect(daily[DateTime(2026, 2, 1)], const Duration(minutes: 30));
+      expect(daily[DateTime(2026, 2, 2)], const Duration(minutes: 30));
+      expect(platform.getUsageStatsCallCount, 2);
     });
 
     test('direct passthrough APIs delegate to UsageStatsManager', () async {
@@ -55,7 +80,6 @@ void main() {
           _eventStat(type: UsageEventType.keyguardShown, count: 6, totalMinutes: 80),
           _eventStat(type: UsageEventType.screenInteractive, count: 8, totalMinutes: 180),
         ]
-        // These unlock events must NOT be fetched on the fast path.
         ..usageEventsResult = <UsageEvent>[
           _event(type: UsageEventType.keyguardHidden, at: DateTime(2026, 2, 1, 8)),
           _event(type: UsageEventType.keyguardHidden, at: DateTime(2026, 2, 2, 20)),
@@ -70,7 +94,6 @@ void main() {
       expect(insights.screenOnDuration, const Duration(minutes: 180));
       expect(insights.unlockedDuration, const Duration(minutes: 90));
       expect(insights.screenOnSessionAverage, const Duration(minutes: 22, seconds: 30));
-      // firstUnlockAt / lastUnlockAt come from DeviceEventStats.firstTimestamp / lastTimestamp.
       expect(insights.firstUnlockAt, DateTime(2026, 2));
       expect(insights.lastUnlockAt, DateTime(2026, 2, 2));
     });
@@ -84,7 +107,6 @@ void main() {
 
       await repository.getDeviceUsageInsights(start: DateTime(2026, 2), end: DateTime(2026, 2, 2));
 
-      // getUsageEvents must not be called when event-stats succeed — no double IPC.
       expect(platform.getUsageEventsCallCount, 0);
     });
 
@@ -112,7 +134,6 @@ void main() {
     test('getDeviceUsageInsights returns null screenOnSessionAverage when pickupCount is zero', () async {
       final platform = _FakeUsageStatsPlatform()
         ..eventStatsResult = <DeviceEventStats>[
-          // No screenInteractive stat → pickupCount == 0
           _eventStat(type: UsageEventType.keyguardHidden, count: 2, totalMinutes: 10),
         ];
       final repository = _repository(platform);
@@ -124,32 +145,26 @@ void main() {
     });
 
     test('_sumDurationBetweenEventPairs handles consecutive start events without losing time', () async {
-      // Two screenInteractive events in a row (no screenNonInteractive between them).
-      // The first session (09:00–10:00) should be closed and counted.
       final platform = _FakeUsageStatsPlatform()
         ..throwUnsupportedOnEventStats = true
         ..usageEventsResult = <UsageEvent>[
           _event(type: UsageEventType.screenInteractive, at: DateTime(2026, 2, 1, 9)),
-          _event(type: UsageEventType.screenInteractive, at: DateTime(2026, 2, 1, 10)), // re-wake
+          _event(type: UsageEventType.screenInteractive, at: DateTime(2026, 2, 1, 10)),
           _event(type: UsageEventType.screenNonInteractive, at: DateTime(2026, 2, 1, 10, 30)),
         ];
       final repository = _repository(platform);
 
-      // ignore: avoid_redundant_argument_values
       final insights = await repository.getDeviceUsageInsights(start: DateTime(2026, 2, 1), end: DateTime(2026, 2, 2));
 
-      // Session 1: 09:00–10:00 = 60 min (closed by the re-wake event)
-      // Session 2: 10:00–10:30 = 30 min
-      // Total = 90 min
       expect(insights.screenOnDuration, const Duration(minutes: 90));
     });
 
-    test('getTopAppEngagementInsights returns score-sorted insights', () async {
+    test('getTopAppEngagementInsights uses consolidated app usage for ranking', () async {
       final platform = _FakeUsageStatsPlatform()
         ..usageStatsResult = <UsageStats>[
-          _usage(packageId: 'a', minutes: 50, launches: 1),
-          _usage(packageId: 'b', minutes: 20, launches: 40),
-          _usage(packageId: 'c', minutes: 5, launches: 1),
+          _usage(packageId: 'a', minutes: 25, launches: 2),
+          _usage(packageId: 'a', minutes: 25, launches: 2),
+          _usage(packageId: 'b', minutes: 30, launches: 3),
         ];
       final repository = _repository(platform);
 
@@ -160,13 +175,9 @@ void main() {
       );
 
       expect(insights.length, 2);
-      // 'b' has the highest launch count (max launches) so it should rank first.
-      expect(insights.first.appInfo.name, 'b');
-      expect(insights.first.launchesPerHour, greaterThan(0));
-      // Engagement scores are normalized to [0, 1].
-      for (final insight in insights) {
-        expect(insight.engagementScore, inInclusiveRange(0.0, 1.0));
-      }
+      expect(insights.first.appInfo.name, 'a');
+      expect(insights.first.totalDuration, const Duration(minutes: 50));
+      expect(insights.first.totalLaunchCount, 4);
     });
 
     test('getHourlyScreenTimeHeatmap splits usage intervals across hourly buckets', () async {
@@ -186,6 +197,23 @@ void main() {
       expect(heatmap[9], const Duration(minutes: 10));
       expect(heatmap[10], const Duration(minutes: 10));
     });
+
+    test('getHourlyScreenTimeHeatmap does not double count interleaved app events', () async {
+      final platform = _FakeUsageStatsPlatform()
+        ..usageEventsResult = <UsageEvent>[
+          _appEvent(type: UsageEventType.activityResumed, at: DateTime(2026, 2, 1, 9), packageName: 'a'),
+          _appEvent(type: UsageEventType.activityResumed, at: DateTime(2026, 2, 1, 9, 10), packageName: 'b'),
+          _appEvent(type: UsageEventType.activityPaused, at: DateTime(2026, 2, 1, 9, 20), packageName: 'b'),
+        ];
+      final repository = _repository(platform);
+
+      final heatmap = await repository.getHourlyScreenTimeHeatmap(
+        start: DateTime(2026, 2, 1, 9),
+        end: DateTime(2026, 2, 1, 10),
+      );
+
+      expect(heatmap[9], const Duration(minutes: 20));
+    });
   });
 }
 
@@ -195,6 +223,7 @@ StatsUsageRepositoryImpl _repository(_FakeUsageStatsPlatform platform) {
 
 class _FakeUsageStatsPlatform extends UsageStatsManager {
   List<UsageStats> usageStatsResult = <UsageStats>[];
+  Map<int, List<UsageStats>> usageStatsByRangeStart = <int, List<UsageStats>>{};
   UsageStats? singleUsageResult;
   List<UsageEvent> usageEventsResult = <UsageEvent>[];
   List<DeviceEventStats> eventStatsResult = <DeviceEventStats>[];
@@ -202,6 +231,7 @@ class _FakeUsageStatsPlatform extends UsageStatsManager {
   AppStandbyBucket standbyBucketResult = AppStandbyBucket.active;
   bool throwUnsupportedOnEventStats = false;
   int getUsageEventsCallCount = 0;
+  int getUsageStatsCallCount = 0;
 
   bool? lastGetUsageStatsIncludeIcons;
 
@@ -213,7 +243,14 @@ class _FakeUsageStatsPlatform extends UsageStatsManager {
     CancelToken? cancelToken,
     Duration timeout = const Duration(seconds: 30),
   }) async {
+    getUsageStatsCallCount++;
     lastGetUsageStatsIncludeIcons = includeIcons;
+
+    final byStart = usageStatsByRangeStart[startDate.millisecondsSinceEpoch];
+    if (byStart != null) {
+      return byStart;
+    }
+
     return usageStatsResult;
   }
 
@@ -276,12 +313,12 @@ class _FakeUsageStatsPlatform extends UsageStatsManager {
   }
 }
 
-UsageStats _usage({required String packageId, required int minutes, required int launches}) {
+UsageStats _usage({required String packageId, required int minutes, required int launches, DateTime? lastUsed}) {
   return UsageStats(
     appInfo: AndroidAppInfo(packageId: AppIdentifier.android(packageId), name: packageId),
     totalDuration: Duration(minutes: minutes),
     totalLaunchCount: launches,
-    lastTimeUsed: DateTime(2026, 2, 1, 12),
+    lastTimeUsed: lastUsed ?? DateTime(2026, 2, 1, 12),
   );
 }
 

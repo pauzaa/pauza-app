@@ -17,32 +17,49 @@ class StatsBlockingKpiGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final label = l10n.statsBlockingCurrentStreak;
-    final value = l10n.statsBlockingDaysValue(snapshot.currentStreakDays);
-    final label2 = l10n.statsBlockingLongestStreak;
-    final value2 = l10n.statsBlockingDaysValue(snapshot.longestStreakDays);
-    final label3 = l10n.statsBlockingAvgSessionDuration;
-    final duration3 = snapshot.averageRestrictionSessionDuration;
-    final value3 = duration3.formatDurationLabel(context.l10n);
-    final label4 = l10n.statsBlockingLongestSessionDuration;
-    final duration2 = snapshot.longestRestrictionSessionDuration;
-    final value4 = duration2.formatDurationLabel(context.l10n);
-    final duration = snapshot.averagePauseDuration;
+    final items = <({String label, String value})>[
+      (label: l10n.statsBlockingCurrentStreak, value: l10n.statsBlockingDaysValue(snapshot.currentStreakDays)),
+      (label: l10n.statsBlockingLongestStreak, value: l10n.statsBlockingDaysValue(snapshot.longestStreakDays)),
+      (
+        label: l10n.statsBlockingAvgSessionDuration,
+        value: snapshot.averageRestrictionSessionDuration.formatDurationLabel(l10n),
+      ),
+      (
+        label: l10n.statsBlockingLongestSessionDuration,
+        value: snapshot.longestRestrictionSessionDuration.formatDurationLabel(l10n),
+      ),
+      (
+        label: l10n.statsBlockingAvgPausesPerSession,
+        value: _avgPausesPerSession(context, snapshot.averagePausesPerSession),
+      ),
+      (label: l10n.statsBlockingAvgPauseDuration, value: snapshot.averagePauseDuration.formatDurationLabel(l10n)),
+    ];
+
     return StatsCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: PauzaSpacing.medium,
         children: <Widget>[
           StatsSectionHeader(label: l10n.statsBlockingKpis),
-          StatsMetricTile(label: label, value: value),
-          StatsMetricTile(label: label2, value: value2),
-          StatsMetricTile(label: label3, value: value3),
-          StatsMetricTile(label: label4, value: value4),
-          StatsMetricTile(
-            label: l10n.statsBlockingAvgPausesPerSession,
-            value: _avgPausesPerSession(context, snapshot.averagePausesPerSession),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final columns = constraints.maxWidth >= 560 ? 2 : 1;
+              final tileWidth = columns == 1
+                  ? constraints.maxWidth
+                  : (constraints.maxWidth - PauzaSpacing.medium) / columns;
+
+              return Wrap(
+                spacing: PauzaSpacing.medium,
+                runSpacing: PauzaSpacing.medium,
+                children: items.map((item) {
+                  return SizedBox(
+                    width: tileWidth,
+                    child: StatsMetricTile(label: item.label, value: item.value),
+                  );
+                }).toList(growable: false),
+              );
+            },
           ),
-          StatsMetricTile(label: l10n.statsBlockingAvgPauseDuration, value: duration.formatDurationLabel(context.l10n)),
         ],
       ),
     );

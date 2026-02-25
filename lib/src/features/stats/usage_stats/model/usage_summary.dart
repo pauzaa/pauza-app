@@ -17,17 +17,12 @@ class UsageSummary {
 
   /// Builds a [UsageSummary] from [current] and [previous] usage lists.
   ///
-  /// **Trend attribution note:** when [current] spans multiple days (e.g. a
-  /// 7-day window), the UsageStats API returns a single aggregated total per
-  /// app for the whole window. Each app's [totalDuration] is therefore
-  /// attributed entirely to the day of [UsageStats.lastTimeUsed]. This makes
-  /// [trend] data approximate for windows > 1 day — an app used on Monday and
-  /// Friday will show its entire usage on Friday. To get accurate day-level
-  /// data, issue one query per day in the window instead.
+  /// [dailyDurations] must contain real day-level totals for [window].
   factory UsageSummary.buildSummary({
     required IList<UsageStats> current,
     required IList<UsageStats> previous,
     required DateTimeRange window,
+    required IMap<DateTime, Duration> dailyDurations,
   }) {
     final currentTotal = current.fold<Duration>(Duration.zero, (sum, item) => sum + item.totalDuration);
     final previousTotal = previous.fold<Duration>(Duration.zero, (sum, item) => sum + item.totalDuration);
@@ -46,23 +41,13 @@ class UsageSummary {
     final trendDurations = <DateTime, Duration>{};
     for (var i = 0; i < window.inclusiveDays; i++) {
       final day = window.start.add(Duration(days: i)).dayStart;
-      trendDurations[day] = Duration.zero;
+      trendDurations[day] = dailyDurations[day] ?? Duration.zero;
     }
 
-    for (final item in current) {
-      final basis = item.lastTimeUsed ?? item.bucketStart ?? window.start;
-      final key = basis.dayStart;
-      if (!trendDurations.containsKey(key)) {
-        continue;
-      }
-      trendDurations[key] = (trendDurations[key] ?? Duration.zero) + item.totalDuration;
-    }
-
-    final trend =
-        trendDurations.entries
-            .map((entry) => UsageTrendPoint(day: entry.key, duration: entry.value))
-            .toList(growable: false)
-          ..sort((a, b) => a.day.compareTo(b.day));
+    final trend = trendDurations.entries
+        .map((entry) => UsageTrendPoint(day: entry.key, duration: entry.value))
+        .toList(growable: false)
+      ..sort((a, b) => a.day.compareTo(b.day));
 
     final deltaPercent = previousTotal.inMilliseconds == 0
         ? null

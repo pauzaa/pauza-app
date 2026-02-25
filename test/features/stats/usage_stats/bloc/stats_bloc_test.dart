@@ -24,6 +24,10 @@ void main() {
         previous: <UsageStats>[
           _usage(packageId: 'social.app', category: 'Social', minutes: 60, day: DateTime(2026, 2, 3)),
         ],
+        dailyDurations: IMap<DateTime, Duration>(<DateTime, Duration>{
+          DateTime(2026, 2, 10): const Duration(minutes: 120),
+          DateTime(2026, 2, 11): const Duration(minutes: 60),
+        }),
       );
 
       final bloc = StatsBloc(usageRepository: repo, platform: PauzaPlatform.android);
@@ -37,6 +41,7 @@ void main() {
       expect(bloc.state.deviceInsightsStatus, StatsSectionStatus.success);
       expect(bloc.state.topEngagementStatus, StatsSectionStatus.success);
       expect(bloc.state.heatmapStatus, StatsSectionStatus.success);
+      expect(repo.dailyDurationsCalls, 1);
 
       await bloc.close();
     });
@@ -56,6 +61,8 @@ void main() {
       expect(repo.lastTopEngagementEnd, DateTime(2026, 2, 3, 23, 59, 59, 999));
       expect(repo.lastHeatmapStart, DateTime(2026, 2));
       expect(repo.lastHeatmapEnd, DateTime(2026, 2, 3, 23, 59, 59, 999));
+      expect(repo.lastDailyDurationsStart, DateTime(2026, 2));
+      expect(repo.lastDailyDurationsEnd, DateTime(2026, 2, 3, 23, 59, 59, 999));
 
       await bloc.close();
     });
@@ -81,6 +88,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state.summary, isNotNull);
+      expect(bloc.state.hasError, isFalse);
       expect(bloc.state.deviceInsightsStatus, StatsSectionStatus.success);
       expect(bloc.state.topEngagementStatus, StatsSectionStatus.failure);
       expect(bloc.state.heatmapStatus, StatsSectionStatus.success);
@@ -117,6 +125,24 @@ void main() {
       await bloc.close();
     });
 
+    test('clears stale global error after successful retry on same bloc', () async {
+      final repo = _FlakyStatsUsageRepository();
+      final bloc = StatsBloc(usageRepository: repo, platform: PauzaPlatform.android);
+
+      bloc.add(const StatsStarted());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.hasError, isTrue);
+
+      repo.shouldFail = false;
+      bloc.add(const StatsRefreshRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(bloc.state.hasError, isFalse);
+      expect(bloc.state.summary, isNotNull);
+
+      await bloc.close();
+    });
+
     test('does not load android stats on iOS platform', () async {
       final repo = FakeStatsUsageRepository();
       final bloc = StatsBloc(usageRepository: repo, platform: PauzaPlatform.ios);
@@ -143,4 +169,18 @@ UsageStats _usage({required String packageId, required String category, required
     bucketEnd: day.dayEnd,
     lastTimeUsed: day,
   );
+}
+
+final class _FlakyStatsUsageRepository extends FakeStatsUsageRepository {
+  _FlakyStatsUsageRepository();
+
+  bool shouldFail = true;
+
+  @override
+  Future<DeviceUsageInsights> getDeviceUsageInsights({required DateTime start, required DateTime end}) async {
+    if (shouldFail) {
+      throw const PauzaMissingPermissionError(message: 'missing');
+    }
+    return super.getDeviceUsageInsights(start: start, end: end);
+  }
 }

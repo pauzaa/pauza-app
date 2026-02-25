@@ -60,4 +60,48 @@ void main() {
     expect(find.text('TOP ENGAGEMENT APPS'), findsOneWidget);
     expect(find.text('APP USAGE'), findsOneWidget);
   });
+
+  testWidgets('app usage table renders one row for duplicate app identities', (tester) async {
+    final repo = FakeStatsUsageRepository(
+      current: <UsageStats>[
+        UsageStats(
+          appInfo: const AndroidAppInfo(
+            packageId: AppIdentifier.android('dup.app'),
+            name: 'dup.app',
+            category: 'Social',
+          ),
+          totalDuration: const Duration(minutes: 50),
+          totalLaunchCount: 2,
+          bucketStart: DateTime(2026, 2, 10),
+          bucketEnd: DateTime(2026, 2, 16),
+          lastTimeUsed: DateTime(2026, 2, 10),
+        ),
+        UsageStats(
+          appInfo: const AndroidAppInfo(
+            packageId: AppIdentifier.android('dup.app'),
+            name: 'dup.app',
+            category: 'Social',
+          ),
+          totalDuration: const Duration(minutes: 70),
+          totalLaunchCount: 5,
+          bucketStart: DateTime(2026, 2, 10),
+          bucketEnd: DateTime(2026, 2, 16),
+          lastTimeUsed: DateTime(2026, 2, 11),
+        ),
+      ],
+    );
+
+    final bloc = StatsBloc(usageRepository: repo, platform: PauzaPlatform.android)..add(const StatsStarted());
+    addTearDown(bloc.close);
+
+    await pumpStatsWidget(
+      tester,
+      BlocProvider<StatsBloc>.value(value: bloc, child: const StatsUsageTabContent()),
+      scrollable: true,
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('dup.app'), findsOneWidget);
+  });
 }

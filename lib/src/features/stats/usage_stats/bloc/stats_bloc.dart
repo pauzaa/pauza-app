@@ -59,6 +59,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     emit(
       state.copyWith(
         isLoading: true,
+        clearError: true,
         deviceInsightsStatus: StatsSectionStatus.loading,
         topEngagementStatus: StatsSectionStatus.loading,
         heatmapStatus: StatsSectionStatus.loading,
@@ -73,6 +74,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
     try {
       final currentUsage = await _usageRepository.getUsageStats(start: state.window.start, end: state.window.end);
+      final dailyDurations = await _usageRepository.getDailyUsageDurations(start: state.window.start, end: state.window.end);
 
       final previousWindow = state.window.shiftByInclusiveRange(-state.window.inclusiveDays);
       final previousUsage = await _usageRepository.getUsageStats(start: previousWindow.start, end: previousWindow.end);
@@ -80,7 +82,13 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
       emit(
         state.copyWith(
           isLoading: false,
-          summary: UsageSummary.buildSummary(current: currentUsage, previous: previousUsage, window: state.window),
+          clearError: true,
+          summary: UsageSummary.buildSummary(
+            current: currentUsage,
+            previous: previousUsage,
+            window: state.window,
+            dailyDurations: dailyDurations,
+          ),
           // usageStats is already sorted by totalDuration descending from the repository.
           usageStats: currentUsage,
         ),

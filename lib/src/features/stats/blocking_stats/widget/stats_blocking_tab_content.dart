@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/stats/blocking_stats/bloc/stats_blocking_bloc.dart';
 import 'package:pauza/src/features/stats/blocking_stats/widget/stats_blocking_daily_trend_card.dart';
 import 'package:pauza/src/features/stats/blocking_stats/widget/stats_blocking_kpi_grid.dart';
 import 'package:pauza/src/features/stats/blocking_stats/widget/stats_blocking_overview_card.dart';
 import 'package:pauza/src/features/stats/blocking_stats/widget/stats_blocking_pause_composition_card.dart';
+import 'package:pauza/src/features/stats/common/widget/stats_date_range_picker_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_inline_fallback_card.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
@@ -21,12 +21,9 @@ class StatsBlockingTabContent extends StatelessWidget {
           spacing: PauzaSpacing.large,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            PauzaDateRangePickerCard(
+            StatsDateRangePickerCard(
               selectedRange: state.window,
-              minDate: DateTime(2020),
               maxDate: state.maxDate,
-              rangeTextBuilder: (range) =>
-                  '${DateFormat('MMM d').format(range.start)} - ${DateFormat('MMM d').format(range.end)}',
               onRangeChanged: (range) {
                 context.read<StatsBlockingBloc>().add(StatsBlockingDateRangePicked(range));
               },

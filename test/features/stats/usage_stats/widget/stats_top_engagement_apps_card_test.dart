@@ -50,4 +50,24 @@ void main() {
 
     expect(find.text('No insight data for the selected period.'), findsOneWidget);
   });
+
+  testWidgets('renders short average sessions without misleading zero label', (tester) async {
+    final apps = <AppEngagementInsight>[
+      const AppEngagementInsight(
+        appInfo: AndroidAppInfo(packageId: AppIdentifier.android('app.short'), name: 'App Short'),
+        totalDuration: Duration(seconds: 20),
+        totalLaunchCount: 1,
+        averageSessionDuration: Duration(seconds: 20),
+        launchesPerHour: 0.2,
+        engagementScore: 0.4,
+      ),
+    ].lock;
+
+    await pumpStatsWidget(
+      tester,
+      StatsTopEngagementAppsCard(status: StatsSectionStatus.success, apps: apps, onRetry: () {}),
+    );
+
+    expect(find.textContaining('Avg session: <1m'), findsOneWidget);
+  });
 }

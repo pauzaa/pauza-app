@@ -1175,6 +1175,10 @@
   "@statsInsightLoadFailed": {
     "description": "Error message when a specific insight section fails."
   },
+  "statsDurationLessThanMinute": "<1m",
+  "@statsDurationLessThanMinute": {
+    "description": "Duration label for non-zero durations shorter than one minute."
+  },
   "statsPerDayValue": "{value}/day",
   "@statsPerDayValue": {
     "description": "Formats numeric per-day values.",

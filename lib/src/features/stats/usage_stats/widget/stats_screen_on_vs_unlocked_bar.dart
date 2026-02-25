@@ -13,11 +13,52 @@ class StatsScreenOnVsUnlockedBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final denominator = math.max(screenOnDuration.inMilliseconds, 1);
-    final normalizedUnlocked = unlockedDuration.inMilliseconds / denominator;
-    final unlockedFraction = normalizedUnlocked.clamp(0.0, 1.0);
-    final unlockedFlex = math.max(1, (unlockedFraction * 1000).round());
-    final remainingFlex = math.max(1, ((1 - unlockedFraction) * 1000).round());
+    final hasAnyDuration = screenOnDuration > Duration.zero || unlockedDuration > Duration.zero;
+    final normalizedScreenOnMs = math.max(screenOnDuration.inMilliseconds, 0);
+    final normalizedUnlockedMs = math.max(unlockedDuration.inMilliseconds, 0);
+    final clampedUnlockedMs = math.min(normalizedUnlockedMs, normalizedScreenOnMs);
+    final lockedMs = math.max(normalizedScreenOnMs - clampedUnlockedMs, 0);
+
+    final bar = hasAnyDuration
+        ? LayoutBuilder(
+            builder: (context, constraints) {
+              final totalMs = clampedUnlockedMs + lockedMs;
+              if (totalMs <= 0) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(color: context.colorScheme.surfaceContainerHighest),
+                  child: const SizedBox.expand(),
+                );
+              }
+
+              final unlockedWidth = constraints.maxWidth * (clampedUnlockedMs / totalMs);
+              final lockedWidth = constraints.maxWidth - unlockedWidth;
+
+              return Row(
+                children: <Widget>[
+                  if (unlockedWidth > 0)
+                    SizedBox(
+                      width: unlockedWidth,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(color: context.colorScheme.primary),
+                        child: const SizedBox.expand(),
+                      ),
+                    ),
+                  if (lockedWidth > 0)
+                    SizedBox(
+                      width: lockedWidth,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(color: context.colorScheme.outlineVariant),
+                        child: const SizedBox.expand(),
+                      ),
+                    ),
+                ],
+              );
+            },
+          )
+        : DecoratedBox(
+            decoration: BoxDecoration(color: context.colorScheme.surfaceContainerHighest),
+            child: const SizedBox.expand(),
+          );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,21 +70,7 @@ class StatsScreenOnVsUnlockedBar extends StatelessWidget {
         const SizedBox(height: PauzaSpacing.small),
         ClipRRect(
           borderRadius: BorderRadius.circular(PauzaCornerRadius.small),
-          child: SizedBox(
-            height: 12,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: unlockedFlex,
-                  child: DecoratedBox(decoration: BoxDecoration(color: context.colorScheme.primary)),
-                ),
-                Expanded(
-                  flex: remainingFlex,
-                  child: DecoratedBox(decoration: BoxDecoration(color: context.colorScheme.outlineVariant)),
-                ),
-              ],
-            ),
-          ),
+          child: SizedBox(height: 12, child: bar),
         ),
         const SizedBox(height: PauzaSpacing.small),
         Row(

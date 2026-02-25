@@ -41,10 +41,12 @@ SELECT
   total_paused_ms
 FROM restriction_sessions
 WHERE integrity_status = 'ok'
+  AND started_at IS NOT NULL
   AND ended_at IS NOT NULL
-  AND ended_at BETWEEN ? AND ?
+  AND started_at <= ?
+  AND ended_at >= ?
 ''',
-      [rangeStartUtcMs, rangeEndUtcMs],
+      [rangeEndUtcMs, rangeStartUtcMs],
     );
 
     var completedSessionsCount = 0;
@@ -59,12 +61,28 @@ WHERE integrity_status = 'ok'
       final pauseCount = row['pause_count'].intOrZero;
       final pausedMs = row['total_paused_ms'].intOrZero;
 
-      final sessionSpanMs = endedAtMs > startedAtMs ? endedAtMs - startedAtMs : 0;
-      final effectiveMs = sessionSpanMs > pausedMs ? sessionSpanMs - pausedMs : 0;
+      if (endedAtMs <= startedAtMs) {
+        continue;
+      }
+
+      final overlapStartMs = startedAtMs < rangeStartUtcMs ? rangeStartUtcMs : startedAtMs;
+      final overlapEndMs = endedAtMs > rangeEndUtcMs ? rangeEndUtcMs : endedAtMs;
+      final overlapSpanMs = overlapEndMs > overlapStartMs ? overlapEndMs - overlapStartMs : 0;
+      if (overlapSpanMs <= 0) {
+        continue;
+      }
+
+      final sessionSpanMs = endedAtMs - startedAtMs;
+      final clippedPausedMs = _clippedPausedMs(
+        pausedMs: pausedMs,
+        overlapSpanMs: overlapSpanMs,
+        sessionSpanMs: sessionSpanMs,
+      );
+      final effectiveMs = overlapSpanMs > clippedPausedMs ? overlapSpanMs - clippedPausedMs : 0;
 
       completedSessionsCount += 1;
       totalPauseCount += pauseCount;
-      totalPausedMs += pausedMs;
+      totalPausedMs += clippedPausedMs;
       totalEffectiveMs += effectiveMs;
 
       if (effectiveMs > longestEffectiveMs) {
@@ -110,5 +128,20 @@ ORDER BY local_day ASC
       totalPausedDuration: Duration(milliseconds: totalPausedMs),
       dailyTrend: dailyTrend,
     );
+  }
+
+  int _clippedPausedMs({required int pausedMs, required int overlapSpanMs, required int sessionSpanMs}) {
+    if (pausedMs <= 0 || overlapSpanMs <= 0 || sessionSpanMs <= 0) {
+      return 0;
+    }
+
+    final estimated = (pausedMs * overlapSpanMs / sessionSpanMs).round();
+    if (estimated <= 0) {
+      return 0;
+    }
+    if (estimated >= overlapSpanMs) {
+      return overlapSpanMs;
+    }
+    return estimated;
   }
 }

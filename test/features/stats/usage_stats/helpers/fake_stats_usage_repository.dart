@@ -8,8 +8,9 @@ import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 /// A configurable fake [StatsUsageRepository] for tests.
 ///
 /// Supply [current] / [previous] usage-stat lists for alternating calls,
-/// override [deviceInsights], [topEngagement], [heatmap] with custom values,
-/// or inject errors via [deviceInsightsError] / [topEngagementError].
+/// override [deviceInsights], [topEngagement], [heatmap], [dailyDurations]
+/// with custom values, or inject errors via [deviceInsightsError] /
+/// [topEngagementError].
 ///
 /// Call counters and last-argument captures are exposed for assertions.
 class FakeStatsUsageRepository implements StatsUsageRepository {
@@ -19,6 +20,7 @@ class FakeStatsUsageRepository implements StatsUsageRepository {
     this.deviceInsights,
     this.topEngagement,
     this.heatmap,
+    this.dailyDurations,
     this.deviceInsightsError,
     this.topEngagementError,
   });
@@ -28,6 +30,7 @@ class FakeStatsUsageRepository implements StatsUsageRepository {
   final DeviceUsageInsights? deviceInsights;
   final IList<AppEngagementInsight>? topEngagement;
   final IMap<int, Duration>? heatmap;
+  final IMap<DateTime, Duration>? dailyDurations;
   final Object? deviceInsightsError;
   final Object? topEngagementError;
 
@@ -43,12 +46,17 @@ class FakeStatsUsageRepository implements StatsUsageRepository {
   /// Number of times [getHourlyScreenTimeHeatmap] was called.
   var heatmapCalls = 0;
 
+  /// Number of times [getDailyUsageDurations] was called.
+  var dailyDurationsCalls = 0;
+
   DateTime? lastDeviceInsightsStart;
   DateTime? lastDeviceInsightsEnd;
   DateTime? lastTopEngagementStart;
   DateTime? lastTopEngagementEnd;
   DateTime? lastHeatmapStart;
   DateTime? lastHeatmapEnd;
+  DateTime? lastDailyDurationsStart;
+  DateTime? lastDailyDurationsEnd;
 
   @override
   Future<IList<UsageStats>> getUsageStats({
@@ -60,7 +68,7 @@ class FakeStatsUsageRepository implements StatsUsageRepository {
     if (current.isEmpty) {
       return <UsageStats>[_defaultUsage(start: start)].lock;
     }
-    return calls.isOdd ? current.lock : previous.lock;
+    return calls.isOdd ? _normalize(current) : _normalize(previous);
   }
 
   @override
@@ -128,12 +136,51 @@ class FakeStatsUsageRepository implements StatsUsageRepository {
   }
 
   @override
+  Future<IMap<DateTime, Duration>> getDailyUsageDurations({required DateTime start, required DateTime end}) async {
+    dailyDurationsCalls++;
+    lastDailyDurationsStart = start;
+    lastDailyDurationsEnd = end;
+    return dailyDurations ?? IMap<DateTime, Duration>({start.dayStart: const Duration(minutes: 30)});
+  }
+
+  @override
   Future<IMap<int, Duration>> getHourlyScreenTimeHeatmap({required DateTime start, required DateTime end}) async {
     heatmapCalls++;
     lastHeatmapStart = start;
     lastHeatmapEnd = end;
     return heatmap ?? _defaultHeatmap;
   }
+}
+
+IList<UsageStats> _normalize(List<UsageStats> stats) {
+  final byPackage = <String, UsageStats>{};
+  for (final stat in stats) {
+    final key = stat.appInfo.identifier.raw;
+    final existing = byPackage[key];
+    if (existing == null) {
+      byPackage[key] = stat;
+      continue;
+    }
+
+    final nextLastUsed = switch ((existing.lastTimeUsed, stat.lastTimeUsed)) {
+      (final DateTime a?, final DateTime b?) => a.isAfter(b) ? a : b,
+      (final DateTime a?, null) => a,
+      (null, final DateTime b?) => b,
+      (null, null) => null,
+    };
+
+    byPackage[key] = UsageStats(
+      appInfo: existing.appInfo,
+      totalDuration: existing.totalDuration + stat.totalDuration,
+      totalLaunchCount: existing.totalLaunchCount + stat.totalLaunchCount,
+      bucketStart: existing.bucketStart,
+      bucketEnd: existing.bucketEnd,
+      lastTimeUsed: nextLastUsed,
+      lastTimeVisible: existing.lastTimeVisible,
+    );
+  }
+
+  return byPackage.values.toIList();
 }
 
 UsageStats _defaultUsage({required DateTime start}) {

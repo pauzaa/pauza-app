@@ -1,18 +1,17 @@
 import 'package:pauza/src/core/localization/l10n.dart';
 
-enum StatsSectionStatus implements Localizable {
+enum StatsSectionStatus {
   initial,
   loading,
   success,
   empty,
   failure;
 
-  @override
-  String localize(AppLocalizations localizations) {
+  String? fallbackMessage(AppLocalizations localizations) {
     return switch (this) {
       StatsSectionStatus.initial => localizations.statsNoInsightData,
       StatsSectionStatus.loading => localizations.loadingLabel,
-      StatsSectionStatus.success => localizations.statsNoInsightData,
+      StatsSectionStatus.success => null,
       StatsSectionStatus.empty => localizations.statsNoInsightData,
       StatsSectionStatus.failure => localizations.statsInsightLoadFailed,
     };

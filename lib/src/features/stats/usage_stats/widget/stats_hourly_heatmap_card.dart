@@ -5,6 +5,7 @@ import 'package:pauza/src/features/stats/usage_stats/model/stats_section_status.
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_hourly_heatmap_grid.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_section_header.dart';
+import 'package:pauza/src/features/stats/usage_stats/widget/stats_section_state_content.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class StatsHourlyHeatmapCard extends StatelessWidget {
@@ -27,49 +28,42 @@ class StatsHourlyHeatmapCard extends StatelessWidget {
             style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
           ),
           const SizedBox(height: PauzaSpacing.medium),
-          if (status == StatsSectionStatus.loading)
-            const SizedBox(height: 164, child: Center(child: CircularProgressIndicator()))
-          else if (status == StatsSectionStatus.failure)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(context.l10n.statsInsightLoadFailed, style: context.textTheme.bodyLarge),
-                const SizedBox(height: PauzaSpacing.medium),
-                PauzaFilledButton(
-                  onPressed: onRetry,
-                  size: PauzaButtonSize.small,
-                  title: Text(context.l10n.retryButton),
-                ),
-              ],
-            )
-          else if (status == StatsSectionStatus.empty || status == StatsSectionStatus.initial)
-            Text(context.l10n.statsNoInsightData, style: context.textTheme.bodyLarge)
-          else ...<Widget>[
-            StatsHourlyHeatmapGrid(heatmap: heatmap),
-            const SizedBox(height: PauzaSpacing.medium),
-            Row(
-              children: <Widget>[
-                Text(context.l10n.statsHeatmapLegendLow, style: context.textTheme.bodySmall),
-                const SizedBox(width: PauzaSpacing.small),
-                Expanded(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: <Color>[
-                          context.colorScheme.primary.withValues(alpha: 0.12),
-                          context.colorScheme.primary,
-                        ],
+          StatsSectionStateContent(
+            status: status,
+            onRetry: onRetry,
+            loadingHeight: 164,
+            successBuilder: (context) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  StatsHourlyHeatmapGrid(heatmap: heatmap),
+                  const SizedBox(height: PauzaSpacing.medium),
+                  Row(
+                    children: <Widget>[
+                      Text(context.l10n.statsHeatmapLegendLow, style: context.textTheme.bodySmall),
+                      const SizedBox(width: PauzaSpacing.small),
+                      Expanded(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: <Color>[
+                                context.colorScheme.primary.withValues(alpha: 0.12),
+                                context.colorScheme.primary,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(PauzaCornerRadius.small),
+                          ),
+                          child: const SizedBox(height: 10),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(PauzaCornerRadius.small),
-                    ),
-                    child: const SizedBox(height: 10),
+                      const SizedBox(width: PauzaSpacing.small),
+                      Text(context.l10n.statsHeatmapLegendHigh, style: context.textTheme.bodySmall),
+                    ],
                   ),
-                ),
-                const SizedBox(width: PauzaSpacing.small),
-                Text(context.l10n.statsHeatmapLegendHigh, style: context.textTheme.bodySmall),
-              ],
-            ),
-          ],
+                ],
+              );
+            },
+          ),
         ],
       ),
     );

@@ -63,7 +63,7 @@ final class NfcRepositoryImpl implements NfcRepository {
         NfcPlatformAvailability.unknown => NfcChipAvailability.unknown,
       };
     } on Object catch (error) {
-      throw NfcException.fromError(error);
+      throw NfcError.fromError(error);
     }
   }
 
@@ -77,26 +77,14 @@ final class NfcRepositoryImpl implements NfcRepository {
     final availability = await getAvailability();
 
     if (availability == NfcChipAvailability.notSupported) {
-      throw NfcException(
-        code: NfcErrorCode.unsupported,
-        nfcAvailability: availability,
-        message: 'NFC is not supported on this platform/device.',
-      );
+      throw NfcUnsupportedError(availability: availability);
     }
 
     if (availability == NfcChipAvailability.disabled) {
-      throw NfcException(
-        code: NfcErrorCode.disabled,
-        nfcAvailability: availability,
-        message: 'NFC is disabled on this device.',
-      );
+      throw NfcDisabledError(availability: availability);
     }
     if (availability == NfcChipAvailability.unknown) {
-      throw NfcException(
-        code: NfcErrorCode.unknown,
-        nfcAvailability: availability,
-        message: 'Could not determine NFC availability.',
-      );
+      throw NfcUnknownError(availability: availability);
     }
 
     try {
@@ -112,9 +100,9 @@ final class NfcRepositoryImpl implements NfcRepository {
         rawSnapshot: snapshot.rawSnapshot,
       );
     } on TimeoutException {
-      throw const NfcException(code: NfcErrorCode.timeout, message: 'NFC scan timed out before a tag was discovered.');
+      throw const NfcTimeoutError();
     } on Object catch (error) {
-      throw NfcException.fromError(error);
+      throw NfcError.fromError(error);
     }
   }
 

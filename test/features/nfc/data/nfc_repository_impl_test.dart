@@ -117,10 +117,7 @@ void main() {
         managerClient: _FakeNfcManagerClient(checkAvailabilityError: UnsupportedError('unsupported')),
       );
 
-      expect(
-        repository.scanSingleCard,
-        throwsA(isA<NfcException>().having((exception) => exception.code, 'code', NfcErrorCode.unsupported)),
-      );
+      expect(repository.scanSingleCard, throwsA(isA<NfcUnsupportedError>()));
     });
 
     test('forwards busy state', () async {

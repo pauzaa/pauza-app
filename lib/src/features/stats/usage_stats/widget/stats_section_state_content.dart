@@ -37,7 +37,10 @@ class StatsSectionStateContent extends StatelessWidget {
   }
 
   Widget _defaultLoading() {
-    return SizedBox(height: loadingHeight, child: const Center(child: CircularProgressIndicator()));
+    return SizedBox(
+      height: loadingHeight,
+      child: const Center(child: CircularProgressIndicator()),
+    );
   }
 
   Widget _defaultEmpty(BuildContext context) {
@@ -51,11 +54,7 @@ class StatsSectionStateContent extends StatelessWidget {
         Text(context.l10n.statsInsightLoadFailed, style: context.textTheme.bodyLarge),
         if (onRetry != null) ...<Widget>[
           const SizedBox(height: PauzaSpacing.medium),
-          PauzaFilledButton(
-            onPressed: onRetry,
-            size: PauzaButtonSize.small,
-            title: Text(context.l10n.retryButton),
-          ),
+          PauzaFilledButton(onPressed: onRetry, size: PauzaButtonSize.small, title: Text(context.l10n.retryButton)),
         ],
       ],
     );

@@ -59,17 +59,17 @@ final class AuthRepositoryImpl implements AuthRepository {
       if (currentSession != session) {
         _emitSession(session);
       }
-    } on AuthException {
+    } on AuthError {
       rethrow;
-    } on Object {
-      throw const AuthException(failure: AuthFailure.unknown);
+    } on Object catch (e) {
+      throw AuthUnknownError(cause: e);
     }
   }
 
   @override
   Future<AuthResult> signIn(AuthCredentialsDto credentials) async {
     if (credentials.email == invalidCredentialsEmail) {
-      throw const AuthException(failure: AuthFailure.invalidCredentials);
+      throw const AuthInvalidCredentialsError();
     }
 
     if (credentials.email == otpRequiredEmail) {
@@ -85,10 +85,10 @@ final class AuthRepositoryImpl implements AuthRepository {
       await _sessionStorage.writeSession(session);
       _emitSession(session);
       return AuthSuccess(session: session, user: user);
-    } on AuthException {
+    } on AuthError {
       rethrow;
-    } on Object {
-      throw const AuthException(failure: AuthFailure.unknown);
+    } on Object catch (e) {
+      throw AuthUnknownError(cause: e);
     }
   }
 
@@ -98,11 +98,11 @@ final class AuthRepositoryImpl implements AuthRepository {
     final pendingEmail = _pendingOtpEmail;
 
     if (pendingChallengeId == null || pendingEmail == null) {
-      throw const AuthException(failure: AuthFailure.otpChallengeMissing);
+      throw const AuthOtpChallengeMissingError();
     }
 
     if (otp != validOtp) {
-      throw const AuthException(failure: AuthFailure.invalidOtp);
+      throw const AuthInvalidOtpError();
     }
 
     final session = _buildDummySession(email: pendingEmail);
@@ -114,10 +114,10 @@ final class AuthRepositoryImpl implements AuthRepository {
       _pendingOtpChallengeId = null;
       _pendingOtpEmail = null;
       return AuthSuccess(session: session, user: user);
-    } on AuthException {
+    } on AuthError {
       rethrow;
-    } on Object {
-      throw const AuthException(failure: AuthFailure.unknown);
+    } on Object catch (e) {
+      throw AuthUnknownError(cause: e);
     }
   }
 
@@ -127,10 +127,10 @@ final class AuthRepositoryImpl implements AuthRepository {
       await _sessionStorage.deleteSession();
       _emitSession(const Session.empty());
       await clearPendingOtpChallenge();
-    } on AuthException {
+    } on AuthError {
       rethrow;
-    } on Object {
-      throw const AuthException(failure: AuthFailure.unknown);
+    } on Object catch (e) {
+      throw AuthUnknownError(cause: e);
     }
   }
 

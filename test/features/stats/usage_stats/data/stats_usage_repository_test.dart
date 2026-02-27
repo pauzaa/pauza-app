@@ -27,9 +27,7 @@ void main() {
     test('getDailyUsageDurations performs explicit day-level aggregation', () async {
       final platform = _FakeUsageStatsPlatform()
         ..usageStatsByRangeStart = <int, List<UsageStats>>{
-          DateTime(2026, 2).millisecondsSinceEpoch: <UsageStats>[
-            _usage(packageId: 'a', minutes: 30, launches: 2),
-          ],
+          DateTime(2026, 2).millisecondsSinceEpoch: <UsageStats>[_usage(packageId: 'a', minutes: 30, launches: 2)],
           DateTime(2026, 2, 2).millisecondsSinceEpoch: <UsageStats>[
             _usage(packageId: 'a', minutes: 10, launches: 1),
             _usage(packageId: 'b', minutes: 20, launches: 2),

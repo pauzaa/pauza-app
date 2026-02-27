@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
-import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/widget/otp_code/otp_actions_section.dart';
 import 'package:pauza/src/features/auth/widget/otp_code/otp_header_text.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
@@ -81,7 +80,6 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
           if (state case AuthFlowFailure(:final error)) {
             final message = switch (error) {
               final Localizable localizable => localizable.localize(context.l10n),
-              AuthException(:final failure) => failure.localizeString(context.l10n),
               _ => context.l10n.authFailureUnknown,
             };
             context.showToast(message);

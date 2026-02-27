@@ -47,7 +47,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state, isA<AuthFlowFailure>());
-      expect((bloc.state as AuthFlowFailure).error, const AuthException(failure: AuthFailure.invalidCredentials));
+      expect((bloc.state as AuthFlowFailure).error, const AuthInvalidCredentialsError());
 
       await bloc.close();
       repository.dispose();
@@ -97,7 +97,7 @@ void main() {
 
       expect(bloc.state, isA<AuthFlowFailure>());
       final failure = bloc.state as AuthFlowFailure;
-      expect(failure.error, const AuthException(failure: AuthFailure.invalidOtp));
+      expect(failure.error, const AuthInvalidOtpError());
       expect(failure.email, AuthRepositoryImpl.otpRequiredEmail);
 
       await bloc.close();
@@ -113,7 +113,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state, isA<AuthFlowFailure>());
-      expect((bloc.state as AuthFlowFailure).error, const AuthException(failure: AuthFailure.otpChallengeMissing));
+      expect((bloc.state as AuthFlowFailure).error, const AuthOtpChallengeMissingError());
 
       await bloc.close();
       repository.dispose();
@@ -163,7 +163,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state, isA<AuthFlowFailure>());
-      expect((bloc.state as AuthFlowFailure).error, PauzaAppError.internetUnavailable);
+      expect((bloc.state as AuthFlowFailure).error, const PauzaInternetUnavailableError());
       expect(repository.signInCalls, 0);
 
       await bloc.close();
@@ -182,7 +182,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(bloc.state, isA<AuthFlowFailure>());
-      expect((bloc.state as AuthFlowFailure).error, PauzaAppError.internetUnavailable);
+      expect((bloc.state as AuthFlowFailure).error, const PauzaInternetUnavailableError());
       expect(repository.verifyOtpCalls, 0);
 
       await bloc.close();
@@ -217,7 +217,7 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<AuthResult> signIn(AuthCredentialsDto credentials) async {
     signInCalls += 1;
     if (credentials.email == AuthRepositoryImpl.invalidCredentialsEmail) {
-      throw const AuthException(failure: AuthFailure.invalidCredentials);
+      throw const AuthInvalidCredentialsError();
     }
 
     if (credentials.email == AuthRepositoryImpl.otpRequiredEmail) {
@@ -239,11 +239,11 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<AuthResult> verifyOtp({required String otp}) async {
     verifyOtpCalls += 1;
     if (_pendingChallenge == null) {
-      throw const AuthException(failure: AuthFailure.otpChallengeMissing);
+      throw const AuthOtpChallengeMissingError();
     }
 
     if (otp != AuthRepositoryImpl.validOtp) {
-      throw const AuthException(failure: AuthFailure.invalidOtp);
+      throw const AuthInvalidOtpError();
     }
 
     const session = Session(accessToken: 'access', refreshToken: 'refresh');

@@ -18,7 +18,7 @@ void main() {
         streaksRepository: repository,
         lifecycleActions: lifecycleActionsController.stream,
         nowLocal: () => _asOfLocal,
-      );
+      )..add(const HomeStatsLoadRequested());
 
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
@@ -37,7 +37,7 @@ void main() {
         streaksRepository: repository,
         lifecycleActions: lifecycleActionsController.stream,
         nowLocal: () => _asOfLocal,
-      );
+      )..add(const HomeStatsLoadRequested());
 
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
@@ -61,7 +61,7 @@ void main() {
         streaksRepository: repository,
         lifecycleActions: lifecycleActionsController.stream,
         nowLocal: () => _asOfLocal,
-      );
+      )..add(const HomeStatsLoadRequested());
 
       await Future<void>.delayed(const Duration(milliseconds: 20));
       lifecycleActionsController.add(RestrictionLifecycleAction.pause);
@@ -87,7 +87,7 @@ void main() {
         streaksRepository: repository,
         lifecycleActions: lifecycleActionsController.stream,
         nowLocal: () => _asOfLocal,
-      );
+      )..add(const HomeStatsLoadRequested());
 
       await Future<void>.delayed(const Duration(milliseconds: 20));
       lifecycleActionsController.add(RestrictionLifecycleAction.resume);

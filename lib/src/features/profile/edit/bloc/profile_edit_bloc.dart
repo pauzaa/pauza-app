@@ -50,7 +50,7 @@ final class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
 
     final canProceed = await _internetRequiredGuard.canProceed();
     if (!canProceed) {
-      emit(state.failure(PauzaAppError.internetUnavailable));
+      emit(state.failure(const PauzaInternetUnavailableError()));
       return;
     }
 

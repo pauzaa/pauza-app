@@ -74,7 +74,10 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
     try {
       final currentUsage = await _usageRepository.getUsageStats(start: state.window.start, end: state.window.end);
-      final dailyDurations = await _usageRepository.getDailyUsageDurations(start: state.window.start, end: state.window.end);
+      final dailyDurations = await _usageRepository.getDailyUsageDurations(
+        start: state.window.start,
+        end: state.window.end,
+      );
 
       final previousWindow = state.window.shiftByInclusiveRange(-state.window.inclusiveDays);
       final previousUsage = await _usageRepository.getUsageStats(start: previousWindow.start, end: previousWindow.end);

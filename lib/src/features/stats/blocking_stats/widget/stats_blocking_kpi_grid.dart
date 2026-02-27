@@ -56,7 +56,7 @@ class StatsBlockingKpiGrid extends StatelessWidget {
                     width: tileWidth,
                     child: StatsMetricTile(label: item.label, value: item.value),
                   );
-                }).toList(growable: false),
+                }).toList(),
               );
             },
           ),

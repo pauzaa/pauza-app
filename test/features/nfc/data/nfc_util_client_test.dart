@@ -5,7 +5,7 @@ import 'package:pauza/src/features/nfc/model/nfc_platform_types.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc/data/nfc_system_settings_launcher.dart';
 import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
-import 'package:pauza/src/features/nfc/model/nfc_errors.dart';
+import 'package:pauza/src/features/nfc/model/nfc_errors.dart' hide NfcError;
 import 'package:pauza/src/features/nfc/model/nfc_tag_tech.dart';
 
 void main() {
@@ -49,10 +49,7 @@ void main() {
         settingsLauncher: const NoopNfcSystemSettingsLauncher(),
       );
 
-      expect(
-        client.scanSingleTag(timeout: const Duration(milliseconds: 10)),
-        throwsA(isA<NfcException>().having((exception) => exception.code, 'code', NfcErrorCode.timeout)),
-      );
+      expect(client.scanSingleTag(timeout: const Duration(milliseconds: 10)), throwsA(isA<NfcTimeoutError>()));
     });
 
     test('scanSingleTag maps discovered nfc_util tag into snapshot', () async {
@@ -81,10 +78,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 1));
       await manager.triggerError(const NfcError(type: NfcErrorType.userCanceled, message: 'cancelled'));
 
-      await expectLater(
-        pending,
-        throwsA(isA<NfcException>().having((exception) => exception.code, 'code', NfcErrorCode.cancelled)),
-      );
+      await expectLater(pending, throwsA(isA<NfcCancelledError>()));
     });
 
     test('stopSession ignores platform stop errors', () async {

@@ -53,10 +53,10 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
       final user = await _remoteDataSource.fetchMe();
       await _writeCacheAndNotify(user);
       return user;
-    } on UserProfileException {
+    } on UserProfileError {
       rethrow;
-    } on Object {
-      throw const UserProfileException(code: UserProfileFailureCode.unknown);
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
     }
   }
 
@@ -76,10 +76,10 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
       );
       await _writeCacheAndNotify(updated);
       return updated;
-    } on UserProfileException {
+    } on UserProfileError {
       rethrow;
-    } on Object {
-      throw const UserProfileException(code: UserProfileFailureCode.unknown);
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
     }
   }
 
@@ -87,10 +87,10 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   Future<bool> isUsernameAvailable({required String username}) async {
     try {
       return _remoteDataSource.isUsernameAvailable(username: username);
-    } on UserProfileException {
+    } on UserProfileError {
       rethrow;
-    } on Object {
-      throw const UserProfileException(code: UserProfileFailureCode.unknown);
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
     }
   }
 
@@ -98,10 +98,10 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   Future<String> uploadProfilePhoto({required String localFilePath}) async {
     try {
       return _remoteDataSource.uploadProfilePhoto(localFilePath: localFilePath);
-    } on UserProfileException {
+    } on UserProfileError {
       rethrow;
-    } on Object {
-      throw const UserProfileException(code: UserProfileFailureCode.unknown);
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
     }
   }
 

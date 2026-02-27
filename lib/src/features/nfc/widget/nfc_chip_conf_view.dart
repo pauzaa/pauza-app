@@ -33,11 +33,11 @@ class _NfcChipConfViewState extends State<NfcChipConfView> {
       }
     } on Object catch (error) {
       if (mounted) {
-        if (error case final Localizable error) {
-          context.showToast(error.localize(context.l10n));
-        } else {
-          context.showToast(context.l10n.nfcChipConfigScanFailed);
-        }
+        final message = switch (error) {
+          final Localizable localizable => localizable.localize(context.l10n),
+          _ => context.l10n.nfcChipConfigScanFailed,
+        };
+        context.showToast(message);
         Navigator.of(context).pop();
       }
     }

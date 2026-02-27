@@ -44,10 +44,11 @@ class UsageSummary {
       trendDurations[day] = dailyDurations[day] ?? Duration.zero;
     }
 
-    final trend = trendDurations.entries
-        .map((entry) => UsageTrendPoint(day: entry.key, duration: entry.value))
-        .toList(growable: false)
-      ..sort((a, b) => a.day.compareTo(b.day));
+    final trend =
+        trendDurations.entries
+            .map((entry) => UsageTrendPoint(day: entry.key, duration: entry.value))
+            .toList(growable: false)
+          ..sort((a, b) => a.day.compareTo(b.day));
 
     final deltaPercent = previousTotal.inMilliseconds == 0
         ? null

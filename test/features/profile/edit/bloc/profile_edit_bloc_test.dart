@@ -29,7 +29,7 @@ void main() {
 
       expect(bloc.state, isA<ProfileEditFailure>());
       final failure = bloc.state as ProfileEditFailure;
-      expect(failure.error, PauzaAppError.internetUnavailable);
+      expect(failure.error, const PauzaInternetUnavailableError());
       expect(repository.updateProfileCalls, 0);
 
       await bloc.close();

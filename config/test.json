@@ -1,4 +1,5 @@
 {
     "APP_NAME": "Pauza-Test",
-    "API_BASE_URL": ""
+    "API_BASE_URL": "",
+    "INTERNET_PROBE_URL": ""
 }

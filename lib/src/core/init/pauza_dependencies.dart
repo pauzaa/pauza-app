@@ -1,4 +1,5 @@
 import 'package:appfuse/appfuse.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -6,6 +7,8 @@ import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/core/api_client/middleware/auth_mw.dart';
 import 'package:pauza/src/core/api_client/middleware/logger_mw.dart';
 import 'package:pauza/src/core/api_client/middleware/retry_mw.dart';
+import 'package:pauza/src/core/connectivity/domain/internet_health_gate.dart';
+import 'package:pauza/src/core/connectivity/domain/internet_health_gate_notifier.dart';
 import 'package:pauza/src/core/init/config.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
@@ -26,7 +29,10 @@ import 'package:pauza_screen_time/pauza_screen_time.dart'
     show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
 
 class PauzaDependencies with AppFuseInitialization {
+  static final Uri _defaultInternetProbeUri = Uri.parse('https://www.google.com/');
+
   late final LocalDatabase localDatabase;
+  late final InternetHealthGate internetHealthGate;
   late final PauzaPermissionGate permissionGate;
   late final PermissionManager permissionManager;
   late final InstalledAppsManager installedAppsManager;
@@ -69,6 +75,14 @@ class PauzaDependencies with AppFuseInitialization {
           const ApiClientRetryMiddleware(),
         ],
       );
+    },
+    'init internet health gate': (state) async {
+      final config = state.getCurrentConfig<PauzaConfig>()!;
+      internetHealthGate = InternetHealthGateNotifier(
+        probeUri: _resolveInternetProbeUri(config),
+        connectivity: Connectivity(),
+      );
+      await internetHealthGate.refresh(force: true);
     },
     'init package info': (_) async {
       packageInfo = await PackageInfo.fromPlatform();
@@ -136,4 +150,24 @@ class PauzaDependencies with AppFuseInitialization {
       }
     },
   };
+
+  static Uri _resolveInternetProbeUri(PauzaConfig config) {
+    final configuredProbeUrl = config.internetProbeUrl;
+    if (configuredProbeUrl != null) {
+      final configuredProbeUri = Uri.tryParse(configuredProbeUrl);
+      if (configuredProbeUri != null && configuredProbeUri.hasScheme) {
+        return configuredProbeUri;
+      }
+    }
+
+    final apiBaseUrl = config.apiBaseUrl.trim();
+    if (apiBaseUrl.isNotEmpty) {
+      final apiBaseUri = Uri.tryParse(apiBaseUrl);
+      if (apiBaseUri != null && apiBaseUri.hasScheme) {
+        return apiBaseUri;
+      }
+    }
+
+    return _defaultInternetProbeUri;
+  }
 }

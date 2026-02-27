@@ -42,6 +42,7 @@ class _PauzaAppState extends State<PauzaApp> with RouterStateMixin<PauzaApp> {
 
   @override
   void dispose() {
+    _dependencies.internetHealthGate.dispose();
     _dependencies.authGate.dispose();
     _dependencies.authRepository.dispose();
     _dependencies.permissionGate.dispose();

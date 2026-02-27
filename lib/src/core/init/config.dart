@@ -17,6 +17,15 @@ class PauzaConfig extends JsonAssetConfig {
   String get appName => getString('APP_NAME');
 
   String get apiBaseUrl => getString('API_BASE_URL');
+
+  String? get internetProbeUrl {
+    try {
+      final value = getString('INTERNET_PROBE_URL').trim();
+      return value.isEmpty ? null : value;
+    } on Object {
+      return null;
+    }
+  }
 }
 
 class ProdConfig extends PauzaConfig {

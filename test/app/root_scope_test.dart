@@ -3,6 +3,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/app/root_scope.dart';
+import 'package:pauza/src/core/connectivity/domain/internet_health_gate.dart';
+import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
+import 'package:pauza/src/core/connectivity/model/internet_health_state.dart';
 import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/auth/common/model/auth_credentials_dto.dart';
@@ -74,8 +77,38 @@ final class _TestPauzaDependencies extends PauzaDependencies {
     userProfileRepository = _FakeUserProfileRepository();
     streaksRepository = _FakeStreaksRepository();
     statsBlockingRepository = _FakeStatsBlockingRepository();
+    internetHealthGate = _FakeInternetHealthGate();
+    internetRequiredGuard = _FakeInternetRequiredGuard();
     this.hasNfcSupport = hasNfcSupport;
   }
+}
+
+final class _FakeInternetHealthGate implements InternetHealthGate {
+  @override
+  InternetHealthState get state => InternetHealthState.initial();
+
+  @override
+  bool get isHealthy => true;
+
+  @override
+  void addListener(VoidCallback listener) {}
+
+  @override
+  Future<void> refresh({bool force = false}) async {}
+
+  @override
+  void removeListener(VoidCallback listener) {}
+
+  @override
+  void dispose() {}
+}
+
+final class _FakeInternetRequiredGuard implements InternetRequiredGuard {
+  @override
+  bool get isHealthy => true;
+
+  @override
+  Future<bool> canProceed({bool forceRefresh = true}) async => true;
 }
 
 final class _FakeLocalDatabase implements LocalDatabase {

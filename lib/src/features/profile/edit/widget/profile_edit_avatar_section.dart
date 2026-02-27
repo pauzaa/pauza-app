@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pauza/src/core/common/model/pauza_app_error.dart';
+import 'package:pauza/src/core/common_ui/pauza_toast.dart';
+import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/profile/edit/domain/user_edit_draft_notifier.dart';
 import 'package:pauza/src/features/profile/edit/widget/profile_edit_draft_avatar.dart';
@@ -34,6 +37,15 @@ class ProfileEditAvatarSection extends StatelessWidget {
   }
 
   Future<void> _onChangePhotoPressed(BuildContext context) async {
+    final canProceed = await PauzaDependencies.of(context).internetRequiredGuard.canProceed();
+    if (!context.mounted) {
+      return;
+    }
+    if (!canProceed) {
+      context.showToast(PauzaAppError.internetUnavailable.localize(context.l10n));
+      return;
+    }
+
     final source = await ProfilePhotoActionSheet.show(context);
     if (!context.mounted || source == null) {
       return;

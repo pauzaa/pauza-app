@@ -76,7 +76,10 @@ class RootScopeState extends State<RootScope> {
       nowUtc: () => DateTime.now().toUtc(),
     );
 
-    authBloc = AuthBloc(authRepository: dependencies.authRepository);
+    authBloc = AuthBloc(
+      authRepository: dependencies.authRepository,
+      internetRequiredGuard: dependencies.internetRequiredGuard,
+    );
 
     restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
       repository: dependencies.restrictionLifecycleRepository,

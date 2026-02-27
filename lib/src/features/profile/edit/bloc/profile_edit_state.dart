@@ -7,8 +7,7 @@ sealed class ProfileEditState {
   ProfileEditState ready(UserDto user) => ProfileEditReady(user: user);
   ProfileEditState saving() => const ProfileEditSaving();
   ProfileEditState success() => const ProfileEditSuccess();
-  ProfileEditState failure(UserProfileFailureCode failureCode, String? errorMessage) =>
-      ProfileEditFailure(failureCode: failureCode, errorMessage: errorMessage);
+  ProfileEditState failure(Object error) => ProfileEditFailure(error: error);
 
   bool get isReady => this is ProfileEditReady;
   bool get isSaving => this is ProfileEditSaving;
@@ -38,8 +37,7 @@ class ProfileEditSuccess extends ProfileEditState {
 }
 
 class ProfileEditFailure extends ProfileEditState {
-  const ProfileEditFailure({required this.failureCode, required this.errorMessage});
+  const ProfileEditFailure({required this.error});
 
-  final UserProfileFailureCode failureCode;
-  final String? errorMessage;
+  final Object error;
 }

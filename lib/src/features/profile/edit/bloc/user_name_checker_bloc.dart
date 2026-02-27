@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common/validation.dart';
+import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
 import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -8,7 +9,7 @@ sealed class UserNameCheckerEvent extends Equatable {
   const UserNameCheckerEvent();
 }
 
-enum UsernameAvailability { unknown, checking, available, taken, error }
+enum UsernameAvailability { unknown, checking, available, taken, offline, error }
 
 final class UserNameCheckerStarted extends UserNameCheckerEvent {
   const UserNameCheckerStarted({required this.username});
@@ -22,8 +23,10 @@ final class UserNameCheckerStarted extends UserNameCheckerEvent {
 class UserNameCheckerBloc extends Bloc<UserNameCheckerEvent, UsernameAvailability> {
   UserNameCheckerBloc({
     required UserProfileRepository userProfileRepository,
+    required InternetRequiredGuard internetRequiredGuard,
     Duration debounceDuration = const Duration(milliseconds: 500),
   }) : _userProfileRepository = userProfileRepository,
+       _internetRequiredGuard = internetRequiredGuard,
        super(UsernameAvailability.unknown) {
     on<UserNameCheckerStarted>(
       _onStarted,
@@ -32,6 +35,7 @@ class UserNameCheckerBloc extends Bloc<UserNameCheckerEvent, UsernameAvailabilit
   }
 
   final UserProfileRepository _userProfileRepository;
+  final InternetRequiredGuard _internetRequiredGuard;
 
   Future<void> _onStarted(UserNameCheckerStarted event, Emitter<UsernameAvailability> emit) async {
     try {
@@ -39,6 +43,13 @@ class UserNameCheckerBloc extends Bloc<UserNameCheckerEvent, UsernameAvailabilit
         emit(UsernameAvailability.error);
         return;
       }
+
+      final canProceed = await _internetRequiredGuard.canProceed();
+      if (!canProceed) {
+        emit(UsernameAvailability.offline);
+        return;
+      }
+
       emit(UsernameAvailability.checking);
       final available = await _userProfileRepository.isUsernameAvailable(username: event.username);
       if (available) {

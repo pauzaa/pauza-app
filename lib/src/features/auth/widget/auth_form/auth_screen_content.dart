@@ -7,6 +7,7 @@ import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
+import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/widget/auth_form/auth_credentials_form.dart';
 import 'package:pauza/src/features/auth/widget/auth_form/auth_header_section.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
@@ -42,8 +43,12 @@ class _AuthScreenContentState extends State<AuthScreenContent> {
             return current is AuthFlowFailure || current is AuthOtpRequired;
           },
           listener: (context, state) {
-            if (state case AuthFlowFailure(:final failure)) {
-              final message = failure.localizeString(context.l10n);
+            if (state case AuthFlowFailure(:final error)) {
+              final message = switch (error) {
+                final Localizable localizable => localizable.localize(context.l10n),
+                AuthException(:final failure) => failure.localizeString(context.l10n),
+                _ => context.l10n.authFailureUnknown,
+              };
               context.showToast(message);
               return;
             }

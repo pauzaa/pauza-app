@@ -3,22 +3,27 @@ import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauza/src/core/common/model/pauza_app_error.dart';
+import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
-import 'package:pauza/src/features/profile/common/model/user_profile_failure.dart';
 import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 
 part 'profile_edit_event.dart';
 part 'profile_edit_state.dart';
 
 final class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
-  ProfileEditBloc({required UserProfileRepository userProfileRepository})
-    : _userProfileRepository = userProfileRepository,
-      super(const ProfileEditInitial()) {
+  ProfileEditBloc({
+    required UserProfileRepository userProfileRepository,
+    required InternetRequiredGuard internetRequiredGuard,
+  }) : _userProfileRepository = userProfileRepository,
+       _internetRequiredGuard = internetRequiredGuard,
+       super(const ProfileEditInitial()) {
     on<ProfileEditStarted>(_onStarted);
     on<ProfileEditSaveRequested>(_onSaveRequested);
   }
 
   final UserProfileRepository _userProfileRepository;
+  final InternetRequiredGuard _internetRequiredGuard;
 
   Future<void> _onStarted(ProfileEditStarted event, Emitter<ProfileEditState> emit) async {
     emit(state.loading());
@@ -27,10 +32,8 @@ final class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
       final cached = await _userProfileRepository.readCachedProfile();
       final user = cached?.user ?? await _userProfileRepository.fetchAndCacheProfile();
       emit(state.ready(user));
-    } on UserProfileException catch (error) {
-      emit(state.failure(error.code, error.message));
     } on Object catch (error) {
-      emit(state.failure(UserProfileFailureCode.unknown, error.toString()));
+      emit(state.failure(error));
     }
   }
 
@@ -45,6 +48,12 @@ final class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
 
     emit(state.saving());
 
+    final canProceed = await _internetRequiredGuard.canProceed();
+    if (!canProceed) {
+      emit(state.failure(PauzaAppError.internetUnavailable));
+      return;
+    }
+
     try {
       await _userProfileRepository.updateProfile(
         name: event.name,
@@ -53,10 +62,8 @@ final class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
         profilePictureBytes: event.profilePictureBytes,
       );
       emit(state.success());
-    } on UserProfileException catch (error) {
-      emit(state.failure(error.code, error.message));
     } on Object catch (error) {
-      emit(state.failure(UserProfileFailureCode.unknown, error.toString()));
+      emit(state.failure(error));
     }
   }
 }

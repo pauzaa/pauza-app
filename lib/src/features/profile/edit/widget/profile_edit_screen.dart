@@ -40,12 +40,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) =>
-              ProfileEditBloc(userProfileRepository: dependencies.userProfileRepository)
-                ..add(const ProfileEditStarted()),
+          create: (_) => ProfileEditBloc(
+            userProfileRepository: dependencies.userProfileRepository,
+            internetRequiredGuard: dependencies.internetRequiredGuard,
+          )..add(const ProfileEditStarted()),
         ),
         BlocProvider(
-          create: (context) => UserNameCheckerBloc(userProfileRepository: dependencies.userProfileRepository),
+          create: (context) => UserNameCheckerBloc(
+            userProfileRepository: dependencies.userProfileRepository,
+            internetRequiredGuard: dependencies.internetRequiredGuard,
+          ),
         ),
       ],
       child: UserEditDraftScope(notifier: _notifier, child: const ProfileEditBody()),

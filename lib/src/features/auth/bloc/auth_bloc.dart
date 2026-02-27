@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauza/src/core/common/model/pauza_app_error.dart';
+import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
 import 'package:pauza/src/features/auth/common/model/auth_credentials_dto.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
@@ -9,7 +11,10 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 final class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc({required AuthRepository authRepository}) : _authRepository = authRepository, super(const AuthIdle()) {
+  AuthBloc({required AuthRepository authRepository, required InternetRequiredGuard internetRequiredGuard})
+    : _authRepository = authRepository,
+      _internetRequiredGuard = internetRequiredGuard,
+      super(const AuthIdle()) {
     on<AuthSignInRequested>(_onSignInRequested);
     on<AuthOtpSubmitted>(_onOtpSubmitted);
     on<AuthSignOutRequested>(_onSignOutRequested);
@@ -17,8 +22,15 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   final AuthRepository _authRepository;
+  final InternetRequiredGuard _internetRequiredGuard;
 
   Future<void> _onSignInRequested(AuthSignInRequested event, Emitter<AuthState> emit) async {
+    final canProceed = await _internetRequiredGuard.canProceed();
+    if (!canProceed) {
+      _emitInternetRequiredFailure(emit, email: event.email);
+      return;
+    }
+
     emit(AuthSubmitting(email: event.email));
 
     try {
@@ -31,7 +43,7 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(AuthOtpRequired(email: email));
       }
     } on Object catch (error) {
-      emit(AuthFlowFailure(failure: _mapFailure(error), email: event.email, message: error.toString()));
+      emit(AuthFlowFailure(error: error, email: event.email));
     }
   }
 
@@ -39,15 +51,25 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
     switch (state) {
       case AuthFlowFailure(email: null):
       case AuthIdle():
-        emit(const AuthFlowFailure(failure: AuthFailure.otpChallengeMissing, email: null, message: 'email is missing'));
+        emit(const AuthFlowFailure(error: AuthException(failure: AuthFailure.otpChallengeMissing), email: null));
         break;
       case AuthSubmitting():
-        emit(const AuthFlowFailure(failure: AuthFailure.unknown, email: null, message: 'already loading'));
+        emit(
+          const AuthFlowFailure(
+            error: AuthException(failure: AuthFailure.unknown, message: 'already loading'),
+            email: null,
+          ),
+        );
         break;
       case AuthOtpRequired(:final email):
       case AuthFlowSuccess(:final email):
       case AuthFlowFailure(:final String email):
         emit(AuthSubmitting(email: email));
+        final canProceed = await _internetRequiredGuard.canProceed();
+        if (!canProceed) {
+          _emitInternetRequiredFailure(emit, email: email);
+          return;
+        }
 
         try {
           final result = await _authRepository.verifyOtp(otp: event.otp);
@@ -59,7 +81,7 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
               emit(AuthOtpRequired(email: email));
           }
         } on Object catch (error) {
-          emit(AuthFlowFailure(failure: _mapFailure(error), message: error.toString(), email: email));
+          emit(AuthFlowFailure(error: error, email: email));
         }
     }
   }
@@ -71,7 +93,7 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _authRepository.signOut();
       emit(const AuthIdle());
     } on Object catch (error) {
-      emit(AuthFlowFailure(failure: _mapFailure(error), message: error.toString(), email: null));
+      emit(AuthFlowFailure(error: error, email: null));
     }
   }
 
@@ -80,14 +102,11 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _authRepository.clearPendingOtpChallenge();
       emit(const AuthIdle());
     } on Object catch (error) {
-      emit(AuthFlowFailure(failure: _mapFailure(error), message: error.toString(), email: null));
+      emit(AuthFlowFailure(error: error, email: null));
     }
   }
 
-  AuthFailure _mapFailure(Object error) {
-    if (error case AuthException(:final failure)) {
-      return failure;
-    }
-    return AuthFailure.unknown;
+  void _emitInternetRequiredFailure(Emitter<AuthState> emit, {required String? email}) {
+    emit(AuthFlowFailure(error: PauzaAppError.internetUnavailable, email: email));
   }
 }

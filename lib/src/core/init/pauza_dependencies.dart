@@ -9,6 +9,7 @@ import 'package:pauza/src/core/api_client/middleware/logger_mw.dart';
 import 'package:pauza/src/core/api_client/middleware/retry_mw.dart';
 import 'package:pauza/src/core/connectivity/domain/internet_health_gate.dart';
 import 'package:pauza/src/core/connectivity/domain/internet_health_gate_notifier.dart';
+import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
 import 'package:pauza/src/core/init/config.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
@@ -33,6 +34,7 @@ class PauzaDependencies with AppFuseInitialization {
 
   late final LocalDatabase localDatabase;
   late final InternetHealthGate internetHealthGate;
+  late final InternetRequiredGuard internetRequiredGuard;
   late final PauzaPermissionGate permissionGate;
   late final PermissionManager permissionManager;
   late final InstalledAppsManager installedAppsManager;
@@ -83,6 +85,7 @@ class PauzaDependencies with AppFuseInitialization {
         connectivity: Connectivity(),
       );
       await internetHealthGate.refresh(force: true);
+      internetRequiredGuard = InternetRequiredGuardImpl(internetHealthGate: internetHealthGate);
     },
     'init package info': (_) async {
       packageInfo = await PackageInfo.fromPlatform();

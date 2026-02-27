@@ -65,10 +65,8 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     CachedUserProfile? cached;
     try {
       cached = await _userProfileRepository.readCachedProfile();
-    } on UserProfileException catch (error) {
-      if (error.code == UserProfileFailureCode.storage) {
-        await _clearCacheIgnoringErrors();
-      }
+    } on UserProfileStorageError {
+      await _clearCacheIgnoringErrors();
     } on Object {
       await _clearCacheIgnoringErrors();
     }
@@ -111,7 +109,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     final previous = state;
     if (previous.status == CurrentUserStatus.available && !previous.isSyncing) {
       // Preserve visible profile while showing in-flight sync indicator.
-      _emit(emit, previous.copyWith(isSyncing: true, clearReason: true, clearMessage: true));
+      _emit(emit, previous.copyWith(isSyncing: true, clearError: true, clearMessage: true));
     }
 
     try {
@@ -125,14 +123,10 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
           isSyncing: false,
         ),
       );
-    } on UserProfileException catch (error) {
+    } on UserProfileError catch (error) {
       await _handleRefreshFailure(error: error, previous: previous, emit: emit);
-    } on Object {
-      await _handleRefreshFailure(
-        error: const UserProfileException(code: UserProfileFailureCode.unknown),
-        previous: previous,
-        emit: emit,
-      );
+    } on Object catch (e) {
+      await _handleRefreshFailure(error: UserProfileUnknownError(e), previous: previous, emit: emit);
     }
   }
 
@@ -154,38 +148,38 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   }
 
   Future<void> _handleRefreshFailure({
-    required UserProfileException error,
+    required UserProfileError error,
     required CurrentUserState previous,
     required Emitter<CurrentUserState> emit,
   }) async {
-    switch (error.code) {
-      case UserProfileFailureCode.unauthorized:
-      case UserProfileFailureCode.forbidden:
+    switch (error) {
+      case UserProfileUnauthorizedError():
+      case UserProfileForbiddenError():
         // Profile endpoint rejected session; enforce auth reset centrally.
         await _authRepository.signOut();
         return;
-      case UserProfileFailureCode.network:
+      case UserProfileNetworkError():
         if (previous.status == CurrentUserStatus.available) {
           _emit(emit, previous.copyWith(isSyncing: false));
         } else {
-          _emit(emit, const CurrentUserState.unavailable(reason: UserProfileFailureCode.network));
+          _emit(emit, const CurrentUserState.unavailable(error: UserProfileNetworkError()));
         }
         return;
-      case UserProfileFailureCode.storage:
-      case UserProfileFailureCode.usernameTaken:
-      case UserProfileFailureCode.validation:
-      case UserProfileFailureCode.cancelled:
+      case UserProfileStorageError():
+      case UserProfileUsernameTakenError():
+      case UserProfileValidationError():
+      case UserProfileCancelledError():
+      case UserProfileUnknownError():
         if (previous.status == CurrentUserStatus.available) {
           _emit(emit, previous.copyWith(isSyncing: false));
         } else {
-          _emit(emit, CurrentUserState.error(reason: error.code, message: error.message));
-        }
-        return;
-      case UserProfileFailureCode.unknown:
-        if (previous.status == CurrentUserStatus.available) {
-          _emit(emit, previous.copyWith(isSyncing: false));
-        } else {
-          _emit(emit, CurrentUserState.error(reason: error.code, message: error.message));
+          String? message;
+          if (error is UserProfileStorageError) {
+            message = error.cause?.toString();
+          } else if (error is UserProfileUnknownError) {
+            message = error.cause?.toString();
+          }
+          _emit(emit, CurrentUserState.error(error: error, message: message));
         }
         return;
     }

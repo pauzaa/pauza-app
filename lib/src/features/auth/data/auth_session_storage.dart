@@ -29,13 +29,13 @@ final class SecureAuthSessionStorage implements AuthSessionStorage {
       }
       final decoded = jsonDecode(raw);
       if (decoded is! Map<String, Object?>) {
-        throw const AuthException(failure: AuthFailure.storageFailure);
+        throw const AuthStorageError();
       }
       return Session.fromJson(decoded);
-    } on AuthException {
+    } on AuthError {
       rethrow;
-    } on Object {
-      throw const AuthException(failure: AuthFailure.storageFailure);
+    } on Object catch (e) {
+      throw AuthStorageError(cause: e);
     }
   }
 
@@ -44,8 +44,8 @@ final class SecureAuthSessionStorage implements AuthSessionStorage {
     try {
       final raw = jsonEncode(session.toJson());
       await _secureStorage.write(key: _sessionKey, value: raw);
-    } on Object {
-      throw const AuthException(failure: AuthFailure.storageFailure);
+    } on Object catch (e) {
+      throw AuthStorageError(cause: e);
     }
   }
 
@@ -53,8 +53,8 @@ final class SecureAuthSessionStorage implements AuthSessionStorage {
   Future<void> deleteSession() async {
     try {
       await _secureStorage.delete(key: _sessionKey);
-    } on Object {
-      throw const AuthException(failure: AuthFailure.storageFailure);
+    } on Object catch (e) {
+      throw AuthStorageError(cause: e);
     }
   }
 }

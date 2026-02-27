@@ -10,14 +10,8 @@ typedef ErrorLogger = void Function(String msg, Object? error, StackTrace stackT
 
 void _defaultLogger(String msg) => developer.log(msg, name: 'http', time: DateTime.now(), level: 300);
 
-void _defaultErrorLogger(String msg, Object? error, StackTrace stackTrace) => developer.log(
-  msg,
-  name: 'http',
-  time: DateTime.now(),
-  level: 900,
-  error: error,
-  stackTrace: stackTrace,
-);
+void _defaultErrorLogger(String msg, Object? error, StackTrace stackTrace) =>
+    developer.log(msg, name: 'http', time: DateTime.now(), level: 900, error: error, stackTrace: stackTrace);
 
 @immutable
 class ApiClientLoggerMiddleware implements ApiClientMiddleware {
@@ -49,9 +43,7 @@ class ApiClientLoggerMiddleware implements ApiClientMiddleware {
       }
       final response = await innerHandler(request, context);
       if (logResponse) {
-        _onResponse(
-          '[${request.method}] ${request.url.path} -> ok | ${stopwatch.elapsedMilliseconds}ms',
-        );
+        _onResponse('[${request.method}] ${request.url.path} -> ok | ${stopwatch.elapsedMilliseconds}ms');
       }
       return response;
     } on ApiClientException catch (error, stackTrace) {

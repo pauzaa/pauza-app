@@ -29,11 +29,11 @@ class QrCodeConfContent extends StatelessWidget {
           case QrCodeConfLoading():
             break;
           case QrCodeConfError():
-            if (state.error case final Localizable localizableError) {
-              context.showToast(localizableError.localize(context.l10n));
-            } else {
-              context.showToast(context.l10n.qrCodeConfigActionFailed);
-            }
+            final message = switch (state.error) {
+              final Localizable localizable => localizable.localize(context.l10n),
+              _ => context.l10n.qrCodeConfigActionFailed,
+            };
+            context.showToast(message);
             break;
         }
       },

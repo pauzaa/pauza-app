@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
-import 'package:pauza/src/features/profile/common/model/user_profile_failure.dart';
 import 'package:pauza/src/features/profile/edit/bloc/profile_edit_bloc.dart';
 import 'package:pauza/src/features/profile/edit/domain/user_edit_draft_notifier.dart';
 import 'package:pauza/src/features/profile/edit/widget/profile_edit_avatar_section.dart';
@@ -29,7 +28,6 @@ class ProfileEditBody extends StatelessWidget {
             if (context.mounted) {
               final message = switch (state.error) {
                 final Localizable localizable => localizable.localize(l10n),
-                UserProfileException(:final code) => code.localize(l10n),
                 _ => l10n.errorTitle,
               };
               context.showToast(message);

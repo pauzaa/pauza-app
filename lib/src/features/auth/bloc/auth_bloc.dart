@@ -51,15 +51,10 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
     switch (state) {
       case AuthFlowFailure(email: null):
       case AuthIdle():
-        emit(const AuthFlowFailure(error: AuthException(failure: AuthFailure.otpChallengeMissing), email: null));
+        emit(const AuthFlowFailure(error: AuthOtpChallengeMissingError(), email: null));
         break;
       case AuthSubmitting():
-        emit(
-          const AuthFlowFailure(
-            error: AuthException(failure: AuthFailure.unknown, message: 'already loading'),
-            email: null,
-          ),
-        );
+        emit(const AuthFlowFailure(error: AuthUnknownError(cause: 'already loading'), email: null));
         break;
       case AuthOtpRequired(:final email):
       case AuthFlowSuccess(:final email):
@@ -107,6 +102,6 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _emitInternetRequiredFailure(Emitter<AuthState> emit, {required String? email}) {
-    emit(AuthFlowFailure(error: PauzaAppError.internetUnavailable, email: email));
+    emit(AuthFlowFailure(error: const PauzaInternetUnavailableError(), email: email));
   }
 }

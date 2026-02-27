@@ -44,10 +44,7 @@ void main() {
       FlutterSecureStorage.setMockInitialValues(<String, String>{'auth.session': 'not-json'});
       final storage = SecureAuthSessionStorage();
 
-      await expectLater(
-        storage.readSession,
-        throwsA(isA<AuthException>().having((error) => error.failure, 'failure', AuthFailure.storageFailure)),
-      );
+      await expectLater(storage.readSession, throwsA(isA<AuthStorageError>()));
     });
   });
 }

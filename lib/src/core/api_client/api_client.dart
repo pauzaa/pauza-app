@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
+import 'package:pauza/src/core/localization/l10n.dart';
 
 /// An HTTP request with a JSON-encoded body.
 extension type ApiClientRequest(BaseRequest _request) implements BaseRequest {}
@@ -329,7 +330,7 @@ class ApiClient {
 
 // Exceptions
 @immutable
-sealed class ApiClientException implements Exception {
+sealed class ApiClientException implements Exception, Localizable {
   const ApiClientException({
     required this.code,
     required this.message,
@@ -358,6 +359,9 @@ final class ApiClientClientException extends ApiClientException {
     super.error,
     super.data,
   });
+
+  @override
+  String localize(AppLocalizations localizations) => localizations.errorTitle;
 }
 
 /// Represents a network or server-side error (e.g., 5xx status codes, connectivity issues).
@@ -369,6 +373,9 @@ final class ApiClientNetworkException extends ApiClientException {
     super.error,
     super.data,
   });
+
+  @override
+  String localize(AppLocalizations localizations) => localizations.internetRequiredToast;
 }
 
 /// Represents an authorization error (e.g., 401 Unauthorized, 403 Forbidden).
@@ -380,4 +387,7 @@ final class ApiClientAuthorizationException extends ApiClientException {
     super.error,
     super.data,
   });
+
+  @override
+  String localize(AppLocalizations localizations) => localizations.errorTitle;
 }

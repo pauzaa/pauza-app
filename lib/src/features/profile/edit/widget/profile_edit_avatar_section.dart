@@ -42,7 +42,7 @@ class ProfileEditAvatarSection extends StatelessWidget {
       return;
     }
     if (!canProceed) {
-      context.showToast(PauzaAppError.internetUnavailable.localize(context.l10n));
+      context.showToast(const PauzaInternetUnavailableError().localize(context.l10n));
       return;
     }
 

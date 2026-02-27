@@ -20,10 +20,12 @@ class HomeContent extends StatelessWidget {
         return previous.error != current.error && current.hasError;
       },
       listener: (context, state) {
-        if (state.error case final Localizable error) {
-          final message = error.localize(l10n);
-          context.showToast(message);
-        }
+        if (!state.hasError) return;
+        final message = switch (state.error) {
+          final Localizable error => error.localize(l10n),
+          _ => l10n.errorTitle,
+        };
+        context.showToast(message);
       },
       child: Scaffold(
         body: SafeArea(

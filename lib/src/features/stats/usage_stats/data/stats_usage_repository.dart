@@ -57,11 +57,7 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
   ]);
 
   @override
-  Future<IList<UsageStats>> getUsageStats({
-    required DateTime start,
-    required DateTime end,
-    bool includeIcons = false,
-  }) {
+  Future<IList<UsageStats>> getUsageStats({required DateTime start, required DateTime end, bool includeIcons = false}) {
     return _fetchNormalizedUsageStats(start: start, end: end, includeIcons: includeIcons);
   }
 
@@ -294,22 +290,19 @@ class StatsUsageRepositoryImpl implements StatsUsageRepository {
       byIdentity[key] = existing.merge(stat);
     }
 
-    return byIdentity.values
-        .map((aggregation) => aggregation.toUsageStats())
-        .toIList()
-        .sort((a, b) {
-          final duration = b.totalDuration.compareTo(a.totalDuration);
-          if (duration != 0) {
-            return duration;
-          }
+    return byIdentity.values.map((aggregation) => aggregation.toUsageStats()).toIList().sort((a, b) {
+      final duration = b.totalDuration.compareTo(a.totalDuration);
+      if (duration != 0) {
+        return duration;
+      }
 
-          final launches = b.totalLaunchCount.compareTo(a.totalLaunchCount);
-          if (launches != 0) {
-            return launches;
-          }
+      final launches = b.totalLaunchCount.compareTo(a.totalLaunchCount);
+      if (launches != 0) {
+        return launches;
+      }
 
-          return a.appInfo.identifier.raw.compareTo(b.appInfo.identifier.raw);
-        });
+      return a.appInfo.identifier.raw.compareTo(b.appInfo.identifier.raw);
+    });
   }
 
   Future<(IList<DeviceEventStats>?, IList<UsageEvent>?, DeviceUsageInsightsSource)> _safeGetEventStatsOrFallback({

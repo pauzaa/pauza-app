@@ -29,22 +29,16 @@ final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
 
       final decoded = jsonDecode(raw);
       if (decoded is! Map<String, Object?>) {
-        throw const UserProfileException(
-          code: UserProfileFailureCode.storage,
-          message: 'Invalid cached user payload shape.',
-        );
+        throw const UserProfileStorageError('Invalid cached user payload shape.');
       }
 
       return CachedUserProfile.fromJson(decoded);
-    } on UserProfileException {
+    } on UserProfileError {
       rethrow;
-    } on FormatException {
-      throw const UserProfileException(code: UserProfileFailureCode.storage, message: 'Invalid cached user payload.');
-    } on Object {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.storage,
-        message: 'Failed to read cached user payload.',
-      );
+    } on FormatException catch (e) {
+      throw UserProfileStorageError(e);
+    } on Object catch (e) {
+      throw UserProfileStorageError(e);
     }
   }
 
@@ -54,18 +48,12 @@ final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
       final raw = jsonEncode(cached.toJson());
       final saved = await _storage.setValue<String>(cacheKey, raw);
       if (!saved) {
-        throw const UserProfileException(
-          code: UserProfileFailureCode.storage,
-          message: 'Failed to write cached user payload.',
-        );
+        throw const UserProfileStorageError('Failed to write cached user payload.');
       }
-    } on UserProfileException {
+    } on UserProfileError {
       rethrow;
-    } on Object {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.storage,
-        message: 'Failed to write cached user payload.',
-      );
+    } on Object catch (e) {
+      throw UserProfileStorageError(e);
     }
   }
 
@@ -74,18 +62,12 @@ final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
     try {
       final deleted = await _storage.setValue<String>(cacheKey, '');
       if (!deleted) {
-        throw const UserProfileException(
-          code: UserProfileFailureCode.storage,
-          message: 'Failed to delete cached user payload.',
-        );
+        throw const UserProfileStorageError('Failed to delete cached user payload.');
       }
-    } on UserProfileException {
+    } on UserProfileError {
       rethrow;
-    } on Object {
-      throw const UserProfileException(
-        code: UserProfileFailureCode.storage,
-        message: 'Failed to delete cached user payload.',
-      );
+    } on Object catch (e) {
+      throw UserProfileStorageError(e);
     }
   }
 }

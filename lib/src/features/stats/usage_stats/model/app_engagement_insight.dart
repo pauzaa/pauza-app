@@ -44,12 +44,6 @@ class AppEngagementInsight {
   }
 
   @override
-  int get hashCode => Object.hash(
-    appInfo,
-    totalDuration,
-    totalLaunchCount,
-    averageSessionDuration,
-    launchesPerHour,
-    engagementScore,
-  );
+  int get hashCode =>
+      Object.hash(appInfo, totalDuration, totalLaunchCount, averageSessionDuration, launchesPerHour, engagementScore);
 }

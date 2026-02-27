@@ -41,12 +41,12 @@ final class UserProfileRemoteDataSourceImpl implements UserProfileRemoteDataSour
     final normalizedUsername = _normalizeUsername(username);
     final normalizedName = name.trim();
     if (normalizedUsername.isEmpty || normalizedName.isEmpty) {
-      throw const UserProfileException(code: UserProfileFailureCode.validation);
+      throw const UserProfileValidationError();
     }
 
     final available = await isUsernameAvailable(username: normalizedUsername);
     if (!available) {
-      throw const UserProfileException(code: UserProfileFailureCode.usernameTaken);
+      throw const UserProfileUsernameTakenError();
     }
 
     final resolvedProfilePicture = profilePictureBytes == null ? profilePictureUrl : 'memory://profile';
@@ -62,7 +62,7 @@ final class UserProfileRemoteDataSourceImpl implements UserProfileRemoteDataSour
   Future<bool> isUsernameAvailable({required String username}) async {
     final normalizedUsername = _normalizeUsername(username);
     if (normalizedUsername.isEmpty) {
-      throw const UserProfileException(code: UserProfileFailureCode.validation);
+      throw const UserProfileValidationError();
     }
 
     await Future<void>.delayed(const Duration(milliseconds: 300));
@@ -76,7 +76,7 @@ final class UserProfileRemoteDataSourceImpl implements UserProfileRemoteDataSour
   @override
   Future<String> uploadProfilePhoto({required String localFilePath}) async {
     if (localFilePath.trim().isEmpty) {
-      throw const UserProfileException(code: UserProfileFailureCode.validation);
+      throw const UserProfileValidationError();
     }
 
     final photoUrl = 'https://example.com/avatar/john-$localFilePath';

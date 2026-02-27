@@ -50,7 +50,7 @@ void main() {
         () => repository.signIn(
           const AuthCredentialsDto(email: AuthRepositoryImpl.invalidCredentialsEmail, password: 'secret'),
         ),
-        throwsA(isA<AuthException>().having((error) => error.failure, 'failure', AuthFailure.invalidCredentials)),
+        throwsA(isA<AuthInvalidCredentialsError>()),
       );
 
       expect(repository.currentSession, const Session.empty());
@@ -80,10 +80,7 @@ void main() {
 
       await repository.signIn(const AuthCredentialsDto(email: AuthRepositoryImpl.otpRequiredEmail, password: 'secret'));
 
-      await expectLater(
-        () => repository.verifyOtp(otp: '000000'),
-        throwsA(isA<AuthException>().having((error) => error.failure, 'failure', AuthFailure.invalidOtp)),
-      );
+      await expectLater(() => repository.verifyOtp(otp: '000000'), throwsA(isA<AuthInvalidOtpError>()));
 
       repository.dispose();
     });

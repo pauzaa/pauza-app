@@ -36,10 +36,7 @@ class StatsTopEngagementAppRow extends StatelessWidget {
               children: <Widget>[
                 Text('${context.l10n.statsEngagementScore}: $scoreLabel', style: context.textTheme.bodyMedium),
                 Text('${context.l10n.statsLaunchIntensity}: $launchesPerHour', style: context.textTheme.bodyMedium),
-                Text(
-                  '${context.l10n.statsAvgSession}: $averageSessionLabel',
-                  style: context.textTheme.bodyMedium,
-                ),
+                Text('${context.l10n.statsAvgSession}: $averageSessionLabel', style: context.textTheme.bodyMedium),
                 Text(
                   '${context.l10n.statsUsageTableLaunchesColumn}: ${insight.totalLaunchCount}',
                   style: context.textTheme.bodyMedium,

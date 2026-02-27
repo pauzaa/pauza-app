@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:nfc_util/nfc_util.dart';
+import 'package:nfc_util/nfc_util.dart' hide NfcError;
 import 'package:pauza/src/features/nfc/model/nfc_platform_types.dart';
 import 'package:pauza/src/features/nfc/data/nfc_system_settings_launcher.dart';
 import 'package:pauza/src/features/nfc/model/nfc_errors.dart';
@@ -84,7 +84,7 @@ class NfcUtilClient implements NfcOperations {
   @override
   Future<NfcTagSnapshot> scanSingleTag({required Duration timeout}) async {
     if (_isSessionActive) {
-      throw const NfcException(code: NfcErrorCode.busy, message: 'Another NFC session is already active.');
+      throw const NfcBusyError();
     }
 
     final completer = Completer<NfcTagSnapshot>();
@@ -110,7 +110,7 @@ class NfcUtilClient implements NfcOperations {
             return;
           }
 
-          completer.completeError(NfcException.fromNfcError(error));
+          completer.completeError(NfcError.fromNfcError(error));
         },
         pollingOptions: const <NfcPollingOption>{
           NfcPollingOption.iso14443,
@@ -125,9 +125,7 @@ class NfcUtilClient implements NfcOperations {
           return;
         }
 
-        completer.completeError(
-          const NfcException(code: NfcErrorCode.timeout, message: 'NFC scan timed out before a tag was discovered.'),
-        );
+        completer.completeError(const NfcTimeoutError());
       });
 
       return await completer.future;
@@ -157,33 +155,30 @@ class NfcUtilClient implements NfcOperations {
     }
   }
 
-  NfcException _mapUnhandledError(Object error) {
-    if (error is NfcException) {
+  NfcError _mapUnhandledError(Object error) {
+    if (error is NfcError) {
       return error;
     }
 
     final message = error.toString().toLowerCase();
 
     if (message.contains('busy') || message.contains('already')) {
-      return const NfcException(code: NfcErrorCode.busy, message: 'Another NFC session is already active.');
+      return const NfcBusyError();
     }
     if (message.contains('permission') || message.contains('denied') || message.contains('unauthorized')) {
-      return const NfcException(code: NfcErrorCode.permissionDenied, message: 'NFC permission was denied.');
+      return const NfcPermissionDeniedError();
     }
     if (message.contains('cancel')) {
-      return const NfcException(code: NfcErrorCode.cancelled, message: 'NFC scan session was cancelled.');
+      return const NfcCancelledError();
     }
     if (message.contains('timeout')) {
-      return const NfcException(code: NfcErrorCode.timeout, message: 'NFC scan timed out before a tag was discovered.');
+      return const NfcTimeoutError();
     }
     if (message.contains('unsupported') || message.contains('not available') || message.contains('unavailable')) {
-      return const NfcException(
-        code: NfcErrorCode.unsupported,
-        message: 'NFC is not supported on this platform/device.',
-      );
+      return const NfcUnsupportedError();
     }
 
-    return NfcException(code: NfcErrorCode.unknown, message: 'Unexpected NFC error.', cause: error);
+    return NfcUnknownError(cause: error);
   }
 }
 

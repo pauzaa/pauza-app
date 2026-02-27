@@ -181,7 +181,7 @@ class _TestApp extends StatelessWidget {
             create: (context) => HomeStatsBloc(
               streaksRepository: streaksRepository,
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
-            ),
+            )..add(const HomeStatsLoadRequested()),
           ),
         ],
         child: const HomeContent(),

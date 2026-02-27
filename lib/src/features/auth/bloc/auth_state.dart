@@ -38,12 +38,11 @@ final class AuthFlowSuccess extends AuthState {
 }
 
 final class AuthFlowFailure extends AuthState {
-  const AuthFlowFailure({required this.failure, required this.email, this.message});
+  const AuthFlowFailure({required this.error, required this.email});
 
-  final AuthFailure failure;
+  final Object error;
   final String? email;
-  final String? message;
 
   @override
-  List<Object?> get props => <Object?>[failure, email, message];
+  List<Object?> get props => <Object?>[error, email];
 }

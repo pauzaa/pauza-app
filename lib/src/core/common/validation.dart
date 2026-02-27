@@ -56,6 +56,9 @@ abstract final class PauzaValidators {
     if (usernameAvailability == UsernameAvailability.taken) {
       return l10n.profileEditUsernameTakenError;
     }
+    if (usernameAvailability == UsernameAvailability.offline) {
+      return l10n.profileEditOfflineUsernameCheckError;
+    }
     return null;
   }
 

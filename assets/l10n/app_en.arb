@@ -100,6 +100,10 @@
   "@profileEditNetworkError": {
     "description": "Network failure message shown on edit profile flow."
   },
+  "profileEditOfflineUsernameCheckError": "Connect to the internet to check username availability",
+  "@profileEditOfflineUsernameCheckError": {
+    "description": "Validation message when username availability cannot be checked while offline."
+  },
   "profileSettingsNavTitle": "Settings",
   "@profileSettingsNavTitle": {
     "description": "Navigation item title for profile settings."
@@ -208,6 +212,22 @@
   "retryButton": "Retry",
   "@retryButton": {
     "description": "Label for reattempting a failed action."
+  },
+  "internetRequiredToast": "Internet connection is required",
+  "@internetRequiredToast": {
+    "description": "Toast shown when a network-required action is blocked while offline."
+  },
+  "leaderboardOfflineTitle": "Leaderboard is unavailable",
+  "@leaderboardOfflineTitle": {
+    "description": "Title for leaderboard offline state."
+  },
+  "leaderboardOfflineMessage": "Connect to the internet to view leaderboard data",
+  "@leaderboardOfflineMessage": {
+    "description": "Message for leaderboard offline state."
+  },
+  "leaderboardRetryButton": "Try again",
+  "@leaderboardRetryButton": {
+    "description": "Retry button label for leaderboard offline state."
   },
   "closeButton": "Close",
   "@closeButton": {

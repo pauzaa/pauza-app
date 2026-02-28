@@ -7,6 +7,7 @@ import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/stats/blocking_stats/bloc/stats_blocking_bloc.dart';
 import 'package:pauza/src/features/stats/blocking_stats/widget/stats_blocking_tab_content.dart';
+import 'package:pauza/src/features/stats/usage_stats/bloc/stats_usage_bloc.dart';
 import 'package:pauza/src/features/stats/common/model/stats_tab.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_tabs.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_tab_content.dart';
@@ -48,6 +49,10 @@ class _StatsScreenState extends State<StatsScreen> {
           create: (context) =>
               StatsBlockingBloc(repository: RootScope.of(context).statsBlockingRepository)
                 ..add(const StatsBlockingStarted()),
+        ),
+        BlocProvider<StatsUsageBloc>(
+          create: (context) =>
+              StatsUsageBloc(repository: RootScope.of(context).statsUsageRepository)..add(const StatsUsageStarted()),
         ),
       ],
       child: Scaffold(

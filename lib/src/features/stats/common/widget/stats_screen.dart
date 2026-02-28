@@ -3,14 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helm/helm.dart';
 import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/common/extensions.dart';
-import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/stats/blocking_stats/bloc/stats_blocking_bloc.dart';
 import 'package:pauza/src/features/stats/blocking_stats/widget/stats_blocking_tab_content.dart';
 import 'package:pauza/src/features/stats/common/model/stats_tab.dart';
-import 'package:pauza/src/features/stats/usage_stats/bloc/stats_bloc.dart';
-import 'package:pauza/src/features/stats/usage_stats/bloc/stats_event.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_tabs.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_tab_content.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
@@ -47,11 +44,6 @@ class _StatsScreenState extends State<StatsScreen> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<StatsBloc>(
-          create: (context) =>
-              StatsBloc(usageRepository: RootScope.of(context).statsUsageRepository, platform: kPauzaPlatform)
-                ..add(const StatsStarted()),
-        ),
         BlocProvider<StatsBlockingBloc>(
           create: (context) =>
               StatsBlockingBloc(repository: RootScope.of(context).statsBlockingRepository)

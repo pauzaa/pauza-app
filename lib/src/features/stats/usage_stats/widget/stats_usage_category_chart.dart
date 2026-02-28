@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/extensions.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/category_usage_bucket.dart';
-import 'package:pauza/src/features/stats/usage_stats/widget/stats_chart_colors.dart';
+import 'package:pauza/src/features/stats/common/widget/stats_chart_colors.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_category_legend_item.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 

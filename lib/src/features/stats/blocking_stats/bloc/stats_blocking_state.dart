@@ -6,6 +6,8 @@ final class StatsBlockingState extends Equatable {
     required this.maxDate,
     this.isLoading = false,
     this.snapshot,
+    this.modeBreakdown,
+    this.sourceBreakdown,
     this.error,
   });
 
@@ -13,6 +15,8 @@ final class StatsBlockingState extends Equatable {
   final DateTime maxDate;
   final bool isLoading;
   final BlockingStatsSnapshot? snapshot;
+  final ModeBlockingSnapshot? modeBreakdown;
+  final SourceBlockingSnapshot? sourceBreakdown;
   final Object? error;
 
   bool get hasError => error != null;
@@ -23,6 +27,10 @@ final class StatsBlockingState extends Equatable {
     bool? isLoading,
     BlockingStatsSnapshot? snapshot,
     bool clearSnapshot = false,
+    ModeBlockingSnapshot? modeBreakdown,
+    bool clearModeBreakdown = false,
+    SourceBlockingSnapshot? sourceBreakdown,
+    bool clearSourceBreakdown = false,
     Object? error,
     bool clearError = false,
   }) {
@@ -31,10 +39,12 @@ final class StatsBlockingState extends Equatable {
       maxDate: maxDate ?? this.maxDate,
       isLoading: isLoading ?? this.isLoading,
       snapshot: clearSnapshot ? null : (snapshot ?? this.snapshot),
+      modeBreakdown: clearModeBreakdown ? null : (modeBreakdown ?? this.modeBreakdown),
+      sourceBreakdown: clearSourceBreakdown ? null : (sourceBreakdown ?? this.sourceBreakdown),
       error: clearError ? null : (error ?? this.error),
     );
   }
 
   @override
-  List<Object?> get props => <Object?>[window, maxDate, isLoading, snapshot, error];
+  List<Object?> get props => <Object?>[window, maxDate, isLoading, snapshot, modeBreakdown, sourceBreakdown, error];
 }

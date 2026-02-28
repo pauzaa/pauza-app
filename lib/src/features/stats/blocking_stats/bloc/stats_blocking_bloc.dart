@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common/extensions.dart';
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/stats/blocking_stats/model/blocking_stats_snapshot.dart';
+import 'package:pauza/src/features/stats/blocking_stats/model/mode_blocking_snapshot.dart';
+import 'package:pauza/src/features/stats/blocking_stats/model/source_blocking_snapshot.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 part 'stats_blocking_event.dart';
@@ -46,10 +48,35 @@ class StatsBlockingBloc extends Bloc<StatsBlockingEvent, StatsBlockingState> {
     emit(state.copyWith(isLoading: true, clearError: true));
 
     try {
-      final snapshot = await _repository.getBlockingSnapshot(window: state.window, nowLocal: _nowLocal());
-      emit(state.copyWith(isLoading: false, snapshot: snapshot, clearError: true));
+      final window = state.window;
+      final now = _nowLocal();
+
+      // Fetch all three data sources in parallel.
+      final (snapshot, modeBreakdown, sourceBreakdown) = await (
+        _repository.getBlockingSnapshot(window: window, nowLocal: now),
+        _repository.getModeBreakdown(window: window),
+        _repository.getSourceBreakdown(window: window),
+      ).wait;
+
+      emit(
+        state.copyWith(
+          isLoading: false,
+          snapshot: snapshot,
+          modeBreakdown: modeBreakdown,
+          sourceBreakdown: sourceBreakdown,
+          clearError: true,
+        ),
+      );
     } on Object catch (error) {
-      emit(state.copyWith(isLoading: false, error: error, clearSnapshot: true));
+      emit(
+        state.copyWith(
+          isLoading: false,
+          error: error,
+          clearSnapshot: true,
+          clearModeBreakdown: true,
+          clearSourceBreakdown: true,
+        ),
+      );
     }
   }
 }

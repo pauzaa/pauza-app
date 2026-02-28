@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
-class StatsUsageKpiCard extends StatelessWidget {
-  const StatsUsageKpiCard({required this.label, required this.value, super.key});
+class StatsKpiCard extends StatelessWidget {
+  const StatsKpiCard({required this.label, required this.value, super.key});
 
   final String label;
   final String value;

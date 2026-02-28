@@ -1325,6 +1325,22 @@
       }
     }
   },
+  "statsBlockingBySource": "By Source",
+  "@statsBlockingBySource": {
+    "description": "Section title for source breakdown chart."
+  },
+  "statsBlockingManualSource": "Manual",
+  "@statsBlockingManualSource": {
+    "description": "Legend label for manual session source."
+  },
+  "statsBlockingScheduledSource": "Scheduled",
+  "@statsBlockingScheduledSource": {
+    "description": "Legend label for scheduled session source."
+  },
+  "statsBlockingByMode": "By Mode",
+  "@statsBlockingByMode": {
+    "description": "Section title for mode breakdown section."
+  },
   "statsEngagementRowSemantics": "{app}: score {score}, launch intensity {launchIntensity}",
   "@statsEngagementRowSemantics": {
     "description": "Accessibility label for one top engagement app row.",

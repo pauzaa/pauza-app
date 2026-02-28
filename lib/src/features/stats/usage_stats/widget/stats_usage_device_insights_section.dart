@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/extensions.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/device_event_snapshot.dart';
-import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_kpi_card.dart';
+import 'package:pauza/src/features/stats/common/widget/stats_kpi_card.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class StatsUsageDeviceInsightsSection extends StatelessWidget {
@@ -34,25 +34,22 @@ class StatsUsageDeviceInsightsSection extends StatelessWidget {
               children: [
                 SizedBox(
                   width: cardWidth,
-                  child: StatsUsageKpiCard(label: l10n.statsUnlockCount, value: snapshot.unlockCount.toString()),
+                  child: StatsKpiCard(label: l10n.statsUnlockCount, value: snapshot.unlockCount.toString()),
                 ),
                 SizedBox(
                   width: cardWidth,
-                  child: StatsUsageKpiCard(label: l10n.statsPickupCount, value: snapshot.screenOnCount.toString()),
+                  child: StatsKpiCard(label: l10n.statsPickupCount, value: snapshot.screenOnCount.toString()),
                 ),
                 SizedBox(
                   width: cardWidth,
-                  child: StatsUsageKpiCard(
+                  child: StatsKpiCard(
                     label: l10n.statsScreenOnDuration,
                     value: snapshot.totalScreenOnTime.formatDurationLabel(l10n),
                   ),
                 ),
                 SizedBox(
                   width: cardWidth,
-                  child: StatsUsageKpiCard(
-                    label: l10n.statsAvgScreenOnSession,
-                    value: avgSession.formatDurationLabel(l10n),
-                  ),
+                  child: StatsKpiCard(label: l10n.statsAvgScreenOnSession, value: avgSession.formatDurationLabel(l10n)),
                 ),
               ],
             );

@@ -23,6 +23,8 @@ import 'package:pauza/src/features/restriction_lifecycle/model/restriction_lifec
 import 'package:pauza/src/features/restriction_lifecycle/model/restriction_session_log.dart';
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/stats/blocking_stats/model/blocking_stats_snapshot.dart';
+import 'package:pauza/src/features/stats/blocking_stats/model/mode_blocking_snapshot.dart';
+import 'package:pauza/src/features/stats/blocking_stats/model/source_blocking_snapshot.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_snapshot.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -268,6 +270,16 @@ final class _FakeStreaksRepository implements StreaksRepository {
 final class _FakeStatsBlockingRepository implements StatsBlockingRepository {
   @override
   Future<BlockingStatsSnapshot> getBlockingSnapshot({required DateTimeRange window, required DateTime nowLocal}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ModeBlockingSnapshot> getModeBreakdown({required DateTimeRange window}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<SourceBlockingSnapshot> getSourceBreakdown({required DateTimeRange window}) {
     throw UnimplementedError();
   }
 }

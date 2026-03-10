@@ -8,7 +8,6 @@ import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart'
 import 'package:pauza/src/core/connectivity/model/internet_health_state.dart';
 import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
-import 'package:pauza/src/features/auth/common/model/auth_credentials_dto.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
@@ -208,7 +207,12 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<void> initialize() async {}
 
   @override
-  Future<AuthResult> signIn(AuthCredentialsDto credentials) {
+  Future<AuthOtpRequiredResult> requestOtp({required String email}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthOtpRequiredResult> resendOtp({required String email}) {
     throw UnimplementedError();
   }
 

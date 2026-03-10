@@ -9,16 +9,6 @@ sealed class AuthError implements Exception, Localizable {
   const AuthError();
 }
 
-final class AuthInvalidCredentialsError extends AuthError {
-  const AuthInvalidCredentialsError();
-
-  @override
-  String localize(AppLocalizations localizations) => localizations.authFailureInvalidCredentials;
-
-  @override
-  String toString() => 'AuthInvalidCredentialsError';
-}
-
 final class AuthInvalidOtpError extends AuthError {
   const AuthInvalidOtpError();
 
@@ -27,6 +17,29 @@ final class AuthInvalidOtpError extends AuthError {
 
   @override
   String toString() => 'AuthInvalidOtpError';
+}
+
+final class AuthOtpMaxAttemptsError extends AuthError {
+  const AuthOtpMaxAttemptsError();
+
+  @override
+  String localize(AppLocalizations localizations) => localizations.authFailureOtpMaxAttempts;
+
+  @override
+  String toString() => 'AuthOtpMaxAttemptsError';
+}
+
+final class AuthOtpCooldownError extends AuthError {
+  const AuthOtpCooldownError({this.retryAfter});
+
+  /// Optional hint for how long the user must wait before retrying.
+  final Duration? retryAfter;
+
+  @override
+  String localize(AppLocalizations localizations) => localizations.authFailureCooldown;
+
+  @override
+  String toString() => 'AuthOtpCooldownError(retryAfter: $retryAfter)';
 }
 
 final class AuthOtpChallengeMissingError extends AuthError {

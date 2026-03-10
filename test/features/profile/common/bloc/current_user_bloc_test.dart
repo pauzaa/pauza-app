@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/features/auth/common/model/auth_credentials_dto.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
@@ -123,7 +122,12 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<void> initialize() async {}
 
   @override
-  Future<AuthResult> signIn(AuthCredentialsDto credentials) {
+  Future<AuthOtpRequiredResult> requestOtp({required String email}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthOtpRequiredResult> resendOtp({required String email}) {
     throw UnimplementedError();
   }
 

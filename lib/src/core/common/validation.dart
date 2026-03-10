@@ -23,16 +23,6 @@ abstract final class PauzaValidators {
     return null;
   }
 
-  /// Validates a password string.
-  ///
-  /// Returns a localized error message if invalid, or null if valid.
-  static String? validatePassword(String? value, AppLocalizations l10n) {
-    if ((value ?? '').trim().isEmpty) {
-      return l10n.authValidationRequired;
-    }
-    return null;
-  }
-
   static String? validateName(String? value, AppLocalizations l10n) {
     if ((value ?? '').trim().isEmpty) {
       return l10n.modeRequiredFieldError;

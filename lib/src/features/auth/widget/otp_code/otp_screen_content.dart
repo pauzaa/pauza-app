@@ -67,16 +67,34 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        context.read<AuthBloc>().add(const AuthFlowResetRequested());
-        if (!didPop) {
-          Navigator.of(context).pop();
-        }
+        if (didPop) return;
+        _handleBackNavigation();
       },
       child: BlocListener<AuthBloc, AuthState>(
         listenWhen: (previous, current) {
-          return current is AuthFlowFailure;
+          if (current is AuthIdle && previous is AuthResetting) return true;
+          if (current is AuthFlowFailure) return true;
+          if (current case AuthOtpRequired(:final resent) when resent) {
+            final previousResent = switch (previous) {
+              AuthOtpRequired(:final resentCount) => resentCount,
+              _ => 0,
+            };
+            return current.resentCount > previousResent;
+          }
+          return false;
         },
         listener: (context, state) {
+          if (state is AuthIdle) {
+            Navigator.of(context).pop();
+            return;
+          }
+
+          if (state case AuthOtpRequired(:final resent) when resent) {
+            _otpController.clear();
+            _startCountdown();
+            return;
+          }
+
           if (state case AuthFlowFailure(:final error)) {
             final message = switch (error) {
               final Localizable localizable => localizable.localize(context.l10n),
@@ -93,44 +111,35 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
               padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.large).copyWith(top: PauzaSpacing.xxLarge),
               children: <Widget>[
                 BlocSelector<AuthBloc, AuthState, String>(
-                  selector: (state) {
-                    switch (state) {
-                      case AuthIdle():
-                        return '';
-                      case AuthSubmitting():
-                        return state.email ?? '';
-                      case AuthOtpRequired():
-                        return state.email;
-                      case AuthFlowSuccess():
-                        return state.email;
-                      case AuthFlowFailure():
-                        return state.email ?? '';
-                    }
-                  },
+                  selector: (state) => state.email ?? '',
                   builder: (context, email) {
                     return OtpHeaderText(email: email);
                   },
                 ),
                 const SizedBox(height: PauzaSpacing.giant),
                 BlocSelector<AuthBloc, AuthState, bool>(
-                  selector: (state) {
-                    return state is AuthSubmitting;
-                  },
-                  builder: (context, isSubmitting) {
+                  selector: (state) => state.isBusy,
+                  builder: (context, isBusy) {
                     return PauzaPinCodeField(
                       key: const Key('otp_pin_code_field'),
                       controller: _otpController,
-                      enabled: !isSubmitting,
+                      enabled: !isBusy,
                       length: _otpLength,
                       onFilled: _submitCode,
                     );
                   },
                 ),
                 const SizedBox(height: PauzaSpacing.giant),
-                OtpActionsSection(
-                  countdownStream: _countdownStream.stream,
-                  initialRemainingSeconds: _initialCountdownSeconds,
-                  onResendTap: _onResendTap,
+                BlocSelector<AuthBloc, AuthState, bool>(
+                  selector: (state) => state.isBusy,
+                  builder: (context, isBusy) {
+                    return OtpActionsSection(
+                      countdownStream: _countdownStream.stream,
+                      initialRemainingSeconds: _initialCountdownSeconds,
+                      isBusy: isBusy,
+                      onResendTap: _onResendTap,
+                    );
+                  },
                 ),
               ],
             ),
@@ -142,15 +151,21 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
 
   void _submitCode() {
     final authState = context.read<AuthBloc>().state;
-    if (authState is AuthSubmitting) {
-      return;
-    }
+    if (authState.isBusy) return;
 
     context.read<AuthBloc>().add(AuthOtpSubmitted(otp: _otpController.text.trim()));
   }
 
   void _onResendTap() {
-    _startCountdown();
-    // TODO: implement resend code API call
+    final authState = context.read<AuthBloc>().state;
+    if (authState.isBusy) return;
+    context.read<AuthBloc>().add(const AuthOtpResendRequested());
+  }
+
+  void _handleBackNavigation() {
+    final authState = context.read<AuthBloc>().state;
+    if (authState is AuthResetting) return;
+
+    context.read<AuthBloc>().add(const AuthFlowResetRequested());
   }
 }

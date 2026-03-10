@@ -11,9 +11,6 @@ import 'package:pauza/src/features/auth/widget/auth_form/auth_credentials_form.d
 import 'package:pauza/src/features/auth/widget/auth_form/auth_header_section.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
-typedef LocaleSelectionHandler = Future<void> Function(BuildContext context, Locale locale);
-typedef OtpNavigationHandler = void Function(BuildContext context);
-
 class AuthScreenContent extends StatefulWidget {
   const AuthScreenContent({super.key});
 
@@ -24,12 +21,10 @@ class AuthScreenContent extends StatefulWidget {
 class _AuthScreenContentState extends State<AuthScreenContent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
@@ -39,6 +34,9 @@ class _AuthScreenContentState extends State<AuthScreenContent> {
       body: SafeArea(
         child: BlocConsumer<AuthBloc, AuthState>(
           listenWhen: (previous, current) {
+            if (!(ModalRoute.of(context)?.isCurrent ?? true)) {
+              return false;
+            }
             return current is AuthFlowFailure || current is AuthOtpRequired;
           },
           listener: (context, state) {
@@ -74,10 +72,8 @@ class _AuthScreenContentState extends State<AuthScreenContent> {
                     AuthCredentialsForm(
                       formKey: _formKey,
                       emailController: _emailController,
-                      passwordController: _passwordController,
-                      onPasswordSubmitted: (_) => _submit(),
-                      onLoginTap: _submit,
-                      onForgotPasswordTap: _onForgotPasswordTap,
+                      onSubmitted: (_) => _submit(),
+                      onSendCodeTap: _submit,
                       isSubmitting: isSubmitting,
                     ),
                   ],
@@ -107,14 +103,7 @@ class _AuthScreenContentState extends State<AuthScreenContent> {
     if (!(_formKey.currentState?.validate() ?? false)) {
       return;
     }
-
-    context.read<AuthBloc>().add(
-      AuthSignInRequested(email: _emailController.text.trim(), password: _passwordController.text),
-    );
-  }
-
-  void _onForgotPasswordTap() {
-    // TODO: wire forgot password flow.
+    context.read<AuthBloc>().add(AuthOtpRequested(email: _emailController.text.trim()));
   }
 
   Future<void> _onLocaleSelected(Locale locale) async {

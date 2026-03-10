@@ -1,8 +1,8 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common/model/pauza_app_error.dart';
 import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
-import 'package:pauza/src/features/auth/common/model/auth_credentials_dto.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
@@ -15,16 +15,25 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
     : _authRepository = authRepository,
       _internetRequiredGuard = internetRequiredGuard,
       super(const AuthIdle()) {
-    on<AuthSignInRequested>(_onSignInRequested);
-    on<AuthOtpSubmitted>(_onOtpSubmitted);
-    on<AuthSignOutRequested>(_onSignOutRequested);
-    on<AuthFlowResetRequested>(_onFlowResetRequested);
+    on<AuthEvent>(
+      (event, emit) => switch (event) {
+        AuthOtpRequested() => _onOtpRequested(event, emit),
+        AuthOtpResendRequested() => _onOtpResendRequested(event, emit),
+        AuthOtpSubmitted() => _onOtpSubmitted(event, emit),
+        AuthSignOutRequested() => _onSignOutRequested(event, emit),
+        AuthFlowResetRequested() => _onFlowResetRequested(event, emit),
+      },
+      transformer: sequential(),
+    );
   }
 
   final AuthRepository _authRepository;
   final InternetRequiredGuard _internetRequiredGuard;
 
-  Future<void> _onSignInRequested(AuthSignInRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onOtpRequested(AuthOtpRequested event, Emitter<AuthState> emit) async {
+    // Guard: ignore queued duplicates once an OTP has already been issued.
+    if (state is AuthOtpRequired || state is AuthSubmitting) return;
+
     final canProceed = await _internetRequiredGuard.canProceed();
     if (!canProceed) {
       _emitInternetRequiredFailure(emit, email: event.email);
@@ -34,16 +43,32 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthSubmitting(email: event.email));
 
     try {
-      final result = await _authRepository.signIn(AuthCredentialsDto(email: event.email, password: event.password));
-
-      switch (result) {
-        case AuthSuccess():
-          emit(AuthFlowSuccess(email: event.email));
-        case AuthOtpRequiredResult(:final email):
-          emit(AuthOtpRequired(email: email));
-      }
+      final result = await _authRepository.requestOtp(email: event.email);
+      emit(AuthOtpRequired(email: result.email));
     } on Object catch (error) {
       emit(AuthFlowFailure(error: error, email: event.email));
+    }
+  }
+
+  Future<void> _onOtpResendRequested(AuthOtpResendRequested event, Emitter<AuthState> emit) async {
+    final email = state.email;
+    if (email == null) return;
+
+    final previousCount = state.resentCount;
+
+    emit(AuthResending(email: email, resentCount: previousCount));
+
+    final canProceed = await _internetRequiredGuard.canProceed();
+    if (!canProceed) {
+      _emitInternetRequiredFailure(emit, email: email, resentCount: previousCount);
+      return;
+    }
+
+    try {
+      final result = await _authRepository.resendOtp(email: email);
+      emit(AuthOtpRequired(email: result.email, resentCount: previousCount + 1));
+    } on Object catch (error) {
+      emit(AuthFlowFailure(error: error, email: email, resentCount: previousCount));
     }
   }
 
@@ -52,32 +77,50 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
       case AuthFlowFailure(email: null):
       case AuthIdle():
         emit(const AuthFlowFailure(error: AuthOtpChallengeMissingError(), email: null));
-        break;
-      case AuthSubmitting():
-        emit(const AuthFlowFailure(error: AuthUnknownError(cause: 'already loading'), email: null));
+      case AuthSubmitting(:final email):
+        emit(
+          AuthFlowFailure(
+            error: const AuthUnknownError(cause: 'already loading'),
+            email: email,
+          ),
+        );
+      case AuthResending(:final email, :final resentCount):
+        emit(
+          AuthFlowFailure(
+            error: const AuthUnknownError(cause: 'resend in progress'),
+            email: email,
+            resentCount: resentCount,
+          ),
+        );
+      case AuthResetting():
+      case AuthFlowSuccess():
         break;
       case AuthOtpRequired(:final email):
-      case AuthFlowSuccess(:final email):
       case AuthFlowFailure(:final String email):
-        emit(AuthSubmitting(email: email));
-        final canProceed = await _internetRequiredGuard.canProceed();
-        if (!canProceed) {
-          _emitInternetRequiredFailure(emit, email: email);
-          return;
-        }
+        await _verifyOtp(emit, email: email, otp: event.otp);
+    }
+  }
 
-        try {
-          final result = await _authRepository.verifyOtp(otp: event.otp);
+  Future<void> _verifyOtp(Emitter<AuthState> emit, {required String email, required String otp}) async {
+    emit(AuthSubmitting(email: email));
 
-          switch (result) {
-            case AuthSuccess():
-              emit(AuthFlowSuccess(email: email));
-            case AuthOtpRequiredResult(:final email):
-              emit(AuthOtpRequired(email: email));
-          }
-        } on Object catch (error) {
-          emit(AuthFlowFailure(error: error, email: email));
-        }
+    final canProceed = await _internetRequiredGuard.canProceed();
+    if (!canProceed) {
+      _emitInternetRequiredFailure(emit, email: email);
+      return;
+    }
+
+    try {
+      final result = await _authRepository.verifyOtp(otp: otp);
+
+      switch (result) {
+        case AuthSuccess():
+          emit(AuthFlowSuccess(email: email));
+        case AuthOtpRequiredResult(:final email):
+          emit(AuthOtpRequired(email: email));
+      }
+    } on Object catch (error) {
+      emit(AuthFlowFailure(error: error, email: email));
     }
   }
 
@@ -93,15 +136,23 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onFlowResetRequested(AuthFlowResetRequested event, Emitter<AuthState> emit) async {
+    if (state is AuthIdle) return;
+
+    // Capture OTP context before resetting so the email header and resend
+    // can still recover if clearPendingOtpChallenge() throws.
+    final previousEmail = state.email;
+
+    emit(const AuthResetting());
+
     try {
       await _authRepository.clearPendingOtpChallenge();
       emit(const AuthIdle());
     } on Object catch (error) {
-      emit(AuthFlowFailure(error: error, email: null));
+      emit(AuthFlowFailure(error: error, email: previousEmail));
     }
   }
 
-  void _emitInternetRequiredFailure(Emitter<AuthState> emit, {required String? email}) {
-    emit(AuthFlowFailure(error: const PauzaInternetUnavailableError(), email: email));
+  void _emitInternetRequiredFailure(Emitter<AuthState> emit, {required String? email, int resentCount = 0}) {
+    emit(AuthFlowFailure(error: const PauzaInternetUnavailableError(), email: email, resentCount: resentCount));
   }
 }

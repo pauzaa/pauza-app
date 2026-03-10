@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:pauza/src/features/auth/common/model/auth_credentials_dto.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
@@ -18,7 +17,14 @@ abstract interface class AuthRepository {
 
   Future<void> initialize();
 
-  Future<AuthResult> signIn(AuthCredentialsDto credentials);
+  /// Requests an OTP code to be sent to the given [email].
+  Future<AuthOtpRequiredResult> requestOtp({required String email});
+
+  /// Resends an OTP code to the given [email].
+  ///
+  /// May throw [AuthOtpCooldownError] or [AuthOtpMaxAttemptsError] when
+  /// rate-limited.
+  Future<AuthOtpRequiredResult> resendOtp({required String email});
 
   Future<AuthResult> verifyOtp({required String otp});
 
@@ -32,9 +38,7 @@ abstract interface class AuthRepository {
 final class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required AuthSessionStorage sessionStorage}) : _sessionStorage = sessionStorage;
 
-  static const String invalidCredentialsEmail = 'wrong@credentials.com';
-  static const String otpRequiredEmail = 'new@account.com';
-  static const String otpChallengeId = 'otp-new-account';
+  static const String otpChallengeId = 'otp-challenge';
   static const String validOtp = '111111';
 
   final AuthSessionStorage _sessionStorage;
@@ -67,29 +71,17 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthResult> signIn(AuthCredentialsDto credentials) async {
-    if (credentials.email == invalidCredentialsEmail) {
-      throw const AuthInvalidCredentialsError();
-    }
+  Future<AuthOtpRequiredResult> requestOtp({required String email}) async {
+    _pendingOtpChallengeId = otpChallengeId;
+    _pendingOtpEmail = email;
+    return AuthOtpRequiredResult(challengeId: otpChallengeId, email: email);
+  }
 
-    if (credentials.email == otpRequiredEmail) {
-      _pendingOtpChallengeId = otpChallengeId;
-      _pendingOtpEmail = credentials.email;
-      return const AuthOtpRequiredResult(challengeId: otpChallengeId, email: otpRequiredEmail);
-    }
-
-    final session = _buildDummySession(email: credentials.email);
-    final user = _buildDummyUser(email: credentials.email);
-
-    try {
-      await _sessionStorage.writeSession(session);
-      _emitSession(session);
-      return AuthSuccess(session: session, user: user);
-    } on AuthError {
-      rethrow;
-    } on Object catch (e) {
-      throw AuthUnknownError(cause: e);
-    }
+  @override
+  Future<AuthOtpRequiredResult> resendOtp({required String email}) async {
+    _pendingOtpChallengeId = otpChallengeId;
+    _pendingOtpEmail = email;
+    return AuthOtpRequiredResult(challengeId: otpChallengeId, email: email);
   }
 
   @override

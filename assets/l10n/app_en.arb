@@ -1368,17 +1368,9 @@
   "@authEmailHint": {
     "description": "Hint text for email input field."
   },
-  "authPassword": "Password",
-  "@authPassword": {
-    "description": "Label for password input field."
-  },
-  "authForgotPassword": "Forgot password?",
-  "@authForgotPassword": {
-    "description": "Link text for password recovery."
-  },
-  "authLogIn": "Log in",
-  "@authLogIn": {
-    "description": "Button label for login action."
+  "authSendCode": "Send Code",
+  "@authSendCode": {
+    "description": "Button label for sending OTP verification code."
   },
   "authOtpTitle": "Verify Your Email",
   "@authOtpTitle": {
@@ -1423,9 +1415,13 @@
   "@authValidationInvalidEmail": {
     "description": "Validation error for invalid email format."
   },
-  "authFailureInvalidCredentials": "Invalid email or password.",
-  "@authFailureInvalidCredentials": {
-    "description": "Error message for invalid login credentials."
+  "authFailureOtpMaxAttempts": "Too many attempts. Please request a new code.",
+  "@authFailureOtpMaxAttempts": {
+    "description": "Error message when maximum OTP verification attempts are exceeded."
+  },
+  "authFailureCooldown": "Too many requests. Please try again in a few minutes.",
+  "@authFailureCooldown": {
+    "description": "Error message when user is rate-limited and must wait before retrying."
   },
   "authFailureInvalidOtp": "Invalid verification code.",
   "@authFailureInvalidOtp": {

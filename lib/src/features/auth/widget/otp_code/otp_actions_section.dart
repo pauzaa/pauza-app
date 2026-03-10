@@ -7,12 +7,14 @@ class OtpActionsSection extends StatelessWidget {
     required this.countdownStream,
     required this.initialRemainingSeconds,
     required this.onResendTap,
+    this.isBusy = false,
     super.key,
   });
 
   final Stream<int> countdownStream;
   final int initialRemainingSeconds;
   final VoidCallback onResendTap;
+  final bool isBusy;
 
   String _countdownLabel(BuildContext context, int remainingSeconds) {
     final minutes = remainingSeconds ~/ 60;
@@ -45,7 +47,7 @@ class OtpActionsSection extends StatelessWidget {
               children: <Widget>[
                 PauzaTextButton(
                   onPressed: onResendTap,
-                  disabled: remainingSeconds > 0,
+                  disabled: remainingSeconds > 0 || isBusy,
                   title: Text(l10n.authOtpResendCode),
                 ),
                 if (remainingSeconds > 0) ...[

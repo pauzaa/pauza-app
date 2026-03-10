@@ -1,72 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
-import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
-import 'package:pauza/src/features/nfc/model/nfc_card_dto.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_availability.dart';
 import 'package:pauza/src/features/nfc/widget/nfc_chip_scan_sheet.dart';
-import 'package:pauza_ui_kit/pauza_ui_kit.dart';
+
+import '../../../helpers/helpers.dart';
 
 void main() {
   testWidgets('opens NFC settings only when repository supports it', (tester) async {
-    final repository = _FakeNfcRepository(
-      availability: NfcChipAvailability.disabled,
-      canOpenSystemSettingsForNfc: true,
-    );
+    final repository = MockNfcRepository();
+    when(() => repository.getAvailability()).thenAnswer((_) async => NfcChipAvailability.disabled);
+    when(() => repository.canOpenSystemSettingsForNfc).thenReturn(true);
+    when(() => repository.openSystemSettingsForNfc()).thenAnswer((_) async => true);
 
-    await tester.pumpWidget(_TestApp(repository: repository));
-
-    await tester.tap(find.text('open'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Open settings'), findsOneWidget);
-
-    await tester.tap(find.text('Open settings'));
-    await tester.pumpAndSettle();
-
-    expect(repository.openSystemSettingsCalls, 1);
-  });
-
-  testWidgets('falls back to OK action when repository cannot open settings', (tester) async {
-    final repository = _FakeNfcRepository(
-      availability: NfcChipAvailability.disabled,
-      canOpenSystemSettingsForNfc: false,
-    );
-
-    await tester.pumpWidget(_TestApp(repository: repository));
-
-    await tester.tap(find.text('open'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Open settings'), findsNothing);
-    expect(find.text('OK'), findsOneWidget);
-
-    await tester.tap(find.text('OK'));
-    await tester.pumpAndSettle();
-
-    expect(repository.openSystemSettingsCalls, 0);
-  });
-}
-
-class _TestApp extends StatelessWidget {
-  const _TestApp({required this.repository});
-
-  final NfcRepository repository;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      locale: const Locale('en'),
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: PauzaTheme.dark,
-      home: Scaffold(
+    await tester.pumpApp(
+      Scaffold(
         body: Builder(
           builder: (context) {
             return TextButton(
@@ -79,39 +27,47 @@ class _TestApp extends StatelessWidget {
         ),
       ),
     );
-  }
-}
 
-final class _FakeNfcRepository implements NfcRepository {
-  _FakeNfcRepository({required this.availability, required this.canOpenSystemSettingsForNfc});
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
 
-  final NfcChipAvailability availability;
+    expect(find.text('Open settings'), findsOneWidget);
 
-  @override
-  final bool canOpenSystemSettingsForNfc;
+    await tester.tap(find.text('Open settings'));
+    await tester.pumpAndSettle();
 
-  var openSystemSettingsCalls = 0;
+    verify(() => repository.openSystemSettingsForNfc()).called(1);
+  });
 
-  @override
-  bool get isScanInProgress => false;
+  testWidgets('falls back to OK action when repository cannot open settings', (tester) async {
+    final repository = MockNfcRepository();
+    when(() => repository.getAvailability()).thenAnswer((_) async => NfcChipAvailability.disabled);
+    when(() => repository.canOpenSystemSettingsForNfc).thenReturn(false);
 
-  @override
-  Future<bool> hasNfcSupport() async => availability != NfcChipAvailability.notSupported;
+    await tester.pumpApp(
+      Scaffold(
+        body: Builder(
+          builder: (context) {
+            return TextButton(
+              onPressed: () async {
+                await NfcChipScanSheet.show(context, repository: repository);
+              },
+              child: const Text('open'),
+            );
+          },
+        ),
+      ),
+    );
 
-  @override
-  Future<NfcChipAvailability> getAvailability() async => availability;
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
 
-  @override
-  Future<bool> openSystemSettingsForNfc() async {
-    openSystemSettingsCalls += 1;
-    return true;
-  }
+    expect(find.text('Open settings'), findsNothing);
+    expect(find.text('OK'), findsOneWidget);
 
-  @override
-  Future<NfcCardDto> scanSingleCard({Duration timeout = const Duration(seconds: 20)}) {
-    throw UnimplementedError();
-  }
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
 
-  @override
-  Future<void> stopSession({String? alertMessage, String? errorMessage}) async {}
+    verifyNever(() => repository.openSystemSettingsForNfc());
+  });
 }

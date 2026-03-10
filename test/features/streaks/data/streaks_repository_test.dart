@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart';
 void main() {
   group('StreaksRepositoryImpl', () {
     test('excludes anomalous sessions from rollups and qualification', () async {
-      final database = _FakeLocalDatabase();
+      final database = _StubLocalDatabase();
       final nowUtc = DateTime.utc(2026, 1, 15, 12);
       final repository = StreaksRepositoryImpl(localDatabase: database, nowUtc: () => nowUtc);
 
@@ -32,7 +32,7 @@ void main() {
     });
 
     test('incremental refresh no-op on unchanged cursor and reprocess on updated session', () async {
-      final database = _FakeLocalDatabase();
+      final database = _StubLocalDatabase();
       final nowUtc = DateTime.utc(2026, 1, 15, 12);
       final repository = StreaksRepositoryImpl(localDatabase: database, nowUtc: () => nowUtc);
 
@@ -71,7 +71,7 @@ void main() {
     });
 
     test('dedupes in-flight refreshes', () async {
-      final database = _FakeLocalDatabase()..restrictionSessionsQueryDelay = const Duration(milliseconds: 30);
+      final database = _StubLocalDatabase()..restrictionSessionsQueryDelay = const Duration(milliseconds: 30);
       final nowUtc = DateTime.utc(2026, 1, 15, 12);
       final repository = StreaksRepositoryImpl(localDatabase: database, nowUtc: () => nowUtc);
 
@@ -92,7 +92,7 @@ void main() {
     test('getGlobalSnapshot includes in-progress contribution for today', () async {
       final nowUtc = DateTime.utc(2026, 1, 15, 12);
       final nowLocal = nowUtc.toLocal();
-      final database = _FakeLocalDatabase();
+      final database = _StubLocalDatabase();
       final repository = StreaksRepositoryImpl(localDatabase: database, nowUtc: () => nowUtc);
 
       database.seedSession(sessionId: 's1', endedAtEpochMs: null, integrityStatus: 'ok', updatedAtEpochMs: 100);
@@ -112,7 +112,7 @@ void main() {
 
     test('computes best streak from aggregates', () async {
       final nowLocal = DateTime(2026, 1, 15, 9);
-      final database = _FakeLocalDatabase();
+      final database = _StubLocalDatabase();
       final repository = StreaksRepositoryImpl(localDatabase: database, nowUtc: () => nowLocal.toUtc());
 
       database.seedDailyAggregate(
@@ -208,7 +208,7 @@ final class _RestrictionSessionRow {
   final int updatedAtEpochMs;
 }
 
-final class _FakeLocalDatabase implements LocalDatabase {
+final class _StubLocalDatabase implements LocalDatabase {
   final Map<String, _RestrictionSessionRow> restrictionSessions = <String, _RestrictionSessionRow>{};
   final Map<String, List<_DateTimeEvent>> restrictionEvents = <String, List<_DateTimeEvent>>{};
   final Map<String, _StreakRollupRow> streakSessionDailyRollups = <String, _StreakRollupRow>{};
@@ -269,7 +269,7 @@ final class _FakeLocalDatabase implements LocalDatabase {
 
   @override
   Future<T> transaction<T>(Future<T> Function(Transaction transaction) action) async {
-    final transaction = _FakeTransaction(fakeDatabase: this);
+    final transaction = _StubTransaction(fakeDatabase: this);
     return action(transaction);
   }
 
@@ -311,10 +311,10 @@ final class _FakeLocalDatabase implements LocalDatabase {
   }
 }
 
-final class _FakeTransaction implements Transaction {
-  _FakeTransaction({required _FakeLocalDatabase fakeDatabase}) : _fakeDatabase = fakeDatabase;
+final class _StubTransaction implements Transaction {
+  _StubTransaction({required _StubLocalDatabase fakeDatabase}) : _fakeDatabase = fakeDatabase;
 
-  final _FakeLocalDatabase _fakeDatabase;
+  final _StubLocalDatabase _fakeDatabase;
 
   @override
   Future<List<Map<String, Object?>>> rawQuery(String sql, [List<Object?>? arguments]) async {

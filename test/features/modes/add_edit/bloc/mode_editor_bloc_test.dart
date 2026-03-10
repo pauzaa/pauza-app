@@ -1,121 +1,79 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
-import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
-import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
-import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
+import 'package:pauza_screen_time/pauza_screen_time.dart';
+
+import '../../../../helpers/helpers.dart';
 
 void main() {
-  group('ModeEditorBloc', () {
-    test('save create calls repository createMode', () async {
-      final repository = _FakeModesRepository();
-      final bloc = ModeEditorBloc(modesRepository: repository, hasNfcSupport: true);
+  late MockModesRepository repository;
 
-      final request = const ModeUpsertDTO.initialForDevice(
-        hasNfcSupport: true,
-      ).copyWith(title: 'Deep Work', textOnScreen: 'Stay focused', blockedAppIds: const ISet.empty());
+  setUpAll(registerTestFallbackValues);
 
-      bloc.add(ModeEditorSaveRequested(modeId: null, request: request));
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      expect(repository.createdRequests, hasLength(1));
-      expect(repository.createdRequests.single.title, 'Deep Work');
-
-      await bloc.close();
-    });
-
-    test('delete success emits ModeEditorDeleteSuccess', () async {
-      final repository = _FakeModesRepository();
-      final bloc = ModeEditorBloc(modesRepository: repository, hasNfcSupport: true);
-      final emitted = <ModeEditorState>[];
-      final sub = bloc.stream.listen(emitted.add);
-
-      bloc.add(const ModeEditorDeleteRequested(modeId: 'mode-1'));
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      expect(repository.deletedModeIds, <String>['mode-1']);
-      expect(emitted.whereType<ModeEditorDeleteSuccess>(), isNotEmpty);
-
-      await sub.cancel();
-      await bloc.close();
-    });
-
-    test('delete with null id emits failure', () async {
-      final repository = _FakeModesRepository();
-      final bloc = ModeEditorBloc(modesRepository: repository, hasNfcSupport: true);
-      final emitted = <ModeEditorState>[];
-      final sub = bloc.stream.listen(emitted.add);
-
-      bloc.add(const ModeEditorDeleteRequested(modeId: null));
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      expect(emitted.last, isA<ModeEditorFailure>());
-
-      await sub.cancel();
-      await bloc.close();
-    });
-
-    test('load maps mode icon token to request icon token', () async {
-      final repository = _FakeModesRepository();
-      final bloc = ModeEditorBloc(modesRepository: repository, hasNfcSupport: true);
-      final emitted = <ModeEditorState>[];
-      final sub = bloc.stream.listen(emitted.add);
-
-      bloc.add(const ModeEditorLoadRequested(modeId: 'mode-1'));
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      final ready = emitted.whereType<ModeEditorReady>().last;
-      expect(ready.request.icon, ModeIconCatalog.defaultIcon);
-
-      await sub.cancel();
-      await bloc.close();
-    });
+  setUp(() {
+    repository = MockModesRepository();
   });
-}
 
-class _FakeModesRepository implements ModesRepository {
-  final List<ModeUpsertDTO> createdRequests = <ModeUpsertDTO>[];
-  final List<String> deletedModeIds = <String>[];
-
-  @override
-  Future<void> createMode(ModeUpsertDTO request) async {
-    createdRequests.add(request);
-  }
-
-  @override
-  Future<void> deleteMode(String modeId) async {
-    deletedModeIds.add(modeId);
-  }
-
-  @override
-  Future<Mode> getMode(String modeId) async {
-    return Mode(
-      id: modeId,
-      title: 'Focus',
-      textOnScreen: 'Stay focused',
-      description: null,
-      allowedPausesCount: 2,
-      minimumDuration: null,
-      endingPausingScenario: ModeEndingPausingScenario.manual,
-      icon: ModeIconCatalog.defaultIcon,
-      schedule: null,
-      blockedAppIds: const ISet.empty(),
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+  group('ModeEditorBloc', () {
+    blocTest<ModeEditorBloc, ModeEditorState>(
+      'save create calls repository createMode',
+      setUp: () {
+        when(() => repository.createMode(any())).thenAnswer((_) async {});
+      },
+      build: () => ModeEditorBloc(modesRepository: repository, hasNfcSupport: true),
+      act: (bloc) {
+        final request = makeModeUpsertDto(
+          title: 'Deep Work',
+          textOnScreen: 'Stay focused',
+          blockedAppIds: const ISetConst<AppIdentifier>(<AppIdentifier>{}),
+        );
+        bloc.add(ModeEditorSaveRequested(modeId: null, request: request));
+      },
+      expect: () => <Matcher>[isA<ModeEditorLoading>(), isA<ModeEditorSaveSuccess>()],
+      verify: (_) {
+        final captured = verify(() => repository.createMode(captureAny())).captured.single as ModeUpsertDTO;
+        expect(captured.title, 'Deep Work');
+      },
     );
-  }
 
-  @override
-  Future<List<Mode>> getModes() async => <Mode>[];
+    blocTest<ModeEditorBloc, ModeEditorState>(
+      'delete success emits ModeEditorDeleteSuccess',
+      setUp: () {
+        when(() => repository.deleteMode(any())).thenAnswer((_) async {});
+      },
+      build: () => ModeEditorBloc(modesRepository: repository, hasNfcSupport: true),
+      act: (bloc) => bloc.add(const ModeEditorDeleteRequested(modeId: 'mode-1')),
+      expect: () => <Matcher>[isA<ModeEditorLoading>(), isA<ModeEditorDeleteSuccess>()],
+      verify: (_) {
+        verify(() => repository.deleteMode('mode-1')).called(1);
+      },
+    );
 
-  @override
-  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {}
+    blocTest<ModeEditorBloc, ModeEditorState>(
+      'delete with null id emits failure',
+      build: () => ModeEditorBloc(modesRepository: repository, hasNfcSupport: true),
+      act: (bloc) => bloc.add(const ModeEditorDeleteRequested(modeId: null)),
+      expect: () => <Matcher>[isA<ModeEditorLoading>(), isA<ModeEditorFailure>()],
+    );
 
-  @override
-  Stream<void> watchModes() => const Stream.empty();
-
-  @override
-  void dispose() {}
+    blocTest<ModeEditorBloc, ModeEditorState>(
+      'load maps mode icon token to request icon token',
+      setUp: () {
+        when(() => repository.getMode(any())).thenAnswer((_) async => makeMode());
+      },
+      build: () => ModeEditorBloc(modesRepository: repository, hasNfcSupport: true),
+      act: (bloc) => bloc.add(const ModeEditorLoadRequested(modeId: 'mode-1')),
+      expect: () => <Matcher>[
+        isA<ModeEditorLoading>(),
+        isA<ModeEditorReady>().having((s) => s.request.icon, 'request.icon', ModeIconCatalog.defaultIcon),
+      ],
+      verify: (_) {
+        verify(() => repository.getMode('mode-1')).called(1);
+      },
+    );
+  });
 }

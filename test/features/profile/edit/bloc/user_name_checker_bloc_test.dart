@@ -1,99 +1,98 @@
-import 'dart:typed_data';
-
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
-import 'package:pauza/src/features/profile/common/model/cached_user_profile.dart';
-import 'package:pauza/src/features/profile/common/model/user_dto.dart';
-import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/profile/edit/bloc/user_name_checker_bloc.dart';
 
+import '../../../../helpers/helpers.dart';
+
 void main() {
-  group('UserNameCheckerBloc', () {
-    test('offline emits offline and skips repository call', () async {
-      final repository = _FakeUserProfileRepository();
-      final guard = _FakeInternetRequiredGuard(canProceedResult: false);
-      final bloc = UserNameCheckerBloc(
-        userProfileRepository: repository,
-        internetRequiredGuard: guard,
-        debounceDuration: Duration.zero,
-      );
+  late MockUserProfileRepository repository;
+  late MockInternetRequiredGuard guard;
 
-      bloc.add(const UserNameCheckerStarted(username: 'john'));
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      expect(bloc.state, UsernameAvailability.offline);
-      expect(repository.isUsernameAvailableCalls, 0);
-
-      await bloc.close();
-    });
-
-    test('online emits available for available username', () async {
-      final repository = _FakeUserProfileRepository();
-      final guard = _FakeInternetRequiredGuard(canProceedResult: true);
-      final bloc = UserNameCheckerBloc(
-        userProfileRepository: repository,
-        internetRequiredGuard: guard,
-        debounceDuration: Duration.zero,
-      );
-
-      bloc.add(const UserNameCheckerStarted(username: 'john'));
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      expect(bloc.state, UsernameAvailability.available);
-      expect(repository.isUsernameAvailableCalls, 1);
-
-      await bloc.close();
-    });
+  setUp(() {
+    repository = MockUserProfileRepository();
+    guard = MockInternetRequiredGuard();
   });
-}
 
-final class _FakeUserProfileRepository implements UserProfileRepository {
-  int isUsernameAvailableCalls = 0;
+  group('UserNameCheckerBloc', () {
+    blocTest<UserNameCheckerBloc, UsernameAvailability>(
+      'offline emits offline and skips repository call',
+      setUp: () {
+        when(() => guard.canProceed(forceRefresh: any(named: 'forceRefresh'))).thenAnswer((_) async => false);
+      },
+      build: () => UserNameCheckerBloc(
+        userProfileRepository: repository,
+        internetRequiredGuard: guard,
+        debounceDuration: Duration.zero,
+      ),
+      act: (bloc) => bloc.add(const UserNameCheckerStarted(username: 'john')),
+      expect: () => <UsernameAvailability>[UsernameAvailability.offline],
+      verify: (_) {
+        verifyNever(() => repository.isUsernameAvailable(username: any(named: 'username')));
+      },
+    );
 
-  @override
-  Future<bool> isUsernameAvailable({required String username}) async {
-    isUsernameAvailableCalls += 1;
-    return true;
-  }
+    blocTest<UserNameCheckerBloc, UsernameAvailability>(
+      'online emits checking then available for available username',
+      setUp: () {
+        when(() => guard.canProceed(forceRefresh: any(named: 'forceRefresh'))).thenAnswer((_) async => true);
+        when(() => repository.isUsernameAvailable(username: any(named: 'username'))).thenAnswer((_) async => true);
+      },
+      build: () => UserNameCheckerBloc(
+        userProfileRepository: repository,
+        internetRequiredGuard: guard,
+        debounceDuration: Duration.zero,
+      ),
+      act: (bloc) => bloc.add(const UserNameCheckerStarted(username: 'john')),
+      expect: () => <UsernameAvailability>[UsernameAvailability.checking, UsernameAvailability.available],
+      verify: (_) {
+        verify(() => repository.isUsernameAvailable(username: 'john')).called(1);
+      },
+    );
 
-  @override
-  Future<CachedUserProfile?> readCachedProfile() async => null;
+    blocTest<UserNameCheckerBloc, UsernameAvailability>(
+      'online emits checking then taken for taken username',
+      setUp: () {
+        when(() => guard.canProceed(forceRefresh: any(named: 'forceRefresh'))).thenAnswer((_) async => true);
+        when(() => repository.isUsernameAvailable(username: any(named: 'username'))).thenAnswer((_) async => false);
+      },
+      build: () => UserNameCheckerBloc(
+        userProfileRepository: repository,
+        internetRequiredGuard: guard,
+        debounceDuration: Duration.zero,
+      ),
+      act: (bloc) => bloc.add(const UserNameCheckerStarted(username: 'taken_name')),
+      expect: () => <UsernameAvailability>[UsernameAvailability.checking, UsernameAvailability.taken],
+    );
 
-  @override
-  Future<UserDto> fetchAndCacheProfile() {
-    throw UnimplementedError();
-  }
+    blocTest<UserNameCheckerBloc, UsernameAvailability>(
+      'emits error for invalid username',
+      build: () => UserNameCheckerBloc(
+        userProfileRepository: repository,
+        internetRequiredGuard: guard,
+        debounceDuration: Duration.zero,
+      ),
+      act: (bloc) => bloc.add(const UserNameCheckerStarted(username: 'AB')),
+      expect: () => <UsernameAvailability>[UsernameAvailability.error],
+      verify: (_) {
+        verifyNever(() => guard.canProceed(forceRefresh: any(named: 'forceRefresh')));
+        verifyNever(() => repository.isUsernameAvailable(username: any(named: 'username')));
+      },
+    );
 
-  @override
-  Future<UserDto> updateProfile({
-    required String name,
-    required String username,
-    String? profilePictureUrl,
-    Uint8List? profilePictureBytes,
-  }) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<String> uploadProfilePhoto({required String localFilePath}) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<UserDto> watchProfileChanges() => const Stream<UserDto>.empty();
-
-  @override
-  Future<void> clearCache() async {}
-}
-
-final class _FakeInternetRequiredGuard implements InternetRequiredGuard {
-  _FakeInternetRequiredGuard({required this.canProceedResult});
-
-  final bool canProceedResult;
-
-  @override
-  bool get isHealthy => canProceedResult;
-
-  @override
-  Future<bool> canProceed({bool forceRefresh = true}) async => canProceedResult;
+    blocTest<UserNameCheckerBloc, UsernameAvailability>(
+      'emits error when repository throws',
+      setUp: () {
+        when(() => guard.canProceed(forceRefresh: any(named: 'forceRefresh'))).thenAnswer((_) async => true);
+        when(() => repository.isUsernameAvailable(username: any(named: 'username'))).thenThrow(Exception('network'));
+      },
+      build: () => UserNameCheckerBloc(
+        userProfileRepository: repository,
+        internetRequiredGuard: guard,
+        debounceDuration: Duration.zero,
+      ),
+      act: (bloc) => bloc.add(const UserNameCheckerStarted(username: 'john')),
+      expect: () => <UsernameAvailability>[UsernameAvailability.checking, UsernameAvailability.error],
+    );
+  });
 }

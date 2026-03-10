@@ -1,6 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/nfc/model/nfc_platform_types.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_availability.dart';
@@ -10,12 +10,21 @@ import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_tag_tech.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../helpers/helpers.dart';
+
 void main() {
+  setUpAll(registerTestFallbackValues);
+
   group('NfcRepositoryImpl', () {
+    late MockNfcOperations mockNfcOperations;
+
+    setUp(() {
+      mockNfcOperations = MockNfcOperations();
+    });
+
     test('returns disabled when manager availability is false', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.disabled),
-      );
+      when(() => mockNfcOperations.checkAvailability()).thenAnswer((_) async => NfcPlatformAvailability.disabled);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       final availability = await repository.getAvailability();
 
@@ -23,9 +32,8 @@ void main() {
     });
 
     test('returns unknown when availability cannot be determined', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.unknown),
-      );
+      when(() => mockNfcOperations.checkAvailability()).thenAnswer((_) async => NfcPlatformAvailability.unknown);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       final availability = await repository.getAvailability();
 
@@ -33,7 +41,8 @@ void main() {
     });
 
     test('hasNfcSupport returns true when availability is available', () async {
-      final repository = NfcRepositoryImpl(managerClient: _FakeNfcManagerClient());
+      when(() => mockNfcOperations.checkAvailability()).thenAnswer((_) async => NfcPlatformAvailability.available);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       final hasNfcSupport = await repository.hasNfcSupport();
 
@@ -41,9 +50,8 @@ void main() {
     });
 
     test('hasNfcSupport returns true when availability is disabled', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.disabled),
-      );
+      when(() => mockNfcOperations.checkAvailability()).thenAnswer((_) async => NfcPlatformAvailability.disabled);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       final hasNfcSupport = await repository.hasNfcSupport();
 
@@ -51,9 +59,8 @@ void main() {
     });
 
     test('hasNfcSupport returns false when availability is not supported', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.notSupported),
-      );
+      when(() => mockNfcOperations.checkAvailability()).thenAnswer((_) async => NfcPlatformAvailability.notSupported);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       final hasNfcSupport = await repository.hasNfcSupport();
 
@@ -61,9 +68,8 @@ void main() {
     });
 
     test('hasNfcSupport returns false when availability is unknown', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(availability: NfcPlatformAvailability.unknown),
-      );
+      when(() => mockNfcOperations.checkAvailability()).thenAnswer((_) async => NfcPlatformAvailability.unknown);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       final hasNfcSupport = await repository.hasNfcSupport();
 
@@ -71,9 +77,8 @@ void main() {
     });
 
     test('hasNfcSupport returns false when availability check throws', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(checkAvailabilityError: Exception('boom')),
-      );
+      when(() => mockNfcOperations.checkAvailability()).thenThrow(Exception('boom'));
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       final hasNfcSupport = await repository.hasNfcSupport();
 
@@ -81,26 +86,25 @@ void main() {
     });
 
     test('maps discovered tag snapshot to NFC card DTO', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(
-          scanResult: NfcTagSnapshot(
-            uidHex: NfcChipIdentifier.parse('01020304'),
-            techTypes: IList(const <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA]),
-            isNdefFormatted: true,
-            ndefRecords: IList(const <NfcNdefRecordDto>[
-              NfcNdefRecordDto(
-                tnf: 'wellKnown',
-                typeHex: '54',
-                identifierHex: '01',
-                payloadHex: '02656e4869',
-                payloadText: 'Hi',
-              ),
-            ]),
-            rawSnapshot: IMap(const <String, Object?>{'nfca': <String, Object?>{}}),
-          ),
+      when(() => mockNfcOperations.checkAvailability()).thenAnswer((_) async => NfcPlatformAvailability.available);
+      when(() => mockNfcOperations.scanSingleTag(timeout: any(named: 'timeout'))).thenAnswer(
+        (_) async => NfcTagSnapshot(
+          uidHex: NfcChipIdentifier.parse('01020304'),
+          techTypes: IList(const <NfcTagTech>[NfcTagTech.ndef, NfcTagTech.nfcA]),
+          isNdefFormatted: true,
+          ndefRecords: IList(const <NfcNdefRecordDto>[
+            NfcNdefRecordDto(
+              tnf: 'wellKnown',
+              typeHex: '54',
+              identifierHex: '01',
+              payloadHex: '02656e4869',
+              payloadText: 'Hi',
+            ),
+          ]),
+          rawSnapshot: IMap(const <String, Object?>{'nfca': <String, Object?>{}}),
         ),
-        uuid: const Uuid(),
       );
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations, uuid: const Uuid());
 
       final card = await repository.scanSingleCard();
 
@@ -113,81 +117,33 @@ void main() {
     });
 
     test('throws unsupported when availability is not supported', () async {
-      final repository = NfcRepositoryImpl(
-        managerClient: _FakeNfcManagerClient(checkAvailabilityError: UnsupportedError('unsupported')),
-      );
+      when(() => mockNfcOperations.checkAvailability()).thenAnswer((_) async => NfcPlatformAvailability.notSupported);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       expect(repository.scanSingleCard, throwsA(isA<NfcUnsupportedError>()));
     });
 
     test('forwards busy state', () async {
-      final managerClient = _FakeNfcManagerClient(isSessionActive: true);
-      final repository = NfcRepositoryImpl(managerClient: managerClient);
+      when(() => mockNfcOperations.isSessionActive).thenReturn(true);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       expect(repository.isScanInProgress, isTrue);
     });
 
     test('forwards NFC system settings support', () async {
-      final managerClient = _FakeNfcManagerClient(canOpenSystemSettingsForNfc: true);
-      final repository = NfcRepositoryImpl(managerClient: managerClient);
+      when(() => mockNfcOperations.canOpenSystemSettingsForNfc).thenReturn(true);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       expect(repository.canOpenSystemSettingsForNfc, isTrue);
     });
 
     test('forwards opening NFC system settings', () async {
-      final managerClient = _FakeNfcManagerClient(openSystemSettingsResult: true);
-      final repository = NfcRepositoryImpl(managerClient: managerClient);
+      when(() => mockNfcOperations.openSystemSettingsForNfc()).thenAnswer((_) async => true);
+      final repository = NfcRepositoryImpl(managerClient: mockNfcOperations);
 
       final opened = await repository.openSystemSettingsForNfc();
 
       expect(opened, isTrue);
     });
   });
-}
-
-final class _FakeNfcManagerClient implements NfcOperations {
-  _FakeNfcManagerClient({
-    this.availability = NfcPlatformAvailability.available,
-    this.isSessionActive = false,
-    this.scanResult,
-    this.checkAvailabilityError,
-    this.canOpenSystemSettingsForNfc = false,
-    this.openSystemSettingsResult = false,
-  });
-
-  final NfcPlatformAvailability availability;
-  @override
-  bool isSessionActive;
-  final NfcTagSnapshot? scanResult;
-  final Object? checkAvailabilityError;
-  @override
-  final bool canOpenSystemSettingsForNfc;
-  final bool openSystemSettingsResult;
-
-  @override
-  Future<NfcPlatformAvailability> checkAvailability() async {
-    if (checkAvailabilityError case final error?) {
-      throw error;
-    }
-
-    return availability;
-  }
-
-  @override
-  Future<NfcTagSnapshot> scanSingleTag({required Duration timeout}) async {
-    return scanResult ??
-        NfcTagSnapshot(
-          uidHex: null,
-          techTypes: IList(const <NfcTagTech>[NfcTagTech.unknown]),
-          isNdefFormatted: false,
-          ndefRecords: IList(const <NfcNdefRecordDto>[]),
-          rawSnapshot: IMap(const <String, Object?>{}),
-        );
-  }
-
-  @override
-  Future<bool> openSystemSettingsForNfc() async => openSystemSettingsResult;
-
-  @override
-  Future<void> stopSession({String? alertMessage, String? errorMessage}) async {}
 }

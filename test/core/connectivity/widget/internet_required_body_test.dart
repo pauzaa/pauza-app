@@ -4,20 +4,20 @@ import 'package:pauza/src/core/connectivity/domain/internet_health_gate.dart';
 import 'package:pauza/src/core/connectivity/model/internet_health_state.dart';
 import 'package:pauza/src/core/connectivity/widget/internet_required_body.dart';
 
+import '../../../helpers/helpers.dart';
+
 void main() {
   group('InternetRequiredBody', () {
     testWidgets('shows offline state when gate is unhealthy', (tester) async {
-      final gate = _FakeInternetHealthGate(isHealthy: false);
+      final gate = FakeInternetHealthGate(isHealthy: false);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: InternetRequiredBody(
-            gate: gate,
-            offlineTitle: 'Offline',
-            offlineMessage: 'No internet',
-            offlineRetryButtonLabel: 'Retry',
-            child: const Text('Healthy content'),
-          ),
+      await tester.pumpApp(
+        InternetRequiredBody(
+          gate: gate,
+          offlineTitle: 'Offline',
+          offlineMessage: 'No internet',
+          offlineRetryButtonLabel: 'Retry',
+          child: const Text('Healthy content'),
         ),
       );
 
@@ -28,17 +28,15 @@ void main() {
     });
 
     testWidgets('shows child when gate is healthy', (tester) async {
-      final gate = _FakeInternetHealthGate(isHealthy: true);
+      final gate = FakeInternetHealthGate(isHealthy: true);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: InternetRequiredBody(
-            gate: gate,
-            offlineTitle: 'Offline',
-            offlineMessage: 'No internet',
-            offlineRetryButtonLabel: 'Retry',
-            child: const Text('Healthy content'),
-          ),
+      await tester.pumpApp(
+        InternetRequiredBody(
+          gate: gate,
+          offlineTitle: 'Offline',
+          offlineMessage: 'No internet',
+          offlineRetryButtonLabel: 'Retry',
+          child: const Text('Healthy content'),
         ),
       );
 
@@ -47,17 +45,15 @@ void main() {
     });
 
     testWidgets('retry triggers forced refresh', (tester) async {
-      final gate = _FakeInternetHealthGate(isHealthy: false);
+      final gate = FakeInternetHealthGate(isHealthy: false);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: InternetRequiredBody(
-            gate: gate,
-            offlineTitle: 'Offline',
-            offlineMessage: 'No internet',
-            offlineRetryButtonLabel: 'Retry',
-            child: const Text('Healthy content'),
-          ),
+      await tester.pumpApp(
+        InternetRequiredBody(
+          gate: gate,
+          offlineTitle: 'Offline',
+          offlineMessage: 'No internet',
+          offlineRetryButtonLabel: 'Retry',
+          child: const Text('Healthy content'),
         ),
       );
 
@@ -69,8 +65,8 @@ void main() {
   });
 }
 
-final class _FakeInternetHealthGate extends ChangeNotifier implements InternetHealthGate {
-  _FakeInternetHealthGate({required this.isHealthy});
+final class FakeInternetHealthGate extends ChangeNotifier implements InternetHealthGate {
+  FakeInternetHealthGate({required this.isHealthy});
 
   @override
   bool isHealthy;

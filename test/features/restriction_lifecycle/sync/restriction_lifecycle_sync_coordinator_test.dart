@@ -13,12 +13,12 @@ void main() {
   group('RestrictionLifecycleSyncCoordinator', () {
     test('syncNow calls sync then refresh in order', () async {
       final callOrder = <String>[];
-      final lifecycleRepository = _FakeRestrictionLifecycleRepository(
+      final lifecycleRepository = FakeRestrictionLifecycleRepository(
         onSyncFromPluginQueue: () async {
           callOrder.add('sync');
         },
       );
-      final streaksRepository = _FakeStreaksRepository(
+      final streaksRepository = FakeStreaksRepository(
         onRefreshAggregates: () async {
           callOrder.add('refresh');
         },
@@ -37,10 +37,10 @@ void main() {
 
     test('syncNow deduplicates concurrent calls and performs one sync and one refresh', () async {
       final syncCompleter = Completer<void>();
-      final lifecycleRepository = _FakeRestrictionLifecycleRepository(
+      final lifecycleRepository = FakeRestrictionLifecycleRepository(
         onSyncFromPluginQueue: () => syncCompleter.future,
       );
-      final streaksRepository = _FakeStreaksRepository();
+      final streaksRepository = FakeStreaksRepository();
       final coordinator = RestrictionLifecycleSyncCoordinator(
         repository: lifecycleRepository,
         streaksRepository: streaksRepository,
@@ -60,12 +60,12 @@ void main() {
     });
 
     test('refresh is not called when sync throws', () async {
-      final lifecycleRepository = _FakeRestrictionLifecycleRepository(
+      final lifecycleRepository = FakeRestrictionLifecycleRepository(
         onSyncFromPluginQueue: () async {
           throw StateError('sync_failed');
         },
       );
-      final streaksRepository = _FakeStreaksRepository();
+      final streaksRepository = FakeStreaksRepository();
       final coordinator = RestrictionLifecycleSyncCoordinator(
         repository: lifecycleRepository,
         streaksRepository: streaksRepository,
@@ -78,8 +78,8 @@ void main() {
     });
 
     test('syncNow propagates refresh error after successful sync', () async {
-      final lifecycleRepository = _FakeRestrictionLifecycleRepository();
-      final streaksRepository = _FakeStreaksRepository(
+      final lifecycleRepository = FakeRestrictionLifecycleRepository();
+      final streaksRepository = FakeStreaksRepository(
         onRefreshAggregates: () async {
           throw StateError('refresh_failed');
         },
@@ -97,10 +97,10 @@ void main() {
 
     testWidgets('didChangeAppLifecycleState(resumed) triggers syncNow once', (tester) async {
       final syncCompleter = Completer<void>();
-      final lifecycleRepository = _FakeRestrictionLifecycleRepository(
+      final lifecycleRepository = FakeRestrictionLifecycleRepository(
         onSyncFromPluginQueue: () => syncCompleter.future,
       );
-      final streaksRepository = _FakeStreaksRepository();
+      final streaksRepository = FakeStreaksRepository();
       final coordinator = RestrictionLifecycleSyncCoordinator(
         repository: lifecycleRepository,
         streaksRepository: streaksRepository,
@@ -127,8 +127,8 @@ void main() {
   });
 }
 
-final class _FakeRestrictionLifecycleRepository implements RestrictionLifecycleRepository {
-  _FakeRestrictionLifecycleRepository({this.onSyncFromPluginQueue});
+final class FakeRestrictionLifecycleRepository implements RestrictionLifecycleRepository {
+  FakeRestrictionLifecycleRepository({this.onSyncFromPluginQueue});
 
   final Future<void> Function()? onSyncFromPluginQueue;
   int syncCallCount = 0;
@@ -150,8 +150,8 @@ final class _FakeRestrictionLifecycleRepository implements RestrictionLifecycleR
   }
 }
 
-final class _FakeStreaksRepository implements StreaksRepository {
-  _FakeStreaksRepository({this.onRefreshAggregates});
+final class FakeStreaksRepository implements StreaksRepository {
+  FakeStreaksRepository({this.onRefreshAggregates});
 
   final Future<void> Function()? onRefreshAggregates;
   int refreshCallCount = 0;

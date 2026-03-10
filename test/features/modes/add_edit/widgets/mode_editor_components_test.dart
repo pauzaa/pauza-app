@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_allowed_pauses_tile.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_apps_selector_tile.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_ending_pausing_scenario_panel.dart';
@@ -8,32 +7,25 @@ import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_minimum_du
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_section_label.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
 import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
-import 'package:pauza_ui_kit/pauza_ui_kit.dart';
+
+import '../../../../helpers/helpers.dart';
 
 void main() {
   testWidgets('ModeEditorSectionLabel uppercases content', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: PauzaTheme.dark,
-        home: const Scaffold(body: ModeEditorSectionLabel(label: 'Title')),
-      ),
-    );
+    await tester.pumpApp(const Scaffold(body: ModeEditorSectionLabel(label: 'Title')));
 
     expect(find.text('TITLE'), findsOneWidget);
   });
 
   testWidgets('ModeEditorAppsSelectorTile renders error text', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: PauzaTheme.dark,
-        home: const Scaffold(
-          body: ModeEditorAppsSelectorTile(
-            title: 'Select Apps',
-            subtitle: 'Customize what to block',
-            selectedCountLabel: '2 apps',
-            errorText: 'Select at least one app',
-            enabled: true,
-          ),
+    await tester.pumpApp(
+      const Scaffold(
+        body: ModeEditorAppsSelectorTile(
+          title: 'Select Apps',
+          subtitle: 'Customize what to block',
+          selectedCountLabel: '2 apps',
+          errorText: 'Select at least one app',
+          enabled: true,
         ),
       ),
     );
@@ -45,17 +37,14 @@ void main() {
     var incrementCount = 0;
     var decrementCount = 0;
 
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: PauzaTheme.dark,
-        home: Scaffold(
-          body: ModeEditorAllowedPausesTile(
-            title: 'Allowed pauses',
-            subtitle: 'Short breaks during session',
-            value: 3,
-            onIncrement: () => incrementCount += 1,
-            onDecrement: () => decrementCount += 1,
-          ),
+    await tester.pumpApp(
+      Scaffold(
+        body: ModeEditorAllowedPausesTile(
+          title: 'Allowed pauses',
+          subtitle: 'Short breaks during session',
+          value: 3,
+          onIncrement: () => incrementCount += 1,
+          onDecrement: () => decrementCount += 1,
         ),
       ),
     );
@@ -72,24 +61,21 @@ void main() {
   testWidgets('ModeEditorEndingPausingScenarioPanel keeps one selected state', (tester) async {
     var selected = ModeEndingPausingScenario.manual;
 
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: PauzaTheme.dark,
-        home: Scaffold(
-          body: StatefulBuilder(
-            builder: (context, setState) => ModeEditorEndingPausingScenarioPanel(
-              title: 'Ending scenario',
-              subtitle: 'Select one option',
-              nfcLabel: 'NFC',
-              qrLabel: 'QR',
-              manualLabel: 'Manual',
-              selectedScenario: selected,
-              onScenarioPressed: (scenario) {
-                setState(() {
-                  selected = scenario;
-                });
-              },
-            ),
+    await tester.pumpApp(
+      Scaffold(
+        body: StatefulBuilder(
+          builder: (context, setState) => ModeEditorEndingPausingScenarioPanel(
+            title: 'Ending scenario',
+            subtitle: 'Select one option',
+            nfcLabel: 'NFC',
+            qrLabel: 'QR',
+            manualLabel: 'Manual',
+            selectedScenario: selected,
+            onScenarioPressed: (scenario) {
+              setState(() {
+                selected = scenario;
+              });
+            },
           ),
         ),
       ),
@@ -102,21 +88,18 @@ void main() {
   });
 
   testWidgets('ModeEditorEndingPausingScenarioPanel disables NFC button', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: PauzaTheme.dark,
-        home: const Scaffold(
-          body: ModeEditorEndingPausingScenarioPanel(
-            title: 'Ending scenario',
-            subtitle: 'Select one option',
-            nfcLabel: 'NFC',
-            qrLabel: 'QR',
-            manualLabel: 'Manual',
-            selectedScenario: ModeEndingPausingScenario.qrCode,
-            nfcDisabled: true,
-            nfcDisabledHint: 'NFC unavailable',
-            onScenarioPressed: _noopScenarioPressed,
-          ),
+    await tester.pumpApp(
+      const Scaffold(
+        body: ModeEditorEndingPausingScenarioPanel(
+          title: 'Ending scenario',
+          subtitle: 'Select one option',
+          nfcLabel: 'NFC',
+          qrLabel: 'QR',
+          manualLabel: 'Manual',
+          selectedScenario: ModeEndingPausingScenario.qrCode,
+          nfcDisabled: true,
+          nfcDisabledHint: 'NFC unavailable',
+          onScenarioPressed: _noopScenarioPressed,
         ),
       ),
     );
@@ -131,22 +114,17 @@ void main() {
     final draftNotifier = ModeUpsertDraftNotifier(hasNfcSupport: true);
     draftNotifier.updateMinimumDuration(const Duration(minutes: 20));
 
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: PauzaTheme.dark,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(
-          body: ModeUpsertScope(
-            notifier: draftNotifier,
-            child: const ModeEditorMinimumDurationTile(
-              title: 'Minimum duration',
-              subtitle: 'Optional',
-              duration: Duration(minutes: 20),
-              actionLabel: 'Set',
-              clearLabel: 'Clear',
-              enabled: true,
-            ),
+    await tester.pumpApp(
+      Scaffold(
+        body: ModeUpsertScope(
+          notifier: draftNotifier,
+          child: const ModeEditorMinimumDurationTile(
+            title: 'Minimum duration',
+            subtitle: 'Optional',
+            duration: Duration(minutes: 20),
+            actionLabel: 'Set',
+            clearLabel: 'Clear',
+            enabled: true,
           ),
         ),
       ),

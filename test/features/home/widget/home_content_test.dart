@@ -1,138 +1,234 @@
 import 'dart:async';
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
-import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/home/model/blocking_action_error.dart';
 import 'package:pauza/src/features/home/widget/home_content.dart';
 import 'package:pauza/src/features/home/widget/home_current_mode_card.dart';
 import 'package:pauza/src/features/home/widget/home_session_button.dart';
 import 'package:pauza/src/features/home/widget/home_stats_pill.dart';
-import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
-import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
-import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
-import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
-import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
-import 'package:pauza/src/features/nfc_chip_config/data/nfc_linked_chips_repository.dart';
-import 'package:pauza/src/features/nfc_chip_config/model/nfc_linked_chip.dart';
-import 'package:pauza/src/features/qr_code_config/data/qr_linked_codes_repository.dart';
-import 'package:pauza/src/features/qr_code_config/model/qr_linked_code.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_snapshot.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_types.dart';
-import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
-import 'package:pauza_ui_kit/pauza_ui_kit.dart';
+
+import '../../../helpers/helpers.dart';
 
 void main() {
   group('HomeContent', () {
+    late MockModesRepository mockModesRepository;
+    late MockBlockingRepository mockBlockingRepository;
+    late MockNfcLinkedChipsRepository mockNfcLinkedChipsRepository;
+    late MockQrLinkedCodesRepository mockQrLinkedCodesRepository;
+    late MockStreaksRepository mockStreaksRepository;
+
+    setUp(() {
+      mockModesRepository = MockModesRepository();
+      mockBlockingRepository = MockBlockingRepository();
+      mockNfcLinkedChipsRepository = MockNfcLinkedChipsRepository();
+      mockQrLinkedCodesRepository = MockQrLinkedCodesRepository();
+      mockStreaksRepository = MockStreaksRepository();
+
+      when(() => mockModesRepository.watchModes()).thenAnswer((_) => const Stream<void>.empty());
+      when(() => mockModesRepository.getModes()).thenAnswer((_) async => <Mode>[makeMode()]);
+      when(() => mockModesRepository.getMode(any())).thenAnswer((_) async => makeMode());
+      when(() => mockModesRepository.dispose()).thenReturn(null);
+
+      when(
+        () => mockBlockingRepository.lifecycleActions,
+      ).thenAnswer((_) => const Stream<RestrictionLifecycleAction>.empty());
+      when(() => mockBlockingRepository.getRestrictionSession()).thenAnswer((_) async => makeRestrictionState());
+      when(() => mockBlockingRepository.dispose()).thenReturn(null);
+
+      when(
+        () => mockStreaksRepository.getGlobalSnapshot(nowLocal: any(named: 'nowLocal')),
+      ).thenAnswer((_) async => makeStreakSnapshot());
+      when(() => mockStreaksRepository.refreshAggregates()).thenAnswer((_) async {});
+    });
+
     testWidgets('renders default home body when session is not active', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(1200, 3000));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final modesBloc = _TestModesListBloc(mockModesRepository);
+      addTearDown(modesBloc.close);
+      final blockingBloc = _TestBlockingBloc(
+        blockingRepository: mockBlockingRepository,
+        modesRepository: mockModesRepository,
+        nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
+        qrLinkedCodesRepository: mockQrLinkedCodesRepository,
+      );
+      addTearDown(blockingBloc.close);
 
-      final modesBloc = _TestModesListBloc();
-      final blockingBloc = _TestBlockingBloc();
-
-      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
-      await tester.pump();
+      await tester.pumpApp(
+        const HomeContent(),
+        surfaceSize: const Size(1200, 3000),
+        providers: [
+          BlocProvider<ModesListBloc>.value(value: modesBloc),
+          BlocProvider<BlockingBloc>.value(value: blockingBloc),
+          BlocProvider<HomeStatsBloc>(
+            create: (context) => HomeStatsBloc(
+              streaksRepository: mockStreaksRepository,
+              lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
+            )..add(const HomeStatsLoadRequested()),
+          ),
+        ],
+      );
 
       expect(find.byType(HomeStatsPill), findsOneWidget);
       expect(find.byType(HomeCurrentModeCard), findsOneWidget);
       expect(find.byType(HomeSessionButton), findsOneWidget);
       expect(find.text('1m'), findsNothing);
       expect(tester.widget<HomeSessionButton>(find.byType(HomeSessionButton)).isActiveSession, isFalse);
-
-      addTearDown(modesBloc.close);
-      addTearDown(blockingBloc.close);
     });
 
     testWidgets('renders loaded streak and duration from HomeStatsBloc', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(1200, 3000));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final modesBloc = _TestModesListBloc(mockModesRepository);
+      addTearDown(modesBloc.close);
+      final blockingBloc = _TestBlockingBloc(
+        blockingRepository: mockBlockingRepository,
+        modesRepository: mockModesRepository,
+        nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
+        qrLinkedCodesRepository: mockQrLinkedCodesRepository,
+      );
+      addTearDown(blockingBloc.close);
 
-      final modesBloc = _TestModesListBloc();
-      final blockingBloc = _TestBlockingBloc();
-
-      await tester.pumpWidget(
-        _TestApp(
-          modesBloc: modesBloc,
-          blockingBloc: blockingBloc,
-          streaksRepository: _SnapshotStreaksRepository(
-            snapshot: _snapshot(streakDays: 2, focusedDuration: const Duration(minutes: 95)),
-          ),
+      final snapshotRepo = MockStreaksRepository();
+      when(() => snapshotRepo.getGlobalSnapshot(nowLocal: any(named: 'nowLocal'))).thenAnswer(
+        (_) async => makeStreakSnapshot(
+          currentStreakDays: const CurrentStreakDays(2),
+          bestStreakDays: const BestStreakDays(2),
+          todayEffectiveDuration: const Duration(minutes: 95),
         ),
       );
-      await tester.pump();
+      when(() => snapshotRepo.refreshAggregates()).thenAnswer((_) async {});
+
+      await tester.pumpApp(
+        const HomeContent(),
+        surfaceSize: const Size(1200, 3000),
+        providers: [
+          BlocProvider<ModesListBloc>.value(value: modesBloc),
+          BlocProvider<BlockingBloc>.value(value: blockingBloc),
+          BlocProvider<HomeStatsBloc>(
+            create: (context) => HomeStatsBloc(
+              streaksRepository: snapshotRepo,
+              lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
+            )..add(const HomeStatsLoadRequested()),
+          ),
+        ],
+      );
 
       expect(find.text('2 Day Streak'), findsOneWidget);
       expect(find.text('1h 35m'), findsOneWidget);
-
-      addTearDown(modesBloc.close);
-      addTearDown(blockingBloc.close);
     });
 
     testWidgets('renders placeholder while first stats load is in-flight', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(1200, 3000));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
-
-      final modesBloc = _TestModesListBloc();
-      final blockingBloc = _TestBlockingBloc();
-      final repository = _DeferredStreaksRepository();
-
-      await tester.pumpWidget(
-        _TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc, streaksRepository: repository),
+      final modesBloc = _TestModesListBloc(mockModesRepository);
+      addTearDown(modesBloc.close);
+      final blockingBloc = _TestBlockingBloc(
+        blockingRepository: mockBlockingRepository,
+        modesRepository: mockModesRepository,
+        nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
+        qrLinkedCodesRepository: mockQrLinkedCodesRepository,
       );
-      await tester.pump();
+      addTearDown(blockingBloc.close);
+
+      final completer = Completer<StreakSnapshot>();
+      final deferredRepo = MockStreaksRepository();
+      when(() => deferredRepo.getGlobalSnapshot(nowLocal: any(named: 'nowLocal'))).thenAnswer((_) => completer.future);
+      when(() => deferredRepo.refreshAggregates()).thenAnswer((_) async {});
+
+      await tester.pumpApp(
+        const HomeContent(),
+        surfaceSize: const Size(1200, 3000),
+        providers: [
+          BlocProvider<ModesListBloc>.value(value: modesBloc),
+          BlocProvider<BlockingBloc>.value(value: blockingBloc),
+          BlocProvider<HomeStatsBloc>(
+            create: (context) => HomeStatsBloc(
+              streaksRepository: deferredRepo,
+              lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
+            )..add(const HomeStatsLoadRequested()),
+          ),
+        ],
+      );
 
       expect(find.text('--'), findsNWidgets(2));
 
-      repository.complete(_snapshot(streakDays: 1, focusedDuration: const Duration(minutes: 10)));
+      completer.complete(
+        makeStreakSnapshot(
+          currentStreakDays: const CurrentStreakDays(1),
+          bestStreakDays: const BestStreakDays(1),
+          todayEffectiveDuration: const Duration(minutes: 10),
+        ),
+      );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 20));
 
       expect(find.text('1 Day Streak'), findsOneWidget);
       expect(find.text('0h 10m'), findsOneWidget);
-
-      addTearDown(modesBloc.close);
-      addTearDown(blockingBloc.close);
     });
 
     testWidgets('shows toast when pause is blocked by limit', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(1200, 3000));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final modesBloc = _TestModesListBloc(mockModesRepository);
+      addTearDown(modesBloc.close);
+      final blockingBloc = _TestBlockingBloc(
+        blockingRepository: mockBlockingRepository,
+        modesRepository: mockModesRepository,
+        nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
+        qrLinkedCodesRepository: mockQrLinkedCodesRepository,
+      );
+      addTearDown(blockingBloc.close);
 
-      final modesBloc = _TestModesListBloc();
-      final blockingBloc = _TestBlockingBloc();
-
-      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
-      await tester.pump();
+      await tester.pumpApp(
+        const HomeContent(),
+        surfaceSize: const Size(1200, 3000),
+        providers: [
+          BlocProvider<ModesListBloc>.value(value: modesBloc),
+          BlocProvider<BlockingBloc>.value(value: blockingBloc),
+          BlocProvider<HomeStatsBloc>(
+            create: (context) => HomeStatsBloc(
+              streaksRepository: mockStreaksRepository,
+              lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
+            )..add(const HomeStatsLoadRequested()),
+          ),
+        ],
+      );
 
       blockingBloc.emitForTest(const BlockingState.initial().setError(const PauseLimitReachedError()));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
 
       expect(find.text('Pause limit reached for this session.'), findsOneWidget);
-
-      addTearDown(modesBloc.close);
-      addTearDown(blockingBloc.close);
     });
 
     testWidgets('shows toast for start configuration validation errors', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(1200, 3000));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final modesBloc = _TestModesListBloc(mockModesRepository);
+      addTearDown(modesBloc.close);
+      final blockingBloc = _TestBlockingBloc(
+        blockingRepository: mockBlockingRepository,
+        modesRepository: mockModesRepository,
+        nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
+        qrLinkedCodesRepository: mockQrLinkedCodesRepository,
+      );
+      addTearDown(blockingBloc.close);
 
-      final modesBloc = _TestModesListBloc();
-      final blockingBloc = _TestBlockingBloc();
-
-      await tester.pumpWidget(_TestApp(modesBloc: modesBloc, blockingBloc: blockingBloc));
-      await tester.pump();
+      await tester.pumpApp(
+        const HomeContent(),
+        surfaceSize: const Size(1200, 3000),
+        providers: [
+          BlocProvider<ModesListBloc>.value(value: modesBloc),
+          BlocProvider<BlockingBloc>.value(value: blockingBloc),
+          BlocProvider<HomeStatsBloc>(
+            create: (context) => HomeStatsBloc(
+              streaksRepository: mockStreaksRepository,
+              lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
+            )..add(const HomeStatsLoadRequested()),
+          ),
+        ],
+      );
 
       blockingBloc.emitForTest(const BlockingState.initial().setError(const NfcStartConfigurationMissingError()));
       await tester.pump();
@@ -143,65 +239,21 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
       expect(find.text('To start this session, link at least one QR code in Settings.'), findsOneWidget);
-
-      addTearDown(modesBloc.close);
-      addTearDown(blockingBloc.close);
     });
   });
 }
 
-class _TestApp extends StatelessWidget {
-  const _TestApp({
-    required this.modesBloc,
-    required this.blockingBloc,
-    this.streaksRepository = const _NoopStreaksRepository(),
-  });
-
-  final ModesListBloc modesBloc;
-  final BlockingBloc blockingBloc;
-  final StreaksRepository streaksRepository;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      locale: const Locale('en'),
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: PauzaTheme.light,
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<ModesListBloc>.value(value: modesBloc),
-          BlocProvider<BlockingBloc>.value(value: blockingBloc),
-          BlocProvider<HomeStatsBloc>(
-            create: (context) => HomeStatsBloc(
-              streaksRepository: streaksRepository,
-              lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
-            )..add(const HomeStatsLoadRequested()),
-          ),
-        ],
-        child: const HomeContent(),
-      ),
-    );
-  }
-}
-
 class _TestModesListBloc extends ModesListBloc {
-  _TestModesListBloc() : super(modesRepository: _NoopModesRepository());
+  _TestModesListBloc(MockModesRepository modesRepository) : super(modesRepository: modesRepository);
 }
 
 class _TestBlockingBloc extends BlockingBloc {
-  _TestBlockingBloc()
-    : super(
-        blockingRepository: _NoopBlockingRepository(),
-        modesRepository: _NoopModesRepository(),
-        nfcLinkedChipsRepository: const _NoopNfcLinkedChipsRepository(),
-        qrLinkedCodesRepository: const _NoopQrLinkedCodesRepository(),
-      );
+  _TestBlockingBloc({
+    required super.blockingRepository,
+    required super.modesRepository,
+    required super.nfcLinkedChipsRepository,
+    required super.qrLinkedCodesRepository,
+  });
 
   BlockingEvent? lastEvent;
 
@@ -212,185 +264,7 @@ class _TestBlockingBloc extends BlockingBloc {
   }
 
   void emitForTest(BlockingState value) {
+    // ignore: invalid_use_of_visible_for_testing_member
     emit(value);
   }
-}
-
-class _NoopModesRepository implements ModesRepository {
-  @override
-  Future<void> createMode(ModeUpsertDTO request) async {}
-
-  @override
-  Future<void> deleteMode(String modeId) async {}
-
-  @override
-  Future<Mode> getMode(String modeId) async => _mode;
-
-  @override
-  Future<List<Mode>> getModes() async => <Mode>[_mode];
-
-  @override
-  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {}
-
-  static final Mode _mode = Mode(
-    id: 'mode-1',
-    title: 'Mode 1',
-    textOnScreen: 'Focus',
-    description: null,
-    allowedPausesCount: 3,
-    minimumDuration: null,
-    endingPausingScenario: ModeEndingPausingScenario.manual,
-    icon: ModeIconCatalog.defaultIcon,
-    schedule: null,
-    blockedAppIds: const ISet<AppIdentifier>.empty(),
-    createdAt: DateTime.now().toUtc(),
-    updatedAt: DateTime.now().toUtc(),
-  );
-
-  @override
-  Stream<void> watchModes() => const Stream.empty();
-
-  @override
-  void dispose() {}
-}
-
-class _NoopBlockingRepository implements BlockingRepository {
-  @override
-  Stream<RestrictionLifecycleAction> get lifecycleActions => const Stream<RestrictionLifecycleAction>.empty();
-
-  @override
-  Future<RestrictionState> getRestrictionSession() async {
-    return const RestrictionState(
-      isScheduleEnabled: false,
-      isInScheduleNow: false,
-      pausedUntil: null,
-      activeMode: null,
-      activeModeSource: RestrictionModeSource.none,
-      currentSessionEvents: <RestrictionLifecycleEvent>[],
-    );
-  }
-
-  @override
-  Future<void> pauseBlocking(
-    Duration duration, {
-    required Mode? mode,
-    required RestrictionState restrictionState,
-  }) async {}
-
-  @override
-  Future<void> resumeBlocking() async {}
-
-  @override
-  Future<void> startBlocking({required Mode mode, required ShieldConfiguration? shield}) async {}
-
-  @override
-  Future<void> stopBlocking({
-    required Mode? mode,
-    required RestrictionState restrictionState,
-    Duration? cooldownDuration,
-  }) async {}
-
-  @override
-  Future<void> syncRestrictionLifecycleEvents() async {}
-
-  @override
-  void dispose() {}
-}
-
-final class _NoopNfcLinkedChipsRepository implements NfcLinkedChipsRepository {
-  const _NoopNfcLinkedChipsRepository();
-
-  @override
-  Future<void> deleteChip({required String id}) async {}
-
-  @override
-  Future<IList<NfcLinkedChip>> getLinkedChips() async => const IListConst<NfcLinkedChip>(<NfcLinkedChip>[]);
-
-  @override
-  Future<bool> hasChip({required NfcChipIdentifier chipIdentifier}) async => true;
-
-  @override
-  Future<bool> hasLinkedChips() async => true;
-
-  @override
-  Future<bool> linkChipIfAbsent({required NfcChipIdentifier chipIdentifier}) async => true;
-
-  @override
-  Future<void> renameChip({required String id, required String name}) async {}
-}
-
-final class _NoopQrLinkedCodesRepository implements QrLinkedCodesRepository {
-  const _NoopQrLinkedCodesRepository();
-
-  @override
-  Future<void> deleteCode({required String id}) async {}
-
-  @override
-  Future<QrLinkedCode> generateAndLinkCode() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<IList<QrLinkedCode>> getLinkedCodes() async => const IListConst<QrLinkedCode>(<QrLinkedCode>[]);
-
-  @override
-  Future<bool> hasScanValue({required String scanValue}) async => true;
-
-  @override
-  Future<bool> hasLinkedCodes() async => true;
-
-  @override
-  Future<void> renameCode({required String id, required String name}) async {}
-}
-
-final class _NoopStreaksRepository implements StreaksRepository {
-  const _NoopStreaksRepository();
-
-  @override
-  Future<StreakSnapshot> getGlobalSnapshot({required DateTime nowLocal}) async {
-    return StreakSnapshot.zero(asOfLocal: nowLocal);
-  }
-
-  @override
-  Future<void> refreshAggregates() async {}
-}
-
-final class _SnapshotStreaksRepository implements StreaksRepository {
-  const _SnapshotStreaksRepository({required this.snapshot});
-
-  final StreakSnapshot snapshot;
-
-  @override
-  Future<StreakSnapshot> getGlobalSnapshot({required DateTime nowLocal}) async {
-    return snapshot;
-  }
-
-  @override
-  Future<void> refreshAggregates() async {}
-}
-
-final class _DeferredStreaksRepository implements StreaksRepository {
-  final Completer<StreakSnapshot> _completer = Completer<StreakSnapshot>();
-
-  void complete(StreakSnapshot snapshot) {
-    _completer.complete(snapshot);
-  }
-
-  @override
-  Future<StreakSnapshot> getGlobalSnapshot({required DateTime nowLocal}) {
-    return _completer.future;
-  }
-
-  @override
-  Future<void> refreshAggregates() async {}
-}
-
-StreakSnapshot _snapshot({required int streakDays, required Duration focusedDuration}) {
-  return StreakSnapshot(
-    asOfLocal: DateTime(2026, 2, 20, 9),
-    targetDurationPerDay: const Duration(minutes: 10),
-    todayEffectiveDuration: focusedDuration,
-    currentStreakDays: CurrentStreakDays(streakDays),
-    bestStreakDays: BestStreakDays(streakDays),
-  );
 }

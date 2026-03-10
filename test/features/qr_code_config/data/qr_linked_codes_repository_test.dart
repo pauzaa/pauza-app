@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 void main() {
   group('QrLinkedCodesRepositoryImpl', () {
     test('generateAndLinkCode inserts row and returns linked code', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       final repository = QrLinkedCodesRepositoryImpl(
         localDatabase: localDatabase,
         uuid: _SequenceUuid(<String>['3f2504e0-4f89-41d3-9a0c-0305e82c3301', 'id-1']),
@@ -23,7 +23,7 @@ void main() {
     });
 
     test('getLinkedCodes returns rows ordered by created_at desc', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       localDatabase.insertDirect(
         id: 'id-old',
         scanValue: 'pauza:qr:v1:3f2504e0-4f89-41d3-9a0c-0305e82c3301',
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('hasScanValue returns true for normalized valid scan', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       localDatabase.insertDirect(
         id: 'id-1',
         scanValue: 'pauza:qr:v1:3f2504e0-4f89-41d3-9a0c-0305e82c3301',
@@ -62,7 +62,7 @@ void main() {
     });
 
     test('hasScanValue returns false for unknown valid scan', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       final repository = QrLinkedCodesRepositoryImpl(localDatabase: localDatabase);
 
       final found = await repository.hasScanValue(scanValue: 'pauza:qr:v1:3f2504e0-4f89-41d3-9a0c-0305e82c3301');
@@ -71,7 +71,7 @@ void main() {
     });
 
     test('hasLinkedCodes returns false when no codes exist', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       final repository = QrLinkedCodesRepositoryImpl(localDatabase: localDatabase);
 
       final hasLinkedCodes = await repository.hasLinkedCodes();
@@ -80,7 +80,7 @@ void main() {
     });
 
     test('hasLinkedCodes returns true when at least one code exists', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       localDatabase.insertDirect(
         id: 'id-1',
         scanValue: 'pauza:qr:v1:3f2504e0-4f89-41d3-9a0c-0305e82c3301',
@@ -96,7 +96,7 @@ void main() {
     });
 
     test('hasScanValue throws for malformed scan value', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       final repository = QrLinkedCodesRepositoryImpl(localDatabase: localDatabase);
 
       expect(
@@ -106,7 +106,7 @@ void main() {
     });
 
     test('renameCode trims and persists name, rejects empty', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       localDatabase.insertDirect(
         id: 'id-1',
         scanValue: 'pauza:qr:v1:3f2504e0-4f89-41d3-9a0c-0305e82c3301',
@@ -123,7 +123,7 @@ void main() {
     });
 
     test('deleteCode removes row', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       localDatabase.insertDirect(
         id: 'id-1',
         scanValue: 'pauza:qr:v1:3f2504e0-4f89-41d3-9a0c-0305e82c3301',
@@ -139,7 +139,7 @@ void main() {
     });
 
     test('generateAndLinkCode retries when duplicate scan token is generated', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       localDatabase.insertDirect(
         id: 'existing-id',
         scanValue: 'pauza:qr:v1:3f2504e0-4f89-41d3-9a0c-0305e82c3301',
@@ -165,7 +165,7 @@ void main() {
   });
 }
 
-final class _FakeLocalDatabase implements LocalDatabase {
+final class FakeLocalDatabase implements LocalDatabase {
   final Map<String, Map<String, Object?>> rowsById = <String, Map<String, Object?>>{};
 
   void insertDirect({

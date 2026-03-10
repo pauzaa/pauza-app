@@ -9,6 +9,8 @@ import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
+import '../../../../helpers/helpers.dart';
+
 void main() {
   group('ModeUpsertDraftNotifier', () {
     test('validateForSubmit returns required field errors', () {
@@ -51,14 +53,9 @@ void main() {
       final notifier = ModeUpsertDraftNotifier(hasNfcSupport: true)
         ..configureForMode(
           isEditMode: true,
-          initialDraft: ModeUpsertDTO(
+          initialDraft: makeModeUpsertDto(
             title: 'Focus',
-            textOnScreen: 'Focus',
-            description: null,
             allowedPausesCount: 2,
-            minimumDuration: null,
-            endingPausingScenario: ModeEndingPausingScenario.manual,
-            icon: ModeIconCatalog.defaultIcon,
             blockedAppIds: ISet<AppIdentifier>(const <AppIdentifier>[AppIdentifier('app.one')]),
             schedule: Schedule(
               days: ISet<WeekDay>(const [WeekDay.mon]),

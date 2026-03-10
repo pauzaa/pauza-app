@@ -9,14 +9,14 @@ import 'package:sqflite/sqflite.dart';
 void main() {
   group('RestrictionLifecycleRepositoryImpl syncFromPluginQueue', () {
     test('duplicate event redelivery does not mutate session twice', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       final startEvent = _event(
         id: 'e1',
         sessionId: 's1',
         action: RestrictionLifecycleAction.start,
         occurredAtEpochMs: 1_000,
       );
-      final pluginClient = _FakeRestrictionLifecyclePluginClient(
+      final pluginClient = FakeRestrictionLifecyclePluginClient(
         batches: <List<RestrictionLifecycleEvent>>[
           [startEvent],
           [startEvent],
@@ -33,8 +33,8 @@ void main() {
     });
 
     test('ack is called after transaction commit', () async {
-      final localDatabase = _FakeLocalDatabase();
-      final pluginClient = _FakeRestrictionLifecyclePluginClient(
+      final localDatabase = FakeLocalDatabase();
+      final pluginClient = FakeRestrictionLifecyclePluginClient(
         batches: <List<RestrictionLifecycleEvent>>[
           [_event(id: 'e1', sessionId: 's1', action: RestrictionLifecycleAction.start, occurredAtEpochMs: 1_000)],
           <RestrictionLifecycleEvent>[],
@@ -51,8 +51,8 @@ void main() {
     });
 
     test('upsert applies initial and subsequent events into one session row', () async {
-      final localDatabase = _FakeLocalDatabase();
-      final pluginClient = _FakeRestrictionLifecyclePluginClient(
+      final localDatabase = FakeLocalDatabase();
+      final pluginClient = FakeRestrictionLifecyclePluginClient(
         batches: <List<RestrictionLifecycleEvent>>[
           [
             _event(id: 'e1', sessionId: 's1', action: RestrictionLifecycleAction.start, occurredAtEpochMs: 1_000),
@@ -93,8 +93,8 @@ RestrictionLifecycleEvent _event({
   );
 }
 
-final class _FakeRestrictionLifecyclePluginClient implements RestrictionLifecyclePluginClient {
-  _FakeRestrictionLifecyclePluginClient({required List<List<RestrictionLifecycleEvent>> batches, this.onAck})
+final class FakeRestrictionLifecyclePluginClient implements RestrictionLifecyclePluginClient {
+  FakeRestrictionLifecyclePluginClient({required List<List<RestrictionLifecycleEvent>> batches, this.onAck})
     : _batches = batches;
 
   final List<List<RestrictionLifecycleEvent>> _batches;
@@ -117,7 +117,7 @@ final class _FakeRestrictionLifecyclePluginClient implements RestrictionLifecycl
   }
 }
 
-final class _FakeLocalDatabase implements LocalDatabase {
+final class FakeLocalDatabase implements LocalDatabase {
   final Map<String, Map<String, Object?>> eventRows = <String, Map<String, Object?>>{};
   final Map<String, Map<String, Object?>> sessionRows = <String, Map<String, Object?>>{};
 
@@ -172,15 +172,15 @@ final class _FakeLocalDatabase implements LocalDatabase {
 
   @override
   Future<T> transaction<T>(Future<T> Function(Transaction transaction) action) async {
-    final transaction = _FakeTransaction(eventRows: eventRows, sessionRows: sessionRows);
+    final transaction = FakeTransaction(eventRows: eventRows, sessionRows: sessionRows);
     final result = await action(transaction);
     committedTransactions += 1;
     return result;
   }
 }
 
-final class _FakeTransaction implements Transaction {
-  _FakeTransaction({required this.eventRows, required this.sessionRows});
+final class FakeTransaction implements Transaction {
+  FakeTransaction({required this.eventRows, required this.sessionRows});
 
   final Map<String, Map<String, Object?>> eventRows;
   final Map<String, Map<String, Object?>> sessionRows;

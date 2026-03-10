@@ -1,83 +1,95 @@
 import 'dart:async';
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/core/common/model/pauza_app_error.dart';
-import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
-import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
+
+import '../../../helpers/helpers.dart';
 
 void main() {
   group('AuthBloc', () {
-    test('initial state is AuthIdle', () {
-      final repository = _FakeAuthRepository();
-      final internetRequiredGuard = _FakeInternetRequiredGuard();
-      final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
+    late FakeAuthRepository repository;
+    late MockInternetRequiredGuard internetRequiredGuard;
 
-      expect(bloc.state, isA<AuthIdle>());
+    setUp(() {
+      repository = FakeAuthRepository();
+      internetRequiredGuard = MockInternetRequiredGuard();
+      when(
+        () => internetRequiredGuard.canProceed(forceRefresh: any(named: 'forceRefresh')),
+      ).thenAnswer((_) async => true);
+      when(() => internetRequiredGuard.isHealthy).thenReturn(true);
+    });
 
-      bloc.close();
+    tearDown(() {
       repository.dispose();
     });
 
+    blocTest<AuthBloc, AuthState>(
+      'initial state is AuthIdle',
+      build: () => AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard),
+      expect: () => <AuthState>[],
+      verify: (bloc) {
+        expect(bloc.state, isA<AuthIdle>());
+      },
+    );
+
     group('AuthOtpRequested', () {
-      test('emits AuthOtpRequired on success', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
-        final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
+      blocTest<AuthBloc, AuthState>(
+        'emits AuthOtpRequired on success',
+        build: () => AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard),
+        act: (bloc) => bloc.add(const AuthOtpRequested(email: 'john@doe.com')),
+        expect: () => <Matcher>[
+          isA<AuthSubmitting>(),
+          isA<AuthOtpRequired>().having((s) => s.email, 'email', 'john@doe.com'),
+        ],
+        verify: (_) {
+          expect(repository.requestOtpCalls, 1);
+        },
+      );
 
-        bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
-        await bloc.stream.firstWhere((s) => s is AuthOtpRequired);
+      blocTest<AuthBloc, AuthState>(
+        'emits AuthFlowFailure when offline',
+        setUp: () {
+          when(
+            () => internetRequiredGuard.canProceed(forceRefresh: any(named: 'forceRefresh')),
+          ).thenAnswer((_) async => false);
+        },
+        build: () => AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard),
+        act: (bloc) => bloc.add(const AuthOtpRequested(email: 'john@doe.com')),
+        expect: () => <Matcher>[
+          isA<AuthFlowFailure>().having((s) => s.error, 'error', const PauzaInternetUnavailableError()),
+        ],
+        verify: (_) {
+          expect(repository.requestOtpCalls, 0);
+        },
+      );
 
-        expect(bloc.state, isA<AuthOtpRequired>());
-        expect((bloc.state as AuthOtpRequired).email, 'john@doe.com');
-        expect(repository.requestOtpCalls, 1);
-
-        await bloc.close();
-        repository.dispose();
-      });
-
-      test('emits AuthFlowFailure when offline', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard(canProceedResult: false);
-        final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
-
-        bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
-        await bloc.stream.firstWhere((s) => s is AuthFlowFailure);
-
-        expect(bloc.state, isA<AuthFlowFailure>());
-        expect((bloc.state as AuthFlowFailure).error, const PauzaInternetUnavailableError());
-        expect(repository.requestOtpCalls, 0);
-
-        await bloc.close();
-        repository.dispose();
-      });
-
-      test('emits AuthFlowFailure when repository throws', () async {
-        final repository = _FakeAuthRepository(requestOtpError: const AuthUnknownError(cause: 'server error'));
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
-        final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
-
-        bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
-        await bloc.stream.firstWhere((s) => s is AuthFlowFailure);
-
-        expect(bloc.state, isA<AuthFlowFailure>());
-        final failure = bloc.state as AuthFlowFailure;
-        expect(failure.error, isA<AuthUnknownError>());
-        expect(failure.email, 'john@doe.com');
-
-        await bloc.close();
-        repository.dispose();
-      });
+      blocTest<AuthBloc, AuthState>(
+        'emits AuthFlowFailure when repository throws',
+        build: () {
+          repository.dispose();
+          repository = FakeAuthRepository(requestOtpError: const AuthUnknownError(cause: 'server error'));
+          return AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
+        },
+        act: (bloc) => bloc.add(const AuthOtpRequested(email: 'john@doe.com')),
+        expect: () => <Matcher>[
+          isA<AuthSubmitting>(),
+          isA<AuthFlowFailure>()
+              .having((s) => s.error, 'error', isA<AuthUnknownError>())
+              .having((s) => s.email, 'email', 'john@doe.com'),
+        ],
+      );
 
       test('duplicate request is ignored when state is already AuthSubmitting', () async {
         final requestCompleter = Completer<AuthOtpRequiredResult>();
-        final repository = _CompletableOtpRequestRepository(requestCompleter: requestCompleter);
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
-        final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
+        final completeRepository = _CompletableOtpRequestRepository(requestCompleter: requestCompleter);
+        final bloc = AuthBloc(authRepository: completeRepository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
 
@@ -101,16 +113,14 @@ void main() {
         // Only one AuthSubmitting and one AuthOtpRequired — no second OTP request cycle
         expect(states.whereType<AuthSubmitting>().length, 1);
         expect(states.whereType<AuthOtpRequired>().length, 1);
-        expect(repository.requestOtpCalls, 1);
+        expect(completeRepository.requestOtpCalls, 1);
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
+        completeRepository.dispose();
       });
 
       test('duplicate request is ignored when state is already AuthOtpRequired', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
@@ -135,14 +145,11 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
       });
     });
 
     group('AuthOtpResendRequested', () {
       test('emits AuthResending then AuthOtpRequired with incremented resentCount on success', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
@@ -170,12 +177,9 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
       });
 
       test('increments resentCount on consecutive resends', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
 
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
@@ -192,12 +196,11 @@ void main() {
         expect(repository.resendOtpCalls, 2);
 
         await bloc.close();
-        repository.dispose();
       });
 
       test('emits AuthResending then AuthFlowFailure preserving resentCount when repository throws', () async {
-        final repository = _FakeAuthRepository(resendOtpError: const AuthOtpCooldownError());
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
+        repository.dispose();
+        repository = FakeAuthRepository(resendOtpError: const AuthOtpCooldownError());
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
@@ -220,12 +223,9 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
       });
 
       test('emits AuthResending then AuthFlowFailure when offline and preserves resentCount', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _ToggleableInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
@@ -240,7 +240,9 @@ void main() {
 
         // Go offline, second resend should fail
         states.clear();
-        internetRequiredGuard.canProceedResult = false;
+        when(
+          () => internetRequiredGuard.canProceed(forceRefresh: any(named: 'forceRefresh')),
+        ).thenAnswer((_) async => false);
         bloc.add(const AuthOtpResendRequested());
         await bloc.stream.firstWhere((s) => s is AuthFlowFailure);
 
@@ -258,36 +260,23 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
       });
 
-      test('is no-op when current state is AuthIdle', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
-        final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
-
-        final states = <AuthState>[];
-        final sub = bloc.stream.listen(states.add);
-
-        bloc.add(const AuthOtpResendRequested());
-        // Give the event a chance to be processed
-        await Future<void>.delayed(Duration.zero);
-        await Future<void>.delayed(Duration.zero);
-
-        expect(bloc.state, isA<AuthIdle>());
-        expect(states, isEmpty);
-        expect(repository.resendOtpCalls, 0);
-
-        await sub.cancel();
-        await bloc.close();
-        repository.dispose();
-      });
+      blocTest<AuthBloc, AuthState>(
+        'is no-op when current state is AuthIdle',
+        build: () => AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard),
+        act: (bloc) => bloc.add(const AuthOtpResendRequested()),
+        expect: () => <AuthState>[],
+        verify: (_) {
+          expect(repository.resendOtpCalls, 0);
+        },
+      );
 
       test(
         'resend from AuthFlowFailure state emits AuthResending then AuthOtpRequired preserving previous resentCount',
         () async {
-          final repository = _FakeAuthRepository(resendOtpError: const AuthOtpCooldownError());
-          final internetRequiredGuard = _FakeInternetRequiredGuard();
+          repository.dispose();
+          repository = FakeAuthRepository(resendOtpError: const AuthOtpCooldownError());
           final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
           final states = <AuthState>[];
           final sub = bloc.stream.listen(states.add);
@@ -317,15 +306,12 @@ void main() {
 
           await sub.cancel();
           await bloc.close();
-          repository.dispose();
         },
       );
     });
 
     group('AuthOtpSubmitted', () {
       test('emits AuthFlowSuccess on valid OTP', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
 
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
@@ -338,12 +324,9 @@ void main() {
         expect((bloc.state as AuthFlowSuccess).email, 'john@doe.com');
 
         await bloc.close();
-        repository.dispose();
       });
 
       test('emits AuthFlowFailure with AuthInvalidOtpError on wrong code', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
 
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
@@ -358,33 +341,26 @@ void main() {
         expect(failure.email, 'john@doe.com');
 
         await bloc.close();
-        repository.dispose();
       });
 
-      test('emits AuthOtpChallengeMissingError when submitted without prior request', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
-        final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
-
-        bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
-        await bloc.stream.firstWhere((s) => s is AuthFlowFailure);
-
-        expect(bloc.state, isA<AuthFlowFailure>());
-        expect((bloc.state as AuthFlowFailure).error, const AuthOtpChallengeMissingError());
-
-        await bloc.close();
-        repository.dispose();
-      });
+      blocTest<AuthBloc, AuthState>(
+        'emits AuthOtpChallengeMissingError when submitted without prior request',
+        build: () => AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard),
+        act: (bloc) => bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp)),
+        expect: () => <Matcher>[
+          isA<AuthFlowFailure>().having((s) => s.error, 'error', const AuthOtpChallengeMissingError()),
+        ],
+      );
 
       test('emits AuthFlowFailure when offline', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _ToggleableInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
 
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
         await bloc.stream.firstWhere((s) => s is AuthOtpRequired);
 
-        internetRequiredGuard.canProceedResult = false;
+        when(
+          () => internetRequiredGuard.canProceed(forceRefresh: any(named: 'forceRefresh')),
+        ).thenAnswer((_) async => false);
         bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
         await bloc.stream.firstWhere((s) => s is AuthFlowFailure);
 
@@ -393,12 +369,9 @@ void main() {
         expect(repository.verifyOtpCalls, 0);
 
         await bloc.close();
-        repository.dispose();
       });
 
       test('can retry OTP submit after failure', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
 
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
@@ -415,14 +388,11 @@ void main() {
         expect(bloc.state, isA<AuthFlowSuccess>());
 
         await bloc.close();
-        repository.dispose();
       });
     });
 
     group('AuthSignOutRequested', () {
       test('emits AuthIdle after sign out', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
 
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
@@ -434,29 +404,25 @@ void main() {
         expect(bloc.state, isA<AuthIdle>());
 
         await bloc.close();
-        repository.dispose();
       });
 
-      test('emits AuthFlowFailure when sign out throws', () async {
-        final repository = _FakeAuthRepository(signOutError: const AuthUnknownError(cause: 'sign-out failed'));
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
-        final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
-
-        bloc.add(const AuthSignOutRequested());
-        await bloc.stream.firstWhere((s) => s is AuthFlowFailure);
-
-        expect(bloc.state, isA<AuthFlowFailure>());
-        expect((bloc.state as AuthFlowFailure).error, isA<AuthUnknownError>());
-
-        await bloc.close();
-        repository.dispose();
-      });
+      blocTest<AuthBloc, AuthState>(
+        'emits AuthFlowFailure when sign out throws',
+        build: () {
+          repository.dispose();
+          repository = FakeAuthRepository(signOutError: const AuthUnknownError(cause: 'sign-out failed'));
+          return AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
+        },
+        act: (bloc) => bloc.add(const AuthSignOutRequested()),
+        expect: () => <Matcher>[
+          isA<AuthSubmitting>(),
+          isA<AuthFlowFailure>().having((s) => s.error, 'error', isA<AuthUnknownError>()),
+        ],
+      );
     });
 
     group('AuthFlowResetRequested', () {
       test('emits AuthResetting then AuthIdle and clears pending OTP challenge', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
@@ -476,12 +442,11 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
       });
 
       test('emits AuthResetting then AuthFlowFailure when clearPendingOtpChallenge throws', () async {
-        final repository = _FakeAuthRepository(clearChallengeError: const AuthUnknownError(cause: 'clear failed'));
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
+        repository.dispose();
+        repository = FakeAuthRepository(clearChallengeError: const AuthUnknownError(cause: 'clear failed'));
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
@@ -502,12 +467,11 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
       });
 
       test('reset failure preserves email context so resend can still recover', () async {
-        final repository = _FakeAuthRepository(clearChallengeError: const AuthUnknownError(cause: 'clear failed'));
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
+        repository.dispose();
+        repository = FakeAuthRepository(clearChallengeError: const AuthUnknownError(cause: 'clear failed'));
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
@@ -536,36 +500,21 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
       });
 
-      test('is no-op when current state is AuthIdle', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
-        final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
-
-        final states = <AuthState>[];
-        final sub = bloc.stream.listen(states.add);
-
-        bloc.add(const AuthFlowResetRequested());
-        // Give the event a chance to be processed
-        await Future<void>.delayed(Duration.zero);
-        await Future<void>.delayed(Duration.zero);
-
-        expect(bloc.state, isA<AuthIdle>());
-        expect(states, isEmpty);
-        expect(repository.clearPendingOtpChallengeCallCount, 0);
-
-        await sub.cancel();
-        await bloc.close();
-        repository.dispose();
-      });
+      blocTest<AuthBloc, AuthState>(
+        'is no-op when current state is AuthIdle',
+        build: () => AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard),
+        act: (bloc) => bloc.add(const AuthFlowResetRequested()),
+        expect: () => <AuthState>[],
+        verify: (_) {
+          expect(repository.clearPendingOtpChallengeCallCount, 0);
+        },
+      );
     });
 
     group('sequential event processing', () {
       test('queued otp request then submit are processed in order', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
@@ -587,12 +536,9 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
       });
 
       test('queued otp request then resend then submit are processed in order', () async {
-        final repository = _FakeAuthRepository();
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
@@ -621,12 +567,11 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
       });
 
       test('reset failure preserves email so otp submit can still succeed', () async {
-        final repository = _FakeAuthRepository(clearChallengeError: const AuthUnknownError(cause: 'fail'));
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
+        repository.dispose();
+        repository = FakeAuthRepository(clearChallengeError: const AuthUnknownError(cause: 'fail'));
         final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
 
         // First move out of AuthIdle (reset from AuthIdle is a no-op).
@@ -647,16 +592,14 @@ void main() {
         expect((bloc.state as AuthFlowSuccess).email, 'john@doe.com');
 
         await bloc.close();
-        repository.dispose();
       });
     });
 
     group('submit queued during resend', () {
       test('submit queued while resending processes after resend completes', () async {
         final resendCompleter = Completer<AuthOtpRequiredResult>();
-        final repository = _CompletableAuthRepository(resendCompleter: resendCompleter);
-        final internetRequiredGuard = _FakeInternetRequiredGuard();
-        final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
+        final completeRepository = _CompletableAuthRepository(resendCompleter: resendCompleter);
+        final bloc = AuthBloc(authRepository: completeRepository, internetRequiredGuard: internetRequiredGuard);
         final states = <AuthState>[];
         final sub = bloc.stream.listen(states.add);
 
@@ -685,14 +628,14 @@ void main() {
 
         await sub.cancel();
         await bloc.close();
-        repository.dispose();
+        completeRepository.dispose();
       });
     });
   });
 }
 
-final class _FakeAuthRepository implements AuthRepository {
-  _FakeAuthRepository({
+final class FakeAuthRepository implements AuthRepository {
+  FakeAuthRepository({
     Session? initialSession,
     this.requestOtpError,
     this.resendOtpError,
@@ -752,11 +695,11 @@ final class _FakeAuthRepository implements AuthRepository {
       throw const AuthInvalidOtpError();
     }
 
-    const session = Session(accessToken: 'access', refreshToken: 'refresh');
-    const user = UserDto(profilePicture: 'https://example.com/avatar/new.png', username: 'new', name: 'New');
+    final session = makeSession();
+    final user = makeUserDto();
     _currentSession = session;
     _controller.add(session);
-    return const AuthSuccess(session: session, user: user);
+    return AuthSuccess(session: session, user: user);
   }
 
   @override
@@ -777,29 +720,6 @@ final class _FakeAuthRepository implements AuthRepository {
   void dispose() {
     _controller.close();
   }
-}
-
-final class _FakeInternetRequiredGuard implements InternetRequiredGuard {
-  _FakeInternetRequiredGuard({this.canProceedResult = true});
-
-  final bool canProceedResult;
-
-  @override
-  bool get isHealthy => canProceedResult;
-
-  @override
-  Future<bool> canProceed({bool forceRefresh = true}) async => canProceedResult;
-}
-
-/// An [InternetRequiredGuard] whose connectivity can be toggled mid-test.
-final class _ToggleableInternetRequiredGuard implements InternetRequiredGuard {
-  bool canProceedResult = true;
-
-  @override
-  bool get isHealthy => canProceedResult;
-
-  @override
-  Future<bool> canProceed({bool forceRefresh = true}) async => canProceedResult;
 }
 
 /// An [AuthRepository] that allows controlling the completion of [resendOtp]
@@ -846,11 +766,11 @@ final class _CompletableAuthRepository implements AuthRepository {
       throw const AuthInvalidOtpError();
     }
 
-    const session = Session(accessToken: 'access', refreshToken: 'refresh');
-    const user = UserDto(profilePicture: 'https://example.com/avatar/new.png', username: 'new', name: 'New');
+    final session = makeSession();
+    final user = makeUserDto();
     _currentSession = session;
     _controller.add(session);
-    return const AuthSuccess(session: session, user: user);
+    return AuthSuccess(session: session, user: user);
   }
 
   @override
@@ -917,11 +837,11 @@ final class _CompletableOtpRequestRepository implements AuthRepository {
       throw const AuthInvalidOtpError();
     }
 
-    const session = Session(accessToken: 'access', refreshToken: 'refresh');
-    const user = UserDto(profilePicture: 'https://example.com/avatar/new.png', username: 'new', name: 'New');
+    final session = makeSession();
+    final user = makeUserDto();
     _currentSession = session;
     _controller.add(session);
-    return const AuthSuccess(session: session, user: user);
+    return AuthSuccess(session: session, user: user);
   }
 
   @override

@@ -9,7 +9,7 @@ import 'package:pauza/src/features/auth/domain/auth_gate.dart';
 void main() {
   group('PauzaAuthGateNotifier', () {
     test('initially reflects repository session', () {
-      final repository = _FakeAuthRepository();
+      final repository = FakeAuthRepository();
       final gate = PauzaAuthGateNotifier(authRepository: repository);
 
       expect(gate.session, const Session.empty());
@@ -20,7 +20,7 @@ void main() {
     });
 
     test('updates authentication flag when repository emits session', () async {
-      final repository = _FakeAuthRepository();
+      final repository = FakeAuthRepository();
       final gate = PauzaAuthGateNotifier(authRepository: repository);
 
       var notificationCount = 0;
@@ -45,7 +45,7 @@ void main() {
     });
 
     test('stops listening after dispose', () async {
-      final repository = _FakeAuthRepository();
+      final repository = FakeAuthRepository();
       final gate = PauzaAuthGateNotifier(authRepository: repository);
 
       var notificationCount = 0;
@@ -65,7 +65,7 @@ void main() {
     });
 
     test('session getter always returns current repository session', () async {
-      final repository = _FakeAuthRepository();
+      final repository = FakeAuthRepository();
       final gate = PauzaAuthGateNotifier(authRepository: repository);
 
       const authenticated = Session(accessToken: 'tok', refreshToken: 'ref');
@@ -79,7 +79,7 @@ void main() {
   });
 }
 
-final class _FakeAuthRepository implements AuthRepository {
+final class FakeAuthRepository implements AuthRepository {
   final StreamController<Session> _controller = StreamController<Session>.broadcast();
 
   Session _currentSession = const Session.empty();

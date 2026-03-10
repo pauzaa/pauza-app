@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 void main() {
   group('NfcLinkedChipsRepositoryImpl', () {
     test('hasLinkedChips returns false when no chips exist', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       final repository = NfcLinkedChipsRepositoryImpl(localDatabase: localDatabase);
 
       final hasLinkedChips = await repository.hasLinkedChips();
@@ -17,7 +17,7 @@ void main() {
     });
 
     test('hasLinkedChips returns true after linking a chip', () async {
-      final localDatabase = _FakeLocalDatabase();
+      final localDatabase = FakeLocalDatabase();
       final repository = NfcLinkedChipsRepositoryImpl(
         localDatabase: localDatabase,
         uuid: _SequenceUuid(<String>['chip-id-1']),
@@ -32,7 +32,7 @@ void main() {
   });
 }
 
-final class _FakeLocalDatabase implements LocalDatabase {
+final class FakeLocalDatabase implements LocalDatabase {
   final Map<String, Map<String, Object?>> rowsById = <String, Map<String, Object?>>{};
 
   @override

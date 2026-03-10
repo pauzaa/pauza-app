@@ -1,35 +1,59 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_icon_picker.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_screen.dart';
-import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
-import 'package:pauza/src/features/modes/common/model/mode_ending_pausing_scenario.dart';
-import 'package:pauza/src/features/modes/common/model/mode.dart';
-import 'package:pauza/src/features/modes/common/model/mode_icon.dart';
-import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
-import 'package:pauza_ui_kit/pauza_ui_kit.dart';
+
+import '../../../../helpers/helpers.dart';
 
 void main() {
+  late MockModesRepository modesRepository;
+
+  setUp(() {
+    modesRepository = MockModesRepository();
+    when(() => modesRepository.getModes()).thenAnswer((_) async => []);
+    when(() => modesRepository.getMode(any())).thenAnswer(
+      (_) async => makeMode(
+        title: 'Deep Work',
+        textOnScreen: 'Stay focused',
+        description: 'desc',
+        allowedPausesCount: 2,
+        blockedAppIds: const ISet.empty(),
+      ),
+    );
+    when(() => modesRepository.createMode(any())).thenAnswer((_) async {});
+    when(
+      () => modesRepository.updateMode(
+        modeId: any(named: 'modeId'),
+        request: any(named: 'request'),
+      ),
+    ).thenAnswer((_) async {});
+    when(() => modesRepository.deleteMode(any())).thenAnswer((_) async {});
+  });
+
+  setUpAll(registerTestFallbackValues);
+
   testWidgets('delete button appears only in edit mode', (tester) async {
-    final createBloc = ModeEditorBloc(modesRepository: _TestModesRepository(), hasNfcSupport: true);
+    final createBloc = ModeEditorBloc(modesRepository: modesRepository, hasNfcSupport: true);
     addTearDown(createBloc.close);
-    await tester.pumpWidget(
-      _TestApp(bloc: createBloc, child: const ModeEditorMainScreen(modeId: null, hasNfcSupport: true)),
+    await tester.pumpApp(
+      BlocProvider<ModeEditorBloc>.value(
+        value: createBloc,
+        child: const ModeEditorMainScreen(modeId: null, hasNfcSupport: true),
+      ),
     );
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text('Delete Focus Mode'), findsNothing);
 
-    final editBloc = ModeEditorBloc(modesRepository: _TestModesRepository(), hasNfcSupport: true);
+    final editBloc = ModeEditorBloc(modesRepository: modesRepository, hasNfcSupport: true);
     addTearDown(editBloc.close);
-    await tester.pumpWidget(
-      _TestApp(
-        bloc: editBloc,
+    await tester.pumpApp(
+      BlocProvider<ModeEditorBloc>.value(
+        value: editBloc,
         child: const ModeEditorMainScreen(modeId: 'mode-1', hasNfcSupport: true),
       ),
     );
@@ -47,9 +71,14 @@ void main() {
   });
 
   testWidgets('save with empty fields shows notifier validation errors', (tester) async {
-    final bloc = ModeEditorBloc(modesRepository: _TestModesRepository(), hasNfcSupport: true);
+    final bloc = ModeEditorBloc(modesRepository: modesRepository, hasNfcSupport: true);
     addTearDown(bloc.close);
-    await tester.pumpWidget(_TestApp(bloc: bloc, child: const ModeEditorMainScreen(modeId: null, hasNfcSupport: true)));
+    await tester.pumpApp(
+      BlocProvider<ModeEditorBloc>.value(
+        value: bloc,
+        child: const ModeEditorMainScreen(modeId: null, hasNfcSupport: true),
+      ),
+    );
     await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.text('Save Mode'));
@@ -59,73 +88,17 @@ void main() {
   });
 
   testWidgets('renders icon picker at top', (tester) async {
-    final bloc = ModeEditorBloc(modesRepository: _TestModesRepository(), hasNfcSupport: true);
+    final bloc = ModeEditorBloc(modesRepository: modesRepository, hasNfcSupport: true);
     addTearDown(bloc.close);
-    await tester.pumpWidget(_TestApp(bloc: bloc, child: const ModeEditorMainScreen(modeId: null, hasNfcSupport: true)));
+    await tester.pumpApp(
+      BlocProvider<ModeEditorBloc>.value(
+        value: bloc,
+        child: const ModeEditorMainScreen(modeId: null, hasNfcSupport: true),
+      ),
+    );
     await tester.pump(const Duration(milliseconds: 300));
 
     // Icon picker is visible at the top (in the Row with title field)
     expect(find.byType(ModeEditorIconPicker), findsOneWidget);
   });
-}
-
-class _TestApp extends StatelessWidget {
-  const _TestApp({required this.bloc, required this.child});
-
-  final ModeEditorBloc bloc;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      locale: const Locale('en'),
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: PauzaTheme.dark,
-      home: BlocProvider<ModeEditorBloc>.value(value: bloc, child: child),
-    );
-  }
-}
-
-class _TestModesRepository implements ModesRepository {
-  @override
-  Future<void> createMode(ModeUpsertDTO request) async {}
-
-  @override
-  Future<void> deleteMode(String modeId) async {}
-
-  @override
-  Future<Mode> getMode(String modeId) async {
-    return Mode(
-      id: modeId,
-      title: 'Deep Work',
-      textOnScreen: 'Stay focused',
-      description: 'desc',
-      allowedPausesCount: 2,
-      minimumDuration: null,
-      endingPausingScenario: ModeEndingPausingScenario.manual,
-      icon: ModeIconCatalog.defaultIcon,
-      schedule: null,
-      blockedAppIds: const ISet.empty(),
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    );
-  }
-
-  @override
-  Future<List<Mode>> getModes() async => <Mode>[];
-
-  @override
-  Future<void> updateMode({required String modeId, required ModeUpsertDTO request}) async {}
-
-  @override
-  Stream<void> watchModes() => const Stream.empty();
-
-  @override
-  void dispose() {}
 }

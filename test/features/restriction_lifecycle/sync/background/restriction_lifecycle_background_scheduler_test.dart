@@ -1,12 +1,34 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/background/restriction_lifecycle_background_scheduler.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/background/restriction_lifecycle_background_worker.dart';
 import 'package:workmanager/workmanager.dart';
 
+import '../../../../helpers/helpers.dart';
+
 void main() {
+  setUpAll(registerTestFallbackValues);
+
   group('WorkmanagerRestrictionLifecycleBackgroundScheduler', () {
+    late MockWorkmanagerClient workmanagerClient;
+
+    setUp(() {
+      workmanagerClient = MockWorkmanagerClient();
+      when(() => workmanagerClient.initialize(any())).thenAnswer((_) async {});
+      when(
+        () => workmanagerClient.registerPeriodicTask(
+          any(),
+          any(),
+          frequency: any(named: 'frequency'),
+          initialDelay: any(named: 'initialDelay'),
+          existingWorkPolicy: any(named: 'existingWorkPolicy'),
+          backoffPolicy: any(named: 'backoffPolicy'),
+          backoffPolicyDelay: any(named: 'backoffPolicyDelay'),
+        ),
+      ).thenAnswer((_) async {});
+    });
+
     test('initializes workmanager and registers daily periodic task', () async {
-      final workmanagerClient = _FakeWorkmanagerClient();
       final scheduler = WorkmanagerRestrictionLifecycleBackgroundScheduler(
         workmanagerClient: workmanagerClient,
         nowLocal: () => DateTime(2026, 2, 23, 10),
@@ -14,18 +36,21 @@ void main() {
 
       await scheduler.initializeAndScheduleDailySync();
 
-      expect(workmanagerClient.initializeCallCount, 1);
-      expect(workmanagerClient.lastUniqueName, restrictionLifecycleBackgroundTaskUniqueName);
-      expect(workmanagerClient.lastTaskName, restrictionLifecycleBackgroundTaskIdentifier);
-      expect(workmanagerClient.lastFrequency, const Duration(hours: 24));
-      expect(workmanagerClient.lastExistingWorkPolicy, ExistingPeriodicWorkPolicy.replace);
-      expect(workmanagerClient.lastBackoffPolicy, BackoffPolicy.linear);
-      expect(workmanagerClient.lastBackoffPolicyDelay, const Duration(minutes: 30));
-      expect(workmanagerClient.lastInitialDelay, const Duration(hours: 14));
+      verify(() => workmanagerClient.initialize(any())).called(1);
+      verify(
+        () => workmanagerClient.registerPeriodicTask(
+          restrictionLifecycleBackgroundTaskUniqueName,
+          restrictionLifecycleBackgroundTaskIdentifier,
+          frequency: const Duration(hours: 24),
+          initialDelay: const Duration(hours: 14),
+          existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
+          backoffPolicy: BackoffPolicy.linear,
+          backoffPolicyDelay: const Duration(minutes: 30),
+        ),
+      ).called(1);
     });
 
     test('computes initial delay as one full day when now is midnight', () async {
-      final workmanagerClient = _FakeWorkmanagerClient();
       final scheduler = WorkmanagerRestrictionLifecycleBackgroundScheduler(
         workmanagerClient: workmanagerClient,
         nowLocal: () => DateTime(2026, 2, 23),
@@ -33,11 +58,20 @@ void main() {
 
       await scheduler.initializeAndScheduleDailySync();
 
-      expect(workmanagerClient.lastInitialDelay, const Duration(hours: 24));
+      verify(
+        () => workmanagerClient.registerPeriodicTask(
+          any(),
+          any(),
+          frequency: any(named: 'frequency'),
+          initialDelay: const Duration(hours: 24),
+          existingWorkPolicy: any(named: 'existingWorkPolicy'),
+          backoffPolicy: any(named: 'backoffPolicy'),
+          backoffPolicyDelay: any(named: 'backoffPolicyDelay'),
+        ),
+      ).called(1);
     });
 
     test('computes short initial delay when near midnight', () async {
-      final workmanagerClient = _FakeWorkmanagerClient();
       final scheduler = WorkmanagerRestrictionLifecycleBackgroundScheduler(
         workmanagerClient: workmanagerClient,
         nowLocal: () => DateTime(2026, 2, 23, 23, 59, 30),
@@ -45,45 +79,17 @@ void main() {
 
       await scheduler.initializeAndScheduleDailySync();
 
-      expect(workmanagerClient.lastInitialDelay, const Duration(seconds: 30));
+      verify(
+        () => workmanagerClient.registerPeriodicTask(
+          any(),
+          any(),
+          frequency: any(named: 'frequency'),
+          initialDelay: const Duration(seconds: 30),
+          existingWorkPolicy: any(named: 'existingWorkPolicy'),
+          backoffPolicy: any(named: 'backoffPolicy'),
+          backoffPolicyDelay: any(named: 'backoffPolicyDelay'),
+        ),
+      ).called(1);
     });
   });
-}
-
-final class _FakeWorkmanagerClient implements WorkmanagerClient {
-  int initializeCallCount = 0;
-  int registerPeriodicTaskCallCount = 0;
-
-  String? lastUniqueName;
-  String? lastTaskName;
-  Duration? lastFrequency;
-  Duration? lastInitialDelay;
-  ExistingPeriodicWorkPolicy? lastExistingWorkPolicy;
-  BackoffPolicy? lastBackoffPolicy;
-  Duration? lastBackoffPolicyDelay;
-
-  @override
-  Future<void> initialize(Function callbackDispatcher) async {
-    initializeCallCount += 1;
-  }
-
-  @override
-  Future<void> registerPeriodicTask(
-    String uniqueName,
-    String taskName, {
-    required Duration frequency,
-    Duration? initialDelay,
-    ExistingPeriodicWorkPolicy? existingWorkPolicy,
-    BackoffPolicy? backoffPolicy,
-    Duration? backoffPolicyDelay,
-  }) async {
-    registerPeriodicTaskCallCount += 1;
-    lastUniqueName = uniqueName;
-    lastTaskName = taskName;
-    lastFrequency = frequency;
-    lastInitialDelay = initialDelay;
-    lastExistingWorkPolicy = existingWorkPolicy;
-    lastBackoffPolicy = backoffPolicy;
-    lastBackoffPolicyDelay = backoffPolicyDelay;
-  }
 }

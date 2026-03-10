@@ -1,83 +1,10 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/modes/select_apps/bloc/installed_apps_bloc.dart';
-import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
-void main() {
-  group('InstalledAppsBloc', () {
-    test('load initializes apps and categories', () async {
-      final bloc = InstalledAppsBloc(
-        installedAppsRepository: _FakeInstalledAppsRepository(apps: _apps),
-        debounceDuration: Duration.zero,
-      );
-
-      bloc.add(const InstalledAppsRequested());
-
-      await Future<void>.delayed(Duration.zero);
-
-      expect(bloc.state.hasError, isFalse);
-      expect(bloc.state.availableCategoryKeys, containsAll(<String>['Social', 'Video']));
-      expect(bloc.state.visibleGroupedApps.keys, containsAll(<String>['Social', 'Video']));
-
-      await bloc.close();
-    });
-
-    test('search filters apps and resets missing selected category', () async {
-      final bloc = InstalledAppsBloc(
-        installedAppsRepository: _FakeInstalledAppsRepository(apps: _apps),
-        debounceDuration: Duration.zero,
-      );
-
-      bloc.add(const InstalledAppsRequested());
-      await Future<void>.delayed(Duration.zero);
-
-      bloc.add(const CategoryFilterChanged(categoryKey: 'Video'));
-      await Future<void>.delayed(Duration.zero);
-      expect(bloc.state.selectedCategoryKey, 'Video');
-
-      bloc.add(const SearchQueryChanged(searchQuery: 'insta'));
-      await Future<void>.delayed(const Duration(milliseconds: 10));
-
-      expect(bloc.state.selectedCategoryKey, isNull);
-      expect(bloc.state.visibleGroupedApps.keys, <String>['Social']);
-
-      await bloc.close();
-    });
-
-    test('category filter limits visible groups', () async {
-      final bloc = InstalledAppsBloc(
-        installedAppsRepository: _FakeInstalledAppsRepository(apps: _apps),
-        debounceDuration: Duration.zero,
-      );
-
-      bloc.add(const InstalledAppsRequested());
-      await Future<void>.delayed(Duration.zero);
-
-      bloc.add(const CategoryFilterChanged(categoryKey: 'Social'));
-      await Future<void>.delayed(Duration.zero);
-
-      expect(bloc.state.visibleGroupedApps.keys, <String>['Social']);
-      expect(bloc.state.visibleGroupedApps['Social']?.length, 2);
-
-      await bloc.close();
-    });
-
-    test('failure path sets error state', () async {
-      final bloc = InstalledAppsBloc(
-        installedAppsRepository: _FakeInstalledAppsRepository(error: Exception('failed')),
-        debounceDuration: Duration.zero,
-      );
-
-      bloc.add(const InstalledAppsRequested());
-      await Future<void>.delayed(Duration.zero);
-
-      expect(bloc.state.hasError, isTrue);
-      expect(bloc.state.isLoading, isFalse);
-
-      await bloc.close();
-    });
-  });
-}
+import '../../../../../helpers/helpers.dart';
 
 const AppIdentifier _instagramId = AppIdentifier.android('com.instagram.android');
 const AppIdentifier _xId = AppIdentifier.android('com.twitter.android');
@@ -89,26 +16,99 @@ const List<AndroidAppInfo> _apps = <AndroidAppInfo>[
   AndroidAppInfo(packageId: _youtubeId, name: 'YouTube', category: 'Video'),
 ];
 
-class _FakeInstalledAppsRepository implements InstalledAppsRepository {
-  _FakeInstalledAppsRepository({this.apps = const <AndroidAppInfo>[], this.error});
+void main() {
+  late MockInstalledAppsRepository repository;
 
-  final List<AndroidAppInfo> apps;
-  final Object? error;
+  setUp(() {
+    repository = MockInstalledAppsRepository();
+  });
 
-  @override
-  Future<List<AndroidAppInfo>> getAndroidInstalledApps({
-    bool includeSystemApps = false,
-    bool includeIcons = true,
-  }) async {
-    if (error case final currentError?) {
-      throw currentError;
-    }
+  group('InstalledAppsBloc', () {
+    blocTest<InstalledAppsBloc, InstalledAppsState>(
+      'load initializes apps and categories',
+      setUp: () {
+        when(
+          () => repository.getAndroidInstalledApps(
+            includeSystemApps: any(named: 'includeSystemApps'),
+            includeIcons: any(named: 'includeIcons'),
+          ),
+        ).thenAnswer((_) async => _apps);
+      },
+      build: () => InstalledAppsBloc(installedAppsRepository: repository, debounceDuration: Duration.zero),
+      act: (bloc) => bloc.add(const InstalledAppsRequested()),
+      verify: (bloc) {
+        expect(bloc.state.hasError, isFalse);
+        expect(bloc.state.availableCategoryKeys, containsAll(<String>['Social', 'Video']));
+        expect(bloc.state.visibleGroupedApps.keys, containsAll(<String>['Social', 'Video']));
+      },
+    );
 
-    return apps;
-  }
+    blocTest<InstalledAppsBloc, InstalledAppsState>(
+      'search filters apps and resets missing selected category',
+      setUp: () {
+        when(
+          () => repository.getAndroidInstalledApps(
+            includeSystemApps: any(named: 'includeSystemApps'),
+            includeIcons: any(named: 'includeIcons'),
+          ),
+        ).thenAnswer((_) async => _apps);
+      },
+      build: () => InstalledAppsBloc(installedAppsRepository: repository, debounceDuration: Duration.zero),
+      act: (bloc) async {
+        bloc.add(const InstalledAppsRequested());
+        await Future<void>.delayed(Duration.zero);
 
-  @override
-  Future<List<IOSAppInfo>> selectIOSApps({List<IOSAppInfo>? preSelectedApps}) async {
-    return preSelectedApps ?? const <IOSAppInfo>[];
-  }
+        bloc.add(const CategoryFilterChanged(categoryKey: 'Video'));
+        await Future<void>.delayed(Duration.zero);
+
+        bloc.add(const SearchQueryChanged(searchQuery: 'insta'));
+      },
+      wait: const Duration(milliseconds: 50),
+      verify: (bloc) {
+        expect(bloc.state.selectedCategoryKey, isNull);
+        expect(bloc.state.visibleGroupedApps.keys, <String>['Social']);
+      },
+    );
+
+    blocTest<InstalledAppsBloc, InstalledAppsState>(
+      'category filter limits visible groups',
+      setUp: () {
+        when(
+          () => repository.getAndroidInstalledApps(
+            includeSystemApps: any(named: 'includeSystemApps'),
+            includeIcons: any(named: 'includeIcons'),
+          ),
+        ).thenAnswer((_) async => _apps);
+      },
+      build: () => InstalledAppsBloc(installedAppsRepository: repository, debounceDuration: Duration.zero),
+      act: (bloc) async {
+        bloc.add(const InstalledAppsRequested());
+        await Future<void>.delayed(Duration.zero);
+
+        bloc.add(const CategoryFilterChanged(categoryKey: 'Social'));
+      },
+      verify: (bloc) {
+        expect(bloc.state.visibleGroupedApps.keys, <String>['Social']);
+        expect(bloc.state.visibleGroupedApps['Social']?.length, 2);
+      },
+    );
+
+    blocTest<InstalledAppsBloc, InstalledAppsState>(
+      'failure path sets error state',
+      setUp: () {
+        when(
+          () => repository.getAndroidInstalledApps(
+            includeSystemApps: any(named: 'includeSystemApps'),
+            includeIcons: any(named: 'includeIcons'),
+          ),
+        ).thenThrow(Exception('failed'));
+      },
+      build: () => InstalledAppsBloc(installedAppsRepository: repository, debounceDuration: Duration.zero),
+      act: (bloc) => bloc.add(const InstalledAppsRequested()),
+      verify: (bloc) {
+        expect(bloc.state.hasError, isTrue);
+        expect(bloc.state.isLoading, isFalse);
+      },
+    );
+  });
 }

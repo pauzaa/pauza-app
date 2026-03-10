@@ -8,7 +8,7 @@ import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 void main() {
   group('AuthRepositoryImpl', () {
     test('initialize keeps empty session when storage has no value', () async {
-      final storage = _FakeAuthSessionStorage();
+      final storage = FakeAuthSessionStorage();
       final repository = AuthRepositoryImpl(sessionStorage: storage);
       final emitted = <Session>[];
       final sub = repository.sessionStream.listen(emitted.add);
@@ -25,7 +25,7 @@ void main() {
 
     group('requestOtp', () {
       test('returns AuthOtpRequiredResult without altering session', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
 
         final result = await repository.requestOtp(email: 'john@doe.com');
@@ -41,7 +41,7 @@ void main() {
 
     group('resendOtp', () {
       test('returns AuthOtpRequiredResult with same email', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
 
         await repository.requestOtp(email: 'john@doe.com');
@@ -56,7 +56,7 @@ void main() {
       });
 
       test('allows verifyOtp after resend', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
 
         await repository.requestOtp(email: 'john@doe.com');
@@ -70,7 +70,7 @@ void main() {
       });
 
       test('succeeds without prior requestOtp and allows verifyOtp', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
 
         final result = await repository.resendOtp(email: 'john@doe.com');
@@ -89,7 +89,7 @@ void main() {
 
     group('verifyOtp', () {
       test('throws AuthInvalidOtpError for wrong code', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
 
         await repository.requestOtp(email: 'new@account.com');
@@ -100,7 +100,7 @@ void main() {
       });
 
       test('succeeds with valid OTP and emits authenticated session', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
         final emitted = <Session>[];
         final sub = repository.sessionStream.listen(emitted.add);
@@ -120,7 +120,7 @@ void main() {
       });
 
       test('throws AuthOtpChallengeMissingError without prior requestOtp', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
 
         await expectLater(
@@ -134,7 +134,7 @@ void main() {
 
     group('clearPendingOtpChallenge', () {
       test('clears challenge so verifyOtp throws', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
 
         await repository.requestOtp(email: 'john@doe.com');
@@ -151,7 +151,7 @@ void main() {
 
     group('signOut', () {
       test('deletes session and emits Session.empty()', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
         final emitted = <Session>[];
         final sub = repository.sessionStream.listen(emitted.add);
@@ -172,7 +172,7 @@ void main() {
 
     group('sessionStream', () {
       test('emits each session mutation in order', () async {
-        final storage = _FakeAuthSessionStorage();
+        final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(sessionStorage: storage);
         final emitted = <Session>[];
         final sub = repository.sessionStream.listen(emitted.add);
@@ -195,7 +195,7 @@ void main() {
   });
 }
 
-final class _FakeAuthSessionStorage implements AuthSessionStorage {
+final class FakeAuthSessionStorage implements AuthSessionStorage {
   Session storedSession = const Session.empty();
   Session? writtenSession;
   int deleteCallCount = 0;

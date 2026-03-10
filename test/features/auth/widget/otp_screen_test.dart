@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
-import 'package:pauza/src/core/localization/gen/app_localizations.g.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
@@ -16,9 +15,13 @@ import 'package:pauza/src/features/auth/widget/otp_code/otp_screen_content.dart'
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
+import '../../../helpers/helpers.dart';
+
 void main() {
+  setUpAll(registerTestFallbackValues);
+
   testWidgets('renders OTP title, description, and masked email', (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp(child: const OtpHeaderText(email: 'user@example.com')));
+    await tester.pumpApp(const OtpHeaderText(email: 'user@example.com'), theme: PauzaTheme.dark);
 
     expect(find.text('Verify Your Email'), findsOneWidget);
     expect(
@@ -28,10 +31,9 @@ void main() {
   });
 
   testWidgets('shows countdown and disables resend when remaining seconds > 0', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      _buildApp(
-        child: OtpActionsSection(countdownStream: Stream.value(55), initialRemainingSeconds: 55, onResendTap: () {}),
-      ),
+    await tester.pumpApp(
+      OtpActionsSection(countdownStream: Stream.value(55), initialRemainingSeconds: 55, onResendTap: () {}),
+      theme: PauzaTheme.dark,
     );
 
     expect(find.text("Didn't receive a code?"), findsOneWidget);
@@ -44,16 +46,15 @@ void main() {
   testWidgets('resend callback is triggered when countdown is zero', (WidgetTester tester) async {
     var resendTapCount = 0;
 
-    await tester.pumpWidget(
-      _buildApp(
-        child: OtpActionsSection(
-          countdownStream: Stream.value(0),
-          initialRemainingSeconds: 0,
-          onResendTap: () {
-            resendTapCount += 1;
-          },
-        ),
+    await tester.pumpApp(
+      OtpActionsSection(
+        countdownStream: Stream.value(0),
+        initialRemainingSeconds: 0,
+        onResendTap: () {
+          resendTapCount += 1;
+        },
       ),
+      theme: PauzaTheme.dark,
     );
 
     await tester.tap(find.text('Resend Code'));
@@ -63,10 +64,9 @@ void main() {
   });
 
   testWidgets('resend button is enabled when countdown is zero', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      _buildApp(
-        child: OtpActionsSection(countdownStream: Stream.value(0), initialRemainingSeconds: 0, onResendTap: () {}),
-      ),
+    await tester.pumpApp(
+      OtpActionsSection(countdownStream: Stream.value(0), initialRemainingSeconds: 0, onResendTap: () {}),
+      theme: PauzaTheme.dark,
     );
 
     expect(find.text("Didn't receive a code?"), findsOneWidget);
@@ -79,15 +79,14 @@ void main() {
 
   group('OtpActionsSection isBusy', () {
     testWidgets('disables resend button when isBusy is true and countdown is zero', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        _buildApp(
-          child: OtpActionsSection(
-            countdownStream: Stream.value(0),
-            initialRemainingSeconds: 0,
-            isBusy: true,
-            onResendTap: () {},
-          ),
+      await tester.pumpApp(
+        OtpActionsSection(
+          countdownStream: Stream.value(0),
+          initialRemainingSeconds: 0,
+          isBusy: true,
+          onResendTap: () {},
         ),
+        theme: PauzaTheme.dark,
       );
 
       final resendButton = tester.widget<PauzaTextButton>(find.byType(PauzaTextButton));
@@ -97,10 +96,9 @@ void main() {
     testWidgets('enables resend button when isBusy is false (default) and countdown is zero', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _buildApp(
-          child: OtpActionsSection(countdownStream: Stream.value(0), initialRemainingSeconds: 0, onResendTap: () {}),
-        ),
+      await tester.pumpApp(
+        OtpActionsSection(countdownStream: Stream.value(0), initialRemainingSeconds: 0, onResendTap: () {}),
+        theme: PauzaTheme.dark,
       );
 
       final resendButton = tester.widget<PauzaTextButton>(find.byType(PauzaTextButton));
@@ -108,15 +106,14 @@ void main() {
     });
 
     testWidgets('disables resend button when both isBusy and countdown are active', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        _buildApp(
-          child: OtpActionsSection(
-            countdownStream: Stream.value(30),
-            initialRemainingSeconds: 30,
-            isBusy: true,
-            onResendTap: () {},
-          ),
+      await tester.pumpApp(
+        OtpActionsSection(
+          countdownStream: Stream.value(30),
+          initialRemainingSeconds: 30,
+          isBusy: true,
+          onResendTap: () {},
         ),
+        theme: PauzaTheme.dark,
       );
 
       final resendButton = tester.widget<PauzaTextButton>(find.byType(PauzaTextButton));
@@ -126,17 +123,16 @@ void main() {
     testWidgets('resend tap does not invoke callback when isBusy is true', (WidgetTester tester) async {
       var tapCount = 0;
 
-      await tester.pumpWidget(
-        _buildApp(
-          child: OtpActionsSection(
-            countdownStream: Stream.value(0),
-            initialRemainingSeconds: 0,
-            isBusy: true,
-            onResendTap: () {
-              tapCount += 1;
-            },
-          ),
+      await tester.pumpApp(
+        OtpActionsSection(
+          countdownStream: Stream.value(0),
+          initialRemainingSeconds: 0,
+          isBusy: true,
+          onResendTap: () {
+            tapCount += 1;
+          },
         ),
+        theme: PauzaTheme.dark,
       );
 
       // Attempt to tap the resend button (it should be disabled)
@@ -149,8 +145,11 @@ void main() {
 
   group('OtpScreenContent', () {
     testWidgets('back navigation dispatches reset and pops screen on success', (WidgetTester tester) async {
-      final repository = _FakeAuthRepository();
-      final internetRequiredGuard = _FakeInternetRequiredGuard();
+      final repository = FakeAuthRepository();
+      final internetRequiredGuard = MockInternetRequiredGuard();
+      when(
+        () => internetRequiredGuard.canProceed(forceRefresh: any(named: 'forceRefresh')),
+      ).thenAnswer((_) async => true);
       final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
       addTearDown(bloc.close);
 
@@ -159,9 +158,9 @@ void main() {
       await bloc.stream.firstWhere((s) => s is AuthOtpRequired);
 
       // Build a two-page navigation stack: home -> otp screen
-      await tester.pumpWidget(
-        _buildBlocApp(
-          bloc: bloc,
+      await tester.pumpApp(
+        BlocProvider<AuthBloc>.value(
+          value: bloc,
           child: Builder(
             builder: (context) {
               return ElevatedButton(
@@ -177,6 +176,7 @@ void main() {
             },
           ),
         ),
+        theme: PauzaTheme.dark,
       );
 
       // Navigate to the OTP screen
@@ -206,7 +206,10 @@ void main() {
     testWidgets('pin code field is disabled while bloc is in AuthSubmitting state', (WidgetTester tester) async {
       final requestCompleter = Completer<AuthOtpRequiredResult>();
       final repository = _CompletableOtpRequestRepository(requestCompleter: requestCompleter);
-      final internetRequiredGuard = _FakeInternetRequiredGuard();
+      final internetRequiredGuard = MockInternetRequiredGuard();
+      when(
+        () => internetRequiredGuard.canProceed(forceRefresh: any(named: 'forceRefresh')),
+      ).thenAnswer((_) async => true);
       final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
       addTearDown(bloc.close);
 
@@ -214,8 +217,10 @@ void main() {
       bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
       await bloc.stream.firstWhere((s) => s is AuthSubmitting);
 
-      await tester.pumpWidget(_buildBlocApp(bloc: bloc, child: const OtpScreenContent()));
-      await tester.pump();
+      await tester.pumpApp(
+        BlocProvider<AuthBloc>.value(value: bloc, child: const OtpScreenContent()),
+        theme: PauzaTheme.dark,
+      );
 
       // The PauzaPinCodeField should be disabled during AuthSubmitting
       final pinField = tester.widget<PauzaPinCodeField>(find.byKey(const Key('otp_pin_code_field')));
@@ -229,16 +234,21 @@ void main() {
     });
 
     testWidgets('displays email from bloc state in header', (WidgetTester tester) async {
-      final repository = _FakeAuthRepository();
-      final internetRequiredGuard = _FakeInternetRequiredGuard();
+      final repository = FakeAuthRepository();
+      final internetRequiredGuard = MockInternetRequiredGuard();
+      when(
+        () => internetRequiredGuard.canProceed(forceRefresh: any(named: 'forceRefresh')),
+      ).thenAnswer((_) async => true);
       final bloc = AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard);
       addTearDown(bloc.close);
 
       bloc.add(const AuthOtpRequested(email: 'alice@test.org'));
       await bloc.stream.firstWhere((s) => s is AuthOtpRequired);
 
-      await tester.pumpWidget(_buildBlocApp(bloc: bloc, child: const OtpScreenContent()));
-      await tester.pump();
+      await tester.pumpApp(
+        BlocProvider<AuthBloc>.value(value: bloc, child: const OtpScreenContent()),
+        theme: PauzaTheme.dark,
+      );
 
       // The email should be masked as a***@test.org in the header
       expect(
@@ -249,31 +259,11 @@ void main() {
   });
 }
 
-Widget _buildApp({required Widget child}) {
-  return MaterialApp(
-    locale: const Locale('en'),
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    theme: PauzaTheme.dark,
-    home: Scaffold(body: child),
-  );
-}
-
-Widget _buildBlocApp({required AuthBloc bloc, required Widget child}) {
-  return MaterialApp(
-    locale: const Locale('en'),
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    theme: PauzaTheme.dark,
-    home: BlocProvider<AuthBloc>.value(value: bloc, child: child),
-  );
-}
-
 // ---------------------------------------------------------------------------
 // Fakes
 // ---------------------------------------------------------------------------
 
-final class _FakeAuthRepository implements AuthRepository {
+final class FakeAuthRepository implements AuthRepository {
   final StreamController<Session> _controller = StreamController<Session>.broadcast();
   Session _currentSession = const Session.empty();
   String? _pendingChallenge;
@@ -328,14 +318,6 @@ final class _FakeAuthRepository implements AuthRepository {
   void dispose() {
     _controller.close();
   }
-}
-
-final class _FakeInternetRequiredGuard implements InternetRequiredGuard {
-  @override
-  bool get isHealthy => true;
-
-  @override
-  Future<bool> canProceed({bool forceRefresh = true}) async => true;
 }
 
 /// An [AuthRepository] that allows controlling the completion of [requestOtp]

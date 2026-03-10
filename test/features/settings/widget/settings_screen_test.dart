@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/settings/widget/settings_footer.dart';
 import 'package:pauza/src/features/settings/widget/settings_notifications_tile.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
+
+import '../../../helpers/helpers.dart';
 
 void main() {
   group('SettingsFooter', () {
@@ -16,18 +17,13 @@ void main() {
         buildNumber: '45',
       );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: PauzaTheme.light,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
-            body: SettingsFooter(
-              signOutLabel: 'Sign Out',
-              packageInfo: packageInfo,
-              versionLabel: (version) => 'v$version',
-              onSignOutTap: () {},
-            ),
+      await tester.pumpApp(
+        Scaffold(
+          body: SettingsFooter(
+            signOutLabel: 'Sign Out',
+            packageInfo: packageInfo,
+            versionLabel: (version) => 'v$version',
+            onSignOutTap: () {},
           ),
         ),
       );
@@ -39,14 +35,7 @@ void main() {
 
   group('SettingsNotificationsTile', () {
     testWidgets('switch toggles on tap', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: PauzaTheme.light,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: SettingsNotificationsTile(title: 'Notifications')),
-        ),
-      );
+      await tester.pumpApp(const Scaffold(body: SettingsNotificationsTile(title: 'Notifications')));
 
       expect(find.text('Notifications'), findsOneWidget);
 

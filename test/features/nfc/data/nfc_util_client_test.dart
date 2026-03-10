@@ -23,7 +23,7 @@ void main() {
 
     test('checkAvailability returns available when platform is available', () async {
       final client = NfcUtilClient(
-        manager: _FakeNfcManagerGateway(),
+        manager: FakeNfcManagerGateway(),
         settingsLauncher: const NoopNfcSystemSettingsLauncher(),
       );
 
@@ -34,7 +34,7 @@ void main() {
 
     test('checkAvailability returns disabled when platform reports unavailable', () async {
       final client = NfcUtilClient(
-        manager: _FakeNfcManagerGateway(isAvailableResult: false),
+        manager: FakeNfcManagerGateway(isAvailableResult: false),
         settingsLauncher: const NoopNfcSystemSettingsLauncher(),
       );
 
@@ -45,7 +45,7 @@ void main() {
 
     test('scanSingleTag returns timeout when no tag is discovered', () async {
       final client = NfcUtilClient(
-        manager: _FakeNfcManagerGateway(),
+        manager: FakeNfcManagerGateway(),
         settingsLauncher: const NoopNfcSystemSettingsLauncher(),
       );
 
@@ -53,7 +53,7 @@ void main() {
     });
 
     test('scanSingleTag maps discovered nfc_util tag into snapshot', () async {
-      final manager = _FakeNfcManagerGateway();
+      final manager = FakeNfcManagerGateway();
       final client = NfcUtilClient(manager: manager, settingsLauncher: const NoopNfcSystemSettingsLauncher());
 
       final pending = client.scanSingleTag(timeout: const Duration(seconds: 1));
@@ -71,7 +71,7 @@ void main() {
     });
 
     test('scanSingleTag maps session user cancel to cancelled exception', () async {
-      final manager = _FakeNfcManagerGateway();
+      final manager = FakeNfcManagerGateway();
       final client = NfcUtilClient(manager: manager, settingsLauncher: const NoopNfcSystemSettingsLauncher());
 
       final pending = client.scanSingleTag(timeout: const Duration(seconds: 1));
@@ -83,7 +83,7 @@ void main() {
 
     test('stopSession ignores platform stop errors', () async {
       final client = NfcUtilClient(
-        manager: _FakeNfcManagerGateway(stopSessionError: StateError('session missing')),
+        manager: FakeNfcManagerGateway(stopSessionError: StateError('session missing')),
         settingsLauncher: const NoopNfcSystemSettingsLauncher(),
       );
 
@@ -92,8 +92,8 @@ void main() {
   });
 }
 
-final class _FakeNfcManagerGateway implements NfcManagerGateway {
-  _FakeNfcManagerGateway({this.isAvailableResult = true, this.stopSessionError});
+final class FakeNfcManagerGateway implements NfcManagerGateway {
+  FakeNfcManagerGateway({this.isAvailableResult = true, this.stopSessionError});
 
   final bool isAvailableResult;
   final Object? stopSessionError;

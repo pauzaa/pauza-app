@@ -15,8 +15,8 @@ import 'package:sqflite/sqflite.dart';
 void main() {
   group('ModesRepositoryImpl', () {
     test('createMode persists normalized icon token and upserts plugin mode', () async {
-      final database = _FakeLocalDatabase();
-      final restrictions = _FakeAppRestrictionManager();
+      final database = FakeLocalDatabase();
+      final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -32,7 +32,7 @@ void main() {
 
       await repository.createMode(request);
 
-      final operations = (database.fakeTransaction.batch() as _FakeBatch).operations;
+      final operations = (database.fakeTransaction.batch() as FakeBatch).operations;
       final modesInsert = operations.firstWhere((operation) => operation.sql.contains('INSERT INTO modes'));
       expect(modesInsert.arguments, contains(ModeIconCatalog.defaultToken));
       expect(modesInsert.arguments, contains(request.minimumDuration?.inMilliseconds));
@@ -45,8 +45,8 @@ void main() {
     });
 
     test('createMode maps disabled schedule to plugin null schedule', () async {
-      final database = _FakeLocalDatabase();
-      final restrictions = _FakeAppRestrictionManager();
+      final database = FakeLocalDatabase();
+      final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -70,8 +70,8 @@ void main() {
     });
 
     test('createMode maps enabled schedule to plugin schedule', () async {
-      final database = _FakeLocalDatabase();
-      final restrictions = _FakeAppRestrictionManager();
+      final database = FakeLocalDatabase();
+      final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -99,8 +99,8 @@ void main() {
     });
 
     test('createMode plugin failure prevents DB write', () async {
-      final database = _FakeLocalDatabase();
-      final restrictions = _FakeAppRestrictionManager()..throwOnUpsert = true;
+      final database = FakeLocalDatabase();
+      final restrictions = FakeAppRestrictionManager()..throwOnUpsert = true;
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -117,8 +117,8 @@ void main() {
     });
 
     test('createMode DB failure compensates with plugin removeMode', () async {
-      final database = _FakeLocalDatabase()..throwOnTransaction = true;
-      final restrictions = _FakeAppRestrictionManager();
+      final database = FakeLocalDatabase()..throwOnTransaction = true;
+      final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -136,8 +136,8 @@ void main() {
     });
 
     test('updateMode persists normalized icon token and upserts plugin mode', () async {
-      final database = _FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
-      final restrictions = _FakeAppRestrictionManager();
+      final database = FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
+      final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -153,7 +153,7 @@ void main() {
 
       await repository.updateMode(modeId: 'mode-1', request: request);
 
-      final update = (database.fakeTransaction.batch() as _FakeBatch).operations.firstWhere(
+      final update = (database.fakeTransaction.batch() as FakeBatch).operations.firstWhere(
         (operation) => operation.sql.contains('UPDATE modes'),
       );
       expect(update.arguments, contains(ModeIconCatalog.defaultToken));
@@ -163,8 +163,8 @@ void main() {
     });
 
     test('updateMode plugin failure prevents DB write', () async {
-      final database = _FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
-      final restrictions = _FakeAppRestrictionManager()..throwOnUpsert = true;
+      final database = FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
+      final restrictions = FakeAppRestrictionManager()..throwOnUpsert = true;
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -181,10 +181,10 @@ void main() {
     });
 
     test('updateMode DB failure compensates by re-upserting previous mode', () async {
-      final database = _FakeLocalDatabase()
+      final database = FakeLocalDatabase()
         ..queryRows = <Map<String, Object?>>[_modeRow(blockedApps: 'app.old')]
         ..throwOnTransaction = true;
-      final restrictions = _FakeAppRestrictionManager();
+      final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -205,8 +205,8 @@ void main() {
     });
 
     test('deleteMode calls plugin removeMode', () async {
-      final database = _FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
-      final restrictions = _FakeAppRestrictionManager();
+      final database = FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
+      final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -220,8 +220,8 @@ void main() {
     });
 
     test('deleteMode plugin failure prevents DB delete', () async {
-      final database = _FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
-      final restrictions = _FakeAppRestrictionManager()..throwOnRemove = true;
+      final database = FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
+      final restrictions = FakeAppRestrictionManager()..throwOnRemove = true;
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -234,10 +234,10 @@ void main() {
     });
 
     test('deleteMode DB failure compensates by re-upserting previous mode', () async {
-      final database = _FakeLocalDatabase()
+      final database = FakeLocalDatabase()
         ..queryRows = <Map<String, Object?>>[_modeRow(blockedApps: 'app.old')]
         ..throwOnRawDelete = true;
-      final restrictions = _FakeAppRestrictionManager();
+      final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -253,7 +253,7 @@ void main() {
 
     test('getModes maps invalid icon token to default token', () async {
       final now = DateTime.now().toUtc().millisecondsSinceEpoch;
-      final database = _FakeLocalDatabase()
+      final database = FakeLocalDatabase()
         ..queryRows = <Map<String, Object?>>[
           <String, Object?>{
             'id': 'mode-1',
@@ -276,7 +276,7 @@ void main() {
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
-        restrictions: _FakeAppRestrictionManager(),
+        restrictions: FakeAppRestrictionManager(),
       );
 
       final modes = await repository.getModes();
@@ -288,8 +288,8 @@ void main() {
     });
 
     test('watchModes emits on changes', () async {
-      final database = _FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
-      final restrictions = _FakeAppRestrictionManager();
+      final database = FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
+      final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
         localDatabase: database,
         platform: PauzaPlatform.android,
@@ -334,7 +334,7 @@ Map<String, Object?> _modeRow({String blockedApps = ''}) {
   };
 }
 
-final class _FakeAppRestrictionManager extends AppRestrictionManager {
+final class FakeAppRestrictionManager extends AppRestrictionManager {
   final List<RestrictionMode> upsertedModes = <RestrictionMode>[];
   final List<String> removedModeIds = <String>[];
   bool throwOnUpsert = false;
@@ -357,29 +357,29 @@ final class _FakeAppRestrictionManager extends AppRestrictionManager {
   }
 }
 
-final class _SqlOperation {
-  const _SqlOperation({required this.sql, required this.arguments});
+final class SqlOperation {
+  const SqlOperation({required this.sql, required this.arguments});
 
   final String sql;
   final List<Object?> arguments;
 }
 
-final class _FakeBatch implements Batch {
-  final List<_SqlOperation> operations = <_SqlOperation>[];
+final class FakeBatch implements Batch {
+  final List<SqlOperation> operations = <SqlOperation>[];
 
   @override
   void rawInsert(String sql, [List<Object?>? arguments]) {
-    operations.add(_SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]));
+    operations.add(SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]));
   }
 
   @override
   void rawUpdate(String sql, [List<Object?>? arguments]) {
-    operations.add(_SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]));
+    operations.add(SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]));
   }
 
   @override
   void rawDelete(String sql, [List<Object?>? arguments]) {
-    operations.add(_SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]));
+    operations.add(SqlOperation(sql: sql, arguments: arguments ?? <Object?>[]));
   }
 
   @override
@@ -389,10 +389,10 @@ final class _FakeBatch implements Batch {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-final class _FakeTransaction implements Transaction {
-  _FakeTransaction();
+final class FakeTransaction implements Transaction {
+  FakeTransaction();
 
-  final _FakeBatch _batch = _FakeBatch();
+  final FakeBatch _batch = FakeBatch();
   List<Map<String, Object?>> scheduleRows = const <Map<String, Object?>>[];
   List<Map<String, Object?>> blockedRows = const <Map<String, Object?>>[];
 
@@ -414,9 +414,9 @@ final class _FakeTransaction implements Transaction {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-final class _FakeLocalDatabase implements LocalDatabase {
+final class FakeLocalDatabase implements LocalDatabase {
   List<Map<String, Object?>> queryRows = const <Map<String, Object?>>[];
-  final _FakeTransaction fakeTransaction = _FakeTransaction();
+  final FakeTransaction fakeTransaction = FakeTransaction();
   int transactionCalls = 0;
   int rawDeleteCalls = 0;
   bool throwOnTransaction = false;

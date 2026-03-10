@@ -1,139 +1,169 @@
 import 'dart:async';
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
-import 'package:pauza/src/features/streaks/common/model/streak_snapshot.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_types.dart';
-import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
-void main() {
-  group('HomeStatsBloc', () {
-    test('loads snapshot on initialization and maps values', () async {
-      final repository = _FakeStreaksRepository(
-        responses: <Object>[_snapshot(streakDays: 3, focusedDuration: const Duration(minutes: 27))],
-      );
-      final lifecycleActionsController = StreamController<RestrictionLifecycleAction>.broadcast();
-      final bloc = HomeStatsBloc(
-        streaksRepository: repository,
-        lifecycleActions: lifecycleActionsController.stream,
-        nowLocal: () => _asOfLocal,
-      )..add(const HomeStatsLoadRequested());
-
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      expect(repository.getGlobalSnapshotCallCount, 1);
-      expect(bloc.state.streakDays, 3);
-      expect(bloc.state.focusedDuration, const Duration(minutes: 27));
-
-      await lifecycleActionsController.close();
-      await bloc.close();
-    });
-
-    test('keeps placeholder state when initial load fails', () async {
-      final repository = _FakeStreaksRepository(responses: <Object>[StateError('load_failed')]);
-      final lifecycleActionsController = StreamController<RestrictionLifecycleAction>.broadcast();
-      final bloc = HomeStatsBloc(
-        streaksRepository: repository,
-        lifecycleActions: lifecycleActionsController.stream,
-        nowLocal: () => _asOfLocal,
-      )..add(const HomeStatsLoadRequested());
-
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      expect(bloc.state.streakDays, isNull);
-      expect(bloc.state.focusedDuration, isNull);
-      expect(bloc.state.noDataAvailable, isTrue);
-
-      await lifecycleActionsController.close();
-      await bloc.close();
-    });
-
-    test('refreshes when lifecycle action is emitted', () async {
-      final repository = _FakeStreaksRepository(
-        responses: <Object>[
-          _snapshot(streakDays: 1, focusedDuration: const Duration(minutes: 10)),
-          _snapshot(streakDays: 2, focusedDuration: const Duration(minutes: 20)),
-        ],
-      );
-      final lifecycleActionsController = StreamController<RestrictionLifecycleAction>.broadcast();
-      final bloc = HomeStatsBloc(
-        streaksRepository: repository,
-        lifecycleActions: lifecycleActionsController.stream,
-        nowLocal: () => _asOfLocal,
-      )..add(const HomeStatsLoadRequested());
-
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-      lifecycleActionsController.add(RestrictionLifecycleAction.pause);
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      expect(repository.getGlobalSnapshotCallCount, 2);
-      expect(bloc.state.streakDays, 2);
-      expect(bloc.state.focusedDuration, const Duration(minutes: 20));
-
-      await lifecycleActionsController.close();
-      await bloc.close();
-    });
-
-    test('keeps last successful values when refresh fails', () async {
-      final repository = _FakeStreaksRepository(
-        responses: <Object>[
-          _snapshot(streakDays: 4, focusedDuration: const Duration(minutes: 40)),
-          StateError('refresh_failed'),
-        ],
-      );
-      final lifecycleActionsController = StreamController<RestrictionLifecycleAction>.broadcast();
-      final bloc = HomeStatsBloc(
-        streaksRepository: repository,
-        lifecycleActions: lifecycleActionsController.stream,
-        nowLocal: () => _asOfLocal,
-      )..add(const HomeStatsLoadRequested());
-
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-      lifecycleActionsController.add(RestrictionLifecycleAction.resume);
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      expect(repository.getGlobalSnapshotCallCount, 2);
-      expect(bloc.state.streakDays, 4);
-      expect(bloc.state.focusedDuration, const Duration(minutes: 40));
-      expect(bloc.state.error, isA<StateError>());
-
-      await lifecycleActionsController.close();
-      await bloc.close();
-    });
-  });
-}
+import '../../../helpers/helpers.dart';
 
 final DateTime _asOfLocal = DateTime(2026, 2, 20, 9);
 
-StreakSnapshot _snapshot({required int streakDays, required Duration focusedDuration}) {
-  return StreakSnapshot(
-    asOfLocal: _asOfLocal,
-    targetDurationPerDay: const Duration(minutes: 10),
-    todayEffectiveDuration: focusedDuration,
-    currentStreakDays: CurrentStreakDays(streakDays),
-    bestStreakDays: BestStreakDays(streakDays),
-  );
-}
+void main() {
+  late MockStreaksRepository repository;
+  late StreamController<RestrictionLifecycleAction> lifecycleActionsController;
 
-class _FakeStreaksRepository implements StreaksRepository {
-  _FakeStreaksRepository({required this.responses});
+  setUpAll(() {
+    registerTestFallbackValues();
+  });
 
-  final List<Object> responses;
-  int getGlobalSnapshotCallCount = 0;
+  setUp(() {
+    repository = MockStreaksRepository();
+    lifecycleActionsController = StreamController<RestrictionLifecycleAction>.broadcast();
+  });
 
-  @override
-  Future<StreakSnapshot> getGlobalSnapshot({required DateTime nowLocal}) async {
-    getGlobalSnapshotCallCount += 1;
-    final index = getGlobalSnapshotCallCount - 1;
-    final response = responses[index];
-    if (response is StreakSnapshot) {
-      return response;
-    }
+  tearDown(() async {
+    await lifecycleActionsController.close();
+  });
 
-    throw response;
-  }
+  group('HomeStatsBloc', () {
+    blocTest<HomeStatsBloc, HomeStatsState>(
+      'loads snapshot on initialization and maps values',
+      setUp: () {
+        when(() => repository.getGlobalSnapshot(nowLocal: any(named: 'nowLocal'))).thenAnswer(
+          (_) async => makeStreakSnapshot(
+            asOfLocal: _asOfLocal,
+            currentStreakDays: const CurrentStreakDays(3),
+            bestStreakDays: const BestStreakDays(3),
+            todayEffectiveDuration: const Duration(minutes: 27),
+          ),
+        );
+      },
+      build: () => HomeStatsBloc(
+        streaksRepository: repository,
+        lifecycleActions: lifecycleActionsController.stream,
+        nowLocal: () => _asOfLocal,
+      ),
+      act: (bloc) => bloc.add(const HomeStatsLoadRequested()),
+      expect: () => <HomeStatsState>[
+        const HomeStatsState(isRefreshing: true, streakDays: null, focusedDuration: null),
+        const HomeStatsState(isRefreshing: false, streakDays: 3, focusedDuration: Duration(minutes: 27)),
+      ],
+      verify: (_) {
+        verify(() => repository.getGlobalSnapshot(nowLocal: any(named: 'nowLocal'))).called(1);
+      },
+    );
 
-  @override
-  Future<void> refreshAggregates() async {}
+    final loadError = StateError('load_failed');
+
+    blocTest<HomeStatsBloc, HomeStatsState>(
+      'keeps placeholder state when initial load fails',
+      setUp: () {
+        when(() => repository.getGlobalSnapshot(nowLocal: any(named: 'nowLocal'))).thenThrow(loadError);
+      },
+      build: () => HomeStatsBloc(
+        streaksRepository: repository,
+        lifecycleActions: lifecycleActionsController.stream,
+        nowLocal: () => _asOfLocal,
+      ),
+      act: (bloc) => bloc.add(const HomeStatsLoadRequested()),
+      expect: () => <HomeStatsState>[
+        const HomeStatsState(isRefreshing: true, streakDays: null, focusedDuration: null),
+        HomeStatsState(isRefreshing: false, streakDays: null, focusedDuration: null, error: loadError),
+      ],
+      verify: (bloc) {
+        expect(bloc.state.noDataAvailable, isTrue);
+      },
+    );
+
+    blocTest<HomeStatsBloc, HomeStatsState>(
+      'refreshes when lifecycle action is emitted',
+      setUp: () {
+        var callCount = 0;
+        when(() => repository.getGlobalSnapshot(nowLocal: any(named: 'nowLocal'))).thenAnswer((_) async {
+          callCount += 1;
+          if (callCount == 1) {
+            return makeStreakSnapshot(
+              asOfLocal: _asOfLocal,
+              currentStreakDays: const CurrentStreakDays(1),
+              bestStreakDays: const BestStreakDays(1),
+              todayEffectiveDuration: const Duration(minutes: 10),
+            );
+          }
+          return makeStreakSnapshot(
+            asOfLocal: _asOfLocal,
+            currentStreakDays: const CurrentStreakDays(2),
+            bestStreakDays: const BestStreakDays(2),
+            todayEffectiveDuration: const Duration(minutes: 20),
+          );
+        });
+      },
+      build: () => HomeStatsBloc(
+        streaksRepository: repository,
+        lifecycleActions: lifecycleActionsController.stream,
+        nowLocal: () => _asOfLocal,
+      ),
+      act: (bloc) async {
+        bloc.add(const HomeStatsLoadRequested());
+        await bloc.stream.firstWhere((s) => !s.isRefreshing);
+        lifecycleActionsController.add(RestrictionLifecycleAction.pause);
+      },
+      expect: () => <HomeStatsState>[
+        const HomeStatsState(isRefreshing: true, streakDays: null, focusedDuration: null),
+        const HomeStatsState(isRefreshing: false, streakDays: 1, focusedDuration: Duration(minutes: 10)),
+        const HomeStatsState(isRefreshing: true, streakDays: 1, focusedDuration: Duration(minutes: 10)),
+        const HomeStatsState(isRefreshing: false, streakDays: 2, focusedDuration: Duration(minutes: 20)),
+      ],
+      verify: (_) {
+        verify(() => repository.getGlobalSnapshot(nowLocal: any(named: 'nowLocal'))).called(2);
+      },
+    );
+
+    final refreshError = StateError('refresh_failed');
+
+    blocTest<HomeStatsBloc, HomeStatsState>(
+      'keeps last successful values when refresh fails',
+      setUp: () {
+        var callCount = 0;
+        when(() => repository.getGlobalSnapshot(nowLocal: any(named: 'nowLocal'))).thenAnswer((_) async {
+          callCount += 1;
+          if (callCount == 1) {
+            return makeStreakSnapshot(
+              asOfLocal: _asOfLocal,
+              currentStreakDays: const CurrentStreakDays(4),
+              bestStreakDays: const BestStreakDays(4),
+              todayEffectiveDuration: const Duration(minutes: 40),
+            );
+          }
+          throw refreshError;
+        });
+      },
+      build: () => HomeStatsBloc(
+        streaksRepository: repository,
+        lifecycleActions: lifecycleActionsController.stream,
+        nowLocal: () => _asOfLocal,
+      ),
+      act: (bloc) async {
+        bloc.add(const HomeStatsLoadRequested());
+        await bloc.stream.firstWhere((s) => !s.isRefreshing);
+        lifecycleActionsController.add(RestrictionLifecycleAction.resume);
+      },
+      expect: () => <HomeStatsState>[
+        const HomeStatsState(isRefreshing: true, streakDays: null, focusedDuration: null),
+        const HomeStatsState(isRefreshing: false, streakDays: 4, focusedDuration: Duration(minutes: 40)),
+        const HomeStatsState(isRefreshing: true, streakDays: 4, focusedDuration: Duration(minutes: 40)),
+        HomeStatsState(
+          isRefreshing: false,
+          streakDays: 4,
+          focusedDuration: const Duration(minutes: 40),
+          error: refreshError,
+        ),
+      ],
+      verify: (_) {
+        verify(() => repository.getGlobalSnapshot(nowLocal: any(named: 'nowLocal'))).called(2);
+      },
+    );
+  });
 }

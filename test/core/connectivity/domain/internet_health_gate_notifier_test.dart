@@ -11,7 +11,7 @@ void main() {
 
   group('InternetHealthGateNotifier', () {
     test('refresh marks healthy when connectivity exists and probe returns 204', () async {
-      final client = _FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
+      final client = FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
       final connectivityController = StreamController<List<ConnectivityResult>>.broadcast();
 
       final gate = InternetHealthGateNotifier(
@@ -35,7 +35,7 @@ void main() {
       final statuses = <int>[401, 404];
 
       for (final status in statuses) {
-        final client = _FakeHttpClient(onSend: (_) async => _response(statusCode: status));
+        final client = FakeHttpClient(onSend: (_) async => _response(statusCode: status));
         final connectivityController = StreamController<List<ConnectivityResult>>.broadcast();
 
         final gate = InternetHealthGateNotifier(
@@ -53,7 +53,7 @@ void main() {
     });
 
     test('refresh marks unhealthy when connectivity is none and probe is skipped', () async {
-      final client = _FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
+      final client = FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
       final connectivityController = StreamController<List<ConnectivityResult>>.broadcast();
 
       final gate = InternetHealthGateNotifier(
@@ -74,7 +74,7 @@ void main() {
     });
 
     test('refresh marks unhealthy and captures error on timeout', () async {
-      final client = _FakeHttpClient(
+      final client = FakeHttpClient(
         onSend: (_) async {
           await Future<void>.delayed(const Duration(milliseconds: 50));
           return _response(statusCode: 204);
@@ -100,7 +100,7 @@ void main() {
     });
 
     test('notifies listeners only when effective state changes', () async {
-      final client = _FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
+      final client = FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
       final connectivityController = StreamController<List<ConnectivityResult>>.broadcast();
 
       final gate = InternetHealthGateNotifier(
@@ -124,7 +124,7 @@ void main() {
     });
 
     test('refresh throttles repeated checks unless forced', () async {
-      final client = _FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
+      final client = FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
       final connectivityController = StreamController<List<ConnectivityResult>>.broadcast();
 
       final gate = InternetHealthGateNotifier(
@@ -147,7 +147,7 @@ void main() {
     });
 
     test('lifecycle resume triggers refresh', () async {
-      final client = _FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
+      final client = FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
       final connectivityController = StreamController<List<ConnectivityResult>>.broadcast();
 
       final gate = InternetHealthGateNotifier(
@@ -166,7 +166,7 @@ void main() {
     });
 
     test('connectivity change stream triggers refresh', () async {
-      final client = _FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
+      final client = FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
       final connectivityController = StreamController<List<ConnectivityResult>>.broadcast();
 
       final gate = InternetHealthGateNotifier(
@@ -187,8 +187,8 @@ void main() {
   });
 }
 
-final class _FakeHttpClient extends BaseClient {
-  _FakeHttpClient({required this.onSend});
+final class FakeHttpClient extends BaseClient {
+  FakeHttpClient({required this.onSend});
 
   final Future<StreamedResponse> Function(BaseRequest request) onSend;
   int requestCount = 0;

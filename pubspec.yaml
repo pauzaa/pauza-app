@@ -47,6 +47,8 @@ dependencies:
   workmanager: ^0.9.0+3
   http: ^1.6.0
   meta: ^1.17.0
+  firebase_core: ^4.5.0
+  firebase_messaging: ^16.1.2
 
 workspace:
   - local_packages/pauza_ui_kit

@@ -31,6 +31,7 @@ import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecy
 import 'package:pauza/src/features/restriction_lifecycle/sync/background/restriction_lifecycle_background_scheduler.dart';
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
+import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
     show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
 
@@ -101,6 +102,10 @@ class PauzaDependencies with AppFuseInitialization {
       authRepository = AuthRepositoryImpl(
         remoteDataSource: authRemoteDataSource,
         sessionStorage: authSessionStorage,
+        onSignOutCleanup: () async {
+          final syncLocalDataSource = SyncLocalDataSourceImpl(database: localDatabase);
+          await syncLocalDataSource.clearAllSyncableTables();
+        },
       );
       await authRepository.initialize();
       authGate = PauzaAuthGateNotifier(authRepository: authRepository);

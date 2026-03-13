@@ -46,11 +46,14 @@ final class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required AuthRemoteDataSource remoteDataSource,
     required AuthSessionStorage sessionStorage,
+    Future<void> Function()? onSignOutCleanup,
   })  : _remoteDataSource = remoteDataSource,
-        _sessionStorage = sessionStorage;
+        _sessionStorage = sessionStorage,
+        _onSignOutCleanup = onSignOutCleanup;
 
   final AuthRemoteDataSource _remoteDataSource;
   final AuthSessionStorage _sessionStorage;
+  final Future<void> Function()? _onSignOutCleanup;
 
   final BehaviorSubject<Session> _sessionController =
       BehaviorSubject<Session>.seeded(const Session.empty());
@@ -146,6 +149,13 @@ final class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> signOut() async {
     try {
+      // Best-effort remote token revocation -- offline logout must still work.
+      try {
+        await _remoteDataSource.logout();
+      } on Object {
+        // Ignored intentionally.
+      }
+      await _onSignOutCleanup?.call();
       await _sessionStorage.deleteSession();
       _emitSession(const Session.empty());
       await clearPendingOtpChallenge();

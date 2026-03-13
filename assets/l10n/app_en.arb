@@ -1458,5 +1458,17 @@
   "authFailureUnknown": "Could not sign in. Please try again.",
   "@authFailureUnknown": {
     "description": "Generic authentication failure message."
+  },
+  "logoutDialogTitle": "Sign Out?",
+  "@logoutDialogTitle": {
+    "description": "Title of the sign-out confirmation dialog."
+  },
+  "logoutDialogBody": "Any unsynced data will be erased from this device. Make sure you are connected to the internet before signing out.",
+  "@logoutDialogBody": {
+    "description": "Body text of the sign-out confirmation dialog warning about unsynced data."
+  },
+  "logoutDialogConfirm": "Sign Out",
+  "@logoutDialogConfirm": {
+    "description": "Destructive confirm button label in the sign-out dialog."
   }
 }

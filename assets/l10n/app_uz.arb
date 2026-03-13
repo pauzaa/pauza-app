@@ -362,5 +362,8 @@
   "authFailureValidation": "Noto'g'ri ma'lumot. Tekshirib, qayta urinib ko'ring.",
   "authFailureRefreshFailed": "Sessiya tugagan. Qayta kiring.",
   "authFailureNetwork": "Ulanish xatosi. Internetni tekshirib, qayta urinib ko'ring.",
-  "authFailureUnknown": "Kirish amalga oshmadi. Qayta urinib ko'ring."
+  "authFailureUnknown": "Kirish amalga oshmadi. Qayta urinib ko'ring.",
+  "logoutDialogTitle": "Chiqasizmi?",
+  "logoutDialogBody": "Sinxronlanmagan ma'lumotlar bu qurilmadan o'chiriladi. Chiqishdan oldin internet aloqangiz borligini tekshiring.",
+  "logoutDialogConfirm": "Chiqish"
 }

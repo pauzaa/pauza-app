@@ -57,6 +57,9 @@ abstract interface class AuthRemoteDataSource {
 
   /// `POST /api/v1/auth/refresh` -- exchanges [refreshToken] for a new pair.
   Future<AuthRefreshResponse> refresh({required String refreshToken});
+
+  /// `POST /api/v1/auth/logout` -- revokes all refresh tokens for the current user.
+  Future<void> logout();
 }
 
 // ---------------------------------------------------------------------------
@@ -145,6 +148,15 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
     );
+  }
+
+  @override
+  Future<void> logout() async {
+    try {
+      await _apiClient.post('/api/v1/auth/logout');
+    } on ApiClientException catch (e) {
+      throw AuthError.fromApiException(e, context: AuthErrorContext.logout);
+    }
   }
 
 }

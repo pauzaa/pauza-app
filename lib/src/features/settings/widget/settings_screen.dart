@@ -17,6 +17,7 @@ import 'package:pauza/src/features/settings/widget/settings_language_tile.dart';
 import 'package:pauza/src/features/settings/widget/settings_leaderboard_tile.dart';
 import 'package:pauza/src/features/settings/widget/settings_navigation_tile.dart';
 import 'package:pauza/src/features/settings/widget/settings_notifications_tile.dart';
+import 'package:pauza/src/features/settings/widget/confirm_logout_dialog.dart';
 import 'package:pauza/src/features/settings/widget/settings_section_title.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
@@ -97,8 +98,11 @@ class _SettingsBody extends StatelessWidget {
                   signOutLabel: l10n.settingsSignOut,
                   packageInfo: PauzaDependencies.of(context).packageInfo,
                   versionLabel: l10n.settingsVersionLabel,
-                  onSignOutTap: () {
-                    RootScope.of(context).authBloc.add(const AuthSignOutRequested());
+                  onSignOutTap: () async {
+                    final confirmed = await ConfirmLogoutDialog.show(context);
+                    if (confirmed == true && context.mounted) {
+                      RootScope.of(context).authBloc.add(const AuthSignOutRequested());
+                    }
                   },
                 ),
               ),

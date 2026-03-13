@@ -1,7 +1,7 @@
 import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 
-enum AuthErrorContext { start, verify, refresh }
+enum AuthErrorContext { start, verify, refresh, logout }
 
 /// Sealed hierarchy of authentication errors.
 ///

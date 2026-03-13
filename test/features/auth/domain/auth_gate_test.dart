@@ -114,6 +114,9 @@ final class FakeAuthRepository implements AuthRepository {
   @override
   Future<void> clearPendingOtpChallenge() async {}
 
+  @override
+  Future<String?> refreshSession() async => null;
+
   /// Emits a session and returns a [Future] that completes after listeners
   /// have been notified (one microtask later).
   Future<void> emitSession(Session session) {

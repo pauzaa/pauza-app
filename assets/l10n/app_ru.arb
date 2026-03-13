@@ -359,5 +359,8 @@
   "authFailureInvalidOtp": "Неверный код подтверждения.",
   "authFailureOtpChallengeMissing": "Сессия подтверждения истекла. Попробуйте снова.",
   "authFailureStorage": "Не удалось получить доступ к защищенному хранилищу.",
+  "authFailureValidation": "Неверные данные. Проверьте и попробуйте снова.",
+  "authFailureRefreshFailed": "Сессия истекла. Войдите снова.",
+  "authFailureNetwork": "Ошибка соединения. Проверьте интернет и попробуйте снова.",
   "authFailureUnknown": "Не удалось войти. Попробуйте снова."
 }

@@ -228,7 +228,7 @@ void main() {
 
       // Complete the request to clean up
       requestCompleter.complete(
-        const AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: 'john@doe.com'),
+        const AuthOtpRequiredResult(challengeId: 'otp-challenge', email: 'john@doe.com'),
       );
       await tester.pump();
     });
@@ -281,20 +281,20 @@ final class FakeAuthRepository implements AuthRepository {
 
   @override
   Future<AuthOtpRequiredResult> requestOtp({required String email}) async {
-    _pendingChallenge = AuthRepositoryImpl.otpChallengeId;
-    return AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: email);
+    _pendingChallenge = 'otp-challenge';
+    return AuthOtpRequiredResult(challengeId: 'otp-challenge', email: email);
   }
 
   @override
   Future<AuthOtpRequiredResult> resendOtp({required String email}) async {
-    _pendingChallenge = AuthRepositoryImpl.otpChallengeId;
-    return AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: email);
+    _pendingChallenge = 'otp-challenge';
+    return AuthOtpRequiredResult(challengeId: 'otp-challenge', email: email);
   }
 
   @override
   Future<AuthResult> verifyOtp({required String otp}) async {
     if (_pendingChallenge == null) throw const AuthOtpChallengeMissingError();
-    if (otp != AuthRepositoryImpl.validOtp) throw const AuthInvalidOtpError();
+    if (otp != '111111') throw const AuthInvalidOtpError();
 
     const session = Session(accessToken: 'access', refreshToken: 'refresh');
     const user = UserDto(profilePicture: 'https://example.com/avatar/new.png', username: 'new', name: 'New');
@@ -313,6 +313,9 @@ final class FakeAuthRepository implements AuthRepository {
   Future<void> clearPendingOtpChallenge() async {
     _pendingChallenge = null;
   }
+
+  @override
+  Future<String?> refreshSession() async => null;
 
   @override
   void dispose() {
@@ -343,20 +346,20 @@ final class _CompletableOtpRequestRepository implements AuthRepository {
 
   @override
   Future<AuthOtpRequiredResult> requestOtp({required String email}) async {
-    _pendingChallenge = AuthRepositoryImpl.otpChallengeId;
+    _pendingChallenge = 'otp-challenge';
     return requestCompleter.future;
   }
 
   @override
   Future<AuthOtpRequiredResult> resendOtp({required String email}) async {
-    _pendingChallenge = AuthRepositoryImpl.otpChallengeId;
-    return AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: email);
+    _pendingChallenge = 'otp-challenge';
+    return AuthOtpRequiredResult(challengeId: 'otp-challenge', email: email);
   }
 
   @override
   Future<AuthResult> verifyOtp({required String otp}) async {
     if (_pendingChallenge == null) throw const AuthOtpChallengeMissingError();
-    if (otp != AuthRepositoryImpl.validOtp) throw const AuthInvalidOtpError();
+    if (otp != '111111') throw const AuthInvalidOtpError();
 
     const session = Session(accessToken: 'access', refreshToken: 'refresh');
     const user = UserDto(profilePicture: 'https://example.com/avatar/new.png', username: 'new', name: 'New');
@@ -375,6 +378,9 @@ final class _CompletableOtpRequestRepository implements AuthRepository {
   Future<void> clearPendingOtpChallenge() async {
     _pendingChallenge = null;
   }
+
+  @override
+  Future<String?> refreshSession() async => null;
 
   @override
   void dispose() {

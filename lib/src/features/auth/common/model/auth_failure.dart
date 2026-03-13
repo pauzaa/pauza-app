@@ -63,6 +63,39 @@ final class AuthStorageError extends AuthError {
   String toString() => 'AuthStorageError(cause: $cause)';
 }
 
+final class AuthValidationError extends AuthError {
+  const AuthValidationError({this.message});
+  final String? message;
+
+  @override
+  String localize(AppLocalizations localizations) => message ?? localizations.authFailureValidation;
+
+  @override
+  String toString() => 'AuthValidationError(message: $message)';
+}
+
+final class AuthRefreshFailedError extends AuthError {
+  const AuthRefreshFailedError({this.cause});
+  final Object? cause;
+
+  @override
+  String localize(AppLocalizations localizations) => localizations.authFailureRefreshFailed;
+
+  @override
+  String toString() => 'AuthRefreshFailedError(cause: $cause)';
+}
+
+final class AuthNetworkError extends AuthError {
+  const AuthNetworkError({this.cause});
+  final Object? cause;
+
+  @override
+  String localize(AppLocalizations localizations) => localizations.authFailureNetwork;
+
+  @override
+  String toString() => 'AuthNetworkError(cause: $cause)';
+}
+
 final class AuthUnknownError extends AuthError {
   const AuthUnknownError({this.cause});
   final Object? cause;

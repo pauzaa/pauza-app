@@ -2,14 +2,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
+import 'package:pauza/src/features/auth/data/auth_remote_data_source.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 
 void main() {
   group('AuthRepositoryImpl', () {
+    late FakeAuthRemoteDataSource fakeRemoteDataSource;
+
+    setUp(() {
+      fakeRemoteDataSource = FakeAuthRemoteDataSource();
+    });
+
     test('initialize keeps empty session when storage has no value', () async {
       final storage = FakeAuthSessionStorage();
-      final repository = AuthRepositoryImpl(sessionStorage: storage);
+      final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
       final emitted = <Session>[];
       final sub = repository.sessionStream.listen(emitted.add);
 
@@ -26,7 +33,7 @@ void main() {
     group('requestOtp', () {
       test('returns AuthOtpRequiredResult without altering session', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
 
         final result = await repository.requestOtp(email: 'john@doe.com');
 
@@ -42,7 +49,7 @@ void main() {
     group('resendOtp', () {
       test('returns AuthOtpRequiredResult with same email', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
 
         await repository.requestOtp(email: 'john@doe.com');
         final result = await repository.resendOtp(email: 'john@doe.com');
@@ -57,11 +64,11 @@ void main() {
 
       test('allows verifyOtp after resend', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
 
         await repository.requestOtp(email: 'john@doe.com');
         await repository.resendOtp(email: 'john@doe.com');
-        final result = await repository.verifyOtp(otp: AuthRepositoryImpl.validOtp);
+        final result = await repository.verifyOtp(otp: '111111');
 
         expect(result, isA<AuthSuccess>());
         expect(repository.currentSession.isAuthenticated, isTrue);
@@ -71,7 +78,7 @@ void main() {
 
       test('succeeds without prior requestOtp and allows verifyOtp', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
 
         final result = await repository.resendOtp(email: 'john@doe.com');
 
@@ -79,7 +86,7 @@ void main() {
         expect(result.email, 'john@doe.com');
 
         // The challenge should be established, so verifyOtp should succeed.
-        final verifyResult = await repository.verifyOtp(otp: AuthRepositoryImpl.validOtp);
+        final verifyResult = await repository.verifyOtp(otp: '111111');
         expect(verifyResult, isA<AuthSuccess>());
         expect(repository.currentSession.isAuthenticated, isTrue);
 
@@ -90,7 +97,7 @@ void main() {
     group('verifyOtp', () {
       test('throws AuthInvalidOtpError for wrong code', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
 
         await repository.requestOtp(email: 'new@account.com');
 
@@ -101,13 +108,13 @@ void main() {
 
       test('succeeds with valid OTP and emits authenticated session', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
         final emitted = <Session>[];
         final sub = repository.sessionStream.listen(emitted.add);
 
         await repository.requestOtp(email: 'new@account.com');
 
-        final result = await repository.verifyOtp(otp: AuthRepositoryImpl.validOtp);
+        final result = await repository.verifyOtp(otp: '111111');
         await Future<void>.delayed(Duration.zero);
 
         expect(result, isA<AuthSuccess>());
@@ -121,10 +128,10 @@ void main() {
 
       test('throws AuthOtpChallengeMissingError without prior requestOtp', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
 
         await expectLater(
-          () => repository.verifyOtp(otp: AuthRepositoryImpl.validOtp),
+          () => repository.verifyOtp(otp: '111111'),
           throwsA(isA<AuthOtpChallengeMissingError>()),
         );
 
@@ -135,13 +142,13 @@ void main() {
     group('clearPendingOtpChallenge', () {
       test('clears challenge so verifyOtp throws', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
 
         await repository.requestOtp(email: 'john@doe.com');
         await repository.clearPendingOtpChallenge();
 
         await expectLater(
-          () => repository.verifyOtp(otp: AuthRepositoryImpl.validOtp),
+          () => repository.verifyOtp(otp: '111111'),
           throwsA(isA<AuthOtpChallengeMissingError>()),
         );
 
@@ -152,12 +159,12 @@ void main() {
     group('signOut', () {
       test('deletes session and emits Session.empty()', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
         final emitted = <Session>[];
         final sub = repository.sessionStream.listen(emitted.add);
 
         await repository.requestOtp(email: 'john@doe.com');
-        await repository.verifyOtp(otp: AuthRepositoryImpl.validOtp);
+        await repository.verifyOtp(otp: '111111');
         await repository.signOut();
         await Future<void>.delayed(Duration.zero);
 
@@ -173,13 +180,13 @@ void main() {
     group('sessionStream', () {
       test('emits each session mutation in order', () async {
         final storage = FakeAuthSessionStorage();
-        final repository = AuthRepositoryImpl(sessionStorage: storage);
+        final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
         final emitted = <Session>[];
         final sub = repository.sessionStream.listen(emitted.add);
 
         await repository.initialize();
         await repository.requestOtp(email: 'john@doe.com');
-        await repository.verifyOtp(otp: AuthRepositoryImpl.validOtp);
+        await repository.verifyOtp(otp: '111111');
         await repository.signOut();
         await Future<void>.delayed(Duration.zero);
 
@@ -193,6 +200,40 @@ void main() {
       });
     });
   });
+}
+
+final class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
+  Object? startError;
+
+  @override
+  Future<void> start({required String email}) async {
+    if (startError != null) throw startError!;
+  }
+
+  @override
+  Future<AuthVerifyResponse> verify({
+    required String email,
+    required String otp,
+  }) async {
+    if (otp != '111111') throw const AuthInvalidOtpError();
+    return const AuthVerifyResponse(
+      accessToken: 'access_token',
+      refreshToken: 'refresh_token',
+      userJson: {
+        'name': 'Test',
+        'username': 'testuser',
+        'profile_picture_url': null,
+      },
+    );
+  }
+
+  @override
+  Future<AuthRefreshResponse> refresh({required String refreshToken}) async {
+    return const AuthRefreshResponse(
+      accessToken: 'new_access',
+      refreshToken: 'new_refresh',
+    );
+  }
 }
 
 final class FakeAuthSessionStorage implements AuthSessionStorage {

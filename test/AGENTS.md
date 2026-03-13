@@ -1,7 +1,37 @@
 # Test Folder Instructions
 
-These rules apply to files under `test/`.
-They complement the repository root `AGENTS.md`.
+> See [/AGENTS.md](/AGENTS.md) for project-wide commands, conventions, and structure.
+
+## OVERVIEW
+
+`test/` holds unit and widget tests. Structure mirrors `lib/` (`test/core/`, `test/features/`). Uses `pumpApp()` for widget tests, mocktail for mocks, and shared fallback registration. Tests must avoid `pumpAndSettle()` with animating widgets and must not `await bloc.close()` while the widget tree listens.
+
+## WHERE TO LOOK
+
+| Task | Location | Notes |
+| --- | --- | --- |
+| Shared pump wrapper | `test/helpers/helpers.dart` | `tester.pumpApp()` with theme, providers, surfaceSize |
+| Mocktail fallback values | `test/helpers/register_fallback_values.dart` | `registerTestFallbackValues` for common types |
+| Core tests | `test/core/` | Mirrors `lib/src/core/` |
+| Feature tests | `test/features/` | Mirrors `lib/src/features/` |
+| Test fixtures / mocks | `test/helpers/` | Shared mocks, fixtures |
+
+## CONVENTIONS
+
+- Use `tester.pumpApp()` for widget tests; pass `BlocProvider` widgets via `providers`.
+- Prefer `setUpAll(registerTestFallbackValues)` for mocktail fallback registration.
+- Add new fallback types to `register_fallback_values.dart` when needed across tests.
+- Use `addTearDown(bloc.close)` for BLoC cleanup; do not `await bloc.close()` while tree is mounted.
+- Prefer bounded pumping: `await tester.pump()` or `await tester.pump(const Duration(milliseconds: 200))`.
+- Expose animation duration as injectable and set to `Duration.zero` in tests when possible.
+- Do not introduce `_Fake`, `_Noop`, or `_TestApp`; use shared helpers.
+
+## ANTI-PATTERNS
+
+- Do not use `pumpAndSettle()` with continuously animating widgets (charts, progress indicators).
+- Do not `await bloc.close()` while the widget tree still listens to that bloc.
+- Do not register fallback values ad hoc when `registerTestFallbackValues` already covers them.
+- Do not create custom test app wrappers; use `pumpApp`.
 
 ## Widget test stability
 

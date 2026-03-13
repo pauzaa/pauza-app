@@ -1,6 +1,71 @@
-# Instructions for this repository
+# PROJECT KNOWLEDGE BASE
 
-## Build/lint/test commands
+Flutter app for behavior intervention (Pauza). Uses BLoC, Helm routing, AppFuse, offline-first SQLite sync with pauza-server, and `pauza_screen_time` for app blocking.
+
+## OVERVIEW
+
+Pauza is a Flutter mobile app for modes-based behavior intervention. It uses BLoC for state management, Helm for declarative routing, AppFuse for theme/locale/init, and an offline-first architecture with SQLite and sync to pauza-server. Feature layout follows `widget → bloc → repository → data_source`, with `pauza_ui_kit` for shared components and `pauza_screen_time` for app restrictions.
+
+## STRUCTURE
+
+```text
+pauza/
+├── lib/
+│   └── src/
+│       ├── app/                  # App shell, root scope; see lib/AGENTS.md
+│       ├── core/                 # API client, DB, routing, init, connectivity; see lib/src/core/AGENTS.md
+│       └── features/             # Feature modules; see lib/src/features/AGENTS.md
+├── test/                         # Unit and widget tests; see test/AGENTS.md
+├── assets/l10n/                  # Localization ARB files
+├── config/                       # Environment JSONs (prod, test); see config/AGENTS.md
+├── specs/                        # Product and technical specs; see specs/AGENTS.md
+├── plan/                         # Implementation plans and guides
+├── local_packages/
+│   └── pauza_ui_kit/             # Shared UI components; see local_packages/pauza_ui_kit/AGENTS.md
+├── android/, ios/                # Native platforms
+└── Makefile                      # format, test, analyze, build targets
+```
+
+## WHERE TO LOOK
+
+| Task | Location | Notes |
+| --- | --- | --- |
+| App entry, theme, locale, router | `lib/src/app/pauza_app.dart`, `lib/src/core/routing/` | AppFuse + Helm; guards in `pauza_router_guards.dart` |
+| DI and startup wiring | `lib/src/core/init/pauza_dependencies.dart` | Steps for DB, API, auth, sync, connectivity, etc. |
+| HTTP / REST API calls | `lib/src/core/api_client/` | `ApiClient`, auth/retry/logger middleware |
+| Local SQLite DB | `lib/src/core/local_database/` | Schema in `pauza_local_database_schema_v1.dart` |
+| Auth (login, OTP, session) | `lib/src/features/auth/` | `AuthBloc`, `AuthRepository`, `AuthScreen` |
+| Blocking / pause / resume | `lib/src/features/home/` | `BlockingBloc`, `PauzaBlockingRepository` |
+| Modes CRUD | `lib/src/features/modes/` | `ModesRepository`, `ModeEditorBloc`, `ModesListBloc` |
+| Sync (local ↔ remote) | `lib/src/features/sync/` | `SyncRepository`, `SyncLocalDataSource`, `SyncRemoteDataSource` |
+| Restriction lifecycle | `lib/src/features/restriction_lifecycle/` | Plugin client, background worker, sync coordinator |
+| Streaks, stats | `lib/src/features/streaks/`, `lib/src/features/stats/` | `StreaksRepository`, blocking/usage stats |
+| Profile, settings | `lib/src/features/profile/`, `lib/src/features/settings/` | `UserProfileRepository`, `UserPreferencesBloc` |
+| NFC / QR config | `lib/src/features/nfc_chip_config/`, `lib/src/features/qr_code_config/` | Linked chips/codes, sync tables |
+| Shared UI components | `local_packages/pauza_ui_kit/` | Theme, buttons, inputs, list tiles, dialogs |
+| Environment config | `config/` | `prod.json`, `test.json`; loaded via AppFuse |
+| Product / tech specs | `specs/` | `specifications.md`, `technical_details.md` |
+
+## CONVENTIONS
+
+- **Layering**: `widget → bloc → repository → data_source`; repositories use abstract interface + `*Impl`.
+- **Imports**: Use `package:` imports; group SDK first, then third-party, then package.
+- **Widgets**: One widget per file; avoid `_buildItem()` helpers; use `Theme.of(context)` and `context.l10n`.
+- **BLoC**: State extends `Equatable`; use single-state `copyWith` or sealed subclasses; handle errors in try-catch.
+- **Localization**: Add strings to `assets/l10n/app_en.arb`, then run `flutter gen-l10n`.
+- **Config**: JSON assets in `config/`; `ProdConfig`, `TestConfig` via AppFuse; `PauzaDependencies` wires DI.
+- **Routing**: Helm `Routable` enum; guards for auth and permissions in `pauza_router_guards.dart`.
+
+## ANTI-PATTERNS
+
+- Do not log or commit secrets (API keys, tokens, `.env`).
+- Do not put business logic in widgets or HTTP/DB concerns in BLoCs.
+- Do not use `pumpAndSettle()` with continuously animating widgets in tests.
+- Do not `await bloc.close()` while the widget tree still listens to that bloc.
+- Do not use relative imports for `lib/`; prefer `package:pauza/...`.
+- Do not hardcode colors or strings; use `Theme.of(context)` and `AppLocalizations`.
+
+## COMMANDS
 
 ```bash
 # Install dependencies
@@ -34,19 +99,31 @@ flutter fix --apply
 
 # Format code
 make format .
-
-# Format with line length
 dart format .
 
 # Generate code (if using build_runner)
 dart run build_runner build
-
-# Watch for code generation
 flutter pub run build_runner watch
 
 # Generate localizations
 flutter gen-l10n
+
+# Make targets
+make test
+make analyze
 ```
+
+## RELATED DOCS
+
+- [lib/AGENTS.md](lib/AGENTS.md)
+- [lib/src/core/AGENTS.md](lib/src/core/AGENTS.md)
+- [lib/src/features/AGENTS.md](lib/src/features/AGENTS.md)
+- [test/AGENTS.md](test/AGENTS.md)
+- [config/AGENTS.md](config/AGENTS.md)
+- [specs/AGENTS.md](specs/AGENTS.md)
+- [local_packages/pauza_ui_kit/AGENTS.md](local_packages/pauza_ui_kit/AGENTS.md)
+
+---
 
 ## Code style guidelines
 

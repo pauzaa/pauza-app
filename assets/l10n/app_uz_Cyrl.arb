@@ -359,5 +359,8 @@
   "authFailureInvalidOtp": "Тасдиқлаш коди нотўғри.",
   "authFailureOtpChallengeMissing": "Тасдиқлаш сессияси тугаган. Қайта уриниб кўринг.",
   "authFailureStorage": "Хавфсиз хотирага кириб бўлмади.",
+  "authFailureValidation": "Нотўғри маълумот. Текшириб, қайта уриниб кўринг.",
+  "authFailureRefreshFailed": "Сессия тугаган. Қайта киринг.",
+  "authFailureNetwork": "Уланиш хатоси. Интернетни текшириб, қайта уриниб кўринг.",
   "authFailureUnknown": "Кириш амалга ошмади. Қайта уриниб кўринг."
 }

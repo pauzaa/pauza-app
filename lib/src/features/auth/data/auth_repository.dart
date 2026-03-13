@@ -4,8 +4,9 @@ import 'package:rxdart/rxdart.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 import 'package:pauza/src/features/auth/common/model/auth_result.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
-import 'package:pauza/src/features/profile/common/model/user_dto.dart';
+import 'package:pauza/src/features/auth/data/auth_remote_data_source.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
+import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 
 abstract interface class AuthRepository {
   Session get currentSession;
@@ -28,6 +29,12 @@ abstract interface class AuthRepository {
 
   Future<AuthResult> verifyOtp({required String otp});
 
+  /// Attempts to refresh the current session using the stored refresh token.
+  ///
+  /// Returns the new access token on success, or `null` if the refresh failed
+  /// (in which case the user is automatically signed out).
+  Future<String?> refreshSession();
+
   Future<void> clearPendingOtpChallenge();
 
   Future<void> signOut();
@@ -36,18 +43,22 @@ abstract interface class AuthRepository {
 }
 
 final class AuthRepositoryImpl implements AuthRepository {
-  AuthRepositoryImpl({required AuthSessionStorage sessionStorage}) : _sessionStorage = sessionStorage;
+  AuthRepositoryImpl({
+    required AuthRemoteDataSource remoteDataSource,
+    required AuthSessionStorage sessionStorage,
+  })  : _remoteDataSource = remoteDataSource,
+        _sessionStorage = sessionStorage;
 
-  static const String otpChallengeId = 'otp-challenge';
-  static const String validOtp = '111111';
-
+  final AuthRemoteDataSource _remoteDataSource;
   final AuthSessionStorage _sessionStorage;
-  // BehaviorSubject replays the latest session to late subscribers (for example, blocs
-  // created after app bootstrap).
-  final BehaviorSubject<Session> _sessionController = BehaviorSubject<Session>.seeded(const Session.empty());
 
-  String? _pendingOtpChallengeId;
+  final BehaviorSubject<Session> _sessionController =
+      BehaviorSubject<Session>.seeded(const Session.empty());
+
   String? _pendingOtpEmail;
+
+  /// In-flight refresh future used to deduplicate concurrent refresh calls.
+  Future<String?>? _pendingRefresh;
 
   @override
   Session get currentSession => _sessionController.value;
@@ -59,7 +70,6 @@ final class AuthRepositoryImpl implements AuthRepository {
   Future<void> initialize() async {
     try {
       final session = await _sessionStorage.readSession();
-      // Avoid duplicate emission on initialize when seed/current already matches storage.
       if (currentSession != session) {
         _emitSession(session);
       }
@@ -72,39 +82,55 @@ final class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<AuthOtpRequiredResult> requestOtp({required String email}) async {
-    _pendingOtpChallengeId = otpChallengeId;
+    try {
+      await _remoteDataSource.start(email: email);
+    } on AuthError {
+      rethrow;
+    } on Object catch (e) {
+      throw AuthUnknownError(cause: e);
+    }
+
     _pendingOtpEmail = email;
-    return AuthOtpRequiredResult(challengeId: otpChallengeId, email: email);
+    return AuthOtpRequiredResult(challengeId: '', email: email);
   }
 
   @override
   Future<AuthOtpRequiredResult> resendOtp({required String email}) async {
-    _pendingOtpChallengeId = otpChallengeId;
+    try {
+      await _remoteDataSource.start(email: email);
+    } on AuthError {
+      rethrow;
+    } on Object catch (e) {
+      throw AuthUnknownError(cause: e);
+    }
+
     _pendingOtpEmail = email;
-    return AuthOtpRequiredResult(challengeId: otpChallengeId, email: email);
+    return AuthOtpRequiredResult(challengeId: '', email: email);
   }
 
   @override
   Future<AuthResult> verifyOtp({required String otp}) async {
-    final pendingChallengeId = _pendingOtpChallengeId;
     final pendingEmail = _pendingOtpEmail;
-
-    if (pendingChallengeId == null || pendingEmail == null) {
+    if (pendingEmail == null) {
       throw const AuthOtpChallengeMissingError();
     }
 
-    if (otp != validOtp) {
-      throw const AuthInvalidOtpError();
-    }
-
-    final session = _buildDummySession(email: pendingEmail);
-    final user = _buildDummyUser(email: pendingEmail);
-
     try {
+      final response = await _remoteDataSource.verify(
+        email: pendingEmail,
+        otp: otp,
+      );
+
+      final session = Session(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+      final user = UserDto.fromJson(response.userJson);
+
       await _sessionStorage.writeSession(session);
       _emitSession(session);
-      _pendingOtpChallengeId = null;
       _pendingOtpEmail = null;
+
       return AuthSuccess(session: session, user: user);
     } on AuthError {
       rethrow;
@@ -112,6 +138,10 @@ final class AuthRepositoryImpl implements AuthRepository {
       throw AuthUnknownError(cause: e);
     }
   }
+
+  @override
+  Future<String?> refreshSession() =>
+      _pendingRefresh ??= _doRefresh().whenComplete(() => _pendingRefresh = null);
 
   @override
   Future<void> signOut() async {
@@ -128,7 +158,6 @@ final class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> clearPendingOtpChallenge() async {
-    _pendingOtpChallengeId = null;
     _pendingOtpEmail = null;
   }
 
@@ -137,28 +166,39 @@ final class AuthRepositoryImpl implements AuthRepository {
     _sessionController.close();
   }
 
+  // ---- private helpers ----------------------------------------------------
+
+  Future<String?> _doRefresh() async {
+    final refreshToken = currentSession.refreshToken;
+    if (refreshToken.isEmpty) return null;
+
+    try {
+      final response = await _remoteDataSource.refresh(
+        refreshToken: refreshToken,
+      );
+
+      final newSession = Session(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+
+      await _sessionStorage.writeSession(newSession);
+      _emitSession(newSession);
+
+      return newSession.accessToken;
+    } on Object {
+      try {
+        await signOut();
+      } on Object {
+        // Best-effort sign-out; the session is already invalid.
+      }
+      return null;
+    }
+  }
+
   void _emitSession(Session session) {
     if (!_sessionController.isClosed) {
       _sessionController.add(session);
     }
-  }
-
-  Session _buildDummySession({required String email}) {
-    final normalized = email.trim().toLowerCase().replaceAll('@', '_at_');
-    return Session(accessToken: 'access_token_$normalized', refreshToken: 'refresh_token_$normalized');
-  }
-
-  UserDto _buildDummyUser({required String email}) {
-    final localPart = email.split('@').first;
-    final normalizedUsername = localPart.isEmpty ? 'user' : localPart;
-    final capitalizedName = normalizedUsername.isEmpty
-        ? 'User'
-        : '${normalizedUsername[0].toUpperCase()}${normalizedUsername.substring(1)}';
-
-    return UserDto(
-      profilePicture: 'https://example.com/avatar/$normalizedUsername.png',
-      username: normalizedUsername,
-      name: capitalizedName,
-    );
   }
 }

@@ -1435,6 +1435,18 @@
   "@authFailureStorage": {
     "description": "Error when secure storage is inaccessible."
   },
+  "authFailureValidation": "Invalid input. Please check and try again.",
+  "@authFailureValidation": {
+    "description": "Error when server rejects input due to validation (422)."
+  },
+  "authFailureRefreshFailed": "Your session has expired. Please sign in again.",
+  "@authFailureRefreshFailed": {
+    "description": "Error when token refresh fails and the user must re-authenticate."
+  },
+  "authFailureNetwork": "Connection error. Please check your internet and try again.",
+  "@authFailureNetwork": {
+    "description": "Error for connectivity or server errors during authentication."
+  },
   "authFailureUnknown": "Could not sign in. Please try again.",
   "@authFailureUnknown": {
     "description": "Generic authentication failure message."

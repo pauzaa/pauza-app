@@ -102,7 +102,7 @@ void main() {
 
         // Complete the first request
         requestCompleter.complete(
-          const AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: 'john@doe.com'),
+          const AuthOtpRequiredResult(challengeId: 'otp-challenge', email: 'john@doe.com'),
         );
         await bloc.stream.firstWhere((s) => s is AuthOtpRequired);
 
@@ -317,7 +317,7 @@ void main() {
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
         await bloc.stream.firstWhere((s) => s is AuthOtpRequired);
 
-        bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
+        bloc.add(const AuthOtpSubmitted(otp: '111111'));
         await bloc.stream.firstWhere((s) => s is AuthFlowSuccess);
 
         expect(bloc.state, isA<AuthFlowSuccess>());
@@ -346,7 +346,7 @@ void main() {
       blocTest<AuthBloc, AuthState>(
         'emits AuthOtpChallengeMissingError when submitted without prior request',
         build: () => AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard),
-        act: (bloc) => bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp)),
+        act: (bloc) => bloc.add(const AuthOtpSubmitted(otp: '111111')),
         expect: () => <Matcher>[
           isA<AuthFlowFailure>().having((s) => s.error, 'error', const AuthOtpChallengeMissingError()),
         ],
@@ -361,7 +361,7 @@ void main() {
         when(
           () => internetRequiredGuard.canProceed(forceRefresh: any(named: 'forceRefresh')),
         ).thenAnswer((_) async => false);
-        bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
+        bloc.add(const AuthOtpSubmitted(otp: '111111'));
         await bloc.stream.firstWhere((s) => s is AuthFlowFailure);
 
         expect(bloc.state, isA<AuthFlowFailure>());
@@ -383,7 +383,7 @@ void main() {
         expect(bloc.state, isA<AuthFlowFailure>());
 
         // Second attempt – correct OTP from failure state
-        bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
+        bloc.add(const AuthOtpSubmitted(otp: '111111'));
         await bloc.stream.firstWhere((s) => s is AuthFlowSuccess);
         expect(bloc.state, isA<AuthFlowSuccess>());
 
@@ -520,7 +520,7 @@ void main() {
         final sub = bloc.stream.listen(states.add);
 
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
-        bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
+        bloc.add(const AuthOtpSubmitted(otp: '111111'));
         await bloc.stream.firstWhere((s) => s is AuthFlowSuccess);
 
         // Should see: AuthSubmitting -> AuthOtpRequired -> AuthSubmitting -> AuthFlowSuccess
@@ -545,7 +545,7 @@ void main() {
 
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
         bloc.add(const AuthOtpResendRequested());
-        bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
+        bloc.add(const AuthOtpSubmitted(otp: '111111'));
         await bloc.stream.firstWhere((s) => s is AuthFlowSuccess);
 
         // Should see: AuthSubmitting -> AuthOtpRequired -> AuthResending -> AuthOtpRequired -> AuthSubmitting -> AuthFlowSuccess
@@ -585,7 +585,7 @@ void main() {
         expect((bloc.state as AuthFlowFailure).email, 'john@doe.com');
 
         // OTP submit from a failure state with preserved email should succeed
-        bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
+        bloc.add(const AuthOtpSubmitted(otp: '111111'));
         await bloc.stream.firstWhere((s) => s is AuthFlowSuccess);
 
         expect(bloc.state, isA<AuthFlowSuccess>());
@@ -610,14 +610,14 @@ void main() {
         // Queue resend (will pause at AuthResending because completer hasn't completed)
         // and then immediately queue submit
         bloc.add(const AuthOtpResendRequested());
-        bloc.add(const AuthOtpSubmitted(otp: AuthRepositoryImpl.validOtp));
+        bloc.add(const AuthOtpSubmitted(otp: '111111'));
 
         // Wait for the bloc to reach AuthResending
         await bloc.stream.firstWhere((s) => s is AuthResending);
 
         // Complete the resend so the submit can process
         resendCompleter.complete(
-          const AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: 'john@doe.com'),
+          const AuthOtpRequiredResult(challengeId: 'otp-challenge', email: 'john@doe.com'),
         );
 
         // The submit event processes after resend completes; since the bloc uses
@@ -672,16 +672,16 @@ final class FakeAuthRepository implements AuthRepository {
   Future<AuthOtpRequiredResult> requestOtp({required String email}) async {
     requestOtpCalls += 1;
     if (requestOtpError != null) throw requestOtpError!;
-    _pendingChallenge = AuthRepositoryImpl.otpChallengeId;
-    return AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: email);
+    _pendingChallenge = 'otp-challenge';
+    return AuthOtpRequiredResult(challengeId: 'otp-challenge', email: email);
   }
 
   @override
   Future<AuthOtpRequiredResult> resendOtp({required String email}) async {
     resendOtpCalls += 1;
     if (resendOtpError != null) throw resendOtpError!;
-    _pendingChallenge = AuthRepositoryImpl.otpChallengeId;
-    return AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: email);
+    _pendingChallenge = 'otp-challenge';
+    return AuthOtpRequiredResult(challengeId: 'otp-challenge', email: email);
   }
 
   @override
@@ -691,7 +691,7 @@ final class FakeAuthRepository implements AuthRepository {
       throw const AuthOtpChallengeMissingError();
     }
 
-    if (otp != AuthRepositoryImpl.validOtp) {
+    if (otp != '111111') {
       throw const AuthInvalidOtpError();
     }
 
@@ -715,6 +715,9 @@ final class FakeAuthRepository implements AuthRepository {
     if (clearChallengeError != null) throw clearChallengeError!;
     _pendingChallenge = null;
   }
+
+  @override
+  Future<String?> refreshSession() async => null;
 
   @override
   void dispose() {
@@ -748,8 +751,8 @@ final class _CompletableAuthRepository implements AuthRepository {
 
   @override
   Future<AuthOtpRequiredResult> requestOtp({required String email}) async {
-    _pendingChallenge = AuthRepositoryImpl.otpChallengeId;
-    return AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: email);
+    _pendingChallenge = 'otp-challenge';
+    return AuthOtpRequiredResult(challengeId: 'otp-challenge', email: email);
   }
 
   @override
@@ -762,7 +765,7 @@ final class _CompletableAuthRepository implements AuthRepository {
     if (_pendingChallenge == null) {
       throw const AuthOtpChallengeMissingError();
     }
-    if (otp != AuthRepositoryImpl.validOtp) {
+    if (otp != '111111') {
       throw const AuthInvalidOtpError();
     }
 
@@ -783,6 +786,9 @@ final class _CompletableAuthRepository implements AuthRepository {
   Future<void> clearPendingOtpChallenge() async {
     _pendingChallenge = null;
   }
+
+  @override
+  Future<String?> refreshSession() async => null;
 
   @override
   void dispose() {
@@ -818,14 +824,14 @@ final class _CompletableOtpRequestRepository implements AuthRepository {
   @override
   Future<AuthOtpRequiredResult> requestOtp({required String email}) async {
     requestOtpCalls += 1;
-    _pendingChallenge = AuthRepositoryImpl.otpChallengeId;
+    _pendingChallenge = 'otp-challenge';
     return requestCompleter.future;
   }
 
   @override
   Future<AuthOtpRequiredResult> resendOtp({required String email}) async {
-    _pendingChallenge = AuthRepositoryImpl.otpChallengeId;
-    return AuthOtpRequiredResult(challengeId: AuthRepositoryImpl.otpChallengeId, email: email);
+    _pendingChallenge = 'otp-challenge';
+    return AuthOtpRequiredResult(challengeId: 'otp-challenge', email: email);
   }
 
   @override
@@ -833,7 +839,7 @@ final class _CompletableOtpRequestRepository implements AuthRepository {
     if (_pendingChallenge == null) {
       throw const AuthOtpChallengeMissingError();
     }
-    if (otp != AuthRepositoryImpl.validOtp) {
+    if (otp != '111111') {
       throw const AuthInvalidOtpError();
     }
 
@@ -854,6 +860,9 @@ final class _CompletableOtpRequestRepository implements AuthRepository {
   Future<void> clearPendingOtpChallenge() async {
     _pendingChallenge = null;
   }
+
+  @override
+  Future<String?> refreshSession() async => null;
 
   @override
   void dispose() {

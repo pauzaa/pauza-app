@@ -12,6 +12,7 @@ import 'package:pauza/src/core/connectivity/domain/internet_health_gate_notifier
 import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
 import 'package:pauza/src/core/init/config.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
+import 'package:pauza/src/features/auth/data/auth_remote_data_source.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 import 'package:pauza/src/features/auth/domain/auth_gate.dart';
@@ -47,6 +48,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final NfcRepository nfcRepository;
   late final bool hasNfcSupport;
   late final AuthSessionStorage authSessionStorage;
+  late final AuthRemoteDataSource authRemoteDataSource;
   late final FlutterSecureStorage secureStorage;
   late final IAppFuseStorage appFuseStorage;
   late final AuthRepository authRepository;
@@ -68,12 +70,32 @@ class PauzaDependencies with AppFuseInitialization {
       );
       await localDatabase.open();
     },
+    'init auth': (state) async {
+      secureStorage = const FlutterSecureStorage();
+      authSessionStorage = SecureAuthSessionStorage(secureStorage: secureStorage);
+      final apiBaseUrl = state.getCurrentConfig<PauzaConfig>()!.apiBaseUrl;
+      authRemoteDataSource = AuthRemoteDataSourceImpl(
+        baseUrl: Uri.parse(apiBaseUrl),
+      );
+      authRepository = AuthRepositoryImpl(
+        remoteDataSource: authRemoteDataSource,
+        sessionStorage: authSessionStorage,
+      );
+      await authRepository.initialize();
+      authGate = PauzaAuthGateNotifier(authRepository: authRepository);
+    },
     'init api client': (state) async {
       apiClient = ApiClient(
         baseUrl: state.getCurrentConfig<PauzaConfig>()!.apiBaseUrl,
         middlewares: [
           const ApiClientLoggerMiddleware(),
-          ApiClientAuthMiddleware(tokenProvider: () async => authRepository.currentSession.accessToken),
+          ApiClientAuthMiddleware(
+            tokenProvider: () async {
+              final token = authRepository.currentSession.accessToken;
+              return token.isEmpty ? null : token;
+            },
+            tokenRefresher: (_) => authRepository.refreshSession(),
+          ),
           const ApiClientRetryMiddleware(),
         ],
       );
@@ -94,13 +116,6 @@ class PauzaDependencies with AppFuseInitialization {
       permissionManager = PermissionManager();
       permissionGate = PauzaPermissionGateNotifier(permissionManager: permissionManager);
       await permissionGate.refresh(force: true);
-    },
-    'init auth': (_) async {
-      secureStorage = const FlutterSecureStorage();
-      authSessionStorage = SecureAuthSessionStorage(secureStorage: secureStorage);
-      authRepository = AuthRepositoryImpl(sessionStorage: authSessionStorage);
-      await authRepository.initialize();
-      authGate = PauzaAuthGateNotifier(authRepository: authRepository);
     },
     'init user profile': (_) async {
       appFuseStorage = await AppFuseShPrStorage.init();

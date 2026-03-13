@@ -359,5 +359,8 @@
   "authFailureInvalidOtp": "Tasdiqlash kodi noto'g'ri.",
   "authFailureOtpChallengeMissing": "Tasdiqlash sessiyasi tugagan. Qayta urinib ko'ring.",
   "authFailureStorage": "Xavfsiz xotiraga kirib bo'lmadi.",
+  "authFailureValidation": "Noto'g'ri ma'lumot. Tekshirib, qayta urinib ko'ring.",
+  "authFailureRefreshFailed": "Sessiya tugagan. Qayta kiring.",
+  "authFailureNetwork": "Ulanish xatosi. Internetni tekshirib, qayta urinib ko'ring.",
   "authFailureUnknown": "Kirish amalga oshmadi. Qayta urinib ko'ring."
 }

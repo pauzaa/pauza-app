@@ -140,6 +140,22 @@ INSERT OR IGNORE INTO streak_rollup_state (
   last_refresh_at
 ) VALUES (1, 0, '', 0);
 ''';
+
+  static const String createSyncCursorsTable = '''
+CREATE TABLE sync_cursors (
+  table_name TEXT NOT NULL PRIMARY KEY,
+  last_synced_at INTEGER NOT NULL DEFAULT 0
+);
+''';
+
+  static const String createSyncDeletionLogTable = '''
+CREATE TABLE sync_deletion_log (
+  table_name TEXT NOT NULL,
+  deletion_key TEXT NOT NULL,
+  deleted_at INTEGER NOT NULL,
+  PRIMARY KEY (table_name, deletion_key)
+);
+''';
 }
 
 final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
@@ -162,9 +178,18 @@ final class PauzaLocalDatabaseSchemaV1 implements LocalDatabaseSchema {
     batch.execute(LocalDatabaseSqlStatements.createStreakDailyAggregatesTable);
     batch.execute(LocalDatabaseSqlStatements.createStreakRollupStateTable);
     batch.execute(LocalDatabaseSqlStatements.seedStreakRollupStateRow);
+    batch.execute(LocalDatabaseSqlStatements.createSyncCursorsTable);
+    batch.execute(LocalDatabaseSqlStatements.createSyncDeletionLogTable);
     await batch.commit(noResult: true);
   }
 
   @override
-  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {}
+  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {
+    if (oldVersion < 5) {
+      final batch = database.batch();
+      batch.execute(LocalDatabaseSqlStatements.createSyncCursorsTable);
+      batch.execute(LocalDatabaseSqlStatements.createSyncDeletionLogTable);
+      await batch.commit(noResult: true);
+    }
+  }
 }

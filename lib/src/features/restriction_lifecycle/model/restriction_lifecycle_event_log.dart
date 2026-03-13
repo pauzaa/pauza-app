@@ -36,6 +36,19 @@ final class RestrictionLifecycleEventLog {
     );
   }
 
+  Map<String, Object?> toMap() {
+    return <String, Object?>{
+      'id': id,
+      'session_id': sessionId,
+      'mode_id': modeId,
+      'action': action.wireValue,
+      'source': source.wireValue,
+      'reason': reason,
+      'occurred_at': occurredAt.toUtc().millisecondsSinceEpoch,
+      'created_at': createdAt.toUtc().millisecondsSinceEpoch,
+    };
+  }
+
   @override
   String toString() =>
       'RestrictionLifecycleEventLog('

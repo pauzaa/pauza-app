@@ -13,7 +13,7 @@ class LocalDatabaseConfig {
   ///
   /// Both the foreground [PauzaDependencies] and background worker must use
   /// this constant to guarantee the same schema version is opened.
-  static const LocalDatabaseConfig pauza = LocalDatabaseConfig(version: 4);
+  static const LocalDatabaseConfig pauza = LocalDatabaseConfig(version: 5);
 
   final String name;
   final int version;

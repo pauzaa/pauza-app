@@ -104,6 +104,24 @@ final class RestrictionSessionLog {
     );
   }
 
+  Map<String, Object?> toMap() {
+    return <String, Object?>{
+      'session_id': sessionId,
+      'mode_id': modeId,
+      'source': source.wireValue,
+      'started_at': startedAt.toUtc().millisecondsSinceEpoch,
+      'ended_at': endedAt?.toUtc().millisecondsSinceEpoch,
+      'pause_count': pauseCount,
+      'total_paused_ms': totalPausedMs,
+      'last_paused_at': lastPausedAt?.toUtc().millisecondsSinceEpoch,
+      'integrity_status': integrityStatus.dbValue,
+      'last_anomaly_reason': lastAnomalyReason,
+      'last_event_id': lastEventId,
+      'created_at': createdAt.toUtc().millisecondsSinceEpoch,
+      'updated_at': updatedAt.toUtc().millisecondsSinceEpoch,
+    };
+  }
+
   List<Object?> toUpsertArgs() {
     return <Object?>[
       sessionId,

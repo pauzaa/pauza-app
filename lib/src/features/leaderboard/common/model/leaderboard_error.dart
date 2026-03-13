@@ -1,7 +1,17 @@
+import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 
 sealed class LeaderboardError implements Exception, Localizable {
   const LeaderboardError();
+
+  factory LeaderboardError.fromApiException(ApiClientException e) {
+    return switch (e) {
+      ApiClientAuthorizationException() =>
+        const LeaderboardUnauthorizedError(),
+      ApiClientNetworkException() => const LeaderboardNetworkError(),
+      ApiClientClientException() => LeaderboardUnknownError(e),
+    };
+  }
 }
 
 final class LeaderboardUnauthorizedError extends LeaderboardError {

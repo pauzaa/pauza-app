@@ -1,4 +1,7 @@
+import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
+
+enum AuthErrorContext { start, verify, refresh }
 
 /// Sealed hierarchy of authentication errors.
 ///
@@ -7,6 +10,63 @@ import 'package:pauza/src/core/localization/l10n.dart';
 /// without enum-code extraction.
 sealed class AuthError implements Exception, Localizable {
   const AuthError();
+
+  factory AuthError.fromApiException(
+    ApiClientException e, {
+    required AuthErrorContext context,
+  }) {
+    return switch (e) {
+      ApiClientAuthorizationException() =>
+        context == AuthErrorContext.refresh
+            ? AuthRefreshFailedError(cause: _serverMessage(e.data))
+            : const AuthInvalidOtpError(),
+      ApiClientClientException(
+        :final statusCode,
+        :final data,
+        :final responseHeaders,
+      ) =>
+        () {
+          if (statusCode == 422) {
+            final fieldMessage = _firstFieldMessage(data);
+            return AuthValidationError(
+              message: fieldMessage ?? _serverMessage(data),
+            );
+          }
+          if (statusCode == 429) {
+            final retryAfterSeconds = int.tryParse(
+              responseHeaders['retry-after'] ?? '',
+            );
+            return AuthOtpCooldownError(
+              retryAfter: retryAfterSeconds != null
+                  ? Duration(seconds: retryAfterSeconds)
+                  : null,
+            );
+          }
+          return AuthUnknownError(
+            cause: _serverMessage(data) ?? 'HTTP $statusCode',
+          );
+        }(),
+      ApiClientNetworkException() => AuthNetworkError(cause: e.message),
+    };
+  }
+
+  static String? _serverMessage(Object? data) {
+    if (data is! Map<String, Object?>) return null;
+    final error = data['error'];
+    if (error is! Map<String, Object?>) return null;
+    return error['message'] as String?;
+  }
+
+  static String? _firstFieldMessage(Object? data) {
+    if (data is! Map<String, Object?>) return null;
+    final error = data['error'];
+    if (error is! Map<String, Object?>) return null;
+    final details = error['details'];
+    if (details is! Map<String, Object?>) return null;
+    final fields = details['fields'];
+    if (fields is! Map<String, Object?>) return null;
+    return fields.values.firstOrNull?.toString();
+  }
 }
 
 final class AuthInvalidOtpError extends AuthError {

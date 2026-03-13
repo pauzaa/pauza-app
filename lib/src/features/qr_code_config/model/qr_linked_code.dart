@@ -27,6 +27,16 @@ final class QrLinkedCode {
     );
   }
 
+  Map<String, Object?> toMap() {
+    return <String, Object?>{
+      'id': id,
+      'scan_value': scanValue.value,
+      'name': name,
+      'created_at': createdAt.toUtc().millisecondsSinceEpoch,
+      'updated_at': updatedAt.toUtc().millisecondsSinceEpoch,
+    };
+  }
+
   @override
   String toString() {
     return 'QrLinkedCode('

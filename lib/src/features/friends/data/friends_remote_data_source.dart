@@ -65,7 +65,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
         ),
       );
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw FriendsError.fromApiException(e);
     }
   }
 
@@ -78,7 +78,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
       );
       return FriendMutationDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw FriendsError.fromApiException(e);
     }
   }
 
@@ -98,7 +98,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
               .toList(growable: false) ??
           const [];
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw FriendsError.fromApiException(e);
     }
   }
 
@@ -118,7 +118,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
               .toList(growable: false) ??
           const [];
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw FriendsError.fromApiException(e);
     }
   }
 
@@ -132,7 +132,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
       );
       return FriendMutationDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw FriendsError.fromApiException(e);
     }
   }
 
@@ -143,7 +143,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
         '/api/v1/friends/requests/$friendshipId/decline',
       );
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw FriendsError.fromApiException(e);
     }
   }
 
@@ -152,7 +152,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
     try {
       await _apiClient.delete('/api/v1/friends/$friendshipId');
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw FriendsError.fromApiException(e);
     }
   }
 
@@ -168,7 +168,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
       );
       return FriendStatsDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw FriendsError.fromApiException(e);
     }
   }
 
@@ -189,41 +189,8 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
               .toList(growable: false) ??
           const [];
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw FriendsError.fromApiException(e);
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Error mapping
-  // ---------------------------------------------------------------------------
-
-  static FriendsError _mapException(ApiClientException e) {
-    switch (e) {
-      case ApiClientAuthorizationException(:final statusCode, :final data):
-        if (statusCode == 403 &&
-            _serverErrorCode(data) == 'SUBSCRIPTION_REQUIRED') {
-          return const FriendsSubscriptionRequiredError();
-        }
-        return statusCode == 403
-            ? const FriendsUnauthorizedError()
-            : const FriendsUnauthorizedError();
-      case ApiClientNetworkException():
-        return const FriendsNetworkError();
-      case ApiClientClientException(:final statusCode, :final data):
-        if (statusCode == 409) return const FriendsConflictError();
-        if (statusCode == 404) return const FriendsNotFoundError();
-        final serverCode = _serverErrorCode(data);
-        if (serverCode == 'VALIDATION_ERROR') {
-          return const FriendsValidationError();
-        }
-        return FriendsUnknownError(e);
-    }
-  }
-
-  static String? _serverErrorCode(Object? data) {
-    if (data is! Map<String, Object?>) return null;
-    final error = data['error'];
-    if (error is! Map<String, Object?>) return null;
-    return error['code'] as String?;
-  }
 }

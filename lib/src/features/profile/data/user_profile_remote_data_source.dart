@@ -39,7 +39,7 @@ final class UserProfileRemoteDataSourceImpl
       final response = await _apiClient.get('/api/v1/me');
       return UserDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw UserProfileError.fromApiException(e);
     }
   }
 
@@ -53,7 +53,7 @@ final class UserProfileRemoteDataSourceImpl
       final response = await _apiClient.patch('/api/v1/me', body: body);
       return UserDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw UserProfileError.fromApiException(e);
     }
   }
 
@@ -66,7 +66,7 @@ final class UserProfileRemoteDataSourceImpl
       );
       return response.data!['available'] as bool;
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw UserProfileError.fromApiException(e);
     }
   }
 
@@ -85,7 +85,7 @@ final class UserProfileRemoteDataSourceImpl
       final response = await _apiClient.post('/api/v1/me/photo', body: file);
       return response.data!['profile_picture_url'] as String;
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw UserProfileError.fromApiException(e);
     }
   }
 
@@ -97,7 +97,7 @@ final class UserProfileRemoteDataSourceImpl
       );
       return response.data!['push_enabled'] as bool;
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw UserProfileError.fromApiException(e);
     }
   }
 
@@ -112,7 +112,7 @@ final class UserProfileRemoteDataSourceImpl
       );
       return response.data!['push_enabled'] as bool;
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw UserProfileError.fromApiException(e);
     }
   }
 
@@ -122,7 +122,7 @@ final class UserProfileRemoteDataSourceImpl
       final response = await _apiClient.get('/api/v1/me/privacy');
       return response.data!['leaderboard_visible'] as bool;
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw UserProfileError.fromApiException(e);
     }
   }
 
@@ -137,36 +137,8 @@ final class UserProfileRemoteDataSourceImpl
       );
       return response.data!['leaderboard_visible'] as bool;
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw UserProfileError.fromApiException(e);
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Error mapping
-  // ---------------------------------------------------------------------------
-
-  static UserProfileError _mapException(ApiClientException e) {
-    switch (e) {
-      case ApiClientAuthorizationException(:final statusCode):
-        return statusCode == 403
-            ? const UserProfileForbiddenError()
-            : const UserProfileUnauthorizedError();
-      case ApiClientNetworkException():
-        return const UserProfileNetworkError();
-      case ApiClientClientException(:final statusCode, :final data):
-        if (statusCode == 409) return const UserProfileUsernameTakenError();
-        final serverCode = _serverErrorCode(data);
-        if (serverCode == 'VALIDATION_ERROR') {
-          return const UserProfileValidationError();
-        }
-        return UserProfileUnknownError(e);
-    }
-  }
-
-  static String? _serverErrorCode(Object? data) {
-    if (data is! Map<String, Object?>) return null;
-    final error = data['error'];
-    if (error is! Map<String, Object?>) return null;
-    return error['code'] as String?;
-  }
 }

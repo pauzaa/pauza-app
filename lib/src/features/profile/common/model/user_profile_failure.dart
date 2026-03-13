@@ -1,7 +1,31 @@
+import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 
 sealed class UserProfileError implements Exception, Localizable {
   const UserProfileError();
+
+  factory UserProfileError.fromApiException(ApiClientException e) {
+    return switch (e) {
+      ApiClientAuthorizationException(:final statusCode) => statusCode == 403
+          ? const UserProfileForbiddenError()
+          : const UserProfileUnauthorizedError(),
+      ApiClientNetworkException() => const UserProfileNetworkError(),
+      ApiClientClientException(:final statusCode, :final data) => () {
+          if (statusCode == 409) return const UserProfileUsernameTakenError();
+          if (_serverErrorCode(data) == 'VALIDATION_ERROR') {
+            return const UserProfileValidationError();
+          }
+          return UserProfileUnknownError(e);
+        }(),
+    };
+  }
+
+  static String? _serverErrorCode(Object? data) {
+    if (data is! Map<String, Object?>) return null;
+    final error = data['error'];
+    if (error is! Map<String, Object?>) return null;
+    return error['code'] as String?;
+  }
 }
 
 final class UserProfileUnauthorizedError extends UserProfileError {

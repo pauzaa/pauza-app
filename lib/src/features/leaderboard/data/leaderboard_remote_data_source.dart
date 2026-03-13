@@ -27,7 +27,7 @@ final class LeaderboardRemoteDataSourceImpl
       );
       return LeaderboardDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw _mapException(e);
+      throw LeaderboardError.fromApiException(e);
     }
   }
 
@@ -43,22 +43,7 @@ final class LeaderboardRemoteDataSourceImpl
       );
       return LeaderboardDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw _mapException(e);
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // Error mapping
-  // ---------------------------------------------------------------------------
-
-  static LeaderboardError _mapException(ApiClientException e) {
-    switch (e) {
-      case ApiClientAuthorizationException():
-        return const LeaderboardUnauthorizedError();
-      case ApiClientNetworkException():
-        return const LeaderboardNetworkError();
-      case ApiClientClientException():
-        return LeaderboardUnknownError(e);
+      throw LeaderboardError.fromApiException(e);
     }
   }
 }

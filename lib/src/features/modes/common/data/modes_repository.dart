@@ -7,6 +7,8 @@ import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
+import 'package:pauza/src/features/sync/common/model/sync_table.dart';
+import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:uuid/uuid.dart';
 
@@ -22,6 +24,8 @@ abstract interface class ModesRepository implements Disposable {
   Future<void> deleteMode(String modeId);
 
   Stream<void> watchModes();
+
+  void notifyExternalChange();
 }
 
 class ModesRepositoryImpl implements ModesRepository {
@@ -29,13 +33,16 @@ class ModesRepositoryImpl implements ModesRepository {
     required LocalDatabase localDatabase,
     required this.platform,
     required AppRestrictionManager restrictions,
+    SyncLocalDataSource? syncLocalDataSource,
     Uuid? uuid,
   }) : _localDatabase = localDatabase,
        _restrictions = restrictions,
+       _syncLocalDataSource = syncLocalDataSource,
        _uuid = uuid ?? const Uuid();
 
   final LocalDatabase _localDatabase;
   final AppRestrictionManager _restrictions;
+  final SyncLocalDataSource? _syncLocalDataSource;
   final Uuid _uuid;
   final PauzaPlatform platform;
 
@@ -131,6 +138,7 @@ GROUP BY m.id;
       rethrow;
     }
 
+    await _trackModeDeletion(modeId, previousMode);
     await _notifyListeners();
   }
 
@@ -369,6 +377,11 @@ INSERT INTO mode_blocked_apps (
       rethrow;
     }
 
+    await _trackUpdateDeletions(
+      modeId: modeId,
+      previousMode: previousMode,
+      request: request,
+    );
     await _notifyListeners();
   }
 
@@ -378,12 +391,61 @@ INSERT INTO mode_blocked_apps (
     return _streamController!.stream;
   }
 
+  @override
+  void notifyExternalChange() => _notifyListeners();
+
   Future<void> _notifyListeners() async {
     final controller = _streamController;
     if (controller == null || controller.isClosed) {
       return;
     }
     controller.add(null);
+  }
+
+  Future<void> _trackModeDeletion(String modeId, Mode previousMode) async {
+    final sync = _syncLocalDataSource;
+    if (sync == null) return;
+
+    await sync.trackDeletion(table: SyncTable.modes, key: modeId);
+    await sync.trackDeletion(table: SyncTable.schedules, key: modeId);
+    for (final appId in previousMode.blockedAppIds) {
+      await sync.trackDeletion(
+        table: SyncTable.modeBlockedApps,
+        key: <String, Object?>{
+          'mode_id': modeId,
+          'platform': platform.dbValue,
+          'app_identifier': appId.raw,
+        },
+      );
+    }
+  }
+
+  Future<void> _trackUpdateDeletions({
+    required String modeId,
+    required Mode previousMode,
+    required ModeUpsertDTO request,
+  }) async {
+    final sync = _syncLocalDataSource;
+    if (sync == null) return;
+
+    final previousBlocked = previousMode.blockedAppIds.map((id) => id.raw).toSet();
+    final requestedBlocked = request.blockedAppIds.map((id) => id.raw).toSet();
+    final removedBlocked = previousBlocked.difference(requestedBlocked);
+
+    for (final appId in removedBlocked) {
+      await sync.trackDeletion(
+        table: SyncTable.modeBlockedApps,
+        key: <String, Object?>{
+          'mode_id': modeId,
+          'platform': platform.dbValue,
+          'app_identifier': appId,
+        },
+      );
+    }
+
+    if (previousMode.schedule != null && request.schedule == null) {
+      await sync.trackDeletion(table: SyncTable.schedules, key: modeId);
+    }
   }
 
   @override

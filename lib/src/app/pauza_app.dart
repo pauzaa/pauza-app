@@ -19,7 +19,7 @@ class PauzaApp extends StatefulWidget {
   static final supportedLanguages = <Locale, String>{
     const Locale('en'): 'English',
     const Locale('uz'): 'O\'zbek',
-    const Locale('uz', 'Cyrl'): 'Ўзбекча',
+    const Locale.fromSubtags(languageCode: 'uz', scriptCode: 'Cyrl'): 'Ўзбекча',
     const Locale('ru'): 'Русский',
   };
 

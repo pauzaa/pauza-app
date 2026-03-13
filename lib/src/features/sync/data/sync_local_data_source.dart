@@ -13,6 +13,7 @@ import 'package:pauza/src/features/sync/common/model/sync_table.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract interface class SyncLocalDataSource {
+  Future<bool> hasAnySyncCursor();
   Future<SyncRequestDto> buildSyncRequest();
   Future<void> applySyncResponse(SyncResponseDto response);
   Future<void> trackDeletion({required SyncTable table, required Object key});
@@ -24,6 +25,18 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
       : _database = database;
 
   final LocalDatabase _database;
+
+  // ---------------------------------------------------------------------------
+  // hasAnySyncCursor
+  // ---------------------------------------------------------------------------
+
+  @override
+  Future<bool> hasAnySyncCursor() async {
+    final rows = await _database.rawQuery(
+      'SELECT 1 FROM sync_cursors LIMIT 1',
+    );
+    return rows.isNotEmpty;
+  }
 
   // ---------------------------------------------------------------------------
   // buildSyncRequest

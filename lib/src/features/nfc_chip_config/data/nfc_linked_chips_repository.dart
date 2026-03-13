@@ -2,6 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc_chip_config/model/nfc_linked_chip.dart';
+import 'package:pauza/src/features/sync/common/model/sync_table.dart';
+import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
 import 'package:uuid/uuid.dart';
 
 abstract interface class NfcLinkedChipsRepository {
@@ -20,11 +22,16 @@ abstract interface class NfcLinkedChipsRepository {
 }
 
 final class NfcLinkedChipsRepositoryImpl implements NfcLinkedChipsRepository {
-  NfcLinkedChipsRepositoryImpl({required LocalDatabase localDatabase, Uuid? uuid})
-    : _localDatabase = localDatabase,
-      _uuid = uuid ?? const Uuid();
+  NfcLinkedChipsRepositoryImpl({
+    required LocalDatabase localDatabase,
+    SyncLocalDataSource? syncLocalDataSource,
+    Uuid? uuid,
+  }) : _localDatabase = localDatabase,
+       _syncLocalDataSource = syncLocalDataSource,
+       _uuid = uuid ?? const Uuid();
 
   final LocalDatabase _localDatabase;
+  final SyncLocalDataSource? _syncLocalDataSource;
   final Uuid _uuid;
 
   @override
@@ -67,6 +74,10 @@ INSERT OR IGNORE INTO nfc_linked_chips (
   @override
   Future<void> deleteChip({required String id}) async {
     await _localDatabase.rawDelete('DELETE FROM nfc_linked_chips WHERE id = ?', [id]);
+    await _syncLocalDataSource?.trackDeletion(
+      table: SyncTable.nfcLinkedChips,
+      key: id,
+    );
   }
 
   @override

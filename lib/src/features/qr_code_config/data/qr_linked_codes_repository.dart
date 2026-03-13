@@ -3,6 +3,8 @@ import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/qr_code_config/data/qr_code_config_error.dart';
 import 'package:pauza/src/features/qr_code_config/model/qr_linked_code.dart';
 import 'package:pauza/src/features/qr_code_config/model/qr_unlock_token.dart';
+import 'package:pauza/src/features/sync/common/model/sync_table.dart';
+import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
 import 'package:qr/qr.dart';
 import 'package:uuid/uuid.dart';
 
@@ -21,11 +23,16 @@ abstract interface class QrLinkedCodesRepository {
 }
 
 final class QrLinkedCodesRepositoryImpl implements QrLinkedCodesRepository {
-  QrLinkedCodesRepositoryImpl({required LocalDatabase localDatabase, Uuid? uuid})
-    : _localDatabase = localDatabase,
-      _uuid = uuid ?? const Uuid();
+  QrLinkedCodesRepositoryImpl({
+    required LocalDatabase localDatabase,
+    SyncLocalDataSource? syncLocalDataSource,
+    Uuid? uuid,
+  }) : _localDatabase = localDatabase,
+       _syncLocalDataSource = syncLocalDataSource,
+       _uuid = uuid ?? const Uuid();
 
   final LocalDatabase _localDatabase;
+  final SyncLocalDataSource? _syncLocalDataSource;
   final Uuid _uuid;
 
   @override
@@ -96,6 +103,10 @@ INSERT OR IGNORE INTO qr_linked_codes (
   Future<void> deleteCode({required String id}) async {
     try {
       await _localDatabase.rawDelete('DELETE FROM qr_linked_codes WHERE id = ?', [id]);
+      await _syncLocalDataSource?.trackDeletion(
+        table: SyncTable.qrLinkedCodes,
+        key: id,
+      );
     } on Object catch (error) {
       throw QrCodeConfigDeleteFailedError(cause: error);
     }

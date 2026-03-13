@@ -234,6 +234,11 @@ final class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
       refreshToken: 'new_refresh',
     );
   }
+  
+  @override
+  Future<void> logout() {
+    return Future<void>.value();
+  }
 }
 
 final class FakeAuthSessionStorage implements AuthSessionStorage {

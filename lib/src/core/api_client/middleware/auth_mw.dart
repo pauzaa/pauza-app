@@ -41,8 +41,13 @@ class ApiClientAuthMiddleware implements ApiClientMiddleware {
   /// The function that builds the authorization header.
   final AuthHeaderBuilder _headerBuilder;
 
+  /// Context key used to bypass auth header injection and token refresh.
+  static const skipAuthKey = 'skipAuth';
+
   @override
   ApiClientHandler call(ApiClientHandler innerHandler) => (request, context) async {
+    if (context[skipAuthKey] == true) return innerHandler(request, context);
+
     // 1. Get the initial token and add it to the request.
     final initialToken = await tokenProvider();
     var authorizedRequest = request;

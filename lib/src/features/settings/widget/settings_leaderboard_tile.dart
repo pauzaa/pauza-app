@@ -4,30 +4,30 @@ import 'package:pauza/src/features/settings/bloc/user_preferences_bloc.dart';
 import 'package:pauza/src/features/settings/widget/settings_option_tile.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
-final class SettingsNotificationsTile extends StatelessWidget {
-  const SettingsNotificationsTile({required this.title, super.key});
+final class SettingsLeaderboardTile extends StatelessWidget {
+  const SettingsLeaderboardTile({required this.title, super.key});
 
   final String title;
 
   @override
   Widget build(BuildContext context) {
     final state = context.watch<UserPreferencesBloc>().state;
-    final isEnabled = state.pushEnabled ?? true;
+    final isVisible = state.leaderboardVisible ?? true;
 
     return SettingsOptionTile(
-      icon: Icons.notifications_rounded,
+      icon: Icons.leaderboard_rounded,
       title: title,
       trailing: PauzaSwitch(
-        value: isEnabled,
+        value: isVisible,
         onChanged: (value) {
           context.read<UserPreferencesBloc>().add(
-            UserPreferencesPushToggled(enabled: value),
+            UserPreferencesLeaderboardToggled(visible: value),
           );
         },
       ),
       onTap: () {
         context.read<UserPreferencesBloc>().add(
-          UserPreferencesPushToggled(enabled: !isEnabled),
+          UserPreferencesLeaderboardToggled(visible: !isVisible),
         );
       },
     );

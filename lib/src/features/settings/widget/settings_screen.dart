@@ -1,5 +1,6 @@
 import 'package:appfuse/appfuse.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helm/helm.dart';
 import 'package:pauza/src/app/pauza_app.dart';
 import 'package:pauza/src/app/root_scope.dart';
@@ -10,8 +11,10 @@ import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
 import 'package:pauza/src/features/nfc_chip_config/widget/nfc_chip_conf_screen.dart';
 import 'package:pauza/src/features/qr_code_config/widget/qr_code_conf_screen.dart';
+import 'package:pauza/src/features/settings/bloc/user_preferences_bloc.dart';
 import 'package:pauza/src/features/settings/widget/settings_footer.dart';
 import 'package:pauza/src/features/settings/widget/settings_language_tile.dart';
+import 'package:pauza/src/features/settings/widget/settings_leaderboard_tile.dart';
 import 'package:pauza/src/features/settings/widget/settings_navigation_tile.dart';
 import 'package:pauza/src/features/settings/widget/settings_notifications_tile.dart';
 import 'package:pauza/src/features/settings/widget/settings_section_title.dart';
@@ -23,6 +26,20 @@ class SettingsScreen extends StatelessWidget {
   static void show(BuildContext context) {
     HelmRouter.push(context, PauzaRoutes.settings);
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => UserPreferencesBloc(
+        userProfileRepository: PauzaDependencies.of(context).userProfileRepository,
+      )..add(const UserPreferencesStarted()),
+      child: const _SettingsBody(),
+    );
+  }
+}
+
+class _SettingsBody extends StatelessWidget {
+  const _SettingsBody();
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +68,8 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
+            SliverToBoxAdapter(child: SettingsSectionTitle(title: l10n.settingsPrivacySectionTitle)),
+            SliverToBoxAdapter(child: SettingsLeaderboardTile(title: l10n.settingsLeaderboardVisibility)),
             SliverToBoxAdapter(child: SettingsSectionTitle(title: l10n.settingsSessionEndingConfSectionTitle)),
             SliverToBoxAdapter(
               child: SettingsNavigationTile(

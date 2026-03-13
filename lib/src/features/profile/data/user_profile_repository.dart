@@ -21,7 +21,18 @@ abstract interface class UserProfileRepository {
 
   Future<bool> isUsernameAvailable({required String username});
 
-  Future<String> uploadProfilePhoto({required String localFilePath});
+  Future<String> uploadProfilePhoto({
+    required Uint8List bytes,
+    required String filename,
+  });
+
+  Future<bool> fetchNotificationPreferences();
+
+  Future<bool> updateNotificationPreferences({required bool pushEnabled});
+
+  Future<bool> fetchPrivacyPreferences();
+
+  Future<bool> updatePrivacyPreferences({required bool leaderboardVisible});
 
   Stream<UserDto> watchProfileChanges();
 
@@ -40,7 +51,8 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   final UserProfileCacheStorage _cacheStorage;
   final UserProfileRemoteDataSource _remoteDataSource;
   final DateTime Function() _nowUtc;
-  final StreamController<UserDto> _profileChangesController = StreamController<UserDto>.broadcast();
+  final StreamController<UserDto> _profileChangesController =
+      StreamController<UserDto>.broadcast();
 
   @override
   Future<CachedUserProfile?> readCachedProfile() {
@@ -68,11 +80,16 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
     Uint8List? profilePictureBytes,
   }) async {
     try {
+      if (profilePictureBytes != null) {
+        await _remoteDataSource.uploadProfilePhoto(
+          bytes: profilePictureBytes,
+          filename: 'profile.jpg',
+        );
+      }
+
       final updated = await _remoteDataSource.updateMe(
         name: name,
         username: username,
-        profilePictureUrl: profilePictureUrl,
-        profilePictureBytes: profilePictureBytes,
       );
       await _writeCacheAndNotify(updated);
       return updated;
@@ -95,9 +112,71 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   }
 
   @override
-  Future<String> uploadProfilePhoto({required String localFilePath}) async {
+  Future<String> uploadProfilePhoto({
+    required Uint8List bytes,
+    required String filename,
+  }) async {
     try {
-      return _remoteDataSource.uploadProfilePhoto(localFilePath: localFilePath);
+      return _remoteDataSource.uploadProfilePhoto(
+        bytes: bytes,
+        filename: filename,
+      );
+    } on UserProfileError {
+      rethrow;
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
+    }
+  }
+
+  @override
+  Future<bool> fetchNotificationPreferences() async {
+    try {
+      return _remoteDataSource.fetchNotificationPreferences();
+    } on UserProfileError {
+      rethrow;
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
+    }
+  }
+
+  @override
+  Future<bool> updateNotificationPreferences({
+    required bool pushEnabled,
+  }) async {
+    try {
+      final result = await _remoteDataSource.updateNotificationPreferences(
+        pushEnabled: pushEnabled,
+      );
+      await _patchCachedPreference(pushEnabled: result);
+      return result;
+    } on UserProfileError {
+      rethrow;
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
+    }
+  }
+
+  @override
+  Future<bool> fetchPrivacyPreferences() async {
+    try {
+      return _remoteDataSource.fetchPrivacyPreferences();
+    } on UserProfileError {
+      rethrow;
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
+    }
+  }
+
+  @override
+  Future<bool> updatePrivacyPreferences({
+    required bool leaderboardVisible,
+  }) async {
+    try {
+      final result = await _remoteDataSource.updatePrivacyPreferences(
+        leaderboardVisible: leaderboardVisible,
+      );
+      await _patchCachedPreference(leaderboardVisible: result);
+      return result;
     } on UserProfileError {
       rethrow;
     } on Object catch (e) {
@@ -115,10 +194,31 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
     await _cacheStorage.delete();
   }
 
+  // ---------------------------------------------------------------------------
+  // Private helpers
+  // ---------------------------------------------------------------------------
+
   Future<void> _writeCacheAndNotify(UserDto user) async {
-    await _cacheStorage.write(CachedUserProfile(user: user, cachedAtUtc: _nowUtc()));
+    await _cacheStorage.write(
+      CachedUserProfile(user: user, cachedAtUtc: _nowUtc()),
+    );
     if (!_profileChangesController.isClosed) {
       _profileChangesController.add(user);
     }
+  }
+
+  /// Reads the cached profile, patches a single preference field, and
+  /// re-writes + notifies so [CurrentUserBloc] stays in sync.
+  Future<void> _patchCachedPreference({
+    bool? pushEnabled,
+    bool? leaderboardVisible,
+  }) async {
+    final cached = await _cacheStorage.read();
+    if (cached == null) return;
+    final patched = cached.user.copyWith(
+      pushEnabled: pushEnabled,
+      leaderboardVisible: leaderboardVisible,
+    );
+    await _writeCacheAndNotify(patched);
   }
 }

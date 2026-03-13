@@ -15,6 +15,7 @@ import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecy
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
+import 'package:pauza/src/features/sync/sync_coordinator.dart';
 
 class RootScope extends StatefulWidget {
   const RootScope({required this.child, this.dependencies, super.key});
@@ -42,6 +43,7 @@ class RootScopeState extends State<RootScope> {
   late final CurrentUserBloc currentUserBloc;
   late final AuthBloc authBloc;
   late final RestrictionLifecycleSyncCoordinator restrictionLifecycleSyncCoordinator;
+  late final SyncCoordinator syncCoordinator;
   late final StreaksRepository streaksRepository;
   late final FriendsRepository friendsRepository;
   late final LeaderboardRepository leaderboardRepository;
@@ -59,6 +61,7 @@ class RootScopeState extends State<RootScope> {
       localDatabase: dependencies.localDatabase,
       platform: kPauzaPlatform,
       restrictions: dependencies.appRestrictionManager,
+      syncLocalDataSource: dependencies.syncLocalDataSource,
     );
 
     installedAppsRepository = PauzaScreenTimeInstalledAppsRepository(
@@ -69,8 +72,14 @@ class RootScopeState extends State<RootScope> {
 
     nfcRepository = dependencies.nfcRepository;
     hasNfcSupport = dependencies.hasNfcSupport;
-    nfcLinkedChipsRepository = NfcLinkedChipsRepositoryImpl(localDatabase: dependencies.localDatabase);
-    qrLinkedCodesRepository = QrLinkedCodesRepositoryImpl(localDatabase: dependencies.localDatabase);
+    nfcLinkedChipsRepository = NfcLinkedChipsRepositoryImpl(
+      localDatabase: dependencies.localDatabase,
+      syncLocalDataSource: dependencies.syncLocalDataSource,
+    );
+    qrLinkedCodesRepository = QrLinkedCodesRepositoryImpl(
+      localDatabase: dependencies.localDatabase,
+      syncLocalDataSource: dependencies.syncLocalDataSource,
+    );
     // UI-level session/profile composition lives in RootScope (runtime scope),
     // not in infra dependencies.
     currentUserBloc = CurrentUserBloc(
@@ -90,6 +99,15 @@ class RootScopeState extends State<RootScope> {
       streaksRepository: dependencies.streaksRepository,
     )..attach();
 
+    syncCoordinator = SyncCoordinator(
+      syncRepository: dependencies.syncRepository,
+      syncLocalDataSource: dependencies.syncLocalDataSource,
+      authRepository: dependencies.authRepository,
+      modesRepository: modesRepository,
+      streaksRepository: dependencies.streaksRepository,
+      restrictions: dependencies.appRestrictionManager,
+    )..attach();
+
     streaksRepository = dependencies.streaksRepository;
     friendsRepository = dependencies.friendsRepository;
     leaderboardRepository = dependencies.leaderboardRepository;
@@ -103,6 +121,7 @@ class RootScopeState extends State<RootScope> {
     currentUserBloc.close();
     authBloc.close();
     restrictionLifecycleSyncCoordinator.detach();
+    syncCoordinator.detach();
     blockingRepository.dispose();
     modesRepository.dispose();
     super.dispose();

@@ -32,6 +32,8 @@ import 'package:pauza/src/features/restriction_lifecycle/sync/background/restric
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
+import 'package:pauza/src/features/sync/data/sync_remote_data_source.dart';
+import 'package:pauza/src/features/sync/data/sync_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
     show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
 
@@ -67,6 +69,9 @@ class PauzaDependencies with AppFuseInitialization {
   late final LeaderboardRepository leaderboardRepository;
   late final PackageInfo packageInfo;
   late final ApiClient apiClient;
+  late final SyncLocalDataSource syncLocalDataSource;
+  late final SyncRemoteDataSource syncRemoteDataSource;
+  late final SyncRepository syncRepository;
 
   static PauzaDependencies of(BuildContext context) => AppFuseScope.of(context).init as PauzaDependencies;
 
@@ -103,12 +108,19 @@ class PauzaDependencies with AppFuseInitialization {
         remoteDataSource: authRemoteDataSource,
         sessionStorage: authSessionStorage,
         onSignOutCleanup: () async {
-          final syncLocalDataSource = SyncLocalDataSourceImpl(database: localDatabase);
           await syncLocalDataSource.clearAllSyncableTables();
         },
       );
       await authRepository.initialize();
       authGate = PauzaAuthGateNotifier(authRepository: authRepository);
+    },
+    'init sync': (_) async {
+      syncLocalDataSource = SyncLocalDataSourceImpl(database: localDatabase);
+      syncRemoteDataSource = SyncRemoteDataSourceImpl(apiClient: apiClient);
+      syncRepository = SyncRepositoryImpl(
+        localDataSource: syncLocalDataSource,
+        remoteDataSource: syncRemoteDataSource,
+      );
     },
     'init internet health gate': (state) async {
       final config = state.getCurrentConfig<PauzaConfig>()!;

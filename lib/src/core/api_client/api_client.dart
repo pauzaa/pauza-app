@@ -87,34 +87,77 @@ ApiClientHandler _createHandler(Client internalClient, MiddlewareChain middlewar
           return;
         }
 
-        // Check response.
-        int statusCode;
+        final statusCode = streamedResponse.statusCode;
+        final responseHeaders = streamedResponse.headers;
+
+        // Read the response body before checking status codes so error
+        // responses carry the server's JSON envelope.
+        Uint8List bytes;
         try {
-          statusCode = streamedResponse.statusCode;
+          bytes = await streamedResponse.stream.toBytes();
+        } on Object catch (error, stackTrace) {
+          throwError(
+            completer,
+            ApiClientNetworkException(
+              code: 'body_stream_error',
+              message: 'Failed to read response stream.',
+              statusCode: statusCode,
+              error: error,
+              responseHeaders: responseHeaders,
+            ),
+            stackTrace,
+          );
+          return;
+        }
+
+        // Decode the JSON body (for both success and error responses).
+        Map<String, Object?>? body;
+        try {
+          final contentType = responseHeaders['content-type']?.toLowerCase() ?? '';
+          if (contentType.contains('application/json') && bytes.isNotEmpty) {
+            body = jsonDecoder.convert(bytes) as Map<String, Object?>;
+          } else if (bytes.isEmpty) {
+            body = <String, Object?>{};
+          }
+        } on Object {
+          // Body could not be decoded — leave as null for error responses,
+          // but fail for success responses that claim to be JSON.
+        }
+
+        // Check status code and throw with decoded body available in `data`.
+        try {
           switch (statusCode) {
             case > 499:
               throw ApiClientNetworkException(
                 code: 'internal_server_error',
                 message: 'Internal server error.',
                 statusCode: statusCode,
+                data: body,
+                responseHeaders: responseHeaders,
               );
             case 401 || 403:
               throw ApiClientAuthorizationException(
                 code: 'unauthorized_error',
                 message: 'User is not authorized.',
                 statusCode: statusCode,
+                data: body,
+                responseHeaders: responseHeaders,
               );
             case > 399:
               throw ApiClientClientException(
                 code: 'bad_request_error',
                 message: 'Bad request.',
                 statusCode: statusCode,
+                data: body,
+                responseHeaders: responseHeaders,
               );
             case > 299:
               throw ApiClientClientException(
                 code: 'redirection_error',
                 message: 'Request was redirected.',
                 statusCode: statusCode,
+                data: body,
+                responseHeaders: responseHeaders,
               );
             default:
               break;
@@ -124,63 +167,30 @@ ApiClientHandler _createHandler(Client internalClient, MiddlewareChain middlewar
           return;
         }
 
-        // Read the response stream.
-        Uint8List bytes;
-        try {
-          final contentType = streamedResponse.headers['content-type']?.toLowerCase() ?? '';
-          if (!contentType.contains('application/json')) {
-            throwError(
-              completer,
-              ApiClientClientException(
-                code: 'invalid_content_type_error',
-                message: 'Response content type is not application/json.',
-                statusCode: statusCode,
-              ),
-              StackTrace.current,
-            );
-            return;
-          }
-          bytes = await streamedResponse.stream.toBytes();
-        } on Object catch (error, stackTrace) {
+        // For success responses, ensure we have valid JSON.
+        if (body == null) {
           throwError(
             completer,
-            ApiClientNetworkException(
-              code: 'body_stream_error',
-              message: 'Failed to read response stream.',
-              statusCode: streamedResponse.statusCode,
-              error: error,
+            ApiClientClientException(
+              code: 'invalid_content_type_error',
+              message: 'Response content type is not application/json.',
+              statusCode: statusCode,
+              responseHeaders: responseHeaders,
             ),
-            stackTrace,
+            StackTrace.current,
           );
           return;
         }
 
-        // Decode the response.
-        ApiClientResponse response;
-        try {
-          final body = bytes.isEmpty ? <String, Object?>{} : jsonDecoder.convert(bytes) as Map<String, Object?>;
-          response = ApiClientResponse.json(
-            body,
-            statusCode: streamedResponse.statusCode,
-            headers: streamedResponse.headers,
-            contentLength: streamedResponse.contentLength ?? bytes.length,
-            persistentConnection: streamedResponse.persistentConnection,
-            request: request,
-          );
-        } on Object catch (error, stackTrace) {
-          throwError(
-            completer,
-            ApiClientClientException(
-              code: 'decoding_error',
-              message: 'Failed to decode response.',
-              statusCode: streamedResponse.statusCode,
-              error: error,
-              data: bytes,
-            ),
-            stackTrace,
-          );
-          return;
-        }
+        // Build the response.
+        final response = ApiClientResponse.json(
+          body,
+          statusCode: statusCode,
+          headers: responseHeaders,
+          contentLength: streamedResponse.contentLength ?? bytes.length,
+          persistentConnection: streamedResponse.persistentConnection,
+          request: request,
+        );
 
         // Complete the completer.
         if (!completer.isCompleted) completer.complete(response);
@@ -337,6 +347,7 @@ sealed class ApiClientException implements Exception, Localizable {
     required this.statusCode,
     this.error,
     this.data,
+    this.responseHeaders = const <String, String>{},
   });
 
   /// HTTP status code. Will be 0 if the request was not sent.
@@ -345,6 +356,9 @@ sealed class ApiClientException implements Exception, Localizable {
   final String message;
   final Object? error;
   final Object? data;
+
+  /// Response headers from the server (empty when no response was received).
+  final Map<String, String> responseHeaders;
 
   @override
   String toString() => 'ApiClientException($code): $message';
@@ -358,6 +372,7 @@ final class ApiClientClientException extends ApiClientException {
     required super.statusCode,
     super.error,
     super.data,
+    super.responseHeaders,
   });
 
   @override
@@ -372,6 +387,7 @@ final class ApiClientNetworkException extends ApiClientException {
     required super.statusCode,
     super.error,
     super.data,
+    super.responseHeaders,
   });
 
   @override
@@ -386,6 +402,7 @@ final class ApiClientAuthorizationException extends ApiClientException {
     required super.statusCode,
     super.error,
     super.data,
+    super.responseHeaders,
   });
 
   @override

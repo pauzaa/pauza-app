@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+import 'package:pauza/src/core/api_client/api_client.dart';
+import 'package:pauza/src/core/api_client/middleware/auth_mw.dart';
 import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 
 // ---------------------------------------------------------------------------
@@ -65,29 +64,28 @@ abstract interface class AuthRemoteDataSource {
 // ---------------------------------------------------------------------------
 
 final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  AuthRemoteDataSourceImpl({
-    required Uri baseUrl,
-    http.Client? httpClient,
-  })  : _baseUrl = baseUrl,
-        _httpClient = httpClient ?? http.Client();
+  const AuthRemoteDataSourceImpl({required ApiClient apiClient})
+      : _apiClient = apiClient;
 
-  final Uri _baseUrl;
-  final http.Client _httpClient;
+  final ApiClient _apiClient;
 
-  static const _jsonHeaders = <String, String>{
-    'Content-Type': 'application/json; charset=UTF-8',
-    'Accept': 'application/json',
+  static const Map<String, Object?> _skipAuthCtx = <String, Object?>{
+    ApiClientAuthMiddleware.skipAuthKey: true,
   };
 
   // ---- public API ---------------------------------------------------------
 
   @override
   Future<void> start({required String email}) async {
-    await _post(
-      '/api/v1/auth/start',
-      body: <String, Object?>{'email': email},
-      errorContext: _ErrorContext.start,
-    );
+    try {
+      await _apiClient.post(
+        '/api/v1/auth/start',
+        body: <String, Object?>{'email': email},
+        context: _skipAuthCtx,
+      );
+    } on ApiClientException catch (e) {
+      throw _mapException(e, _ErrorContext.start);
+    }
   }
 
   @override
@@ -95,12 +93,18 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String otp,
   }) async {
-    final json = await _post(
-      '/api/v1/auth/verify',
-      body: <String, Object?>{'email': email, 'otp': otp},
-      errorContext: _ErrorContext.verify,
-    );
+    final ApiClientResponse response;
+    try {
+      response = await _apiClient.post(
+        '/api/v1/auth/verify',
+        body: <String, Object?>{'email': email, 'otp': otp},
+        context: _skipAuthCtx,
+      );
+    } on ApiClientException catch (e) {
+      throw _mapException(e, _ErrorContext.verify);
+    }
 
+    final json = response.data ?? <String, Object?>{};
     final accessToken = json['access_token'] as String?;
     final refreshToken = json['refresh_token'] as String?;
     final userJson = json['user'] as Map<String, Object?>?;
@@ -118,12 +122,18 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<AuthRefreshResponse> refresh({required String refreshToken}) async {
-    final json = await _post(
-      '/api/v1/auth/refresh',
-      body: <String, Object?>{'refresh_token': refreshToken},
-      errorContext: _ErrorContext.refresh,
-    );
+    final ApiClientResponse response;
+    try {
+      response = await _apiClient.post(
+        '/api/v1/auth/refresh',
+        body: <String, Object?>{'refresh_token': refreshToken},
+        context: _skipAuthCtx,
+      );
+    } on ApiClientException catch (e) {
+      throw _mapException(e, _ErrorContext.refresh);
+    }
 
+    final json = response.data ?? <String, Object?>{};
     final newAccessToken = json['access_token'] as String?;
     final newRefreshToken = json['refresh_token'] as String?;
 
@@ -139,79 +149,59 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   // ---- helpers ------------------------------------------------------------
 
-  Future<Map<String, Object?>> _post(
-    String path, {
-    required Map<String, Object?> body,
-    required _ErrorContext errorContext,
-  }) async {
-    final uri = _baseUrl.replace(path: path);
-
-    final http.Response response;
-    try {
-      response = await _httpClient.post(
-        uri,
-        headers: _jsonHeaders,
-        body: jsonEncode(body),
-      );
-    } on Object catch (e) {
-      throw AuthNetworkError(cause: e);
-    }
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      return _decodeJson(response.body);
-    }
-
-    _throwForStatus(response, errorContext);
-  }
-
-  Map<String, Object?> _decodeJson(String body) {
-    if (body.isEmpty) return <String, Object?>{};
-    try {
-      final decoded = jsonDecode(body);
-      if (decoded is Map<String, Object?>) return decoded;
-      return <String, Object?>{};
-    } on Object {
-      return <String, Object?>{};
-    }
-  }
-
-  Never _throwForStatus(http.Response response, _ErrorContext errorContext) {
-    final json = _decodeJson(response.body);
-    final errorMap = json['error'] as Map<String, Object?>?;
-    final errorCode = errorMap?['code'] as String?;
-    final errorMessage = errorMap?['message'] as String?;
-
-    switch (response.statusCode) {
-      case 401:
+  static AuthError _mapException(
+    ApiClientException e,
+    _ErrorContext errorContext,
+  ) {
+    switch (e) {
+      case ApiClientAuthorizationException():
         if (errorContext == _ErrorContext.refresh) {
-          throw AuthRefreshFailedError(cause: errorMessage);
+          return AuthRefreshFailedError(cause: _serverMessage(e.data));
         }
-        throw const AuthInvalidOtpError();
+        return const AuthInvalidOtpError();
 
-      case 422:
-        final details = errorMap?['details'] as Map<String, Object?>?;
-        final fields = details?['fields'] as Map<String, Object?>?;
-        final fieldMessage = fields?.values.firstOrNull?.toString();
-        throw AuthValidationError(message: fieldMessage ?? errorMessage);
-
-      case 429:
-        final retryAfterSeconds = int.tryParse(
-          response.headers['retry-after'] ?? '',
+      case ApiClientClientException(:final statusCode, :final data, :final responseHeaders):
+        if (statusCode == 422) {
+          final fieldMessage = _firstFieldMessage(data);
+          return AuthValidationError(
+            message: fieldMessage ?? _serverMessage(data),
+          );
+        }
+        if (statusCode == 429) {
+          final retryAfterSeconds = int.tryParse(
+            responseHeaders['retry-after'] ?? '',
+          );
+          return AuthOtpCooldownError(
+            retryAfter: retryAfterSeconds != null
+                ? Duration(seconds: retryAfterSeconds)
+                : null,
+          );
+        }
+        return AuthUnknownError(
+          cause: _serverMessage(data) ?? 'HTTP $statusCode',
         );
-        throw AuthOtpCooldownError(
-          retryAfter: retryAfterSeconds != null
-              ? Duration(seconds: retryAfterSeconds)
-              : null,
-        );
 
-      case >= 500:
-        throw AuthNetworkError(cause: errorMessage ?? errorCode);
-
-      default:
-        throw AuthUnknownError(
-          cause: errorMessage ?? 'HTTP ${response.statusCode}',
-        );
+      case ApiClientNetworkException():
+        return AuthNetworkError(cause: e.message);
     }
+  }
+
+  static String? _serverMessage(Object? data) {
+    if (data is! Map<String, Object?>) return null;
+    final error = data['error'];
+    if (error is! Map<String, Object?>) return null;
+    return error['message'] as String?;
+  }
+
+  static String? _firstFieldMessage(Object? data) {
+    if (data is! Map<String, Object?>) return null;
+    final error = data['error'];
+    if (error is! Map<String, Object?>) return null;
+    final details = error['details'];
+    if (details is! Map<String, Object?>) return null;
+    final fields = details['fields'];
+    if (fields is! Map<String, Object?>) return null;
+    return fields.values.firstOrNull?.toString();
   }
 }
 

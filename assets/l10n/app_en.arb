@@ -120,6 +120,14 @@
   "@settingsNotifications": {
     "description": "Label for settings notifications row."
   },
+  "settingsLeaderboardVisibility": "Leaderboard Visibility",
+  "@settingsLeaderboardVisibility": {
+    "description": "Label for leaderboard visibility settings toggle."
+  },
+  "settingsPrivacySectionTitle": "Privacy",
+  "@settingsPrivacySectionTitle": {
+    "description": "Section title for privacy settings."
+  },
   "settingsLanguage": "Language",
   "@settingsLanguage": {
     "description": "Label for settings language row."

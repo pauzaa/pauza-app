@@ -70,20 +70,6 @@ class PauzaDependencies with AppFuseInitialization {
       );
       await localDatabase.open();
     },
-    'init auth': (state) async {
-      secureStorage = const FlutterSecureStorage();
-      authSessionStorage = SecureAuthSessionStorage(secureStorage: secureStorage);
-      final apiBaseUrl = state.getCurrentConfig<PauzaConfig>()!.apiBaseUrl;
-      authRemoteDataSource = AuthRemoteDataSourceImpl(
-        baseUrl: Uri.parse(apiBaseUrl),
-      );
-      authRepository = AuthRepositoryImpl(
-        remoteDataSource: authRemoteDataSource,
-        sessionStorage: authSessionStorage,
-      );
-      await authRepository.initialize();
-      authGate = PauzaAuthGateNotifier(authRepository: authRepository);
-    },
     'init api client': (state) async {
       apiClient = ApiClient(
         baseUrl: state.getCurrentConfig<PauzaConfig>()!.apiBaseUrl,
@@ -99,6 +85,17 @@ class PauzaDependencies with AppFuseInitialization {
           const ApiClientRetryMiddleware(),
         ],
       );
+    },
+    'init auth': (_) async {
+      secureStorage = const FlutterSecureStorage();
+      authSessionStorage = SecureAuthSessionStorage(secureStorage: secureStorage);
+      authRemoteDataSource = AuthRemoteDataSourceImpl(apiClient: apiClient);
+      authRepository = AuthRepositoryImpl(
+        remoteDataSource: authRemoteDataSource,
+        sessionStorage: authSessionStorage,
+      );
+      await authRepository.initialize();
+      authGate = PauzaAuthGateNotifier(authRepository: authRepository);
     },
     'init internet health gate': (state) async {
       final config = state.getCurrentConfig<PauzaConfig>()!;
@@ -120,7 +117,7 @@ class PauzaDependencies with AppFuseInitialization {
     'init user profile': (_) async {
       appFuseStorage = await AppFuseShPrStorage.init();
       userProfileCacheStorage = AppFuseUserProfileCacheStorage(storage: appFuseStorage);
-      userProfileRemoteDataSource = const UserProfileRemoteDataSourceImpl();
+      userProfileRemoteDataSource = UserProfileRemoteDataSourceImpl(apiClient: apiClient);
       userProfileRepository = UserProfileRepositoryImpl(
         cacheStorage: userProfileCacheStorage,
         remoteDataSource: userProfileRemoteDataSource,

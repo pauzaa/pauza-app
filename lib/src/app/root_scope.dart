@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
+import 'package:pauza/src/features/friends/data/friends_repository.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
+import 'package:pauza/src/features/leaderboard/data/leaderboard_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
@@ -41,6 +43,8 @@ class RootScopeState extends State<RootScope> {
   late final AuthBloc authBloc;
   late final RestrictionLifecycleSyncCoordinator restrictionLifecycleSyncCoordinator;
   late final StreaksRepository streaksRepository;
+  late final FriendsRepository friendsRepository;
+  late final LeaderboardRepository leaderboardRepository;
 
   @override
   void initState() {
@@ -87,6 +91,8 @@ class RootScopeState extends State<RootScope> {
     )..attach();
 
     streaksRepository = dependencies.streaksRepository;
+    friendsRepository = dependencies.friendsRepository;
+    leaderboardRepository = dependencies.leaderboardRepository;
 
     super.initState();
   }

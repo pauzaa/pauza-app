@@ -16,6 +16,10 @@ import 'package:pauza/src/features/auth/data/auth_remote_data_source.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 import 'package:pauza/src/features/auth/domain/auth_gate.dart';
+import 'package:pauza/src/features/friends/data/friends_remote_data_source.dart';
+import 'package:pauza/src/features/friends/data/friends_repository.dart';
+import 'package:pauza/src/features/leaderboard/data/leaderboard_remote_data_source.dart';
+import 'package:pauza/src/features/leaderboard/data/leaderboard_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
 import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
@@ -56,6 +60,10 @@ class PauzaDependencies with AppFuseInitialization {
   late final UserProfileCacheStorage userProfileCacheStorage;
   late final UserProfileRemoteDataSource userProfileRemoteDataSource;
   late final UserProfileRepository userProfileRepository;
+  late final FriendsRemoteDataSource friendsRemoteDataSource;
+  late final FriendsRepository friendsRepository;
+  late final LeaderboardRemoteDataSource leaderboardRemoteDataSource;
+  late final LeaderboardRepository leaderboardRepository;
   late final PackageInfo packageInfo;
   late final ApiClient apiClient;
 
@@ -122,6 +130,22 @@ class PauzaDependencies with AppFuseInitialization {
         cacheStorage: userProfileCacheStorage,
         remoteDataSource: userProfileRemoteDataSource,
         nowUtc: () => DateTime.now().toUtc(),
+      );
+    },
+    'init friends': (_) async {
+      friendsRemoteDataSource = FriendsRemoteDataSourceImpl(
+        apiClient: apiClient,
+      );
+      friendsRepository = FriendsRepositoryImpl(
+        remoteDataSource: friendsRemoteDataSource,
+      );
+    },
+    'init leaderboard': (_) async {
+      leaderboardRemoteDataSource = LeaderboardRemoteDataSourceImpl(
+        apiClient: apiClient,
+      );
+      leaderboardRepository = LeaderboardRepositoryImpl(
+        remoteDataSource: leaderboardRemoteDataSource,
       );
     },
     'init managers': (_) async {

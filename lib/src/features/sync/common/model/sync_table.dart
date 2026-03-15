@@ -7,10 +7,11 @@ enum SyncTable {
   nfcLinkedChips('nfc_linked_chips', 'updated_at'),
   qrLinkedCodes('qr_linked_codes', 'updated_at'),
   streakSessionDailyRollups('streak_session_daily_rollups', 'updated_at'),
-  streakDailyAggregates('streak_daily_aggregates', 'updated_at');
+  streakDailyAggregates('streak_daily_aggregates', 'updated_at', readOnly: true);
 
-  const SyncTable(this.key, this.cursorColumn);
+  const SyncTable(this.key, this.cursorColumn, {this.readOnly = false});
 
   final String key;
   final String cursorColumn;
+  final bool readOnly;
 }

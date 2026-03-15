@@ -58,7 +58,7 @@ abstract interface class AuthRemoteDataSource {
   /// `POST /api/v1/auth/refresh` -- exchanges [refreshToken] for a new pair.
   Future<AuthRefreshResponse> refresh({required String refreshToken});
 
-  /// `POST /api/v1/auth/logout` -- revokes all refresh tokens for the current user.
+  /// `POST /api/v1/auth/logout` -- revokes the current session; other sessions remain active.
   Future<void> logout();
 }
 

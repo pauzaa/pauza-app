@@ -11,6 +11,7 @@ import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc_chip_config/data/nfc_linked_chips_repository.dart';
 import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
 import 'package:pauza/src/features/qr_code_config/data/qr_linked_codes_repository.dart';
+import 'package:pauza/src/features/devices/domain/device_token_coordinator.dart';
 import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
@@ -44,6 +45,7 @@ class RootScopeState extends State<RootScope> {
   late final AuthBloc authBloc;
   late final RestrictionLifecycleSyncCoordinator restrictionLifecycleSyncCoordinator;
   late final SyncCoordinator syncCoordinator;
+  late final DeviceTokenCoordinator deviceTokenCoordinator;
   late final StreaksRepository streaksRepository;
   late final FriendsRepository friendsRepository;
   late final LeaderboardRepository leaderboardRepository;
@@ -108,6 +110,8 @@ class RootScopeState extends State<RootScope> {
       restrictions: dependencies.appRestrictionManager,
     )..attach();
 
+    deviceTokenCoordinator = dependencies.deviceTokenCoordinator..attach();
+
     streaksRepository = dependencies.streaksRepository;
     friendsRepository = dependencies.friendsRepository;
     leaderboardRepository = dependencies.leaderboardRepository;
@@ -122,6 +126,7 @@ class RootScopeState extends State<RootScope> {
     authBloc.close();
     restrictionLifecycleSyncCoordinator.detach();
     syncCoordinator.detach();
+    deviceTokenCoordinator.detach();
     blockingRepository.dispose();
     modesRepository.dispose();
     super.dispose();

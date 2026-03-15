@@ -13,6 +13,9 @@ import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart'
 import 'package:pauza/src/core/init/config.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/auth/data/auth_remote_data_source.dart';
+import 'package:pauza/src/features/devices/data/devices_remote_data_source.dart';
+import 'package:pauza/src/features/devices/data/devices_repository.dart';
+import 'package:pauza/src/features/devices/domain/device_token_coordinator.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 import 'package:pauza/src/features/auth/domain/auth_gate.dart';
@@ -72,6 +75,9 @@ class PauzaDependencies with AppFuseInitialization {
   late final SyncLocalDataSource syncLocalDataSource;
   late final SyncRemoteDataSource syncRemoteDataSource;
   late final SyncRepository syncRepository;
+  late final DevicesRemoteDataSource devicesRemoteDataSource;
+  late final DevicesRepository devicesRepository;
+  late final DeviceTokenCoordinator deviceTokenCoordinator;
 
   static PauzaDependencies of(BuildContext context) => AppFuseScope.of(context).init as PauzaDependencies;
 
@@ -108,6 +114,7 @@ class PauzaDependencies with AppFuseInitialization {
         remoteDataSource: authRemoteDataSource,
         sessionStorage: authSessionStorage,
         onSignOutCleanup: () async {
+          await deviceTokenCoordinator.unregisterCurrentToken();
           await syncLocalDataSource.clearAllSyncableTables();
         },
       );
@@ -147,6 +154,20 @@ class PauzaDependencies with AppFuseInitialization {
         cacheStorage: userProfileCacheStorage,
         remoteDataSource: userProfileRemoteDataSource,
         nowUtc: () => DateTime.now().toUtc(),
+        onAccountDeleted: () async {
+          await syncLocalDataSource.clearAllSyncableTables();
+          await authRepository.signOut();
+        },
+      );
+    },
+    'init devices': (_) async {
+      devicesRemoteDataSource = DevicesRemoteDataSourceImpl(apiClient: apiClient);
+      devicesRepository = DevicesRepositoryImpl(
+        remoteDataSource: devicesRemoteDataSource,
+      );
+      deviceTokenCoordinator = DeviceTokenCoordinator(
+        authRepository: authRepository,
+        devicesRepository: devicesRepository,
       );
     },
     'init friends': (_) async {

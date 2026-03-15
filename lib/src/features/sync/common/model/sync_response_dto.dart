@@ -2,18 +2,13 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 final class SyncResponseDto {
-  const SyncResponseDto({
-    required this.serverTime,
-    required this.tables,
-  });
+  const SyncResponseDto({required this.tables});
 
-  final int serverTime;
   final Map<String, SyncTableResponseDto> tables;
 
   factory SyncResponseDto.fromJson(Map<String, Object?> json) {
     final tablesJson = json['tables'] as Map<String, Object?>;
     return SyncResponseDto(
-      serverTime: json['server_time'] as int,
       tables: tablesJson.map(
         (key, value) => MapEntry(
           key,
@@ -24,18 +19,16 @@ final class SyncResponseDto {
   }
 
   @override
-  String toString() =>
-      'SyncResponseDto(serverTime: $serverTime, tables: ${tables.keys})';
+  String toString() => 'SyncResponseDto(tables: ${tables.keys})';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SyncResponseDto &&
-          other.serverTime == serverTime &&
           _mapsEqual(tables, other.tables);
 
   @override
-  int get hashCode => Object.hash(serverTime, tables);
+  int get hashCode => tables.hashCode;
 
   static bool _mapsEqual(
     Map<String, SyncTableResponseDto> a,
@@ -52,10 +45,12 @@ final class SyncResponseDto {
 @immutable
 final class SyncTableResponseDto {
   const SyncTableResponseDto({
+    required this.nextCursor,
     this.upserts = const [],
     this.deletions = const [],
   });
 
+  final int nextCursor;
   final List<Map<String, Object?>> upserts;
   final List<Object> deletions;
 
@@ -63,6 +58,7 @@ final class SyncTableResponseDto {
     final rawUpserts = json['upserts'] as List<Object?>? ?? const [];
     final rawDeletions = json['deletions'] as List<Object?>? ?? const [];
     return SyncTableResponseDto(
+      nextCursor: json['next_cursor'] as int,
       upserts: rawUpserts.cast<Map<String, Object?>>(),
       deletions: rawDeletions.cast<Object>(),
     );
@@ -70,16 +66,17 @@ final class SyncTableResponseDto {
 
   @override
   String toString() =>
-      'SyncTableResponseDto(upserts: ${upserts.length}, '
-      'deletions: ${deletions.length})';
+      'SyncTableResponseDto(nextCursor: $nextCursor, '
+      'upserts: ${upserts.length}, deletions: ${deletions.length})';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SyncTableResponseDto &&
+          other.nextCursor == nextCursor &&
           listEquals(other.upserts, upserts) &&
           listEquals(other.deletions, deletions);
 
   @override
-  int get hashCode => Object.hash(upserts, deletions);
+  int get hashCode => Object.hash(nextCursor, upserts, deletions);
 }

@@ -9,7 +9,7 @@ final class SyncRequestDto {
     return SyncRequestDto(
       tables: {
         for (final table in SyncTable.values)
-          table.key: const SyncTableRequestDto(lastSyncedAt: 0),
+          table.key: const SyncTableRequestDto(cursor: 0),
       },
     );
   }
@@ -51,18 +51,18 @@ final class SyncRequestDto {
 @immutable
 final class SyncTableRequestDto {
   const SyncTableRequestDto({
-    required this.lastSyncedAt,
+    required this.cursor,
     this.upserts = const [],
     this.deletions = const [],
   });
 
-  final int lastSyncedAt;
+  final int cursor;
   final List<Map<String, Object?>> upserts;
   final List<Object> deletions;
 
   Map<String, Object?> toJson() {
     return <String, Object?>{
-      'last_synced_at': lastSyncedAt,
+      'cursor': cursor,
       'upserts': upserts,
       'deletions': deletions,
     };
@@ -70,17 +70,17 @@ final class SyncTableRequestDto {
 
   @override
   String toString() =>
-      'SyncTableRequestDto(lastSyncedAt: $lastSyncedAt, '
+      'SyncTableRequestDto(cursor: $cursor, '
       'upserts: ${upserts.length}, deletions: ${deletions.length})';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SyncTableRequestDto &&
-          other.lastSyncedAt == lastSyncedAt &&
+          other.cursor == cursor &&
           listEquals(other.upserts, upserts) &&
           listEquals(other.deletions, deletions);
 
   @override
-  int get hashCode => Object.hash(lastSyncedAt, upserts, deletions);
+  int get hashCode => Object.hash(cursor, upserts, deletions);
 }

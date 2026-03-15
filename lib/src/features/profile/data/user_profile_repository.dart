@@ -34,6 +34,10 @@ abstract interface class UserProfileRepository {
 
   Future<bool> updatePrivacyPreferences({required bool leaderboardVisible});
 
+  Future<void> requestAccountDeletion();
+
+  Future<void> confirmAccountDeletion({required String otp});
+
   Stream<UserDto> watchProfileChanges();
 
   Future<void> clearCache();
@@ -44,13 +48,16 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
     required UserProfileCacheStorage cacheStorage,
     required UserProfileRemoteDataSource remoteDataSource,
     required DateTime Function() nowUtc,
+    Future<void> Function()? onAccountDeleted,
   }) : _cacheStorage = cacheStorage,
        _remoteDataSource = remoteDataSource,
-       _nowUtc = nowUtc;
+       _nowUtc = nowUtc,
+       _onAccountDeleted = onAccountDeleted;
 
   final UserProfileCacheStorage _cacheStorage;
   final UserProfileRemoteDataSource _remoteDataSource;
   final DateTime Function() _nowUtc;
+  final Future<void> Function()? _onAccountDeleted;
   final StreamController<UserDto> _profileChangesController =
       StreamController<UserDto>.broadcast();
 
@@ -177,6 +184,29 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
       );
       await _patchCachedPreference(leaderboardVisible: result);
       return result;
+    } on UserProfileError {
+      rethrow;
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
+    }
+  }
+
+  @override
+  Future<void> requestAccountDeletion() async {
+    try {
+      await _remoteDataSource.requestAccountDeletion();
+    } on UserProfileError {
+      rethrow;
+    } on Object catch (e) {
+      throw UserProfileUnknownError(e);
+    }
+  }
+
+  @override
+  Future<void> confirmAccountDeletion({required String otp}) async {
+    try {
+      await _remoteDataSource.confirmAccountDeletion(otp: otp);
+      await _onAccountDeleted?.call();
     } on UserProfileError {
       rethrow;
     } on Object catch (e) {

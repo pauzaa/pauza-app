@@ -24,6 +24,10 @@ abstract interface class UserProfileRemoteDataSource {
   Future<bool> fetchPrivacyPreferences();
 
   Future<bool> updatePrivacyPreferences({required bool leaderboardVisible});
+
+  Future<void> requestAccountDeletion();
+
+  Future<void> confirmAccountDeletion({required String otp});
 }
 
 final class UserProfileRemoteDataSourceImpl
@@ -141,4 +145,24 @@ final class UserProfileRemoteDataSourceImpl
     }
   }
 
+  @override
+  Future<void> requestAccountDeletion() async {
+    try {
+      await _apiClient.post('/api/v1/me/delete/request');
+    } on ApiClientException catch (e) {
+      throw UserProfileError.fromApiException(e);
+    }
+  }
+
+  @override
+  Future<void> confirmAccountDeletion({required String otp}) async {
+    try {
+      await _apiClient.post(
+        '/api/v1/me/delete/confirm',
+        body: <String, Object?>{'otp': otp},
+      );
+    } on ApiClientException catch (e) {
+      throw UserProfileError.fromApiException(e);
+    }
+  }
 }

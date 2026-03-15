@@ -48,13 +48,17 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
 
     for (final table in SyncTable.values) {
       final cursor = await _readCursor(table);
-      final upserts = await _readUnsyncedRows(table, cursor);
-      final deletions = await _readTrackedDeletions(table);
-      tables[table.key] = SyncTableRequestDto(
-        lastSyncedAt: cursor,
-        upserts: upserts,
-        deletions: deletions,
-      );
+      if (table.readOnly) {
+        tables[table.key] = SyncTableRequestDto(cursor: cursor);
+      } else {
+        final upserts = await _readUnsyncedRows(table, cursor);
+        final deletions = await _readTrackedDeletions(table);
+        tables[table.key] = SyncTableRequestDto(
+          cursor: cursor,
+          upserts: upserts,
+          deletions: deletions,
+        );
+      }
     }
 
     return SyncRequestDto(tables: tables);
@@ -144,7 +148,7 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
         await txn.rawInsert(
           'INSERT OR REPLACE INTO sync_cursors (table_name, last_synced_at) '
           'VALUES (?, ?)',
-          [table.key, response.serverTime],
+          [table.key, tableData.nextCursor],
         );
 
         await txn.rawDelete(

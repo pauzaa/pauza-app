@@ -365,5 +365,12 @@
   "authFailureUnknown": "Кириш амалга ошмади. Қайта уриниб кўринг.",
   "logoutDialogTitle": "Чиқасизми?",
   "logoutDialogBody": "Синхронланмаган маълумотлар бу қурилмадан ўчирилади. Чиқишдан олдин интернет алоқангиз борлигини текширинг.",
-  "logoutDialogConfirm": "Чиқиш"
+  "logoutDialogConfirm": "Чиқиш",
+  "leaderboardCurrentStreak": "Жорий серия",
+  "leaderboardTotalFocus": "Умумий фокус",
+  "leaderboardDaysCount": "{count} Кун",
+  "leaderboardHoursCount": "{count}с",
+  "leaderboardMinutesCount": "{count}д",
+  "leaderboardEmptyTitle": "Рейтинг маълумотлари ҳали йўқ",
+  "leaderboardErrorTitle": "Рейтингни юклаб бўлмади"
 }

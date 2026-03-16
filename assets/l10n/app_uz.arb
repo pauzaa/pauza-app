@@ -365,5 +365,12 @@
   "authFailureUnknown": "Kirish amalga oshmadi. Qayta urinib ko'ring.",
   "logoutDialogTitle": "Chiqasizmi?",
   "logoutDialogBody": "Sinxronlanmagan ma'lumotlar bu qurilmadan o'chiriladi. Chiqishdan oldin internet aloqangiz borligini tekshiring.",
-  "logoutDialogConfirm": "Chiqish"
+  "logoutDialogConfirm": "Chiqish",
+  "leaderboardCurrentStreak": "Joriy seriya",
+  "leaderboardTotalFocus": "Umumiy fokus",
+  "leaderboardDaysCount": "{count} Kun",
+  "leaderboardHoursCount": "{count}s",
+  "leaderboardMinutesCount": "{count}d",
+  "leaderboardEmptyTitle": "Reyting ma'lumotlari hali yo'q",
+  "leaderboardErrorTitle": "Reytingni yuklab bo'lmadi"
 }

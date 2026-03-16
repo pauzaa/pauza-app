@@ -1470,5 +1470,48 @@
   "logoutDialogConfirm": "Sign Out",
   "@logoutDialogConfirm": {
     "description": "Destructive confirm button label in the sign-out dialog."
+  },
+  "leaderboardCurrentStreak": "Current Streak",
+  "@leaderboardCurrentStreak": {
+    "description": "Label for the current streak tab in leaderboard."
+  },
+  "leaderboardTotalFocus": "Total Focus",
+  "@leaderboardTotalFocus": {
+    "description": "Label for the total focus time tab in leaderboard."
+  },
+  "leaderboardDaysCount": "{count} Days",
+  "@leaderboardDaysCount": {
+    "description": "Days count label in leaderboard.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderboardHoursCount": "{count}h",
+  "@leaderboardHoursCount": {
+    "description": "Hours count label in leaderboard.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderboardMinutesCount": "{count}m",
+  "@leaderboardMinutesCount": {
+    "description": "Minutes count label in leaderboard.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderboardEmptyTitle": "No leaderboard data yet",
+  "@leaderboardEmptyTitle": {
+    "description": "Empty state title for leaderboard."
+  },
+  "leaderboardErrorTitle": "Failed to load leaderboard",
+  "@leaderboardErrorTitle": {
+    "description": "Error state title for leaderboard."
   }
 }

@@ -22,6 +22,7 @@ import 'package:pauza/src/features/auth/domain/auth_gate.dart';
 import 'package:pauza/src/features/friends/data/friends_remote_data_source.dart';
 import 'package:pauza/src/features/friends/data/friends_repository.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_remote_data_source.dart';
+import 'package:pauza/src/features/leaderboard/data/mock_leaderboard_remote_data_source.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
@@ -179,9 +180,8 @@ class PauzaDependencies with AppFuseInitialization {
       );
     },
     'init leaderboard': (_) async {
-      leaderboardRemoteDataSource = LeaderboardRemoteDataSourceImpl(
-        apiClient: apiClient,
-      );
+      // TODO(alisher): switch back to LeaderboardRemoteDataSourceImpl
+      leaderboardRemoteDataSource = const MockLeaderboardRemoteDataSource();
       leaderboardRepository = LeaderboardRepositoryImpl(
         remoteDataSource: leaderboardRemoteDataSource,
       );

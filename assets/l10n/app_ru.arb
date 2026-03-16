@@ -365,5 +365,12 @@
   "authFailureUnknown": "Не удалось войти. Попробуйте снова.",
   "logoutDialogTitle": "Выйти?",
   "logoutDialogBody": "Несинхронизированные данные будут удалены с этого устройства. Убедитесь, что у вас есть подключение к интернету перед выходом.",
-  "logoutDialogConfirm": "Выйти"
+  "logoutDialogConfirm": "Выйти",
+  "leaderboardCurrentStreak": "Текущая серия",
+  "leaderboardTotalFocus": "Общий фокус",
+  "leaderboardDaysCount": "{count} Дней",
+  "leaderboardHoursCount": "{count}ч",
+  "leaderboardMinutesCount": "{count}м",
+  "leaderboardEmptyTitle": "Данных рейтинга пока нет",
+  "leaderboardErrorTitle": "Не удалось загрузить рейтинг"
 }

@@ -4,8 +4,8 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
+import 'package:pauza/src/core/cache/json_cache_entry.dart';
 import 'package:pauza/src/features/profile/common/bloc/current_user_state.dart';
-import 'package:pauza/src/features/profile/common/model/cached_user_profile.dart';
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/profile/common/model/user_profile_failure.dart';
 import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
@@ -62,7 +62,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
       return;
     }
 
-    CachedUserProfile? cached;
+    JsonCacheEntry<UserDto>? cached;
     try {
       cached = await _userProfileRepository.readCachedProfile();
     } on UserProfileStorageError {
@@ -78,7 +78,7 @@ final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
       _emit(
         emit,
         CurrentUserState.available(
-          user: cached.user,
+          user: cached.data,
           freshness: freshness,
           cachedAtUtc: cached.cachedAtUtc,
           isSyncing: true,

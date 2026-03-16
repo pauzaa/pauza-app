@@ -49,6 +49,7 @@ dependencies:
   meta: ^1.17.0
   firebase_core: ^4.5.0
   firebase_messaging: ^16.1.2
+  purchases_flutter: ^8.0.0
 
 workspace:
   - local_packages/pauza_ui_kit

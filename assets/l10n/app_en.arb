@@ -1657,5 +1657,50 @@
   "findAndRequestsOutgoing": "Outgoing",
   "@findAndRequestsOutgoing": {
     "description": "Label for outgoing requests."
+  },
+  "paywallTitle": "Premium",
+  "@paywallTitle": {
+    "description": "Title for the paywall screen."
+  },
+  "paywallDescription": "Unlock all features and get the most out of Pauza.",
+  "@paywallDescription": {
+    "description": "Subtitle description on the paywall screen."
+  },
+  "paywallPurchaseButton": "Subscribe for {price}",
+  "@paywallPurchaseButton": {
+    "description": "Label for the purchase button on the paywall screen.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallRestoreButton": "Restore Purchases",
+  "@paywallRestoreButton": {
+    "description": "Label for the restore purchases button."
+  },
+  "paywallPurchasing": "Processing…",
+  "@paywallPurchasing": {
+    "description": "Label shown while a purchase is in progress."
+  },
+  "paywallSuccessTitle": "You're now Premium!",
+  "@paywallSuccessTitle": {
+    "description": "Title shown after a successful purchase."
+  },
+  "paywallErrorGeneric": "Something went wrong. Please try again.",
+  "@paywallErrorGeneric": {
+    "description": "Generic error message on the paywall screen."
+  },
+  "paywallOfflineMessage": "You are offline. Connect to the internet to view subscription plans.",
+  "@paywallOfflineMessage": {
+    "description": "Message shown on the paywall screen when the user is offline."
+  },
+  "premiumBadge": "Premium",
+  "@premiumBadge": {
+    "description": "Badge label for premium users."
+  },
+  "premiumLockedMessage": "This feature requires a Premium subscription.",
+  "@premiumLockedMessage": {
+    "description": "Message shown when a feature is locked behind premium."
   }
 }

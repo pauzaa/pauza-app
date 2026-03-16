@@ -18,6 +18,8 @@ class PauzaConfig extends JsonAssetConfig {
 
   String get apiBaseUrl => getString('API_BASE_URL');
 
+  String get revenueCatApiKey => getString('REVENUECAT_API_KEY');
+
   String? get internetProbeUrl {
     try {
       final value = getString('INTERNET_PROBE_URL').trim();

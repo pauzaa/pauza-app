@@ -372,5 +372,15 @@
   "leaderboardHoursCount": "{count}ч",
   "leaderboardMinutesCount": "{count}м",
   "leaderboardEmptyTitle": "Данных рейтинга пока нет",
-  "leaderboardErrorTitle": "Не удалось загрузить рейтинг"
+  "leaderboardErrorTitle": "Не удалось загрузить рейтинг",
+  "paywallTitle": "Премиум",
+  "paywallDescription": "Разблокируйте все функции и получите максимум от Pauza.",
+  "paywallPurchaseButton": "Подписаться за {price}",
+  "paywallRestoreButton": "Восстановить покупки",
+  "paywallPurchasing": "Обработка…",
+  "paywallSuccessTitle": "Вы теперь Премиум!",
+  "paywallErrorGeneric": "Что-то пошло не так. Попробуйте ещё раз.",
+  "paywallOfflineMessage": "Вы офлайн. Подключитесь к интернету, чтобы увидеть планы подписки.",
+  "premiumBadge": "Премиум",
+  "premiumLockedMessage": "Эта функция требует подписку Премиум."
 }

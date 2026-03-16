@@ -372,5 +372,15 @@
   "leaderboardHoursCount": "{count}s",
   "leaderboardMinutesCount": "{count}d",
   "leaderboardEmptyTitle": "Reyting ma'lumotlari hali yo'q",
-  "leaderboardErrorTitle": "Reytingni yuklab bo'lmadi"
+  "leaderboardErrorTitle": "Reytingni yuklab bo'lmadi",
+  "paywallTitle": "Premium",
+  "paywallDescription": "Barcha funksiyalarni oching va Pauza'dan maksimal foydalaning.",
+  "paywallPurchaseButton": "{price} ga obuna bo'lish",
+  "paywallRestoreButton": "Xaridlarni tiklash",
+  "paywallPurchasing": "Qayta ishlanmoqda…",
+  "paywallSuccessTitle": "Siz endi Premiumsiz!",
+  "paywallErrorGeneric": "Xatolik yuz berdi. Qayta urinib ko'ring.",
+  "paywallOfflineMessage": "Siz oflayn holatdasiz. Obuna rejalarini ko'rish uchun internetga ulaning.",
+  "premiumBadge": "Premium",
+  "premiumLockedMessage": "Bu funksiya Premium obunani talab qiladi."
 }

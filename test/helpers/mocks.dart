@@ -4,6 +4,7 @@ import 'package:pauza/src/core/connectivity/domain/internet_health_gate.dart';
 import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
 import 'package:pauza/src/core/local_database/local_database_service.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
+import 'package:pauza/src/features/devices/data/devices_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 import 'package:pauza/src/features/auth/domain/auth_gate.dart';
 import 'package:pauza/src/features/friends/data/friends_repository.dart';
@@ -25,6 +26,8 @@ import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repo
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
 import 'package:pauza/src/features/sync/data/sync_remote_data_source.dart';
+import 'package:pauza/src/features/subscription/data/purchases_data_source.dart';
+import 'package:pauza/src/features/subscription/data/subscription_repository.dart';
 import 'package:pauza/src/features/sync/data/sync_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -92,3 +95,9 @@ class MockSyncLocalDataSource extends Mock implements SyncLocalDataSource {}
 class MockSyncRemoteDataSource extends Mock implements SyncRemoteDataSource {}
 
 class MockSyncRepository extends Mock implements SyncRepository {}
+
+class MockDevicesRepository extends Mock implements DevicesRepository {}
+
+class MockPurchasesDataSource extends Mock implements PurchasesDataSource {}
+
+class MockSubscriptionRepository extends Mock implements SubscriptionRepository {}

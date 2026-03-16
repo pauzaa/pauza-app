@@ -8,10 +8,7 @@ import 'package:pauza/src/features/friends/common/model/friends_error.dart';
 import 'package:pauza/src/features/friends/common/model/pagination_dto.dart';
 
 abstract interface class FriendsRemoteDataSource {
-  Future<({List<FriendDto> friends, PaginationDto pagination})> fetchFriends({
-    int page,
-    int limit,
-  });
+  Future<({List<FriendDto> friends, PaginationDto pagination})> fetchFriends({int page, int limit});
 
   Future<FriendMutationDto> sendRequest({required String username});
 
@@ -27,25 +24,18 @@ abstract interface class FriendsRemoteDataSource {
 
   Future<void> removeFriend({required String friendshipId});
 
-  Future<FriendStatsDto> fetchFriendStats({
-    required String friendshipId,
-    int days,
-  });
+  Future<FriendStatsDto> fetchFriendStats({required String friendshipId, int days});
 
   Future<List<BasicUserDto>> searchUsers({required String query});
 }
 
 final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
-  const FriendsRemoteDataSourceImpl({required ApiClient apiClient})
-      : _apiClient = apiClient;
+  const FriendsRemoteDataSourceImpl({required ApiClient apiClient}) : _apiClient = apiClient;
 
   final ApiClient _apiClient;
 
   @override
-  Future<({List<FriendDto> friends, PaginationDto pagination})> fetchFriends({
-    int page = 1,
-    int limit = 20,
-  }) async {
+  Future<({List<FriendDto> friends, PaginationDto pagination})> fetchFriends({int page = 1, int limit = 20}) async {
     try {
       final response = await _apiClient.get(
         '/api/v1/friends',
@@ -54,17 +44,12 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
       final data = response.data!;
       final rawFriends = data['friends'] as List<Object?>?;
       return (
-        friends: rawFriends
-                ?.map(
-                  (e) => FriendDto.fromJson(
-                    e as Map<String, Object?>? ?? const {},
-                  ),
-                )
+        friends:
+            rawFriends
+                ?.map((e) => FriendDto.fromJson(e as Map<String, Object?>? ?? const {}))
                 .toList(growable: false) ??
             const [],
-        pagination: PaginationDto.fromJson(
-          data['pagination'] as Map<String, Object?>? ?? const {},
-        ),
+        pagination: PaginationDto.fromJson(data['pagination'] as Map<String, Object?>? ?? const {}),
       );
     } on ApiClientException catch (e) {
       throw FriendsError.fromApiException(e);
@@ -74,10 +59,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
   @override
   Future<FriendMutationDto> sendRequest({required String username}) async {
     try {
-      final response = await _apiClient.post(
-        '/api/v1/friends/request',
-        body: <String, Object?>{'username': username},
-      );
+      final response = await _apiClient.post('/api/v1/friends/request', body: <String, Object?>{'username': username});
       return FriendMutationDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
       throw FriendsError.fromApiException(e);
@@ -87,16 +69,10 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
   @override
   Future<List<FriendRequestDto>> fetchIncomingRequests() async {
     try {
-      final response = await _apiClient.get(
-        '/api/v1/friends/requests/incoming',
-      );
+      final response = await _apiClient.get('/api/v1/friends/requests/incoming');
       final rawRequests = response.data!['requests'] as List<Object?>?;
       return rawRequests
-              ?.map(
-                (e) => FriendRequestDto.fromJson(
-                  e as Map<String, Object?>? ?? const {},
-                ),
-              )
+              ?.map((e) => FriendRequestDto.fromJson(e as Map<String, Object?>? ?? const {}))
               .toList(growable: false) ??
           const [];
     } on ApiClientException catch (e) {
@@ -107,16 +83,10 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
   @override
   Future<List<FriendRequestDto>> fetchOutgoingRequests() async {
     try {
-      final response = await _apiClient.get(
-        '/api/v1/friends/requests/outgoing',
-      );
+      final response = await _apiClient.get('/api/v1/friends/requests/outgoing');
       final rawRequests = response.data!['requests'] as List<Object?>?;
       return rawRequests
-              ?.map(
-                (e) => FriendRequestDto.fromJson(
-                  e as Map<String, Object?>? ?? const {},
-                ),
-              )
+              ?.map((e) => FriendRequestDto.fromJson(e as Map<String, Object?>? ?? const {}))
               .toList(growable: false) ??
           const [];
     } on ApiClientException catch (e) {
@@ -125,13 +95,9 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
   }
 
   @override
-  Future<FriendMutationDto> acceptRequest({
-    required String friendshipId,
-  }) async {
+  Future<FriendMutationDto> acceptRequest({required String friendshipId}) async {
     try {
-      final response = await _apiClient.post(
-        '/api/v1/friends/requests/$friendshipId/accept',
-      );
+      final response = await _apiClient.post('/api/v1/friends/requests/$friendshipId/accept');
       return FriendMutationDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
       throw FriendsError.fromApiException(e);
@@ -141,9 +107,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
   @override
   Future<void> declineRequest({required String friendshipId}) async {
     try {
-      await _apiClient.post(
-        '/api/v1/friends/requests/$friendshipId/decline',
-      );
+      await _apiClient.post('/api/v1/friends/requests/$friendshipId/decline');
     } on ApiClientException catch (e) {
       throw FriendsError.fromApiException(e);
     }
@@ -152,9 +116,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
   @override
   Future<void> cancelRequest({required String friendshipId}) async {
     try {
-      await _apiClient.post(
-        '/api/v1/friends/requests/$friendshipId/cancel',
-      );
+      await _apiClient.post('/api/v1/friends/requests/$friendshipId/cancel');
     } on ApiClientException catch (e) {
       throw FriendsError.fromApiException(e);
     }
@@ -170,10 +132,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
   }
 
   @override
-  Future<FriendStatsDto> fetchFriendStats({
-    required String friendshipId,
-    int days = 30,
-  }) async {
+  Future<FriendStatsDto> fetchFriendStats({required String friendshipId, int days = 30}) async {
     try {
       final response = await _apiClient.get(
         '/api/v1/friends/$friendshipId/stats',
@@ -188,22 +147,14 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
   @override
   Future<List<BasicUserDto>> searchUsers({required String query}) async {
     try {
-      final response = await _apiClient.get(
-        '/api/v1/friends/search',
-        queryParameters: <String, Object>{'q': query},
-      );
+      final response = await _apiClient.get('/api/v1/friends/search', queryParameters: <String, Object>{'q': query});
       final rawUsers = response.data!['users'] as List<Object?>?;
       return rawUsers
-              ?.map(
-                (e) => BasicUserDto.fromJson(
-                  e as Map<String, Object?>? ?? const {},
-                ),
-              )
+              ?.map((e) => BasicUserDto.fromJson(e as Map<String, Object?>? ?? const {}))
               .toList(growable: false) ??
           const [];
     } on ApiClientException catch (e) {
       throw FriendsError.fromApiException(e);
     }
   }
-
 }

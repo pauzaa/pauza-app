@@ -1513,5 +1513,149 @@
   "leaderboardErrorTitle": "Failed to load leaderboard",
   "@leaderboardErrorTitle": {
     "description": "Error state title for leaderboard."
+  },
+
+  "friendsTitle": "Friends",
+  "@friendsTitle": {
+    "description": "Title for the friends screen and navigation destination."
+  },
+  "friendsSearchHint": "Search friends...",
+  "@friendsSearchHint": {
+    "description": "Hint text for friends search field."
+  },
+  "friendsActiveStreaks": "ACTIVE STREAKS",
+  "@friendsActiveStreaks": {
+    "description": "Section header for active streaks."
+  },
+  "friendsOnlineCount": "{count} Friends",
+  "@friendsOnlineCount": {
+    "description": "Count of friends.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsTodayLabel": "TODAY",
+  "@friendsTodayLabel": {
+    "description": "Label for today's focus time."
+  },
+  "friendsAllTimeLabel": "ALL TIME",
+  "@friendsAllTimeLabel": {
+    "description": "Label for all-time focus time."
+  },
+  "friendsTrendLabel": "7-DAY TREND",
+  "@friendsTrendLabel": {
+    "description": "Label for the 7-day activity trend."
+  },
+  "friendsStreakDays": "{count} days",
+  "@friendsStreakDays": {
+    "description": "Streak days count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsLongestStreak": "Longest: {count} days",
+  "@friendsLongestStreak": {
+    "description": "Longest streak label.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsOfflineTitle": "You're offline",
+  "@friendsOfflineTitle": {
+    "description": "Title shown when offline on friends screen."
+  },
+  "friendsOfflineMessage": "Connect to the internet to see your friends.",
+  "@friendsOfflineMessage": {
+    "description": "Message shown when offline on friends screen."
+  },
+  "friendsRetryButton": "Retry",
+  "@friendsRetryButton": {
+    "description": "Retry button label for friends screen."
+  },
+  "friendsEmptyState": "No friends yet. Tap + to find people!",
+  "@friendsEmptyState": {
+    "description": "Empty state message when user has no friends."
+  },
+  "friendsErrorTitle": "Failed to load friends",
+  "@friendsErrorTitle": {
+    "description": "Error state title for friends screen."
+  },
+
+  "findAndRequestsTitle": "Find & Requests",
+  "@findAndRequestsTitle": {
+    "description": "Title for the find and requests screen."
+  },
+  "findAndRequestsSearchHint": "Search by username...",
+  "@findAndRequestsSearchHint": {
+    "description": "Hint text for user search field."
+  },
+  "findAndRequestsPendingRequests": "PENDING REQUESTS",
+  "@findAndRequestsPendingRequests": {
+    "description": "Section header for pending requests."
+  },
+  "findAndRequestsTotalBadge": "{count}",
+  "@findAndRequestsTotalBadge": {
+    "description": "Badge showing total pending request count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "findAndRequestsAccept": "Accept",
+  "@findAndRequestsAccept": {
+    "description": "Accept friend request button label."
+  },
+  "findAndRequestsDecline": "Decline",
+  "@findAndRequestsDecline": {
+    "description": "Decline friend request button label."
+  },
+  "findAndRequestsCancel": "Cancel",
+  "@findAndRequestsCancel": {
+    "description": "Cancel outgoing friend request button label."
+  },
+  "findAndRequestsSentAgo": "Sent {timeAgo}",
+  "@findAndRequestsSentAgo": {
+    "description": "Time label for outgoing requests.",
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsReceivedAgo": "Received {timeAgo}",
+  "@findAndRequestsReceivedAgo": {
+    "description": "Time label for incoming requests.",
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsAddButton": "Add",
+  "@findAndRequestsAddButton": {
+    "description": "Add friend button label."
+  },
+  "findAndRequestsNoResults": "No users found",
+  "@findAndRequestsNoResults": {
+    "description": "Empty state when search returns no results."
+  },
+  "findAndRequestsErrorTitle": "Failed to load requests",
+  "@findAndRequestsErrorTitle": {
+    "description": "Error state title for find and requests screen."
+  },
+  "findAndRequestsIncoming": "Incoming",
+  "@findAndRequestsIncoming": {
+    "description": "Label for incoming requests."
+  },
+  "findAndRequestsOutgoing": "Outgoing",
+  "@findAndRequestsOutgoing": {
+    "description": "Label for outgoing requests."
   }
 }

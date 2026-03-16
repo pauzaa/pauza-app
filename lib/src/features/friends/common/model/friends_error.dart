@@ -7,19 +7,18 @@ sealed class FriendsError implements Exception, Localizable {
   factory FriendsError.fromApiException(ApiClientException e) {
     return switch (e) {
       ApiClientAuthorizationException(:final statusCode, :final data) =>
-        statusCode == 403 &&
-                _serverErrorCode(data) == 'SUBSCRIPTION_REQUIRED'
+        statusCode == 403 && _serverErrorCode(data) == 'SUBSCRIPTION_REQUIRED'
             ? const FriendsSubscriptionRequiredError()
             : const FriendsUnauthorizedError(),
       ApiClientNetworkException() => const FriendsNetworkError(),
       ApiClientClientException(:final statusCode, :final data) => () {
-          if (statusCode == 409) return const FriendsConflictError();
-          if (statusCode == 404) return const FriendsNotFoundError();
-          if (_serverErrorCode(data) == 'VALIDATION_ERROR') {
-            return const FriendsValidationError();
-          }
-          return FriendsUnknownError(e);
-        }(),
+        if (statusCode == 409) return const FriendsConflictError();
+        if (statusCode == 404) return const FriendsNotFoundError();
+        if (_serverErrorCode(data) == 'VALIDATION_ERROR') {
+          return const FriendsValidationError();
+        }
+        return FriendsUnknownError(e);
+      }(),
     };
   }
 
@@ -85,8 +84,7 @@ final class FriendsNetworkError extends FriendsError {
   const FriendsNetworkError();
 
   @override
-  String localize(AppLocalizations localizations) =>
-      localizations.internetRequiredToast;
+  String localize(AppLocalizations localizations) => localizations.internetRequiredToast;
 
   @override
   String toString() => 'FriendsNetworkError';

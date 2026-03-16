@@ -2,11 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 final class PaginationDto {
-  const PaginationDto({
-    required this.page,
-    required this.limit,
-    required this.total,
-  });
+  const PaginationDto({required this.page, required this.limit, required this.total});
 
   factory PaginationDto.fromJson(Map<String, Object?> json) => PaginationDto(
     page: json['Page'] as int? ?? json['page'] as int? ?? 1,
@@ -21,15 +17,11 @@ final class PaginationDto {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PaginationDto &&
-          page == other.page &&
-          limit == other.limit &&
-          total == other.total;
+      other is PaginationDto && page == other.page && limit == other.limit && total == other.total;
 
   @override
   int get hashCode => Object.hash(page, limit, total);
 
   @override
-  String toString() =>
-      'PaginationDto(page: $page, limit: $limit, total: $total)';
+  String toString() => 'PaginationDto(page: $page, limit: $limit, total: $total)';
 }

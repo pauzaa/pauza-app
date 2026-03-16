@@ -3,6 +3,8 @@ import 'package:helm/helm.dart';
 import 'package:pauza/src/features/auth/widget/auth_screen.dart';
 import 'package:pauza/src/features/auth/widget/otp_screen.dart';
 import 'package:pauza/src/features/home/widget/home_screen.dart';
+import 'package:pauza/src/features/friends/find_and_requests/widget/find_and_requests_screen.dart';
+import 'package:pauza/src/features/friends/friends_list/widget/friends_list_screen.dart';
 import 'package:pauza/src/features/leaderboard/widget/leaderboard_screen.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_screen.dart';
 import 'package:pauza/src/features/navigation/widget/dashboard_tabs_shell.dart';
@@ -20,6 +22,8 @@ enum PauzaRoutes with Routable {
   home,
   stats,
   leaderboard,
+  friends,
+  findAndRequests,
   profile,
   profileEdit,
   modeCreate,
@@ -39,6 +43,8 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.home => '/home',
     PauzaRoutes.stats => '/stats',
     PauzaRoutes.leaderboard => '/leaderboard',
+    PauzaRoutes.friends => '/friends',
+    PauzaRoutes.findAndRequests => '/friends/find',
     PauzaRoutes.profile => '/profile',
     PauzaRoutes.profileEdit => '/profile/edit',
     PauzaRoutes.modeCreate => '/modes/new',
@@ -58,6 +64,8 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.home ||
     PauzaRoutes.stats ||
     PauzaRoutes.leaderboard ||
+    PauzaRoutes.friends ||
+    PauzaRoutes.findAndRequests ||
     PauzaRoutes.profile ||
     PauzaRoutes.profileEdit ||
     PauzaRoutes.modeCreate ||
@@ -77,6 +85,8 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.home => const HomeScreen(),
     PauzaRoutes.stats => const StatsScreen(),
     PauzaRoutes.leaderboard => const LeaderboardScreen(),
+    PauzaRoutes.friends => const FriendsListScreen(),
+    PauzaRoutes.findAndRequests => const FindAndRequestsScreen(),
     PauzaRoutes.profile => const ProfileScreen(),
     PauzaRoutes.profileEdit => const ProfileEditScreen(),
     PauzaRoutes.modeCreate => ModeEditorScreen.create(),

@@ -43,13 +43,7 @@ final class BasicUserDto {
           leaderboardVisible == other.leaderboardVisible;
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    name,
-    username,
-    profilePictureUrl,
-    leaderboardVisible,
-  );
+  int get hashCode => Object.hash(id, name, username, profilePictureUrl, leaderboardVisible);
 
   @override
   String toString() =>

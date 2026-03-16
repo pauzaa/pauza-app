@@ -17,18 +17,14 @@ final class FriendStatsDto {
     final stats = json['stats'] as Map<String, Object?>? ?? const {};
     final rawTrends = stats['daily_trends'] as List<Object?>?;
     return FriendStatsDto(
-      user: BasicUserDto.fromJson(
-        json['user'] as Map<String, Object?>? ?? const {},
-      ),
+      user: BasicUserDto.fromJson(json['user'] as Map<String, Object?>? ?? const {}),
       currentStreakDays: stats['current_streak_days'] as int? ?? 0,
       longestStreakDays: stats['longest_streak_days'] as int? ?? 0,
       totalFocusTimeMs: stats['total_focus_time_ms'] as int? ?? 0,
       focusTimeTodayMs: stats['focus_time_today_ms'] as int? ?? 0,
-      dailyTrends: rawTrends
-              ?.map(
-                (e) =>
-                    DailyTrendDto.fromJson(e as Map<String, Object?>? ?? const {}),
-              )
+      dailyTrends:
+          rawTrends
+              ?.map((e) => DailyTrendDto.fromJson(e as Map<String, Object?>? ?? const {}))
               .toList(growable: false) ??
           const [],
     );

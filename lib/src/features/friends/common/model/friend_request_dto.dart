@@ -3,11 +3,7 @@ import 'package:pauza/src/features/friends/common/model/basic_user_dto.dart';
 
 @immutable
 final class FriendRequestDto {
-  const FriendRequestDto({
-    required this.friendshipId,
-    required this.user,
-    required this.createdAt,
-  });
+  const FriendRequestDto({required this.friendshipId, required this.user, required this.createdAt});
 
   factory FriendRequestDto.fromJson(Map<String, Object?> json) {
     final rawCreatedAt = json['created_at'] as String?;

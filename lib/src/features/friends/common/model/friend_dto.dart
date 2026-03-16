@@ -3,11 +3,7 @@ import 'package:pauza/src/features/friends/common/model/basic_user_dto.dart';
 
 @immutable
 final class FriendDto {
-  const FriendDto({
-    required this.friendshipId,
-    required this.user,
-    required this.since,
-  });
+  const FriendDto({required this.friendshipId, required this.user, required this.since});
 
   factory FriendDto.fromJson(Map<String, Object?> json) {
     final rawSince = json['since'] as String?;
@@ -25,15 +21,11 @@ final class FriendDto {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FriendDto &&
-          friendshipId == other.friendshipId &&
-          user == other.user &&
-          since == other.since;
+      other is FriendDto && friendshipId == other.friendshipId && user == other.user && since == other.since;
 
   @override
   int get hashCode => Object.hash(friendshipId, user, since);
 
   @override
-  String toString() =>
-      'FriendDto(friendshipId: $friendshipId, user: $user, since: $since)';
+  String toString() => 'FriendDto(friendshipId: $friendshipId, user: $user, since: $since)';
 }

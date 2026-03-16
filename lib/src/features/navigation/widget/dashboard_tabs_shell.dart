@@ -13,7 +13,13 @@ class DashboardTabsShell extends StatelessWidget {
     final l10n = context.l10n;
 
     return NestedTabsNavigator(
-      tabs: const <PauzaRoutes>[PauzaRoutes.home, PauzaRoutes.stats, PauzaRoutes.leaderboard, PauzaRoutes.profile],
+      tabs: const <PauzaRoutes>[
+        PauzaRoutes.home,
+        PauzaRoutes.stats,
+        PauzaRoutes.leaderboard,
+        PauzaRoutes.friends,
+        PauzaRoutes.profile,
+      ],
       initialTab: PauzaRoutes.home,
       builder: (context, child, selectedIndex, onTabPressed) {
         return Scaffold(
@@ -23,6 +29,7 @@ class DashboardTabsShell extends StatelessWidget {
               PauzaNavigationDestination(icon: Icons.home_rounded, label: l10n.homeTitle),
               PauzaNavigationDestination(icon: Icons.bar_chart_rounded, label: l10n.statsTitle),
               PauzaNavigationDestination(icon: Symbols.rewarded_ads, label: l10n.leaderboardTitle),
+              PauzaNavigationDestination(icon: Icons.people_rounded, label: l10n.friendsTitle),
               PauzaNavigationDestination(icon: Icons.person_rounded, label: l10n.profileTitle),
             ],
             selectedIndex: selectedIndex,

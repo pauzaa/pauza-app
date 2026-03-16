@@ -36,6 +36,8 @@ import 'package:pauza/src/features/restriction_lifecycle/sync/background/restric
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
+import 'package:pauza/src/features/subscription/data/purchases_data_source.dart';
+import 'package:pauza/src/features/subscription/data/subscription_repository.dart';
 import 'package:pauza/src/features/sync/data/sync_remote_data_source.dart';
 import 'package:pauza/src/features/sync/data/sync_repository.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
@@ -79,6 +81,9 @@ class PauzaDependencies with AppFuseInitialization {
   late final DevicesRemoteDataSource devicesRemoteDataSource;
   late final DevicesRepository devicesRepository;
   late final DeviceTokenCoordinator deviceTokenCoordinator;
+  late final PurchasesDataSource purchasesDataSource;
+  late final SubscriptionRepository subscriptionRepository;
+  late final String revenueCatApiKey;
 
   static PauzaDependencies of(BuildContext context) => AppFuseScope.of(context).init as PauzaDependencies;
 
@@ -125,10 +130,7 @@ class PauzaDependencies with AppFuseInitialization {
     'init sync': (_) async {
       syncLocalDataSource = SyncLocalDataSourceImpl(database: localDatabase);
       syncRemoteDataSource = SyncRemoteDataSourceImpl(apiClient: apiClient);
-      syncRepository = SyncRepositoryImpl(
-        localDataSource: syncLocalDataSource,
-        remoteDataSource: syncRemoteDataSource,
-      );
+      syncRepository = SyncRepositoryImpl(localDataSource: syncLocalDataSource, remoteDataSource: syncRemoteDataSource);
     },
     'init internet health gate': (state) async {
       final config = state.getCurrentConfig<PauzaConfig>()!;
@@ -149,12 +151,14 @@ class PauzaDependencies with AppFuseInitialization {
     },
     'init user profile': (_) async {
       appFuseStorage = await AppFuseShPrStorage.init();
-      userProfileCacheStorage = AppFuseUserProfileCacheStorage(storage: appFuseStorage);
+      userProfileCacheStorage = AppFuseUserProfileCacheStorage(
+        storage: appFuseStorage,
+        nowUtc: () => DateTime.now().toUtc(),
+      );
       userProfileRemoteDataSource = UserProfileRemoteDataSourceImpl(apiClient: apiClient);
       userProfileRepository = UserProfileRepositoryImpl(
         cacheStorage: userProfileCacheStorage,
         remoteDataSource: userProfileRemoteDataSource,
-        nowUtc: () => DateTime.now().toUtc(),
         onAccountDeleted: () async {
           await syncLocalDataSource.clearAllSyncableTables();
           await authRepository.signOut();
@@ -163,28 +167,25 @@ class PauzaDependencies with AppFuseInitialization {
     },
     'init devices': (_) async {
       devicesRemoteDataSource = DevicesRemoteDataSourceImpl(apiClient: apiClient);
-      devicesRepository = DevicesRepositoryImpl(
-        remoteDataSource: devicesRemoteDataSource,
-      );
+      devicesRepository = DevicesRepositoryImpl(remoteDataSource: devicesRemoteDataSource);
       deviceTokenCoordinator = DeviceTokenCoordinator(
         authRepository: authRepository,
         devicesRepository: devicesRepository,
       );
     },
+    'init subscription': (state) async {
+      revenueCatApiKey = state.getCurrentConfig<PauzaConfig>()!.revenueCatApiKey;
+      purchasesDataSource = PurchasesDataSourceImpl();
+      subscriptionRepository = SubscriptionRepositoryImpl(dataSource: purchasesDataSource, entitlementId: 'premium');
+    },
     'init friends': (_) async {
-      friendsRemoteDataSource = FriendsRemoteDataSourceImpl(
-        apiClient: apiClient,
-      );
-      friendsRepository = FriendsRepositoryImpl(
-        remoteDataSource: friendsRemoteDataSource,
-      );
+      friendsRemoteDataSource = FriendsRemoteDataSourceImpl(apiClient: apiClient);
+      friendsRepository = FriendsRepositoryImpl(remoteDataSource: friendsRemoteDataSource);
     },
     'init leaderboard': (_) async {
       // TODO(alisher): switch back to LeaderboardRemoteDataSourceImpl
       leaderboardRemoteDataSource = const MockLeaderboardRemoteDataSource();
-      leaderboardRepository = LeaderboardRepositoryImpl(
-        remoteDataSource: leaderboardRemoteDataSource,
-      );
+      leaderboardRepository = LeaderboardRepositoryImpl(remoteDataSource: leaderboardRemoteDataSource);
     },
     'init managers': (_) async {
       installedAppsManager = InstalledAppsManager();

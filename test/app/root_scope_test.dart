@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
+import 'package:pauza/src/features/devices/domain/device_token_coordinator.dart';
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 
 import '../helpers/helpers.dart';
@@ -86,5 +87,11 @@ final class _TestPauzaDependencies extends PauzaDependencies {
     syncRepository = MockSyncRepository();
     friendsRepository = MockFriendsRepository();
     leaderboardRepository = MockLeaderboardRepository();
+    subscriptionRepository = MockSubscriptionRepository();
+    revenueCatApiKey = 'test-key';
+    deviceTokenCoordinator = DeviceTokenCoordinator(
+      authRepository: authRepository,
+      devicesRepository: MockDevicesRepository(),
+    );
   }
 }

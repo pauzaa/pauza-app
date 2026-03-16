@@ -372,5 +372,15 @@
   "leaderboardHoursCount": "{count}с",
   "leaderboardMinutesCount": "{count}д",
   "leaderboardEmptyTitle": "Рейтинг маълумотлари ҳали йўқ",
-  "leaderboardErrorTitle": "Рейтингни юклаб бўлмади"
+  "leaderboardErrorTitle": "Рейтингни юклаб бўлмади",
+  "paywallTitle": "Премиум",
+  "paywallDescription": "Барча функцияларни очинг ва Паузадан максимал фойдаланинг.",
+  "paywallPurchaseButton": "{price} га обуна бўлиш",
+  "paywallRestoreButton": "Харидларни тиклаш",
+  "paywallPurchasing": "Қайта ишланмоқда…",
+  "paywallSuccessTitle": "Сиз энди Премиумсиз!",
+  "paywallErrorGeneric": "Хатолик юз берди. Қайта уриниб кўринг.",
+  "paywallOfflineMessage": "Сиз офлайн ҳолатдасиз. Обуна режаларини кўриш учун интернетга уланинг.",
+  "premiumBadge": "Премиум",
+  "premiumLockedMessage": "Бу функция Премиум обунани талаб қилади."
 }

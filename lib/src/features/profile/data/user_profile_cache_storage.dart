@@ -1,73 +1,34 @@
-import 'dart:convert';
-
 import 'package:appfuse/appfuse.dart';
-import 'package:pauza/src/features/profile/common/model/cached_user_profile.dart';
-import 'package:pauza/src/features/profile/common/model/user_profile_failure.dart';
+import 'package:pauza/src/core/cache/json_cache_entry.dart';
+import 'package:pauza/src/core/cache/json_cache_storage.dart';
+import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 
 abstract interface class UserProfileCacheStorage {
-  Future<CachedUserProfile?> read();
+  Future<JsonCacheEntry<UserDto>?> read();
 
-  Future<void> write(CachedUserProfile cached);
+  Future<void> write(UserDto user);
 
   Future<void> delete();
 }
 
 final class AppFuseUserProfileCacheStorage implements UserProfileCacheStorage {
-  const AppFuseUserProfileCacheStorage({required IAppFuseStorage storage}) : _storage = storage;
+  AppFuseUserProfileCacheStorage({required IAppFuseStorage storage, required DateTime Function() nowUtc})
+    : _delegate = AppFuseJsonCacheStorage<UserDto>(
+        storage: storage,
+        cacheKey: 'auth.user_profile.cache.v1',
+        fromJson: UserDto.fromJson,
+        toJson: (user) => user.toJson(),
+        nowUtc: nowUtc,
+      );
 
-  static const String cacheKey = 'auth.user_profile.cache.v1';
-
-  final IAppFuseStorage _storage;
-
-  @override
-  Future<CachedUserProfile?> read() async {
-    try {
-      final raw = await _storage.getValue<String>(cacheKey);
-      if (raw == null || raw.isEmpty) {
-        return null;
-      }
-
-      final decoded = jsonDecode(raw);
-      if (decoded is! Map<String, Object?>) {
-        throw const UserProfileStorageError('Invalid cached user payload shape.');
-      }
-
-      return CachedUserProfile.fromJson(decoded);
-    } on UserProfileError {
-      rethrow;
-    } on FormatException catch (e) {
-      throw UserProfileStorageError(e);
-    } on Object catch (e) {
-      throw UserProfileStorageError(e);
-    }
-  }
+  final AppFuseJsonCacheStorage<UserDto> _delegate;
 
   @override
-  Future<void> write(CachedUserProfile cached) async {
-    try {
-      final raw = jsonEncode(cached.toJson());
-      final saved = await _storage.setValue<String>(cacheKey, raw);
-      if (!saved) {
-        throw const UserProfileStorageError('Failed to write cached user payload.');
-      }
-    } on UserProfileError {
-      rethrow;
-    } on Object catch (e) {
-      throw UserProfileStorageError(e);
-    }
-  }
+  Future<JsonCacheEntry<UserDto>?> read() => _delegate.read();
 
   @override
-  Future<void> delete() async {
-    try {
-      final deleted = await _storage.setValue<String>(cacheKey, '');
-      if (!deleted) {
-        throw const UserProfileStorageError('Failed to delete cached user payload.');
-      }
-    } on UserProfileError {
-      rethrow;
-    } on Object catch (e) {
-      throw UserProfileStorageError(e);
-    }
-  }
+  Future<void> write(UserDto user) => _delegate.write(user);
+
+  @override
+  Future<void> delete() => _delegate.delete();
 }

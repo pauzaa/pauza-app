@@ -31,8 +31,8 @@ final class UserPreferencesBloc
       if (cached != null) {
         emit(state.copyWith(
           isLoading: false,
-          pushEnabled: cached.user.pushEnabled,
-          leaderboardVisible: cached.user.leaderboardVisible,
+          pushEnabled: cached.data.pushEnabled,
+          leaderboardVisible: cached.data.leaderboardVisible,
         ));
         return;
       }

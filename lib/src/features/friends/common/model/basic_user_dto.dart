@@ -11,11 +11,11 @@ final class BasicUserDto {
   });
 
   factory BasicUserDto.fromJson(Map<String, Object?> json) => BasicUserDto(
-    id: json['ID'] as String? ?? '',
-    name: json['Name'] as String? ?? '',
-    username: json['Username'] as String? ?? '',
-    profilePictureUrl: json['ProfilePictureURL'] as String?,
-    leaderboardVisible: json['LeaderboardVisible'] as bool? ?? false,
+    id: json['id'] as String? ?? json['ID'] as String? ?? '',
+    name: json['name'] as String? ?? json['Name'] as String? ?? '',
+    username: json['username'] as String? ?? json['Username'] as String? ?? '',
+    profilePictureUrl: json['profile_picture_url'] as String? ?? json['ProfilePictureURL'] as String?,
+    leaderboardVisible: json['leaderboard_visible'] as bool? ?? json['LeaderboardVisible'] as bool? ?? false,
   );
 
   final String id;

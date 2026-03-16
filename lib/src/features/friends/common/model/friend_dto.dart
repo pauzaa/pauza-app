@@ -10,10 +10,10 @@ final class FriendDto {
   });
 
   factory FriendDto.fromJson(Map<String, Object?> json) {
-    final rawSince = json['Since'] as String?;
+    final rawSince = json['since'] as String?;
     return FriendDto(
-      friendshipId: json['FriendshipID'] as String? ?? '',
-      user: BasicUserDto.fromJson(json['User'] as Map<String, Object?>? ?? const {}),
+      friendshipId: json['friendship_id'] as String? ?? '',
+      user: BasicUserDto.fromJson(json['user'] as Map<String, Object?>? ?? const {}),
       since: rawSince != null ? DateTime.parse(rawSince).toUtc() : DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
     );
   }

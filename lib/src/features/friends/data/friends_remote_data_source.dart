@@ -23,6 +23,8 @@ abstract interface class FriendsRemoteDataSource {
 
   Future<void> declineRequest({required String friendshipId});
 
+  Future<void> cancelRequest({required String friendshipId});
+
   Future<void> removeFriend({required String friendshipId});
 
   Future<FriendStatsDto> fetchFriendStats({
@@ -50,7 +52,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
         queryParameters: <String, Object>{'page': page, 'limit': limit},
       );
       final data = response.data!;
-      final rawFriends = data['Friends'] as List<Object?>?;
+      final rawFriends = data['friends'] as List<Object?>?;
       return (
         friends: rawFriends
                 ?.map(
@@ -61,7 +63,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
                 .toList(growable: false) ??
             const [],
         pagination: PaginationDto.fromJson(
-          data['Pagination'] as Map<String, Object?>? ?? const {},
+          data['pagination'] as Map<String, Object?>? ?? const {},
         ),
       );
     } on ApiClientException catch (e) {
@@ -88,7 +90,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
       final response = await _apiClient.get(
         '/api/v1/friends/requests/incoming',
       );
-      final rawRequests = response.data!['Requests'] as List<Object?>?;
+      final rawRequests = response.data!['requests'] as List<Object?>?;
       return rawRequests
               ?.map(
                 (e) => FriendRequestDto.fromJson(
@@ -108,7 +110,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
       final response = await _apiClient.get(
         '/api/v1/friends/requests/outgoing',
       );
-      final rawRequests = response.data!['Requests'] as List<Object?>?;
+      final rawRequests = response.data!['requests'] as List<Object?>?;
       return rawRequests
               ?.map(
                 (e) => FriendRequestDto.fromJson(
@@ -141,6 +143,17 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
     try {
       await _apiClient.post(
         '/api/v1/friends/requests/$friendshipId/decline',
+      );
+    } on ApiClientException catch (e) {
+      throw FriendsError.fromApiException(e);
+    }
+  }
+
+  @override
+  Future<void> cancelRequest({required String friendshipId}) async {
+    try {
+      await _apiClient.post(
+        '/api/v1/friends/requests/$friendshipId/cancel',
       );
     } on ApiClientException catch (e) {
       throw FriendsError.fromApiException(e);

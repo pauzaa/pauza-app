@@ -9,8 +9,8 @@ final class FriendMutationDto {
 
   factory FriendMutationDto.fromJson(Map<String, Object?> json) =>
       FriendMutationDto(
-        friendshipId: json['FriendshipID'] as String? ?? '',
-        status: json['Status'] as String? ?? '',
+        friendshipId: json['friendship_id'] as String? ?? '',
+        status: json['status'] as String? ?? '',
       );
 
   final String friendshipId;

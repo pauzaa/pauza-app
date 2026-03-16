@@ -23,6 +23,8 @@ abstract interface class FriendsRepository {
 
   Future<void> declineRequest({required String friendshipId});
 
+  Future<void> cancelRequest({required String friendshipId});
+
   Future<void> removeFriend({required String friendshipId});
 
   Future<FriendStatsDto> fetchFriendStats({
@@ -104,6 +106,17 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<void> declineRequest({required String friendshipId}) async {
     try {
       await _remoteDataSource.declineRequest(friendshipId: friendshipId);
+    } on FriendsError {
+      rethrow;
+    } on Object catch (e) {
+      throw FriendsUnknownError(e);
+    }
+  }
+
+  @override
+  Future<void> cancelRequest({required String friendshipId}) async {
+    try {
+      await _remoteDataSource.cancelRequest(friendshipId: friendshipId);
     } on FriendsError {
       rethrow;
     } on Object catch (e) {

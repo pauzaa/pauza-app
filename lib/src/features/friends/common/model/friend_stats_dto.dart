@@ -9,19 +9,21 @@ final class FriendStatsDto {
     required this.currentStreakDays,
     required this.longestStreakDays,
     required this.totalFocusTimeMs,
+    required this.focusTimeTodayMs,
     required this.dailyTrends,
   });
 
   factory FriendStatsDto.fromJson(Map<String, Object?> json) {
-    final stats = json['Stats'] as Map<String, Object?>? ?? const {};
+    final stats = json['stats'] as Map<String, Object?>? ?? const {};
     final rawTrends = stats['daily_trends'] as List<Object?>?;
     return FriendStatsDto(
       user: BasicUserDto.fromJson(
-        json['User'] as Map<String, Object?>? ?? const {},
+        json['user'] as Map<String, Object?>? ?? const {},
       ),
       currentStreakDays: stats['current_streak_days'] as int? ?? 0,
       longestStreakDays: stats['longest_streak_days'] as int? ?? 0,
       totalFocusTimeMs: stats['total_focus_time_ms'] as int? ?? 0,
+      focusTimeTodayMs: stats['focus_time_today_ms'] as int? ?? 0,
       dailyTrends: rawTrends
               ?.map(
                 (e) =>
@@ -36,6 +38,7 @@ final class FriendStatsDto {
   final int currentStreakDays;
   final int longestStreakDays;
   final int totalFocusTimeMs;
+  final int focusTimeTodayMs;
   final List<DailyTrendDto> dailyTrends;
 
   @override
@@ -46,6 +49,7 @@ final class FriendStatsDto {
           currentStreakDays == other.currentStreakDays &&
           longestStreakDays == other.longestStreakDays &&
           totalFocusTimeMs == other.totalFocusTimeMs &&
+          focusTimeTodayMs == other.focusTimeTodayMs &&
           _listEquals(dailyTrends, other.dailyTrends);
 
   @override
@@ -54,6 +58,7 @@ final class FriendStatsDto {
     currentStreakDays,
     longestStreakDays,
     totalFocusTimeMs,
+    focusTimeTodayMs,
     Object.hashAll(dailyTrends),
   );
 
@@ -62,6 +67,7 @@ final class FriendStatsDto {
       'FriendStatsDto(user: $user, currentStreakDays: $currentStreakDays, '
       'longestStreakDays: $longestStreakDays, '
       'totalFocusTimeMs: $totalFocusTimeMs, '
+      'focusTimeTodayMs: $focusTimeTodayMs, '
       'dailyTrends: $dailyTrends)';
 }
 

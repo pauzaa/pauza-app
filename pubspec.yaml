@@ -19,6 +19,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^9.2.4
+  hive_ce: ^2.7.0
   fl_chart: ^1.1.1
   flutter_launcher_icons: ^0.14.4
   helm: ^0.0.1

@@ -21,11 +21,9 @@ void main() {
     blocTest<ProfileEditBloc, ProfileEditState>(
       'offline save emits network failure and does not call repository update',
       setUp: () {
-        when(() => repository.readCachedProfile()).thenAnswer(
-          (_) async => makeCachedUserProfile(
-            user: makeUserDto(username: 'john', name: 'John'),
-          ),
-        );
+        when(
+          () => repository.fetchProfile(forceRemote: any(named: 'forceRemote')),
+        ).thenAnswer((_) async => makeUserDto(username: 'john', name: 'John'));
         when(() => guard.canProceed(forceRefresh: any(named: 'forceRefresh'))).thenAnswer((_) async => false);
       },
       build: () => ProfileEditBloc(userProfileRepository: repository, internetRequiredGuard: guard),
@@ -48,7 +46,7 @@ void main() {
         isA<ProfileEditFailure>().having((s) => s.error, 'error', isA<PauzaInternetUnavailableError>()),
       ],
       verify: (_) {
-        verify(() => repository.readCachedProfile()).called(1);
+        verify(() => repository.fetchProfile(forceRemote: any(named: 'forceRemote'))).called(1);
         verify(() => guard.canProceed(forceRefresh: any(named: 'forceRefresh'))).called(1);
         verifyNever(
           () => repository.updateProfile(

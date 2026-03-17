@@ -20,21 +20,21 @@ final class AiRemoteDataSourceImpl implements AiRemoteDataSource {
 
   @override
   Future<String> analyzeUsage(UsageAnalysisRequestDto request) async =>
-      _post('/api/v1/ai/usage-analysis', request.toJson());
+      _post('/ai/usage-analysis', request.toJson());
 
   @override
   Future<String> suggestFocusSchedule(
     FocusScheduleRequestDto request,
   ) async =>
-      _post('/api/v1/ai/focus-schedule', request.toJson());
+      _post('/ai/focus-schedule', request.toJson());
 
   @override
   Future<String> generateDailyReport(DailyReportRequestDto request) async =>
-      _post('/api/v1/ai/daily-report', request.toJson());
+      _post('/ai/daily-report', request.toJson());
 
   @override
   Future<String> checkAddiction(AddictionCheckRequestDto request) async =>
-      _post('/api/v1/ai/addiction-check', request.toJson());
+      _post('/ai/addiction-check', request.toJson());
 
   Future<String> _post(String path, Map<String, Object?> body) async {
     try {

@@ -3,28 +3,21 @@ import 'package:pauza/src/features/leaderboard/common/model/leaderboard_error.da
 import 'package:pauza/src/features/leaderboard/data/leaderboard_remote_data_source.dart';
 
 abstract interface class LeaderboardRepository {
-  Future<LeaderboardDto> fetchStreakLeaderboard({int page, int limit});
+  Future<LeaderboardDto> fetchStreakLeaderboard({int page, int limit, bool skipCache});
 
-  Future<LeaderboardDto> fetchFocusTimeLeaderboard({int page, int limit});
+  Future<LeaderboardDto> fetchFocusTimeLeaderboard({int page, int limit, bool skipCache});
 }
 
 final class LeaderboardRepositoryImpl implements LeaderboardRepository {
-  const LeaderboardRepositoryImpl({
-    required LeaderboardRemoteDataSource remoteDataSource,
-  }) : _remoteDataSource = remoteDataSource;
+  const LeaderboardRepositoryImpl({required LeaderboardRemoteDataSource remoteDataSource})
+    : _remoteDataSource = remoteDataSource;
 
   final LeaderboardRemoteDataSource _remoteDataSource;
 
   @override
-  Future<LeaderboardDto> fetchStreakLeaderboard({
-    int page = 1,
-    int limit = 20,
-  }) async {
+  Future<LeaderboardDto> fetchStreakLeaderboard({int page = 1, int limit = 20, bool skipCache = false}) async {
     try {
-      return await _remoteDataSource.fetchStreakLeaderboard(
-        page: page,
-        limit: limit,
-      );
+      return await _remoteDataSource.fetchStreakLeaderboard(page: page, limit: limit, skipCache: skipCache);
     } on LeaderboardError {
       rethrow;
     } on Object catch (e) {
@@ -33,15 +26,9 @@ final class LeaderboardRepositoryImpl implements LeaderboardRepository {
   }
 
   @override
-  Future<LeaderboardDto> fetchFocusTimeLeaderboard({
-    int page = 1,
-    int limit = 20,
-  }) async {
+  Future<LeaderboardDto> fetchFocusTimeLeaderboard({int page = 1, int limit = 20, bool skipCache = false}) async {
     try {
-      return await _remoteDataSource.fetchFocusTimeLeaderboard(
-        page: page,
-        limit: limit,
-      );
+      return await _remoteDataSource.fetchFocusTimeLeaderboard(page: page, limit: limit, skipCache: skipCache);
     } on LeaderboardError {
       rethrow;
     } on Object catch (e) {

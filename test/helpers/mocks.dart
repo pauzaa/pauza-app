@@ -16,7 +16,6 @@ import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_system_settings_launcher.dart';
 import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
 import 'package:pauza/src/features/nfc_chip_config/data/nfc_linked_chips_repository.dart';
-import 'package:pauza/src/features/profile/data/user_profile_cache_storage.dart';
 import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 import 'package:pauza/src/features/qr_code_config/data/qr_linked_codes_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
@@ -49,8 +48,6 @@ class MockNfcRepository extends Mock implements NfcRepository {}
 class MockUserProfileRepository extends Mock implements UserProfileRepository {}
 
 class MockRestrictionLifecycleRepository extends Mock implements RestrictionLifecycleRepository {}
-
-class MockUserProfileCacheStorage extends Mock implements UserProfileCacheStorage {}
 
 class MockAuthSessionStorage extends Mock implements AuthSessionStorage {}
 

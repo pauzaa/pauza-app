@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
-import 'package:pauza/src/core/cache/json_cache_entry.dart';
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/subscription/domain/subscription_coordinator.dart';
 
@@ -41,12 +40,12 @@ void main() {
   });
 
   group('SubscriptionCoordinator', () {
-    test('initializes SDK with cached user ID on authenticated session', () async {
+    test('initializes SDK with fetched user ID on authenticated session', () async {
       final user = makeUserDto().copyWith(id: 'user-123');
       when(() => authRepository.currentSession).thenReturn(makeSession());
       when(
-        () => userProfileRepository.readCachedProfile(),
-      ).thenAnswer((_) async => JsonCacheEntry<UserDto>(data: user, cachedAtUtc: DateTime.utc(2024)));
+        () => userProfileRepository.fetchProfile(forceRemote: any(named: 'forceRemote')),
+      ).thenAnswer((_) async => user);
 
       final coordinator = SubscriptionCoordinator(
         authRepository: authRepository,
@@ -64,9 +63,11 @@ void main() {
       coordinator.detach();
     });
 
-    test('waits for profile emission when no cached profile', () async {
+    test('waits for profile emission when fetch fails', () async {
       when(() => authRepository.currentSession).thenReturn(makeSession());
-      when(() => userProfileRepository.readCachedProfile()).thenAnswer((_) async => null);
+      when(
+        () => userProfileRepository.fetchProfile(forceRemote: any(named: 'forceRemote')),
+      ).thenThrow(Exception('network error'));
 
       final coordinator = SubscriptionCoordinator(
         authRepository: authRepository,

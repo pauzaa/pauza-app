@@ -46,19 +46,19 @@ final class AuthRefreshResponse {
 // ---------------------------------------------------------------------------
 
 abstract interface class AuthRemoteDataSource {
-  /// `POST /api/v1/auth/start` -- sends an OTP to [email].
+  /// `POST /auth/start` -- sends an OTP to [email].
   Future<void> start({required String email});
 
-  /// `POST /api/v1/auth/verify` -- verifies the OTP and returns tokens + user.
+  /// `POST /auth/verify` -- verifies the OTP and returns tokens + user.
   Future<AuthVerifyResponse> verify({
     required String email,
     required String otp,
   });
 
-  /// `POST /api/v1/auth/refresh` -- exchanges [refreshToken] for a new pair.
+  /// `POST /auth/refresh` -- exchanges [refreshToken] for a new pair.
   Future<AuthRefreshResponse> refresh({required String refreshToken});
 
-  /// `POST /api/v1/auth/logout` -- revokes the current session; other sessions remain active.
+  /// `POST /auth/logout` -- revokes the current session; other sessions remain active.
   Future<void> logout();
 }
 
@@ -82,7 +82,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> start({required String email}) async {
     try {
       await _apiClient.post(
-        '/api/v1/auth/start',
+        '/auth/start',
         body: <String, Object?>{'email': email},
         context: _skipAuthCtx,
       );
@@ -99,7 +99,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final ApiClientResponse response;
     try {
       response = await _apiClient.post(
-        '/api/v1/auth/verify',
+        '/auth/verify',
         body: <String, Object?>{'email': email, 'otp': otp},
         context: _skipAuthCtx,
       );
@@ -128,7 +128,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final ApiClientResponse response;
     try {
       response = await _apiClient.post(
-        '/api/v1/auth/refresh',
+        '/auth/refresh',
         body: <String, Object?>{'refresh_token': refreshToken},
         context: _skipAuthCtx,
       );
@@ -153,7 +153,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> logout() async {
     try {
-      await _apiClient.post('/api/v1/auth/logout');
+      await _apiClient.post('/auth/logout');
     } on ApiClientException catch (e) {
       throw AuthError.fromApiException(e, context: AuthErrorContext.logout);
     }

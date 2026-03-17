@@ -59,9 +59,6 @@ final class SubscriptionCoordinator {
   }
 
   Future<void> _initializeWithUserId() async {
-    // Subscribe to profile changes first to avoid a race where a profile
-    // arrives between the cache read returning null and the subscription
-    // being set up.
     _cancelProfileSubscription();
     _profileSubscription = _userProfileRepository.watchProfileChanges().listen((user) async {
       if (!_isAttached) return;
@@ -76,14 +73,15 @@ final class SubscriptionCoordinator {
     });
 
     try {
-      final cached = await _userProfileRepository.readCachedProfile();
       if (!_isAttached) return;
-      if (cached != null && cached.data.id.isNotEmpty) {
+      final user = await _userProfileRepository.fetchProfile();
+      if (!_isAttached) return;
+      if (user.id.isNotEmpty) {
         _cancelProfileSubscription();
-        await _subscriptionRepository.initialize(apiKey: _revenueCatApiKey, appUserId: cached.data.id);
+        await _subscriptionRepository.initialize(apiKey: _revenueCatApiKey, appUserId: user.id);
       }
     } on Object catch (e) {
-      log('SubscriptionCoordinator: cached profile read failed: $e', name: 'subscription');
+      log('SubscriptionCoordinator: profile fetch failed: $e', name: 'subscription');
     }
   }
 

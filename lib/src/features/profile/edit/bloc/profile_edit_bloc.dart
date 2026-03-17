@@ -29,8 +29,7 @@ final class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
     emit(state.loading());
 
     try {
-      final cached = await _userProfileRepository.readCachedProfile();
-      final user = cached?.data ?? await _userProfileRepository.fetchAndCacheProfile();
+      final user = await _userProfileRepository.fetchProfile();
       emit(state.ready(user));
     } on Object catch (error) {
       emit(state.failure(error));

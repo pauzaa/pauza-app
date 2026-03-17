@@ -27,8 +27,8 @@ class FindAndRequestsBloc extends Bloc<FindAndRequestsEvent, FindAndRequestsStat
 
     try {
       final (incoming, outgoing) = await (
-        _friendsRepository.fetchIncomingRequests(),
-        _friendsRepository.fetchOutgoingRequests(),
+        _friendsRepository.fetchIncomingRequests(skipCache: true),
+        _friendsRepository.fetchOutgoingRequests(skipCache: true),
       ).wait;
 
       emit(state.copyWith(isLoading: false, incomingRequests: incoming, outgoingRequests: outgoing, clearError: true));

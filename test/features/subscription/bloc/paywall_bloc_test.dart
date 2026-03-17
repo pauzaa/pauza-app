@@ -55,8 +55,6 @@ void main() {
     currentUserBloc = CurrentUserBloc(
       authRepository: authRepository,
       userProfileRepository: userProfileRepository,
-      ttl: const Duration(minutes: 15),
-      nowUtc: () => DateTime.utc(2024),
     );
   });
 

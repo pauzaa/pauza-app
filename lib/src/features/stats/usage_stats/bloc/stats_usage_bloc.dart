@@ -31,16 +31,27 @@ class StatsUsageBloc extends Bloc<StatsUsageEvent, StatsUsageState> {
 
   Future<void> _onDateRangePicked(StatsUsageDateRangePicked event, Emitter<StatsUsageState> emit) async {
     final picked = DateTimeRange(start: event.range.start.dayStart, end: event.range.end.dayEnd);
-    emit(state.copyWith(window: picked));
-    await _load(emit);
+    emit(
+      state.copyWith(
+        window: picked,
+        isLoading: true,
+        clearError: true,
+        clearSnapshot: true,
+        clearDailyTrend: true,
+        clearDeviceEventSnapshot: true,
+      ),
+    );
+    await _load(emit, skipLoadingEmit: true);
   }
 
   Future<void> _onRefreshRequested(StatsUsageRefreshRequested event, Emitter<StatsUsageState> emit) async {
     await _load(emit);
   }
 
-  Future<void> _load(Emitter<StatsUsageState> emit) async {
-    emit(state.copyWith(isLoading: true, clearError: true));
+  Future<void> _load(Emitter<StatsUsageState> emit, {bool skipLoadingEmit = false}) async {
+    if (!skipLoadingEmit) {
+      emit(state.copyWith(isLoading: true, clearError: true));
+    }
 
     try {
       // Fire all three requests in parallel.
@@ -71,15 +82,7 @@ class StatsUsageBloc extends Bloc<StatsUsageEvent, StatsUsageState> {
         ),
       );
     } on Object catch (error) {
-      emit(
-        state.copyWith(
-          isLoading: false,
-          error: error,
-          clearSnapshot: true,
-          clearDailyTrend: true,
-          clearDeviceEventSnapshot: true,
-        ),
-      );
+      emit(state.copyWith(isLoading: false, error: error));
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,7 @@ class StatsBlockingBloc extends Bloc<StatsBlockingEvent, StatsBlockingState> {
          StatsBlockingState(window: initialRange ?? DateTime.now().pastWeek, maxDate: maxDate ?? DateTime.now().dayEnd),
        ) {
     on<StatsBlockingStarted>(_onStarted);
-    on<StatsBlockingDateRangePicked>(_onDateRangePicked);
+    on<StatsBlockingDateRangePicked>(_onDateRangePicked, transformer: restartable());
     on<StatsBlockingRefreshRequested>(_onRefreshRequested);
   }
 
@@ -31,21 +32,33 @@ class StatsBlockingBloc extends Bloc<StatsBlockingEvent, StatsBlockingState> {
   final DateTime Function() _nowLocal;
 
   Future<void> _onStarted(StatsBlockingStarted event, Emitter<StatsBlockingState> emit) async {
+    if (state.snapshot != null) return;
     await _load(emit);
   }
 
   Future<void> _onDateRangePicked(StatsBlockingDateRangePicked event, Emitter<StatsBlockingState> emit) async {
     final picked = DateTimeRange(start: event.range.start.dayStart, end: event.range.end.dayEnd);
-    emit(state.copyWith(window: picked));
-    await _load(emit);
+    emit(
+      state.copyWith(
+        window: picked,
+        isLoading: true,
+        clearError: true,
+        clearSnapshot: true,
+        clearModeBreakdown: true,
+        clearSourceBreakdown: true,
+      ),
+    );
+    await _load(emit, skipLoadingEmit: true);
   }
 
   Future<void> _onRefreshRequested(StatsBlockingRefreshRequested event, Emitter<StatsBlockingState> emit) async {
     await _load(emit);
   }
 
-  Future<void> _load(Emitter<StatsBlockingState> emit) async {
-    emit(state.copyWith(isLoading: true, clearError: true));
+  Future<void> _load(Emitter<StatsBlockingState> emit, {bool skipLoadingEmit = false}) async {
+    if (!skipLoadingEmit) {
+      emit(state.copyWith(isLoading: true, clearError: true));
+    }
 
     try {
       final window = state.window;
@@ -68,15 +81,7 @@ class StatsBlockingBloc extends Bloc<StatsBlockingEvent, StatsBlockingState> {
         ),
       );
     } on Object catch (error) {
-      emit(
-        state.copyWith(
-          isLoading: false,
-          error: error,
-          clearSnapshot: true,
-          clearModeBreakdown: true,
-          clearSourceBreakdown: true,
-        ),
-      );
+      emit(state.copyWith(isLoading: false, error: error));
     }
   }
 }

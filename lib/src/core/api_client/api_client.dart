@@ -135,10 +135,18 @@ ApiClientHandler _createHandler(Client internalClient, MiddlewareChain middlewar
                 data: body,
                 responseHeaders: responseHeaders,
               );
-            case 401 || 403:
+            case 401:
               throw ApiClientAuthorizationException(
                 code: 'unauthorized_error',
                 message: 'User is not authorized.',
+                statusCode: statusCode,
+                data: body,
+                responseHeaders: responseHeaders,
+              );
+            case 403:
+              throw ApiClientClientException(
+                code: 'forbidden_error',
+                message: 'Access forbidden.',
                 statusCode: statusCode,
                 data: body,
                 responseHeaders: responseHeaders,
@@ -394,7 +402,7 @@ final class ApiClientNetworkException extends ApiClientException {
   String localize(AppLocalizations localizations) => localizations.internetRequiredToast;
 }
 
-/// Represents an authorization error (e.g., 401 Unauthorized, 403 Forbidden).
+/// Represents an authorization error (e.g., 401 Unauthorized).
 final class ApiClientAuthorizationException extends ApiClientException {
   const ApiClientAuthorizationException({
     required super.code,

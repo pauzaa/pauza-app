@@ -6,12 +6,12 @@ sealed class FriendsError implements Exception, Localizable {
 
   factory FriendsError.fromApiException(ApiClientException e) {
     return switch (e) {
-      ApiClientAuthorizationException(:final statusCode, :final data) =>
-        statusCode == 403 && _serverErrorCode(data) == 'SUBSCRIPTION_REQUIRED'
-            ? const FriendsSubscriptionRequiredError()
-            : const FriendsUnauthorizedError(),
+      ApiClientAuthorizationException() => const FriendsUnauthorizedError(),
       ApiClientNetworkException() => const FriendsNetworkError(),
       ApiClientClientException(:final statusCode, :final data) => () {
+        if (statusCode == 403 && _serverErrorCode(data) == 'SUBSCRIPTION_REQUIRED') {
+          return const FriendsSubscriptionRequiredError();
+        }
         if (statusCode == 409) return const FriendsConflictError();
         if (statusCode == 404) return const FriendsNotFoundError();
         if (_serverErrorCode(data) == 'VALIDATION_ERROR') {

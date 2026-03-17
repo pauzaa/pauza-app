@@ -143,6 +143,7 @@ class PauzaDependencies with AppFuseInitialization {
         onSignOutCleanup: () async {
           await deviceTokenCoordinator.unregisterCurrentToken();
           await syncLocalDataSource.clearAllSyncableTables();
+          await httpCacheStore.clear();
         },
       );
       await authRepository.initialize();

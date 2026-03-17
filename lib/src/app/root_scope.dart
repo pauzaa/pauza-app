@@ -109,7 +109,6 @@ class RootScopeState extends State<RootScope> {
       authRepository: dependencies.authRepository,
       modesRepository: modesRepository,
       streaksRepository: dependencies.streaksRepository,
-      restrictions: dependencies.appRestrictionManager,
     )..attach();
 
     deviceTokenCoordinator = dependencies.deviceTokenCoordinator..attach();

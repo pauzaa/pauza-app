@@ -6,7 +6,6 @@ import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
 import 'package:pauza/src/features/sync/data/sync_repository.dart';
-import 'package:pauza_screen_time/pauza_screen_time.dart' show AppRestrictionManager;
 
 final class SyncCoordinator with WidgetsBindingObserver {
   SyncCoordinator({
@@ -15,20 +14,17 @@ final class SyncCoordinator with WidgetsBindingObserver {
     required AuthRepository authRepository,
     required ModesRepository modesRepository,
     required StreaksRepository streaksRepository,
-    required AppRestrictionManager restrictions,
   })  : _syncRepository = syncRepository,
         _syncLocalDataSource = syncLocalDataSource,
         _authRepository = authRepository,
         _modesRepository = modesRepository,
-        _streaksRepository = streaksRepository,
-        _restrictions = restrictions;
+        _streaksRepository = streaksRepository;
 
   final SyncRepository _syncRepository;
   final SyncLocalDataSource _syncLocalDataSource;
   final AuthRepository _authRepository;
   final ModesRepository _modesRepository;
   final StreaksRepository _streaksRepository;
-  final AppRestrictionManager _restrictions;
 
   bool _isAttached = false;
   bool _initialDownloadCompleted = false;
@@ -87,7 +83,7 @@ final class SyncCoordinator with WidgetsBindingObserver {
 
   Future<void> _postSync() async {
     try {
-      await _reconcilePluginModes();
+      await _modesRepository.reconcilePlugin();
     } on Object {
       // Best-effort plugin reconciliation.
     }
@@ -102,30 +98,6 @@ final class SyncCoordinator with WidgetsBindingObserver {
       await _streaksRepository.refreshAggregates();
     } on Object {
       // Best-effort streak refresh.
-    }
-  }
-
-  Future<void> _reconcilePluginModes() async {
-    final config = await _restrictions.getModesConfig();
-    final pluginModeIds = config.modes.map((m) => m.modeId).toSet();
-    final dbModes = await _modesRepository.getModes();
-    final dbModeIds = dbModes.map((m) => m.id).toSet();
-
-    final staleIds = pluginModeIds.difference(dbModeIds);
-    for (final id in staleIds) {
-      try {
-        await _restrictions.removeMode(id);
-      } on Object {
-        // Best-effort removal.
-      }
-    }
-
-    for (final mode in dbModes) {
-      try {
-        await _restrictions.upsertMode(mode.toRestrictionMode());
-      } on Object {
-        // Best-effort upsert.
-      }
     }
   }
 

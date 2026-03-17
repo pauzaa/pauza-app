@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:pauza/src/core/common/disposable.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
+import 'package:sqflite/sqflite.dart' show Batch;
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/common/model/schedule.dart';
@@ -23,10 +24,38 @@ abstract interface class ModesRepository implements Disposable {
 
   Future<void> deleteMode(String modeId);
 
+  Future<void> reconcilePlugin();
+
   Stream<void> watchModes();
 
   void notifyExternalChange();
 }
+
+String _modeSelectQuery({String? whereClause}) => '''
+SELECT
+  m.id,
+  m.title,
+  m.text_on_screen,
+  m.description,
+  m.allowed_pauses_count,
+  m.minimum_duration_ms,
+  m.ending_pausing_scenario,
+  m.icon_token,
+  m.created_at,
+  m.updated_at,
+  s.days AS schedule_days,
+  s.start_minute AS schedule_start_minute,
+  s.end_minute AS schedule_end_minute,
+  s.enabled AS schedule_enabled,
+  GROUP_CONCAT(ba.app_identifier) AS blocked_apps
+FROM modes m
+LEFT JOIN schedules s ON s.mode_id = m.id
+LEFT JOIN mode_blocked_apps ba
+  ON ba.mode_id = m.id AND ba.platform = ?
+${whereClause != null ? 'WHERE $whereClause' : ''}
+GROUP BY m.id
+ORDER BY m.title ASC;
+''';
 
 class ModesRepositoryImpl implements ModesRepository {
   ModesRepositoryImpl({
@@ -50,33 +79,7 @@ class ModesRepositoryImpl implements ModesRepository {
 
   @override
   Future<List<Mode>> getModes() async {
-    final rows = await _localDatabase.rawQuery(
-      '''
-SELECT
-  m.id,
-  m.title,
-  m.text_on_screen,
-  m.description,
-  m.allowed_pauses_count,
-  m.minimum_duration_ms,
-  m.ending_pausing_scenario,
-  m.icon_token,
-  m.created_at,
-  m.updated_at,
-  s.days AS schedule_days,
-  s.start_minute AS schedule_start_minute,
-  s.end_minute AS schedule_end_minute,
-  s.enabled AS schedule_enabled,
-  GROUP_CONCAT(ba.app_identifier) AS blocked_apps
-FROM modes m
-LEFT JOIN schedules s ON s.mode_id = m.id
-LEFT JOIN mode_blocked_apps ba
-  ON ba.mode_id = m.id AND ba.platform = ?
-GROUP BY m.id
-ORDER BY m.title ASC;
-''',
-      [platform.dbValue],
-    );
+    final rows = await _localDatabase.rawQuery(_modeSelectQuery(), [platform.dbValue]);
 
     if (rows.isEmpty) {
       return const [];
@@ -87,33 +90,7 @@ ORDER BY m.title ASC;
 
   @override
   Future<Mode> getMode(String modeId) async {
-    final rows = await _localDatabase.rawQuery(
-      '''
-SELECT
-  m.id,
-  m.title,
-  m.text_on_screen,
-  m.description,
-  m.allowed_pauses_count,
-  m.minimum_duration_ms,
-  m.ending_pausing_scenario,
-  m.icon_token,
-  m.created_at,
-  m.updated_at,
-  s.days AS schedule_days,
-  s.start_minute AS schedule_start_minute,
-  s.end_minute AS schedule_end_minute,
-  s.enabled AS schedule_enabled,
-  GROUP_CONCAT(ba.app_identifier) AS blocked_apps
-FROM modes m
-LEFT JOIN schedules s ON s.mode_id = m.id
-LEFT JOIN mode_blocked_apps ba
-  ON ba.mode_id = m.id AND ba.platform = ?
-WHERE m.id = ?
-GROUP BY m.id;
-''',
-      [platform.dbValue, modeId],
-    );
+    final rows = await _localDatabase.rawQuery(_modeSelectQuery(whereClause: 'm.id = ?'), [platform.dbValue, modeId]);
 
     if (rows.isEmpty) {
       throw Exception('Mode not found');
@@ -182,48 +159,10 @@ INSERT INTO modes (
 
         final schedule = request.schedule;
         if (schedule != null) {
-          batch.rawInsert(
-            '''
-INSERT INTO schedules (
-  id,
-  mode_id,
-  days,
-  start_minute,
-  end_minute,
-  enabled,
-  created_at,
-  updated_at
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-''',
-            [
-              modeId,
-              modeId,
-              WeekDay.encodeDays(schedule.days),
-              schedule.start.toMinutesFromMidnight,
-              schedule.end.toMinutesFromMidnight,
-              schedule.enabled ? 1 : 0,
-              now,
-              now,
-            ],
-          );
+          _batchInsertSchedule(batch, modeId: modeId, schedule: schedule, now: now);
         }
 
-        if (request.blockedAppIds.isNotEmpty) {
-          for (final appId in request.blockedAppIds) {
-            batch.rawInsert(
-              '''
-INSERT INTO mode_blocked_apps (
-  mode_id,
-  platform,
-  app_identifier,
-  created_at,
-  updated_at
-) VALUES (?, ?, ?, ?, ?)
-''',
-              [modeId, platform.dbValue, appId.raw, now, now],
-            );
-          }
-        }
+        _batchInsertBlockedApps(batch, modeId: modeId, appIds: request.blockedAppIds.map((id) => id.raw), now: now);
 
         await batch.commit(noResult: true);
       });
@@ -317,30 +256,7 @@ WHERE mode_id = ?
             ],
           );
         } else {
-          batch.rawInsert(
-            '''
-INSERT INTO schedules (
-  id,
-  mode_id,
-  days,
-  start_minute,
-  end_minute,
-  enabled,
-  created_at,
-  updated_at
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-''',
-            [
-              modeId,
-              modeId,
-              WeekDay.encodeDays(schedule.days),
-              schedule.start.toMinutesFromMidnight,
-              schedule.end.toMinutesFromMidnight,
-              schedule.enabled ? 1 : 0,
-              now,
-              now,
-            ],
-          );
+          _batchInsertSchedule(batch, modeId: modeId, schedule: schedule, now: now);
         }
 
         for (final appId in removedBlocked) {
@@ -351,20 +267,7 @@ INSERT INTO schedules (
           ]);
         }
 
-        for (final appId in addedBlocked) {
-          batch.rawInsert(
-            '''
-INSERT INTO mode_blocked_apps (
-  mode_id,
-  platform,
-  app_identifier,
-  created_at,
-  updated_at
-) VALUES (?, ?, ?, ?, ?)
-''',
-            [modeId, platform.dbValue, appId, now, now],
-          );
-        }
+        _batchInsertBlockedApps(batch, modeId: modeId, appIds: addedBlocked, now: now);
 
         await batch.commit(noResult: true);
       });
@@ -407,7 +310,9 @@ INSERT INTO mode_blocked_apps (
     if (sync == null) return;
 
     await sync.trackDeletion(table: SyncTable.modes, key: modeId);
-    await sync.trackDeletion(table: SyncTable.schedules, key: modeId);
+    if (previousMode.schedule != null) {
+      await sync.trackDeletion(table: SyncTable.schedules, key: modeId);
+    }
     for (final appId in previousMode.blockedAppIds) {
       await sync.trackDeletion(
         table: SyncTable.modeBlockedApps,
@@ -445,6 +350,75 @@ INSERT INTO mode_blocked_apps (
 
     if (previousMode.schedule != null && request.schedule == null) {
       await sync.trackDeletion(table: SyncTable.schedules, key: modeId);
+    }
+  }
+
+  @override
+  Future<void> reconcilePlugin() async {
+    final config = await _restrictions.getModesConfig();
+    final pluginModeIds = config.modes.map((m) => m.modeId).toSet();
+    final dbModes = await getModes();
+    final dbModeIds = dbModes.map((m) => m.id).toSet();
+
+    final staleIds = pluginModeIds.difference(dbModeIds);
+    for (final id in staleIds) {
+      try {
+        await _restrictions.removeMode(id);
+      } on Object {
+        // Best-effort removal.
+      }
+    }
+
+    for (final mode in dbModes) {
+      try {
+        await _restrictions.upsertMode(mode.toRestrictionMode());
+      } on Object {
+        // Best-effort upsert.
+      }
+    }
+  }
+
+  void _batchInsertSchedule(Batch batch, {required String modeId, required Schedule schedule, required int now}) {
+    batch.rawInsert(
+      '''
+INSERT INTO schedules (
+  id,
+  mode_id,
+  days,
+  start_minute,
+  end_minute,
+  enabled,
+  created_at,
+  updated_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+''',
+      [
+        modeId,
+        modeId,
+        WeekDay.encodeDays(schedule.days),
+        schedule.start.toMinutesFromMidnight,
+        schedule.end.toMinutesFromMidnight,
+        schedule.enabled ? 1 : 0,
+        now,
+        now,
+      ],
+    );
+  }
+
+  void _batchInsertBlockedApps(Batch batch, {required String modeId, required Iterable<String> appIds, required int now}) {
+    for (final appId in appIds) {
+      batch.rawInsert(
+        '''
+INSERT INTO mode_blocked_apps (
+  mode_id,
+  platform,
+  app_identifier,
+  created_at,
+  updated_at
+) VALUES (?, ?, ?, ?, ?)
+''',
+        [modeId, platform.dbValue, appId, now, now],
+      );
     }
   }
 

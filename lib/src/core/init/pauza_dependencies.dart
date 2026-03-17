@@ -2,8 +2,13 @@ import 'package:appfuse/appfuse.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pauza/src/core/api_client/api_client.dart';
+import 'package:pauza/src/core/api_client/cache/cache_mw.dart';
+import 'package:pauza/src/core/api_client/cache/cache_policy.dart';
+import 'package:pauza/src/core/api_client/cache/http_cache_store.dart';
 import 'package:pauza/src/core/api_client/middleware/auth_mw.dart';
 import 'package:pauza/src/core/api_client/middleware/logger_mw.dart';
 import 'package:pauza/src/core/api_client/middleware/retry_mw.dart';
@@ -22,12 +27,10 @@ import 'package:pauza/src/features/auth/domain/auth_gate.dart';
 import 'package:pauza/src/features/friends/data/friends_remote_data_source.dart';
 import 'package:pauza/src/features/friends/data/friends_repository.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_remote_data_source.dart';
-import 'package:pauza/src/features/leaderboard/data/mock_leaderboard_remote_data_source.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
 import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
-import 'package:pauza/src/features/profile/data/user_profile_cache_storage.dart';
 import 'package:pauza/src/features/profile/data/user_profile_remote_data_source.dart';
 import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_plugin_client.dart';
@@ -63,10 +66,9 @@ class PauzaDependencies with AppFuseInitialization {
   late final AuthSessionStorage authSessionStorage;
   late final AuthRemoteDataSource authRemoteDataSource;
   late final FlutterSecureStorage secureStorage;
-  late final IAppFuseStorage appFuseStorage;
   late final AuthRepository authRepository;
   late final PauzaAuthGate authGate;
-  late final UserProfileCacheStorage userProfileCacheStorage;
+  late final HttpCacheStore httpCacheStore;
   late final UserProfileRemoteDataSource userProfileRemoteDataSource;
   late final UserProfileRepository userProfileRepository;
   late final FriendsRemoteDataSource friendsRemoteDataSource;
@@ -96,6 +98,12 @@ class PauzaDependencies with AppFuseInitialization {
       );
       await localDatabase.open();
     },
+    'init http cache': (_) async {
+      final dir = await getApplicationDocumentsDirectory();
+      Hive.init('${dir.path}/hive');
+      final box = await Hive.openBox<String>('http_cache');
+      httpCacheStore = HiveHttpCacheStore(box: box);
+    },
     'init api client': (state) async {
       apiClient = ApiClient(
         baseUrl: state.getCurrentConfig<PauzaConfig>()!.apiBaseUrl,
@@ -107,6 +115,16 @@ class PauzaDependencies with AppFuseInitialization {
               return token.isEmpty ? null : token;
             },
             tokenRefresher: (_) => authRepository.refreshSession(),
+          ),
+          ApiClientCacheMiddleware(
+            cacheStore: httpCacheStore,
+            policies: [
+              CachePolicy(pattern: RegExp(r'/leaderboard/.*'), ttl: const Duration(minutes: 5)),
+              CachePolicy(pattern: RegExp(r'/friends/search'), ttl: const Duration(minutes: 1)),
+              CachePolicy(pattern: RegExp(r'/friends/.*/stats'), ttl: const Duration(minutes: 3)),
+              CachePolicy(pattern: RegExp(r'/friends'), ttl: const Duration(minutes: 2)),
+              CachePolicy(pattern: RegExp(r'/me'), ttl: const Duration(minutes: 10)),
+            ],
           ),
           const ApiClientRetryMiddleware(),
         ],
@@ -150,14 +168,8 @@ class PauzaDependencies with AppFuseInitialization {
       await permissionGate.refresh(force: true);
     },
     'init user profile': (_) async {
-      appFuseStorage = await AppFuseShPrStorage.init();
-      userProfileCacheStorage = AppFuseUserProfileCacheStorage(
-        storage: appFuseStorage,
-        nowUtc: () => DateTime.now().toUtc(),
-      );
       userProfileRemoteDataSource = UserProfileRemoteDataSourceImpl(apiClient: apiClient);
       userProfileRepository = UserProfileRepositoryImpl(
-        cacheStorage: userProfileCacheStorage,
         remoteDataSource: userProfileRemoteDataSource,
         onAccountDeleted: () async {
           await syncLocalDataSource.clearAllSyncableTables();
@@ -183,8 +195,7 @@ class PauzaDependencies with AppFuseInitialization {
       friendsRepository = FriendsRepositoryImpl(remoteDataSource: friendsRemoteDataSource);
     },
     'init leaderboard': (_) async {
-      // TODO(alisher): switch back to LeaderboardRemoteDataSourceImpl
-      leaderboardRemoteDataSource = const MockLeaderboardRemoteDataSource();
+      leaderboardRemoteDataSource = LeaderboardRemoteDataSourceImpl(apiClient: apiClient);
       leaderboardRepository = LeaderboardRepositoryImpl(remoteDataSource: leaderboardRemoteDataSource);
     },
     'init managers': (_) async {

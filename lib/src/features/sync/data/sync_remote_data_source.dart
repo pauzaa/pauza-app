@@ -17,7 +17,7 @@ final class SyncRemoteDataSourceImpl implements SyncRemoteDataSource {
   Future<SyncResponseDto> sync(SyncRequestDto request) async {
     try {
       final response = await _apiClient.post(
-        '/api/v1/sync',
+        '/sync',
         body: request.toJson(),
       );
       return SyncResponseDto.fromJson(response.data!);

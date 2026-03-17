@@ -7,29 +7,25 @@ final class BasicUserDto {
     required this.name,
     required this.username,
     this.profilePictureUrl,
-    this.leaderboardVisible = false,
   });
 
   factory BasicUserDto.fromJson(Map<String, Object?> json) => BasicUserDto(
-    id: json['id'] as String? ?? json['ID'] as String? ?? '',
-    name: json['name'] as String? ?? json['Name'] as String? ?? '',
-    username: json['username'] as String? ?? json['Username'] as String? ?? '',
-    profilePictureUrl: json['profile_picture_url'] as String? ?? json['ProfilePictureURL'] as String?,
-    leaderboardVisible: json['leaderboard_visible'] as bool? ?? json['LeaderboardVisible'] as bool? ?? false,
+    id: json['id'] as String? ?? '',
+    name: json['name'] as String? ?? '',
+    username: json['username'] as String? ?? '',
+    profilePictureUrl: json['profile_picture_url'] as String?,
   );
 
   final String id;
   final String name;
   final String username;
   final String? profilePictureUrl;
-  final bool leaderboardVisible;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'ID': id,
-    'Name': name,
-    'Username': username,
-    'ProfilePictureURL': profilePictureUrl,
-    'LeaderboardVisible': leaderboardVisible,
+    'id': id,
+    'name': name,
+    'username': username,
+    'profile_picture_url': profilePictureUrl,
   };
 
   @override
@@ -39,15 +35,13 @@ final class BasicUserDto {
           id == other.id &&
           name == other.name &&
           username == other.username &&
-          profilePictureUrl == other.profilePictureUrl &&
-          leaderboardVisible == other.leaderboardVisible;
+          profilePictureUrl == other.profilePictureUrl;
 
   @override
-  int get hashCode => Object.hash(id, name, username, profilePictureUrl, leaderboardVisible);
+  int get hashCode => Object.hash(id, name, username, profilePictureUrl);
 
   @override
   String toString() =>
       'BasicUserDto(id: $id, name: $name, username: $username, '
-      'profilePictureUrl: $profilePictureUrl, '
-      'leaderboardVisible: $leaderboardVisible)';
+      'profilePictureUrl: $profilePictureUrl)';
 }

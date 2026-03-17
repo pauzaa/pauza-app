@@ -12,7 +12,6 @@ import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc/model/nfc_ndef_record_dto.dart';
 import 'package:pauza/src/features/nfc/model/nfc_tag_tech.dart';
 import 'package:pauza/src/features/nfc_chip_config/model/nfc_linked_chip.dart';
-import 'package:pauza/src/core/cache/json_cache_entry.dart';
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/qr_code_config/model/qr_linked_code.dart';
 import 'package:pauza/src/features/qr_code_config/model/qr_unlock_token.dart';
@@ -205,12 +204,4 @@ ModeUpsertDTO makeModeUpsertDto({
     schedule: schedule,
     blockedAppIds: blockedAppIds,
   );
-}
-
-// ---------------------------------------------------------------------------
-// JsonCacheEntry<UserDto> (replaces CachedUserProfile)
-// ---------------------------------------------------------------------------
-
-JsonCacheEntry<UserDto> makeCachedUserProfile({UserDto? user, DateTime? cachedAtUtc}) {
-  return JsonCacheEntry<UserDto>(data: user ?? makeUserDto(), cachedAtUtc: cachedAtUtc ?? _epoch);
 }

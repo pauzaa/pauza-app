@@ -1,16 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:pauza/src/core/cache/json_cache_entry.dart';
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/profile/common/model/user_profile_failure.dart';
-import 'package:pauza/src/features/profile/data/user_profile_cache_storage.dart';
 import 'package:pauza/src/features/profile/data/user_profile_remote_data_source.dart';
 
 abstract interface class UserProfileRepository {
-  Future<JsonCacheEntry<UserDto>?> readCachedProfile();
-
-  Future<UserDto> fetchAndCacheProfile();
+  Future<UserDto> fetchProfile({bool forceRemote});
 
   Future<UserDto> updateProfile({
     required String name,
@@ -36,34 +32,25 @@ abstract interface class UserProfileRepository {
   Future<void> confirmAccountDeletion({required String otp});
 
   Stream<UserDto> watchProfileChanges();
-
-  Future<void> clearCache();
 }
 
 final class UserProfileRepositoryImpl implements UserProfileRepository {
   UserProfileRepositoryImpl({
-    required UserProfileCacheStorage cacheStorage,
     required UserProfileRemoteDataSource remoteDataSource,
     Future<void> Function()? onAccountDeleted,
-  }) : _cacheStorage = cacheStorage,
-       _remoteDataSource = remoteDataSource,
+  }) : _remoteDataSource = remoteDataSource,
        _onAccountDeleted = onAccountDeleted;
 
-  final UserProfileCacheStorage _cacheStorage;
   final UserProfileRemoteDataSource _remoteDataSource;
   final Future<void> Function()? _onAccountDeleted;
   final StreamController<UserDto> _profileChangesController = StreamController<UserDto>.broadcast();
+  UserDto? _lastEmittedUser;
 
   @override
-  Future<JsonCacheEntry<UserDto>?> readCachedProfile() {
-    return _cacheStorage.read();
-  }
-
-  @override
-  Future<UserDto> fetchAndCacheProfile() async {
+  Future<UserDto> fetchProfile({bool forceRemote = false}) async {
     try {
-      final user = await _remoteDataSource.fetchMe();
-      await _writeCacheAndNotify(user);
+      final user = await _remoteDataSource.fetchMe(skipCache: forceRemote);
+      _notifyIfChanged(user);
       return user;
     } on UserProfileError {
       rethrow;
@@ -85,7 +72,7 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
       }
 
       final updated = await _remoteDataSource.updateMe(name: name, username: username);
-      await _writeCacheAndNotify(updated);
+      _notifyIfChanged(updated);
       return updated;
     } on UserProfileError {
       rethrow;
@@ -130,9 +117,7 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   @override
   Future<bool> updateNotificationPreferences({required bool pushEnabled}) async {
     try {
-      final result = await _remoteDataSource.updateNotificationPreferences(pushEnabled: pushEnabled);
-      await _patchCachedPreference(pushEnabled: result);
-      return result;
+      return await _remoteDataSource.updateNotificationPreferences(pushEnabled: pushEnabled);
     } on UserProfileError {
       rethrow;
     } on Object catch (e) {
@@ -154,9 +139,7 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   @override
   Future<bool> updatePrivacyPreferences({required bool leaderboardVisible}) async {
     try {
-      final result = await _remoteDataSource.updatePrivacyPreferences(leaderboardVisible: leaderboardVisible);
-      await _patchCachedPreference(leaderboardVisible: result);
-      return result;
+      return await _remoteDataSource.updatePrivacyPreferences(leaderboardVisible: leaderboardVisible);
     } on UserProfileError {
       rethrow;
     } on Object catch (e) {
@@ -192,28 +175,10 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
     return _profileChangesController.stream;
   }
 
-  @override
-  Future<void> clearCache() async {
-    await _cacheStorage.delete();
-  }
-
-  // ---------------------------------------------------------------------------
-  // Private helpers
-  // ---------------------------------------------------------------------------
-
-  Future<void> _writeCacheAndNotify(UserDto user) async {
-    await _cacheStorage.write(user);
-    if (!_profileChangesController.isClosed) {
+  void _notifyIfChanged(UserDto user) {
+    if (!_profileChangesController.isClosed && user != _lastEmittedUser) {
+      _lastEmittedUser = user;
       _profileChangesController.add(user);
     }
-  }
-
-  /// Reads the cached profile, patches a single preference field, and
-  /// re-writes + notifies so [CurrentUserBloc] stays in sync.
-  Future<void> _patchCachedPreference({bool? pushEnabled, bool? leaderboardVisible}) async {
-    final cached = await _cacheStorage.read();
-    if (cached == null) return;
-    final patched = cached.data.copyWith(pushEnabled: pushEnabled, leaderboardVisible: leaderboardVisible);
-    await _writeCacheAndNotify(patched);
   }
 }

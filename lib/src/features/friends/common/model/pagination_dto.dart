@@ -5,9 +5,9 @@ final class PaginationDto {
   const PaginationDto({required this.page, required this.limit, required this.total});
 
   factory PaginationDto.fromJson(Map<String, Object?> json) => PaginationDto(
-    page: json['Page'] as int? ?? json['page'] as int? ?? 1,
-    limit: json['Limit'] as int? ?? json['limit'] as int? ?? 20,
-    total: json['Total'] as int? ?? json['total'] as int? ?? 0,
+    page: json['page'] as int? ?? 1,
+    limit: json['limit'] as int? ?? 20,
+    total: json['total'] as int? ?? 0,
   );
 
   final int page;

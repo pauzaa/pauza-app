@@ -19,7 +19,7 @@ class FriendsListBloc extends Bloc<FriendsListEvent, FriendsListState> {
   final FriendsRepository _friendsRepository;
 
   Future<void> _onLoadRequested(FriendsListLoadRequested event, Emitter<FriendsListState> emit) {
-    return _fetch(emit);
+    return _fetch(emit, skipCache: false);
   }
 
   void _onSearchChanged(FriendsListSearchChanged event, Emitter<FriendsListState> emit) {
@@ -27,14 +27,14 @@ class FriendsListBloc extends Bloc<FriendsListEvent, FriendsListState> {
   }
 
   Future<void> _onRefreshRequested(FriendsListRefreshRequested event, Emitter<FriendsListState> emit) {
-    return _fetch(emit);
+    return _fetch(emit, skipCache: true);
   }
 
-  Future<void> _fetch(Emitter<FriendsListState> emit) async {
+  Future<void> _fetch(Emitter<FriendsListState> emit, {required bool skipCache}) async {
     emit(state.copyWith(isLoading: true, clearError: true));
 
     try {
-      final result = await _friendsRepository.fetchFriends(page: 1, limit: 100);
+      final result = await _friendsRepository.fetchFriends(page: 1, limit: 100, skipCache: skipCache);
       final friends = result.friends;
 
       emit(state.copyWith(isLoading: false, friends: friends, clearError: true));

@@ -31,13 +31,11 @@ final class UserDto {
     return UserDto(
       id: json['id'] as String? ?? '',
       email: json['email'] as String? ?? '',
-      profilePicture:
-          json['profile_picture_url'] as String? ?? json['profilePicture'] as String?,
+      profilePicture: json['profile_picture_url'] as String?,
       username: json['username'] as String? ?? '',
       name: json['name'] as String? ?? '',
-      pushEnabled: json['push_enabled'] as bool? ?? json['pushEnabled'] as bool? ?? true,
-      leaderboardVisible:
-          json['leaderboard_visible'] as bool? ?? json['leaderboardVisible'] as bool? ?? true,
+      pushEnabled: json['push_enabled'] as bool? ?? true,
+      leaderboardVisible: json['leaderboard_visible'] as bool? ?? true,
       createdAt: createdAt,
       subscription: subscription,
     );
@@ -103,17 +101,8 @@ final class UserDto {
   }
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    email,
-    profilePicture,
-    username,
-    name,
-    pushEnabled,
-    leaderboardVisible,
-    createdAt,
-    subscription,
-  );
+  int get hashCode =>
+      Object.hash(id, email, profilePicture, username, name, pushEnabled, leaderboardVisible, createdAt, subscription);
 
   @override
   String toString() =>

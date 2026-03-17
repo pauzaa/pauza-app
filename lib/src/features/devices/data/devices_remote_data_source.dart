@@ -23,7 +23,7 @@ final class DevicesRemoteDataSourceImpl implements DevicesRemoteDataSource {
   }) async {
     try {
       await _apiClient.post(
-        '/api/v1/devices',
+        '/devices',
         body: <String, Object?>{
           'fcm_token': fcmToken,
           'platform': platform,
@@ -38,7 +38,7 @@ final class DevicesRemoteDataSourceImpl implements DevicesRemoteDataSource {
   Future<void> unregister({required String fcmToken}) async {
     try {
       await _apiClient.post(
-        '/api/v1/devices/unregister',
+        '/devices/unregister',
         body: <String, Object?>{'fcm_token': fcmToken},
       );
     } on ApiClientException catch (e) {

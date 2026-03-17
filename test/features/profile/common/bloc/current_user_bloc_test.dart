@@ -26,19 +26,14 @@ void main() {
     when(() => authRepository.sessionStream).thenAnswer((_) => sessionController.stream);
     when(() => authRepository.currentSession).thenReturn(session);
     when(() => profileRepository.watchProfileChanges()).thenAnswer((_) => const Stream<Never>.empty());
-    when(() => profileRepository.clearCache()).thenAnswer((_) async {});
   });
 
   tearDown(() async {
     await sessionController.close();
   });
 
-  CurrentUserBloc buildBloc() => CurrentUserBloc(
-    authRepository: authRepository,
-    userProfileRepository: profileRepository,
-    ttl: const Duration(minutes: 5),
-    nowUtc: () => DateTime.utc(2026, 2, 27),
-  );
+  CurrentUserBloc buildBloc() =>
+      CurrentUserBloc(authRepository: authRepository, userProfileRepository: profileRepository);
 
   group('CurrentUserBloc', () {
     test('initial state is unauthenticated', () {
@@ -48,8 +43,9 @@ void main() {
     });
 
     test('signs out and transitions to unauthenticated on unauthorized profile refresh', () async {
-      when(() => profileRepository.readCachedProfile()).thenAnswer((_) async => null);
-      when(() => profileRepository.fetchAndCacheProfile()).thenThrow(const UserProfileUnauthorizedError());
+      when(
+        () => profileRepository.fetchProfile(forceRemote: any(named: 'forceRemote')),
+      ).thenThrow(const UserProfileUnauthorizedError());
       when(() => authRepository.signOut()).thenAnswer((_) async {
         when(() => authRepository.currentSession).thenReturn(const Session.empty());
         sessionController.add(const Session.empty());
@@ -66,11 +62,11 @@ void main() {
     });
 
     blocTest<CurrentUserBloc, CurrentUserState>(
-      'emits unavailable state with Object error for network failures '
-      'without cached profile',
+      'emits unavailable state with Object error for network failures',
       setUp: () {
-        when(() => profileRepository.readCachedProfile()).thenAnswer((_) async => null);
-        when(() => profileRepository.fetchAndCacheProfile()).thenThrow(const UserProfileNetworkError());
+        when(
+          () => profileRepository.fetchProfile(forceRemote: any(named: 'forceRemote')),
+        ).thenThrow(const UserProfileNetworkError());
       },
       build: buildBloc,
       act: (bloc) {
@@ -85,11 +81,11 @@ void main() {
     );
 
     blocTest<CurrentUserBloc, CurrentUserState>(
-      'emits error state with unknown Object error and message '
-      'for unknown failures',
+      'emits error state with unknown Object error and message for unknown failures',
       setUp: () {
-        when(() => profileRepository.readCachedProfile()).thenAnswer((_) async => null);
-        when(() => profileRepository.fetchAndCacheProfile()).thenThrow(UserProfileUnknownError(Exception('boom')));
+        when(
+          () => profileRepository.fetchProfile(forceRemote: any(named: 'forceRemote')),
+        ).thenThrow(UserProfileUnknownError(Exception('boom')));
       },
       build: buildBloc,
       act: (bloc) {
@@ -105,29 +101,27 @@ void main() {
     );
 
     blocTest<CurrentUserBloc, CurrentUserState>(
-      'keeps available state when refresh fails with network error '
-      'after cached profile',
+      'keeps available state when refresh fails with network error after successful load',
       setUp: () {
-        when(
-          () => profileRepository.readCachedProfile(),
-        ).thenAnswer((_) async => makeCachedUserProfile(user: user, cachedAtUtc: DateTime.utc(2026, 2, 27)));
-        when(() => profileRepository.fetchAndCacheProfile()).thenThrow(const UserProfileNetworkError());
+        var callCount = 0;
+        when(() => profileRepository.fetchProfile(forceRemote: any(named: 'forceRemote'))).thenAnswer((_) async {
+          callCount++;
+          if (callCount == 1) return user;
+          throw const UserProfileNetworkError();
+        });
       },
       build: buildBloc,
-      act: (bloc) {
+      act: (bloc) async {
         bloc.add(CurrentUserSessionChanged(session: session));
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        bloc.add(const CurrentUserRefreshRequested(forceRemote: true));
       },
       wait: const Duration(milliseconds: 50),
       expect: () => <TypeMatcher<CurrentUserState>>[
+        isA<CurrentUserState>().having((s) => s.status, 'status', CurrentUserStatus.loading),
         isA<CurrentUserState>()
             .having((s) => s.status, 'status', CurrentUserStatus.available)
-            .having((s) => s.isSyncing, 'isSyncing', isTrue)
             .having((s) => s.user, 'user', user),
-        isA<CurrentUserState>()
-            .having((s) => s.status, 'status', CurrentUserStatus.available)
-            .having((s) => s.isSyncing, 'isSyncing', isFalse)
-            .having((s) => s.user, 'user', user)
-            .having((s) => s.error, 'error', isNull),
       ],
     );
   });

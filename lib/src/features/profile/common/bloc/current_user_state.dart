@@ -6,10 +6,10 @@ enum CurrentUserStatus {
   /// No authenticated auth session exists.
   unauthenticated,
 
-  /// Session exists, but there is no cached profile yet.
+  /// Session exists, but profile has not loaded yet.
   loading,
 
-  /// Profile data is available (fresh or stale).
+  /// Profile data is available.
   available,
 
   /// Profile could not be loaded because of a recoverable issue (for example network).
@@ -19,40 +19,15 @@ enum CurrentUserStatus {
   error,
 }
 
-/// Freshness of cached profile payload relative to TTL.
-enum UserFreshness { fresh, stale, unknown }
-
 /// Unified state model for current-user UI.
-///
-/// We keep one state object with [status] plus optional fields instead of many
-/// subclasses to simplify transitions and rendering.
 final class CurrentUserState extends Equatable {
-  const CurrentUserState({
-    required this.status,
-    this.user,
-    this.freshness = UserFreshness.unknown,
-    this.cachedAtUtc,
-    this.isSyncing = false,
-    this.error,
-    this.message,
-  });
+  const CurrentUserState({required this.status, this.user, this.error, this.message});
 
   const CurrentUserState.unauthenticated() : this(status: CurrentUserStatus.unauthenticated);
 
   const CurrentUserState.loading() : this(status: CurrentUserStatus.loading);
 
-  const CurrentUserState.available({
-    required UserDto user,
-    required UserFreshness freshness,
-    required DateTime cachedAtUtc,
-    required bool isSyncing,
-  }) : this(
-         status: CurrentUserStatus.available,
-         user: user,
-         freshness: freshness,
-         cachedAtUtc: cachedAtUtc,
-         isSyncing: isSyncing,
-       );
+  const CurrentUserState.available({required UserDto user}) : this(status: CurrentUserStatus.available, user: user);
 
   const CurrentUserState.unavailable({required Object error})
     : this(status: CurrentUserStatus.unavailable, error: error);
@@ -62,25 +37,15 @@ final class CurrentUserState extends Equatable {
 
   final CurrentUserStatus status;
   final UserDto? user;
-  final UserFreshness freshness;
-  final DateTime? cachedAtUtc;
-  final bool isSyncing;
   final Object? error;
   final String? message;
 
   /// Convenience check used in update paths where user payload is required.
   bool get isAvailable => status == CurrentUserStatus.available;
 
-  /// Partial update helper for transition logic.
-  ///
-  /// [clearError]/[clearMessage] let us explicitly reset failure details when
-  /// moving to a non-error status.
   CurrentUserState copyWith({
     CurrentUserStatus? status,
     UserDto? user,
-    UserFreshness? freshness,
-    DateTime? cachedAtUtc,
-    bool? isSyncing,
     Object? error,
     String? message,
     bool clearError = false,
@@ -89,14 +54,11 @@ final class CurrentUserState extends Equatable {
     return CurrentUserState(
       status: status ?? this.status,
       user: user ?? this.user,
-      freshness: freshness ?? this.freshness,
-      cachedAtUtc: cachedAtUtc ?? this.cachedAtUtc,
-      isSyncing: isSyncing ?? this.isSyncing,
       error: clearError ? null : error ?? this.error,
       message: clearMessage ? null : message ?? this.message,
     );
   }
 
   @override
-  List<Object?> get props => <Object?>[status, user, freshness, cachedAtUtc, isSyncing, error, message];
+  List<Object?> get props => <Object?>[status, user, error, message];
 }

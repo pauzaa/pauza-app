@@ -89,8 +89,6 @@ class RootScopeState extends State<RootScope> {
     currentUserBloc = CurrentUserBloc(
       authRepository: dependencies.authRepository,
       userProfileRepository: dependencies.userProfileRepository,
-      ttl: const Duration(minutes: 15),
-      nowUtc: () => DateTime.now().toUtc(),
     );
 
     authBloc = AuthBloc(

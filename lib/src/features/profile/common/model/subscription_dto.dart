@@ -2,11 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 final class SubscriptionDto {
-  const SubscriptionDto({
-    required this.entitlement,
-    required this.isActive,
-    this.currentPeriodEnd,
-  });
+  const SubscriptionDto({required this.entitlement, required this.isActive, this.currentPeriodEnd});
 
   factory SubscriptionDto.fromJson(Map<String, Object?> json) {
     DateTime? periodEnd;

@@ -8,13 +8,13 @@ import 'package:pauza/src/features/friends/common/model/pagination_dto.dart';
 import 'package:pauza/src/features/friends/data/friends_remote_data_source.dart';
 
 abstract interface class FriendsRepository {
-  Future<({List<FriendDto> friends, PaginationDto pagination})> fetchFriends({int page, int limit});
+  Future<({List<FriendDto> friends, PaginationDto pagination})> fetchFriends({int page, int limit, bool skipCache});
 
   Future<FriendMutationDto> sendRequest({required String username});
 
-  Future<List<FriendRequestDto>> fetchIncomingRequests();
+  Future<List<FriendRequestDto>> fetchIncomingRequests({bool skipCache});
 
-  Future<List<FriendRequestDto>> fetchOutgoingRequests();
+  Future<List<FriendRequestDto>> fetchOutgoingRequests({bool skipCache});
 
   Future<FriendMutationDto> acceptRequest({required String friendshipId});
 
@@ -36,9 +36,13 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   final FriendsRemoteDataSource _remoteDataSource;
 
   @override
-  Future<({List<FriendDto> friends, PaginationDto pagination})> fetchFriends({int page = 1, int limit = 20}) async {
+  Future<({List<FriendDto> friends, PaginationDto pagination})> fetchFriends({
+    int page = 1,
+    int limit = 20,
+    bool skipCache = false,
+  }) async {
     try {
-      return await _remoteDataSource.fetchFriends(page: page, limit: limit);
+      return await _remoteDataSource.fetchFriends(page: page, limit: limit, skipCache: skipCache);
     } on FriendsError {
       rethrow;
     } on Object catch (e) {
@@ -58,9 +62,9 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   }
 
   @override
-  Future<List<FriendRequestDto>> fetchIncomingRequests() async {
+  Future<List<FriendRequestDto>> fetchIncomingRequests({bool skipCache = false}) async {
     try {
-      return await _remoteDataSource.fetchIncomingRequests();
+      return await _remoteDataSource.fetchIncomingRequests(skipCache: skipCache);
     } on FriendsError {
       rethrow;
     } on Object catch (e) {
@@ -69,9 +73,9 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   }
 
   @override
-  Future<List<FriendRequestDto>> fetchOutgoingRequests() async {
+  Future<List<FriendRequestDto>> fetchOutgoingRequests({bool skipCache = false}) async {
     try {
-      return await _remoteDataSource.fetchOutgoingRequests();
+      return await _remoteDataSource.fetchOutgoingRequests(skipCache: skipCache);
     } on FriendsError {
       rethrow;
     } on Object catch (e) {

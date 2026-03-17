@@ -5,25 +5,17 @@ import 'package:pauza/src/features/leaderboard/common/model/leaderboard_entry_dt
 import 'package:pauza/src/features/leaderboard/common/model/leaderboard_rank_dto.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_remote_data_source.dart';
 
-final class MockLeaderboardRemoteDataSource
-    implements LeaderboardRemoteDataSource {
+final class MockLeaderboardRemoteDataSource implements LeaderboardRemoteDataSource {
   const MockLeaderboardRemoteDataSource();
 
   @override
-  Future<LeaderboardDto> fetchStreakLeaderboard({
-    int page = 1,
-    int limit = 20,
-  }) async {
+  Future<LeaderboardDto> fetchStreakLeaderboard({int page = 1, int limit = 20, bool skipCache = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 600));
 
     return LeaderboardDto(
       entries: <LeaderboardEntryDto>[
         for (var i = 0; i < _mockUsers.length; i++)
-          LeaderboardEntryDto(
-            rank: i + 1,
-            user: _mockUsers[i],
-            currentStreakDays: _streakDays[i],
-          ),
+          LeaderboardEntryDto(rank: i + 1, user: _mockUsers[i], currentStreakDays: _streakDays[i]),
       ],
       myRank: const LeaderboardRankDto(rank: 5, currentStreakDays: 12),
       pagination: const PaginationDto(page: 1, limit: 20, total: 10),
@@ -31,20 +23,13 @@ final class MockLeaderboardRemoteDataSource
   }
 
   @override
-  Future<LeaderboardDto> fetchFocusTimeLeaderboard({
-    int page = 1,
-    int limit = 20,
-  }) async {
+  Future<LeaderboardDto> fetchFocusTimeLeaderboard({int page = 1, int limit = 20, bool skipCache = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 600));
 
     return LeaderboardDto(
       entries: <LeaderboardEntryDto>[
         for (var i = 0; i < _mockUsers.length; i++)
-          LeaderboardEntryDto(
-            rank: i + 1,
-            user: _mockUsers[i],
-            totalFocusTimeMs: _focusTimeMs[i],
-          ),
+          LeaderboardEntryDto(rank: i + 1, user: _mockUsers[i], totalFocusTimeMs: _focusTimeMs[i]),
       ],
       myRank: const LeaderboardRankDto(rank: 5, totalFocusTimeMs: 5400000),
       pagination: const PaginationDto(page: 1, limit: 20, total: 10),

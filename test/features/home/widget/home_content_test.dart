@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pauza/src/features/ai/daily_report/bloc/ai_daily_report_bloc.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
 import 'package:pauza/src/features/home/model/blocking_action_error.dart';
@@ -26,6 +27,8 @@ void main() {
     late MockNfcLinkedChipsRepository mockNfcLinkedChipsRepository;
     late MockQrLinkedCodesRepository mockQrLinkedCodesRepository;
     late MockStreaksRepository mockStreaksRepository;
+    late MockAiRepository mockAiRepository;
+    late MockStatsUsageRepository mockStatsUsageRepository;
 
     setUp(() {
       mockModesRepository = MockModesRepository();
@@ -33,6 +36,8 @@ void main() {
       mockNfcLinkedChipsRepository = MockNfcLinkedChipsRepository();
       mockQrLinkedCodesRepository = MockQrLinkedCodesRepository();
       mockStreaksRepository = MockStreaksRepository();
+      mockAiRepository = MockAiRepository();
+      mockStatsUsageRepository = MockStatsUsageRepository();
 
       when(() => mockModesRepository.watchModes()).thenAnswer((_) => const Stream<void>.empty());
       when(() => mockModesRepository.getModes()).thenAnswer((_) async => <Mode>[makeMode()]);
@@ -73,6 +78,13 @@ void main() {
               streaksRepository: mockStreaksRepository,
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
+          ),
+          BlocProvider<AiDailyReportBloc>(
+            create: (context) => AiDailyReportBloc(
+              aiRepository: mockAiRepository,
+              usageRepository: mockStatsUsageRepository,
+              streaksRepository: mockStreaksRepository,
+            ),
           ),
         ],
       );
@@ -117,6 +129,13 @@ void main() {
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
           ),
+          BlocProvider<AiDailyReportBloc>(
+            create: (context) => AiDailyReportBloc(
+              aiRepository: mockAiRepository,
+              usageRepository: mockStatsUsageRepository,
+              streaksRepository: mockStreaksRepository,
+            ),
+          ),
         ],
       );
 
@@ -151,6 +170,13 @@ void main() {
               streaksRepository: deferredRepo,
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
+          ),
+          BlocProvider<AiDailyReportBloc>(
+            create: (context) => AiDailyReportBloc(
+              aiRepository: mockAiRepository,
+              usageRepository: mockStatsUsageRepository,
+              streaksRepository: mockStreaksRepository,
+            ),
           ),
         ],
       );
@@ -194,6 +220,13 @@ void main() {
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
           ),
+          BlocProvider<AiDailyReportBloc>(
+            create: (context) => AiDailyReportBloc(
+              aiRepository: mockAiRepository,
+              usageRepository: mockStatsUsageRepository,
+              streaksRepository: mockStreaksRepository,
+            ),
+          ),
         ],
       );
 
@@ -226,6 +259,13 @@ void main() {
               streaksRepository: mockStreaksRepository,
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
+          ),
+          BlocProvider<AiDailyReportBloc>(
+            create: (context) => AiDailyReportBloc(
+              aiRepository: mockAiRepository,
+              usageRepository: mockStatsUsageRepository,
+              streaksRepository: mockStreaksRepository,
+            ),
           ),
         ],
       );

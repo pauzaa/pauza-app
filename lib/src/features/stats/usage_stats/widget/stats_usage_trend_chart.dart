@@ -28,7 +28,14 @@ class StatsUsageTrendChart extends StatelessWidget {
     }
 
     final maxHours = dailyTrend.map((p) => p.totalScreenTime.inMinutes / 60).reduce((a, b) => a > b ? a : b);
-    final maxY = (maxHours * 1.2).ceilToDouble().clamp(1.0, double.infinity);
+    final useMinutes = maxHours < 1.0;
+    final double maxY;
+    if (useMinutes) {
+      final maxMinutes = dailyTrend.map((p) => p.totalScreenTime.inMinutes.toDouble()).reduce((a, b) => a > b ? a : b);
+      maxY = (maxMinutes * 1.2).ceilToDouble().clamp(1.0, double.infinity);
+    } else {
+      maxY = (maxHours * 1.2).ceilToDouble().clamp(1.0, double.infinity);
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,6 +60,8 @@ class StatsUsageTrendChart extends StatelessWidget {
                 ),
               ),
               titlesData: FlTitlesData(
+                rightTitles: const AxisTitles(),
+                topTitles: const AxisTitles(),
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
@@ -60,7 +69,7 @@ class StatsUsageTrendChart extends StatelessWidget {
                     getTitlesWidget: (value, meta) {
                       if (value == 0) return const SizedBox.shrink();
                       return Text(
-                        '${value.toInt()}h',
+                        useMinutes ? '${value.toInt()}m' : '${value.toInt()}h',
                         style: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
                       );
                     },
@@ -111,7 +120,9 @@ class StatsUsageTrendChart extends StatelessWidget {
                     x: i,
                     barRods: [
                       BarChartRodData(
-                        toY: dailyTrend[i].totalScreenTime.inMinutes / 60,
+                        toY: useMinutes
+                            ? dailyTrend[i].totalScreenTime.inMinutes.toDouble()
+                            : dailyTrend[i].totalScreenTime.inMinutes / 60,
                         color: colorScheme.primary,
                         width: dailyTrend.length <= 7
                             ? 20

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pauza/src/features/streaks/common/model/streak_types.dart';
+import 'package:pauza/src/core/common/model/local_day_key.dart';
 
 @immutable
 final class BlockingDailyPoint extends Equatable {

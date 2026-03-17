@@ -1,19 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:pauza/src/features/streaks/common/model/streak_extensions.dart';
+import 'package:pauza/src/core/common/model/local_day_key.dart';
 
-extension type const LocalDayKey(String value) implements String {
-  factory LocalDayKey.fromDateTime(DateTime dateTime) {
-    return LocalDayKey(dateTime.localDayKey);
-  }
-
-  factory LocalDayKey.fromDb(String value) {
-    return LocalDayKey(value);
-  }
-
-  String get dbValue => value;
-
-  DateTime? get localDate => value.localDayDate;
-}
+export 'package:pauza/src/core/common/model/local_day_key.dart';
 
 extension type const BestStreakDays(int value) implements int {
   const BestStreakDays.zero() : this(0);

@@ -27,18 +27,11 @@ final class FocusScheduleRequestDto extends Equatable {
     'app_usage': appUsage.map((e) => e.toJson()).toList(growable: false),
     'preferred_focus_hours': preferredFocusHours,
     'timezone': timezone,
-    if (currentSchedules != null)
-      'current_schedules':
-          currentSchedules!.map((e) => e.toJson()).toList(growable: false),
+    if (currentSchedules != null) 'current_schedules': currentSchedules!.map((e) => e.toJson()).toList(growable: false),
   };
 
   @override
-  List<Object?> get props => <Object?>[
-    appUsage,
-    preferredFocusHours,
-    timezone,
-    currentSchedules,
-  ];
+  List<Object?> get props => <Object?>[appUsage, preferredFocusHours, timezone, currentSchedules];
 
   @override
   String toString() =>

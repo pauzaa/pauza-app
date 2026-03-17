@@ -3,11 +3,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 final class AiDailyScreenTimeDto extends Equatable {
-  const AiDailyScreenTimeDto({
-    required this.date,
-    required this.totalScreenTimeMs,
-    required this.totalUnlocks,
-  });
+  const AiDailyScreenTimeDto({required this.date, required this.totalScreenTimeMs, required this.totalUnlocks});
 
   /// Date in `YYYY-MM-DD` format.
   final String date;

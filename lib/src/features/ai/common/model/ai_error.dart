@@ -7,18 +7,17 @@ sealed class AiError implements Exception, Localizable {
   factory AiError.fromApiException(ApiClientException e) {
     return switch (e) {
       ApiClientAuthorizationException(:final statusCode, :final data) =>
-        statusCode == 403 &&
-                _serverErrorCode(data) == 'SUBSCRIPTION_REQUIRED'
+        statusCode == 403 && _serverErrorCode(data) == 'SUBSCRIPTION_REQUIRED'
             ? const AiSubscriptionRequiredError()
             : const AiUnauthorizedError(),
       ApiClientNetworkException() => const AiNetworkError(),
       ApiClientClientException(:final statusCode, :final data) => () {
-          if (statusCode == 429) return const AiRateLimitedError();
-          if (_serverErrorCode(data) == 'VALIDATION_ERROR') {
-            return const AiValidationError();
-          }
-          return AiUnknownError(e);
-        }(),
+        if (statusCode == 429) return const AiRateLimitedError();
+        if (_serverErrorCode(data) == 'VALIDATION_ERROR') {
+          return const AiValidationError();
+        }
+        return AiUnknownError(e);
+      }(),
     };
   }
 
@@ -34,8 +33,7 @@ final class AiNetworkError extends AiError {
   const AiNetworkError();
 
   @override
-  String localize(AppLocalizations localizations) =>
-      localizations.internetRequiredToast;
+  String localize(AppLocalizations localizations) => localizations.internetRequiredToast;
 
   @override
   String toString() => 'AiNetworkError';
@@ -55,7 +53,7 @@ final class AiSubscriptionRequiredError extends AiError {
   const AiSubscriptionRequiredError();
 
   @override
-  String localize(AppLocalizations localizations) => localizations.errorTitle;
+  String localize(AppLocalizations localizations) => localizations.aiErrorSubscriptionRequired;
 
   @override
   String toString() => 'AiSubscriptionRequiredError';
@@ -65,7 +63,7 @@ final class AiRateLimitedError extends AiError {
   const AiRateLimitedError();
 
   @override
-  String localize(AppLocalizations localizations) => localizations.errorTitle;
+  String localize(AppLocalizations localizations) => localizations.aiErrorRateLimited;
 
   @override
   String toString() => 'AiRateLimitedError';
@@ -75,7 +73,7 @@ final class AiValidationError extends AiError {
   const AiValidationError();
 
   @override
-  String localize(AppLocalizations localizations) => localizations.errorTitle;
+  String localize(AppLocalizations localizations) => localizations.aiErrorGeneric;
 
   @override
   String toString() => 'AiValidationError';
@@ -87,7 +85,7 @@ final class AiUnknownError extends AiError {
   final Object? cause;
 
   @override
-  String localize(AppLocalizations localizations) => localizations.errorTitle;
+  String localize(AppLocalizations localizations) => localizations.aiErrorGeneric;
 
   @override
   String toString() => 'AiUnknownError(cause: $cause)';

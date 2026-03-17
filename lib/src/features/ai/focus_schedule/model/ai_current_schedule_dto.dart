@@ -4,11 +4,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 final class AiCurrentScheduleDto extends Equatable {
-  const AiCurrentScheduleDto({
-    required this.days,
-    required this.startMinute,
-    required this.endMinute,
-  });
+  const AiCurrentScheduleDto({required this.days, required this.startMinute, required this.endMinute});
 
   /// Day-of-week numbers.
   final IList<int> days;
@@ -29,6 +25,5 @@ final class AiCurrentScheduleDto extends Equatable {
   List<Object?> get props => <Object?>[days, startMinute, endMinute];
 
   @override
-  String toString() =>
-      'AiCurrentScheduleDto(days: $days, $startMinute-$endMinute)';
+  String toString() => 'AiCurrentScheduleDto(days: $days, $startMinute-$endMinute)';
 }

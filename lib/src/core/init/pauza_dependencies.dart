@@ -17,6 +17,8 @@ import 'package:pauza/src/core/connectivity/domain/internet_health_gate_notifier
 import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
 import 'package:pauza/src/core/init/config.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
+import 'package:pauza/src/features/ai/data/ai_remote_data_source.dart';
+import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_remote_data_source.dart';
 import 'package:pauza/src/features/devices/data/devices_remote_data_source.dart';
 import 'package:pauza/src/features/devices/data/devices_repository.dart';
@@ -86,6 +88,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final PurchasesDataSource purchasesDataSource;
   late final SubscriptionRepository subscriptionRepository;
   late final String revenueCatApiKey;
+  late final AiRepository aiRepository;
 
   static PauzaDependencies of(BuildContext context) => AppFuseScope.of(context).init as PauzaDependencies;
 
@@ -197,6 +200,10 @@ class PauzaDependencies with AppFuseInitialization {
     'init leaderboard': (_) async {
       leaderboardRemoteDataSource = LeaderboardRemoteDataSourceImpl(apiClient: apiClient);
       leaderboardRepository = LeaderboardRepositoryImpl(remoteDataSource: leaderboardRemoteDataSource);
+    },
+    'init ai': (_) async {
+      final aiDataSource = AiRemoteDataSourceImpl(apiClient: apiClient);
+      aiRepository = AiRepositoryImpl(remoteDataSource: aiDataSource);
     },
     'init managers': (_) async {
       installedAppsManager = InstalledAppsManager();

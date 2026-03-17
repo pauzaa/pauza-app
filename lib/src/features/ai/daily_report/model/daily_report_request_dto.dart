@@ -27,25 +27,15 @@ final class DailyReportRequestDto extends Equatable {
   Map<String, Object?> toJson() => <String, Object?>{
     'date': date,
     'app_usage': appUsage.map((e) => e.toJson()).toList(growable: false),
-    if (focusSessions != null)
-      'focus_sessions':
-          focusSessions!.map((e) => e.toJson()).toList(growable: false),
+    if (focusSessions != null) 'focus_sessions': focusSessions!.map((e) => e.toJson()).toList(growable: false),
     if (totalScreenTimeMs != null) 'total_screen_time_ms': totalScreenTimeMs,
     if (totalUnlocks != null) 'total_unlocks': totalUnlocks,
     if (streakDays != null) 'streak_days': streakDays,
   };
 
   @override
-  List<Object?> get props => <Object?>[
-    date,
-    appUsage,
-    focusSessions,
-    totalScreenTimeMs,
-    totalUnlocks,
-    streakDays,
-  ];
+  List<Object?> get props => <Object?>[date, appUsage, focusSessions, totalScreenTimeMs, totalUnlocks, streakDays];
 
   @override
-  String toString() =>
-      'DailyReportRequestDto($date, apps: ${appUsage.length})';
+  String toString() => 'DailyReportRequestDto($date, apps: ${appUsage.length})';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/init/pauza_dependencies.dart';
+import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
 import 'package:pauza/src/features/friends/data/friends_repository.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
@@ -51,6 +52,7 @@ class RootScopeState extends State<RootScope> {
   late final StreaksRepository streaksRepository;
   late final FriendsRepository friendsRepository;
   late final LeaderboardRepository leaderboardRepository;
+  late final AiRepository aiRepository;
 
   @override
   void initState() {
@@ -122,6 +124,7 @@ class RootScopeState extends State<RootScope> {
     streaksRepository = dependencies.streaksRepository;
     friendsRepository = dependencies.friendsRepository;
     leaderboardRepository = dependencies.leaderboardRepository;
+    aiRepository = dependencies.aiRepository;
 
     super.initState();
   }

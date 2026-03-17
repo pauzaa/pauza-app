@@ -1702,5 +1702,53 @@
   "premiumLockedMessage": "This feature requires a Premium subscription.",
   "@premiumLockedMessage": {
     "description": "Message shown when a feature is locked behind premium."
+  },
+  "aiUsageAnalysis": "AI Usage Analysis",
+  "@aiUsageAnalysis": {
+    "description": "Title for AI usage analysis section."
+  },
+  "aiUsageAnalysisCta": "Analyze My Usage",
+  "@aiUsageAnalysisCta": {
+    "description": "CTA button for AI usage analysis."
+  },
+  "aiAddictionCheck": "Addiction Check",
+  "@aiAddictionCheck": {
+    "description": "Title for AI addiction check section."
+  },
+  "aiAddictionCheckCta": "Check My Habits",
+  "@aiAddictionCheckCta": {
+    "description": "CTA button for AI addiction check."
+  },
+  "aiFocusSchedule": "Focus Schedule",
+  "@aiFocusSchedule": {
+    "description": "Title for AI focus schedule section."
+  },
+  "aiFocusScheduleCta": "Get Schedule Suggestion",
+  "@aiFocusScheduleCta": {
+    "description": "CTA button for AI focus schedule."
+  },
+  "aiDailyReport": "Daily AI Report",
+  "@aiDailyReport": {
+    "description": "Title for AI daily report section."
+  },
+  "aiDailyReportCta": "Get Today's Report",
+  "@aiDailyReportCta": {
+    "description": "CTA button for AI daily report."
+  },
+  "aiErrorSubscriptionRequired": "This feature requires a Premium subscription.",
+  "@aiErrorSubscriptionRequired": {
+    "description": "Error shown when AI feature requires subscription."
+  },
+  "aiErrorRateLimited": "Too many requests. Please try again later.",
+  "@aiErrorRateLimited": {
+    "description": "Error shown when AI rate limit is hit."
+  },
+  "aiErrorGeneric": "Something went wrong. Please try again.",
+  "@aiErrorGeneric": {
+    "description": "Generic error for AI features."
+  },
+  "aiRetry": "Retry",
+  "@aiRetry": {
+    "description": "Retry button label for AI features."
   }
 }

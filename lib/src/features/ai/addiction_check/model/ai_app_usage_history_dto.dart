@@ -5,10 +5,7 @@ import 'package:pauza/src/features/ai/common/model/ai_app_usage_item_dto.dart';
 
 @immutable
 final class AiAppUsageHistoryDto extends Equatable {
-  const AiAppUsageHistoryDto({
-    required this.date,
-    required this.apps,
-  });
+  const AiAppUsageHistoryDto({required this.date, required this.apps});
 
   /// Date in `YYYY-MM-DD` format.
   final String date;
@@ -24,6 +21,5 @@ final class AiAppUsageHistoryDto extends Equatable {
   List<Object?> get props => <Object?>[date, apps];
 
   @override
-  String toString() =>
-      'AiAppUsageHistoryDto($date, apps: ${apps.length})';
+  String toString() => 'AiAppUsageHistoryDto($date, apps: ${apps.length})';
 }

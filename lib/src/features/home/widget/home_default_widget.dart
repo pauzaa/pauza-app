@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
+import 'package:pauza/src/features/ai/daily_report/widget/ai_daily_report_card.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
 import 'package:pauza/src/features/home/widget/home_current_mode_card.dart';
@@ -51,6 +52,8 @@ class HomeDefaultWidget extends StatelessWidget {
             );
           },
         ),
+        const SizedBox(height: PauzaSpacing.extraLarge),
+        const AiDailyReportCard(),
       ],
     );
   }

@@ -29,12 +29,7 @@ final class AiFocusSessionDto extends Equatable {
   };
 
   @override
-  List<Object?> get props => <Object?>[
-    startedAt,
-    endedAt,
-    pauseCount,
-    effectiveMs,
-  ];
+  List<Object?> get props => <Object?>[startedAt, endedAt, pauseCount, effectiveMs];
 
   @override
   String toString() =>

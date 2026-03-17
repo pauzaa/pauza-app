@@ -13,8 +13,7 @@ abstract interface class AiRepository {
 }
 
 final class AiRepositoryImpl implements AiRepository {
-  const AiRepositoryImpl({required AiRemoteDataSource remoteDataSource})
-      : _remoteDataSource = remoteDataSource;
+  const AiRepositoryImpl({required AiRemoteDataSource remoteDataSource}) : _remoteDataSource = remoteDataSource;
 
   final AiRemoteDataSource _remoteDataSource;
 
@@ -30,9 +29,7 @@ final class AiRepositoryImpl implements AiRepository {
   }
 
   @override
-  Future<String> suggestFocusSchedule(
-    FocusScheduleRequestDto request,
-  ) async {
+  Future<String> suggestFocusSchedule(FocusScheduleRequestDto request) async {
     try {
       return await _remoteDataSource.suggestFocusSchedule(request);
     } on AiError {

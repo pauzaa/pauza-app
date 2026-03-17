@@ -27,14 +27,8 @@ final class UsageAnalysisRequestDto extends Equatable {
   };
 
   @override
-  List<Object?> get props => <Object?>[
-    period,
-    appUsage,
-    totalScreenTimeMs,
-    totalUnlocks,
-  ];
+  List<Object?> get props => <Object?>[period, appUsage, totalScreenTimeMs, totalUnlocks];
 
   @override
-  String toString() =>
-      'UsageAnalysisRequestDto($period, apps: ${appUsage.length})';
+  String toString() => 'UsageAnalysisRequestDto($period, apps: ${appUsage.length})';
 }

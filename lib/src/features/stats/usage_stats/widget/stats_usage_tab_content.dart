@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauza/src/features/ai/usage_analysis/widget/ai_usage_analysis_section.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_usage_bloc.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_app_table.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_category_chart.dart';
@@ -58,6 +59,8 @@ class StatsUsageTabContent extends StatelessWidget {
                 const SizedBox(height: PauzaSpacing.large),
                 StatsUsageDeviceInsightsSection(snapshot: state.deviceEventSnapshot!),
               ],
+              const SizedBox(height: PauzaSpacing.large),
+              const AiUsageAnalysisSection(),
             ],
           ],
         );

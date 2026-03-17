@@ -26,13 +26,7 @@ final class AiAppUsageItemDto extends Equatable {
   };
 
   @override
-  List<Object?> get props => <Object?>[
-    appIdentifier,
-    appName,
-    totalTimeMs,
-    launchCount,
-    category,
-  ];
+  List<Object?> get props => <Object?>[appIdentifier, appName, totalTimeMs, launchCount, category];
 
   @override
   String toString() =>

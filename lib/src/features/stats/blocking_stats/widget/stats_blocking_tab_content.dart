@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauza/src/features/ai/addiction_check/widget/ai_addiction_check_section.dart';
+import 'package:pauza/src/features/ai/focus_schedule/widget/ai_focus_schedule_section.dart';
 import 'package:pauza/src/features/stats/blocking_stats/bloc/stats_blocking_bloc.dart';
 import 'package:pauza/src/features/stats/blocking_stats/widget/stats_blocking_date_range_section.dart';
 import 'package:pauza/src/features/stats/blocking_stats/widget/stats_blocking_empty_view.dart';
@@ -58,6 +60,10 @@ class StatsBlockingTabContent extends StatelessWidget {
                 const SizedBox(height: PauzaSpacing.large),
                 StatsBlockingSourceChart(sourceBreakdown: state.sourceBreakdown!),
               ],
+              const SizedBox(height: PauzaSpacing.large),
+              const AiAddictionCheckSection(),
+              const SizedBox(height: PauzaSpacing.large),
+              const AiFocusScheduleSection(),
             ],
           ],
         );

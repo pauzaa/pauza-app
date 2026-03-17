@@ -13,19 +13,15 @@ abstract interface class AiRemoteDataSource {
 }
 
 final class AiRemoteDataSourceImpl implements AiRemoteDataSource {
-  const AiRemoteDataSourceImpl({required ApiClient apiClient})
-      : _apiClient = apiClient;
+  const AiRemoteDataSourceImpl({required ApiClient apiClient}) : _apiClient = apiClient;
 
   final ApiClient _apiClient;
 
   @override
-  Future<String> analyzeUsage(UsageAnalysisRequestDto request) async =>
-      _post('/ai/usage-analysis', request.toJson());
+  Future<String> analyzeUsage(UsageAnalysisRequestDto request) async => _post('/ai/usage-analysis', request.toJson());
 
   @override
-  Future<String> suggestFocusSchedule(
-    FocusScheduleRequestDto request,
-  ) async =>
+  Future<String> suggestFocusSchedule(FocusScheduleRequestDto request) async =>
       _post('/ai/focus-schedule', request.toJson());
 
   @override

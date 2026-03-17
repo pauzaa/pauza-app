@@ -18,21 +18,14 @@ final class AddictionCheckRequestDto extends Equatable {
   final IList<AiFirstUnlockTimeDto>? firstUnlockTimes;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'app_usage_history':
-        appUsageHistory.map((e) => e.toJson()).toList(growable: false),
-    'daily_screen_time_history':
-        dailyScreenTimeHistory.map((e) => e.toJson()).toList(growable: false),
+    'app_usage_history': appUsageHistory.map((e) => e.toJson()).toList(growable: false),
+    'daily_screen_time_history': dailyScreenTimeHistory.map((e) => e.toJson()).toList(growable: false),
     if (firstUnlockTimes != null)
-      'first_unlock_times':
-          firstUnlockTimes!.map((e) => e.toJson()).toList(growable: false),
+      'first_unlock_times': firstUnlockTimes!.map((e) => e.toJson()).toList(growable: false),
   };
 
   @override
-  List<Object?> get props => <Object?>[
-    appUsageHistory,
-    dailyScreenTimeHistory,
-    firstUnlockTimes,
-  ];
+  List<Object?> get props => <Object?>[appUsageHistory, dailyScreenTimeHistory, firstUnlockTimes];
 
   @override
   String toString() =>

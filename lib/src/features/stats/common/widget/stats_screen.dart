@@ -46,9 +46,7 @@ class _StatsScreenState extends State<StatsScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<StatsBlockingBloc>(
-          create: (context) =>
-              StatsBlockingBloc(repository: RootScope.of(context).statsBlockingRepository)
-                ..add(const StatsBlockingStarted()),
+          create: (context) => StatsBlockingBloc(repository: RootScope.of(context).statsBlockingRepository),
         ),
         BlocProvider<StatsUsageBloc>(
           create: (context) =>
@@ -79,7 +77,7 @@ class _StatsScreenState extends State<StatsScreen> {
                 builder: (context, value, child) {
                   return switch (value) {
                     StatsTab.usage => const StatsUsageTabContent(),
-                    StatsTab.blocking => const StatsBlockingTabContent(),
+                    StatsTab.blocking => const _LazyBlockingTabContent(),
                   };
                 },
               ),
@@ -89,4 +87,22 @@ class _StatsScreenState extends State<StatsScreen> {
       ),
     );
   }
+}
+
+class _LazyBlockingTabContent extends StatefulWidget {
+  const _LazyBlockingTabContent();
+
+  @override
+  State<_LazyBlockingTabContent> createState() => _LazyBlockingTabContentState();
+}
+
+class _LazyBlockingTabContentState extends State<_LazyBlockingTabContent> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<StatsBlockingBloc>().add(const StatsBlockingStarted());
+  }
+
+  @override
+  Widget build(BuildContext context) => const StatsBlockingTabContent();
 }

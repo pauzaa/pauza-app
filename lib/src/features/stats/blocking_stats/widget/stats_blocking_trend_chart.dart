@@ -27,7 +27,7 @@ class StatsBlockingTrendChart extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    final maxHours = dailyTrend.map((p) => p.effectiveDuration.inMinutes / 60).reduce((a, b) => a > b ? a : b);
+    final maxHours = dailyTrend.map((p) => p.effectiveDuration.inSeconds / 3600).reduce((a, b) => a > b ? a : b);
     final maxY = (maxHours * 1.2).ceilToDouble().clamp(1.0, double.infinity);
 
     return Column(
@@ -113,7 +113,7 @@ class StatsBlockingTrendChart extends StatelessWidget {
                     x: i,
                     barRods: [
                       BarChartRodData(
-                        toY: dailyTrend[i].effectiveDuration.inMinutes / 60,
+                        toY: dailyTrend[i].effectiveDuration.inSeconds / 3600,
                         color: colorScheme.primary,
                         width: dailyTrend.length <= 7
                             ? 20

@@ -23,7 +23,14 @@ abstract interface class StatsUsageRepository {
 
   /// Returns detailed usage data for a single app identified by [packageId],
   /// including a per-day trend and current inactive status.
-  Future<AppUsageDetail> getAppDetail({required String packageId, required DateTimeRange window});
+  ///
+  /// [appInfo] is provided by the caller (from the [AppUsageEntry]) so we
+  /// don't need to re-fetch metadata when the app has zero usage in [window].
+  Future<AppUsageDetail> getAppDetail({
+    required AndroidAppInfo appInfo,
+    required String packageId,
+    required DateTimeRange window,
+  });
 
   /// Returns device-level event statistics (screen-on count, unlock count).
   ///
@@ -87,24 +94,22 @@ final class StatsUsageRepositoryImpl implements StatsUsageRepository {
   @override
   Future<IList<DailyUsagePoint>> getDailyUsageTrend({required DateTimeRange window}) async {
     final days = _generateDays(window);
+
+    final results = await Future.wait(
+      days.map(
+        (day) => _usageStatsManager.getUsageStats(startDate: day.dayStart, endDate: day.dayEnd, includeIcons: false),
+      ),
+    );
+
     final points = <DailyUsagePoint>[];
-
-    for (final day in days) {
-      final dayStart = day.dayStart;
-      final dayEnd = day.dayEnd;
-
-      final statsList = await _usageStatsManager.getUsageStats(
-        startDate: dayStart,
-        endDate: dayEnd,
-        includeIcons: false,
-      );
-
+    for (var i = 0; i < days.length; i++) {
+      final statsList = results[i];
       final totalMs = statsList.fold<int>(0, (sum, s) => sum + s.totalDuration.inMilliseconds);
       final totalLaunches = statsList.fold<int>(0, (sum, s) => sum + s.totalLaunchCount);
 
       points.add(
         DailyUsagePoint(
-          localDay: LocalDayKey.fromDateTime(day),
+          localDay: LocalDayKey.fromDateTime(days[i]),
           totalScreenTime: Duration(milliseconds: totalMs),
           totalLaunchCount: totalLaunches,
         ),
@@ -119,54 +124,52 @@ final class StatsUsageRepositoryImpl implements StatsUsageRepository {
   // ---------------------------------------------------------------------------
 
   @override
-  Future<AppUsageDetail> getAppDetail({required String packageId, required DateTimeRange window}) async {
-    // Fetch aggregate stats and inactive status concurrently.
-    final results = await Future.wait<Object?>([
-      _usageStatsManager.getAppUsageStats(
-        packageId: packageId,
-        startDate: window.start.dayStart,
-        endDate: window.end.dayEnd,
-      ),
-      _usageStatsManager.isAppInactive(packageId: packageId),
-    ]);
-
-    final appStats = results[0] as UsageStats?;
-    final isInactive = results[1] as bool;
-
-    // Build daily trend.
+  Future<AppUsageDetail> getAppDetail({
+    required AndroidAppInfo appInfo,
+    required String packageId,
+    required DateTimeRange window,
+  }) async {
+    // Fetch aggregate stats, inactive status, and daily trend concurrently.
     final days = _generateDays(window);
+
+    final (aggregateResults, dailyResults) = await (
+      Future.wait<Object?>([
+        _usageStatsManager.getAppUsageStats(
+          packageId: packageId,
+          startDate: window.start.dayStart,
+          endDate: window.end.dayEnd,
+        ),
+        _usageStatsManager.isAppInactive(packageId: packageId),
+      ]),
+      Future.wait(
+        days.map(
+          (day) => _usageStatsManager.getAppUsageStats(
+            packageId: packageId,
+            startDate: day.dayStart,
+            endDate: day.dayEnd,
+            includeIcons: false,
+          ),
+        ),
+      ),
+    ).wait;
+
+    final appStats = aggregateResults[0] as UsageStats?;
+    final isInactive = aggregateResults[1] as bool;
+
     final trend = <DailyUsagePoint>[];
-
-    for (final day in days) {
-      final dayStat = await _usageStatsManager.getAppUsageStats(
-        packageId: packageId,
-        startDate: day.dayStart,
-        endDate: day.dayEnd,
-        includeIcons: false,
-      );
-
+    for (var i = 0; i < days.length; i++) {
+      final dayStat = dailyResults[i];
       trend.add(
         DailyUsagePoint(
-          localDay: LocalDayKey.fromDateTime(day),
+          localDay: LocalDayKey.fromDateTime(days[i]),
           totalScreenTime: dayStat?.totalDuration ?? Duration.zero,
           totalLaunchCount: dayStat?.totalLaunchCount ?? 0,
         ),
       );
     }
 
-    // When the app has no usage in the range, appStats is null.
-    // We still need an AppInfo to display the detail screen. Re-fetch with
-    // icons enabled so the caller always gets metadata.
-    final resolvedStats =
-        appStats ??
-        await _usageStatsManager.getAppUsageStats(
-          packageId: packageId,
-          startDate: window.start.dayStart,
-          endDate: window.end.dayEnd,
-        );
-
     return AppUsageDetail(
-      appInfo: resolvedStats!.appInfo,
+      appInfo: appInfo,
       totalDuration: appStats?.totalDuration ?? Duration.zero,
       launchCount: appStats?.totalLaunchCount ?? 0,
       lastTimeUsed: appStats?.lastTimeUsed,

@@ -42,7 +42,7 @@ class StatsBlockingSourceChart extends StatelessWidget {
                   sections: [
                     for (var i = 0; i < sourceBreakdown.breakdowns.length; i++)
                       PieChartSectionData(
-                        value: sourceBreakdown.breakdowns[i].totalEffectiveBlockedDuration.inMinutes.toDouble(),
+                        value: sourceBreakdown.breakdowns[i].totalEffectiveBlockedDuration.inSeconds.toDouble(),
                         color: StatsChartColors.colorAt(i),
                         radius: 60,
                         showTitle: false,

@@ -98,18 +98,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthOtpRequiredResult> resendOtp({required String email}) async {
-    try {
-      await _remoteDataSource.start(email: email);
-    } on AuthError {
-      rethrow;
-    } on Object catch (e) {
-      throw AuthUnknownError(cause: e);
-    }
-
-    _pendingOtpEmail = email;
-    return AuthOtpRequiredResult(challengeId: '', email: email);
-  }
+  Future<AuthOtpRequiredResult> resendOtp({required String email}) => requestOtp(email: email);
 
   @override
   Future<AuthResult> verifyOtp({required String otp}) async {
@@ -197,10 +186,16 @@ final class AuthRepositoryImpl implements AuthRepository {
 
       return newSession.accessToken;
     } on Object {
+      // Local-only cleanup — skip the remote logout call to avoid a deadlock:
+      // the logout POST would trigger the auth middleware, which would call
+      // refreshSession(), returning _pendingRefresh (this very future).
       try {
-        await signOut();
+        await _onSignOutCleanup?.call();
+        await _sessionStorage.deleteSession();
+        _emitSession(const Session.empty());
+        await clearPendingOtpChallenge();
       } on Object {
-        // Best-effort sign-out; the session is already invalid.
+        // Best-effort cleanup; the session is already invalid.
       }
       return null;
     }

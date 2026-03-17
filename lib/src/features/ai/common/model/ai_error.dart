@@ -6,12 +6,12 @@ sealed class AiError implements Exception, Localizable {
 
   factory AiError.fromApiException(ApiClientException e) {
     return switch (e) {
-      ApiClientAuthorizationException(:final statusCode, :final data) =>
-        statusCode == 403 && _serverErrorCode(data) == 'SUBSCRIPTION_REQUIRED'
-            ? const AiSubscriptionRequiredError()
-            : const AiUnauthorizedError(),
+      ApiClientAuthorizationException() => const AiUnauthorizedError(),
       ApiClientNetworkException() => const AiNetworkError(),
       ApiClientClientException(:final statusCode, :final data) => () {
+        if (statusCode == 403 && _serverErrorCode(data) == 'SUBSCRIPTION_REQUIRED') {
+          return const AiSubscriptionRequiredError();
+        }
         if (statusCode == 429) return const AiRateLimitedError();
         if (_serverErrorCode(data) == 'VALIDATION_ERROR') {
           return const AiValidationError();

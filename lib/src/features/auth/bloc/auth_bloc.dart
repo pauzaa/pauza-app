@@ -95,18 +95,23 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
       case AuthResetting():
       case AuthFlowSuccess():
         break;
-      case AuthOtpRequired(:final email):
-      case AuthFlowFailure(:final String email):
-        await _verifyOtp(emit, email: email, otp: event.otp);
+      case AuthOtpRequired(:final email, :final resentCount):
+      case AuthFlowFailure(:final String email, :final resentCount):
+        await _verifyOtp(emit, email: email, otp: event.otp, resentCount: resentCount);
     }
   }
 
-  Future<void> _verifyOtp(Emitter<AuthState> emit, {required String email, required String otp}) async {
+  Future<void> _verifyOtp(
+    Emitter<AuthState> emit, {
+    required String email,
+    required String otp,
+    int resentCount = 0,
+  }) async {
     emit(AuthSubmitting(email: email));
 
     final canProceed = await _internetRequiredGuard.canProceed();
     if (!canProceed) {
-      _emitInternetRequiredFailure(emit, email: email);
+      _emitInternetRequiredFailure(emit, email: email, resentCount: resentCount);
       return;
     }
 
@@ -117,10 +122,10 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
         case AuthSuccess():
           emit(AuthFlowSuccess(email: email));
         case AuthOtpRequiredResult(:final email):
-          emit(AuthOtpRequired(email: email));
+          emit(AuthOtpRequired(email: email, resentCount: resentCount));
       }
     } on Object catch (error) {
-      emit(AuthFlowFailure(error: error, email: email));
+      emit(AuthFlowFailure(error: error, email: email, resentCount: resentCount));
     }
   }
 

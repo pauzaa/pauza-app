@@ -6,10 +6,10 @@ sealed class UserProfileError implements Exception, Localizable {
 
   factory UserProfileError.fromApiException(ApiClientException e) {
     return switch (e) {
-      ApiClientAuthorizationException(:final statusCode) =>
-        statusCode == 403 ? const UserProfileForbiddenError() : const UserProfileUnauthorizedError(),
+      ApiClientAuthorizationException() => const UserProfileUnauthorizedError(),
       ApiClientNetworkException() => const UserProfileNetworkError(),
       ApiClientClientException(:final statusCode, :final data) => () {
+        if (statusCode == 403) return const UserProfileForbiddenError();
         if (statusCode == 409) return const UserProfileUsernameTakenError();
         if (_serverErrorCode(data) == 'VALIDATION_ERROR') {
           return const UserProfileValidationError();

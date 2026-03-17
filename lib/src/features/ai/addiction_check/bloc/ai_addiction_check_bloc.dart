@@ -9,7 +9,7 @@ import 'package:pauza/src/features/ai/common/model/ai_error.dart';
 import 'package:pauza/src/features/ai/common/model/ai_usage_mapper.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
-import 'package:pauza/src/features/streaks/common/model/streak_extensions.dart';
+import 'package:pauza/src/core/common/local_day_extensions.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 part 'ai_addiction_check_event.dart';

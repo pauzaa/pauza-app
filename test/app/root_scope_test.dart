@@ -82,6 +82,7 @@ final class _TestPauzaDependencies extends PauzaDependencies {
     internetHealthGate = MockInternetHealthGate();
     this.internetRequiredGuard = internetRequiredGuard;
     this.hasNfcSupport = hasNfcSupport;
+    aiRepository = MockAiRepository();
     syncLocalDataSource = MockSyncLocalDataSource();
     syncRemoteDataSource = MockSyncRemoteDataSource();
     syncRepository = MockSyncRepository();

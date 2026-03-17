@@ -10,9 +10,9 @@ import 'package:pauza/src/features/stats/blocking_stats/model/mode_blocking_snap
 import 'package:pauza/src/features/stats/blocking_stats/model/session_source.dart';
 import 'package:pauza/src/features/stats/blocking_stats/model/source_blocking_breakdown.dart';
 import 'package:pauza/src/features/stats/blocking_stats/model/source_blocking_snapshot.dart';
-import 'package:pauza/src/features/streaks/common/model/streak_extensions.dart';
+import 'package:pauza/src/core/common/local_day_extensions.dart';
+import 'package:pauza/src/core/common/model/local_day_key.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_snapshot.dart';
-import 'package:pauza/src/features/streaks/common/model/streak_types.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 

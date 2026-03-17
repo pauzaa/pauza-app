@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:pauza/src/features/streaks/common/model/streak_extensions.dart';
-import 'package:pauza/src/features/streaks/common/model/streak_types.dart';
+import 'package:pauza/src/core/common/local_day_extensions.dart';
+import 'package:pauza/src/core/common/model/local_day_key.dart';
 
 @immutable
 final class StreakDailyAggregate {

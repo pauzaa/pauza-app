@@ -4,6 +4,7 @@ import 'package:pauza/src/features/nfc/model/nfc_chip_identifier.dart';
 import 'package:pauza/src/features/nfc_chip_config/model/nfc_linked_chip.dart';
 import 'package:pauza/src/features/sync/common/model/sync_table.dart';
 import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
+import 'package:pauza/src/features/sync/domain/sync_trigger.dart';
 import 'package:uuid/uuid.dart';
 
 abstract interface class NfcLinkedChipsRepository {
@@ -25,13 +26,16 @@ final class NfcLinkedChipsRepositoryImpl implements NfcLinkedChipsRepository {
   NfcLinkedChipsRepositoryImpl({
     required LocalDatabase localDatabase,
     SyncLocalDataSource? syncLocalDataSource,
+    SyncTrigger? syncTrigger,
     Uuid? uuid,
   }) : _localDatabase = localDatabase,
        _syncLocalDataSource = syncLocalDataSource,
+       _syncTrigger = syncTrigger,
        _uuid = uuid ?? const Uuid();
 
   final LocalDatabase _localDatabase;
   final SyncLocalDataSource? _syncLocalDataSource;
+  final SyncTrigger? _syncTrigger;
   final Uuid _uuid;
 
   @override
@@ -68,16 +72,18 @@ INSERT OR IGNORE INTO nfc_linked_chips (
       [_uuid.v4(), normalizedChipIdentifier, normalizedChipIdentifier, now, now],
     );
 
+    if (inserted > 0) {
+      _syncTrigger?.notifyChange();
+    }
+
     return inserted > 0;
   }
 
   @override
   Future<void> deleteChip({required String id}) async {
     await _localDatabase.rawDelete('DELETE FROM nfc_linked_chips WHERE id = ?', [id]);
-    await _syncLocalDataSource?.trackDeletion(
-      table: SyncTable.nfcLinkedChips,
-      key: id,
-    );
+    await _syncLocalDataSource?.trackDeletion(table: SyncTable.nfcLinkedChips, key: id);
+    _syncTrigger?.notifyChange();
   }
 
   @override
@@ -112,5 +118,6 @@ WHERE id = ?
 ''',
       [normalizedName, DateTime.now().toUtc().millisecondsSinceEpoch, id],
     );
+    _syncTrigger?.notifyChange();
   }
 }

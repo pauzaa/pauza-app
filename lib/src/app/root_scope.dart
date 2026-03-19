@@ -18,6 +18,7 @@ import 'package:pauza/src/features/subscription/domain/subscription_coordinator.
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
+import 'package:pauza/src/features/sync/domain/sync_trigger.dart';
 import 'package:pauza/src/features/sync/sync_coordinator.dart';
 
 class RootScope extends StatefulWidget {
@@ -53,10 +54,12 @@ class RootScopeState extends State<RootScope> {
   late final FriendsRepository friendsRepository;
   late final LeaderboardRepository leaderboardRepository;
   late final AiRepository aiRepository;
+  late final SyncTrigger _syncTrigger;
 
   @override
   void initState() {
     final dependencies = widget.dependencies ?? PauzaDependencies.of(context);
+    _syncTrigger = dependencies.syncTrigger;
 
     blockingRepository = PauzaBlockingRepository(
       restrictions: dependencies.appRestrictionManager,
@@ -68,6 +71,7 @@ class RootScopeState extends State<RootScope> {
       platform: kPauzaPlatform,
       restrictions: dependencies.appRestrictionManager,
       syncLocalDataSource: dependencies.syncLocalDataSource,
+      syncTrigger: dependencies.syncTrigger,
     );
 
     installedAppsRepository = PauzaScreenTimeInstalledAppsRepository(
@@ -81,10 +85,12 @@ class RootScopeState extends State<RootScope> {
     nfcLinkedChipsRepository = NfcLinkedChipsRepositoryImpl(
       localDatabase: dependencies.localDatabase,
       syncLocalDataSource: dependencies.syncLocalDataSource,
+      syncTrigger: dependencies.syncTrigger,
     );
     qrLinkedCodesRepository = QrLinkedCodesRepositoryImpl(
       localDatabase: dependencies.localDatabase,
       syncLocalDataSource: dependencies.syncLocalDataSource,
+      syncTrigger: dependencies.syncTrigger,
     );
     // UI-level session/profile composition lives in RootScope (runtime scope),
     // not in infra dependencies.
@@ -109,7 +115,10 @@ class RootScopeState extends State<RootScope> {
       authRepository: dependencies.authRepository,
       modesRepository: modesRepository,
       streaksRepository: dependencies.streaksRepository,
+      internetHealthGate: dependencies.internetHealthGate,
     )..attach();
+
+    dependencies.syncTrigger.bind(onSync: syncCoordinator.requestSync);
 
     deviceTokenCoordinator = dependencies.deviceTokenCoordinator..attach();
 
@@ -135,6 +144,7 @@ class RootScopeState extends State<RootScope> {
     authBloc.close();
     restrictionLifecycleSyncCoordinator.detach();
     syncCoordinator.detach();
+    _syncTrigger.dispose();
     deviceTokenCoordinator.detach();
     subscriptionCoordinator.detach();
     blockingRepository.dispose();

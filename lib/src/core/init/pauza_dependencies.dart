@@ -45,6 +45,7 @@ import 'package:pauza/src/features/subscription/data/purchases_data_source.dart'
 import 'package:pauza/src/features/subscription/data/subscription_repository.dart';
 import 'package:pauza/src/features/sync/data/sync_remote_data_source.dart';
 import 'package:pauza/src/features/sync/data/sync_repository.dart';
+import 'package:pauza/src/features/sync/domain/sync_trigger.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart'
     show AppRestrictionManager, InstalledAppsManager, PermissionManager, UsageStatsManager;
 
@@ -82,6 +83,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final SyncLocalDataSource syncLocalDataSource;
   late final SyncRemoteDataSource syncRemoteDataSource;
   late final SyncRepository syncRepository;
+  late final SyncTrigger syncTrigger;
   late final DevicesRemoteDataSource devicesRemoteDataSource;
   late final DevicesRepository devicesRepository;
   late final DeviceTokenCoordinator deviceTokenCoordinator;
@@ -153,6 +155,7 @@ class PauzaDependencies with AppFuseInitialization {
       syncLocalDataSource = SyncLocalDataSourceImpl(database: localDatabase);
       syncRemoteDataSource = SyncRemoteDataSourceImpl(apiClient: apiClient);
       syncRepository = SyncRepositoryImpl(localDataSource: syncLocalDataSource, remoteDataSource: syncRemoteDataSource);
+      syncTrigger = SyncTriggerImpl();
     },
     'init internet health gate': (state) async {
       final config = state.getCurrentConfig<PauzaConfig>()!;
@@ -217,6 +220,7 @@ class PauzaDependencies with AppFuseInitialization {
       restrictionLifecycleRepository = RestrictionLifecycleRepositoryImpl(
         localDatabase: localDatabase,
         pluginClient: RestrictionLifecyclePluginClientImpl(restrictions: appRestrictionManager),
+        syncTrigger: syncTrigger,
       );
       try {
         await restrictionLifecycleRepository.syncFromPluginQueue();

@@ -1,3 +1,3 @@
 abstract final class StreakConstants {
-  static const Duration targetDurationPerDay = Duration(minutes: 10);
+  static const Duration targetDurationPerDay = Duration(minutes: 30);
 }

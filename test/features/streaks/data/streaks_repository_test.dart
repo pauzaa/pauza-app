@@ -98,16 +98,66 @@ void main() {
       database.seedSession(sessionId: 's1', endedAtEpochMs: null, integrityStatus: 'ok', updatedAtEpochMs: 100);
       database.seedEvents(
         sessionId: 's1',
-        events: [_event(action: 'START', occurredAtUtc: nowUtc.subtract(const Duration(minutes: 12)))],
+        events: [_event(action: 'START', occurredAtUtc: nowUtc.subtract(const Duration(minutes: 35)))],
       );
 
       final snapshot = await repository.getGlobalSnapshot(nowLocal: nowLocal);
 
-      expect(snapshot.todayEffectiveDuration, const Duration(minutes: 12));
+      expect(snapshot.todayEffectiveDuration, const Duration(minutes: 35));
       expect(snapshot.todayQualified, isTrue);
       expect(snapshot.currentStreakDays, 1);
       expect(snapshot.bestStreakDays, 1);
       expect(snapshot.targetDurationPerDay, StreakConstants.targetDurationPerDay);
+    });
+
+    test('25-min session is NOT qualified under 30-min threshold', () async {
+      final database = _StubLocalDatabase();
+      final nowUtc = DateTime.utc(2026, 1, 15, 12);
+      final repository = StreaksRepositoryImpl(localDatabase: database, nowUtc: () => nowUtc);
+
+      database.seedSession(
+        sessionId: 's1',
+        endedAtEpochMs: nowUtc.millisecondsSinceEpoch,
+        integrityStatus: 'ok',
+        updatedAtEpochMs: 100,
+      );
+      database.seedEvents(
+        sessionId: 's1',
+        events: [
+          _event(action: 'START', occurredAtUtc: nowUtc.subtract(const Duration(minutes: 25))),
+          _event(action: 'END', occurredAtUtc: nowUtc),
+        ],
+      );
+
+      await repository.refreshAggregates();
+
+      final aggregate = database.streakDailyAggregates.values.single;
+      expect(aggregate.qualified, isFalse);
+    });
+
+    test('30-min session IS qualified under 30-min threshold', () async {
+      final database = _StubLocalDatabase();
+      final nowUtc = DateTime.utc(2026, 1, 15, 12);
+      final repository = StreaksRepositoryImpl(localDatabase: database, nowUtc: () => nowUtc);
+
+      database.seedSession(
+        sessionId: 's1',
+        endedAtEpochMs: nowUtc.millisecondsSinceEpoch,
+        integrityStatus: 'ok',
+        updatedAtEpochMs: 100,
+      );
+      database.seedEvents(
+        sessionId: 's1',
+        events: [
+          _event(action: 'START', occurredAtUtc: nowUtc.subtract(const Duration(minutes: 30))),
+          _event(action: 'END', occurredAtUtc: nowUtc),
+        ],
+      );
+
+      await repository.refreshAggregates();
+
+      final aggregate = database.streakDailyAggregates.values.single;
+      expect(aggregate.qualified, isTrue);
     });
 
     test('computes best streak from aggregates', () async {

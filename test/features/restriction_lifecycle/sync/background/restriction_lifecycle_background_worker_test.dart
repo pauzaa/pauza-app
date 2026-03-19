@@ -12,6 +12,7 @@ void main() {
     late MockAuthSessionStorage authSessionStorage;
     late MockRestrictionLifecycleRepository restrictionLifecycleRepository;
     late MockStreaksRepository streaksRepository;
+    late MockSyncRepository syncRepository;
 
     setUp(() {
       factory = MockRestrictionLifecycleBackgroundDependenciesFactory();
@@ -19,10 +20,12 @@ void main() {
       authSessionStorage = MockAuthSessionStorage();
       restrictionLifecycleRepository = MockRestrictionLifecycleRepository();
       streaksRepository = MockStreaksRepository();
+      syncRepository = MockSyncRepository();
 
       when(() => dependencies.authSessionStorage).thenReturn(authSessionStorage);
       when(() => dependencies.restrictionLifecycleRepository).thenReturn(restrictionLifecycleRepository);
       when(() => dependencies.streaksRepository).thenReturn(streaksRepository);
+      when(() => dependencies.syncRepository).thenReturn(syncRepository);
       when(() => dependencies.close()).thenAnswer((_) async {});
       when(() => factory.create()).thenAnswer((_) async => dependencies);
     });
@@ -44,6 +47,7 @@ void main() {
       when(() => authSessionStorage.readSession()).thenAnswer((_) async => makeSession());
       when(() => restrictionLifecycleRepository.syncFromPluginQueue()).thenAnswer((_) async {});
       when(() => streaksRepository.refreshAggregates()).thenAnswer((_) async {});
+      when(() => syncRepository.sync()).thenAnswer((_) async {});
 
       final worker = RestrictionLifecycleBackgroundWorker(dependenciesFactory: factory);
 
@@ -52,6 +56,22 @@ void main() {
       expect(result, RestrictionLifecycleBackgroundTaskResult.success);
       verify(() => restrictionLifecycleRepository.syncFromPluginQueue()).called(1);
       verify(() => streaksRepository.refreshAggregates()).called(1);
+      verify(() => syncRepository.sync()).called(1);
+      verify(() => dependencies.close()).called(1);
+    });
+
+    test('returns success when server sync fails (best-effort)', () async {
+      when(() => authSessionStorage.readSession()).thenAnswer((_) async => makeSession());
+      when(() => restrictionLifecycleRepository.syncFromPluginQueue()).thenAnswer((_) async {});
+      when(() => streaksRepository.refreshAggregates()).thenAnswer((_) async {});
+      when(() => syncRepository.sync()).thenThrow(StateError('network_error'));
+
+      final worker = RestrictionLifecycleBackgroundWorker(dependenciesFactory: factory);
+
+      final result = await worker.run();
+
+      expect(result, RestrictionLifecycleBackgroundTaskResult.success);
+      verify(() => syncRepository.sync()).called(1);
       verify(() => dependencies.close()).called(1);
     });
 

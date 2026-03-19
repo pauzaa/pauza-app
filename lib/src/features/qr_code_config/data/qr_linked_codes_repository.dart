@@ -5,6 +5,7 @@ import 'package:pauza/src/features/qr_code_config/model/qr_linked_code.dart';
 import 'package:pauza/src/features/qr_code_config/model/qr_unlock_token.dart';
 import 'package:pauza/src/features/sync/common/model/sync_table.dart';
 import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
+import 'package:pauza/src/features/sync/domain/sync_trigger.dart';
 import 'package:qr/qr.dart';
 import 'package:uuid/uuid.dart';
 
@@ -26,13 +27,16 @@ final class QrLinkedCodesRepositoryImpl implements QrLinkedCodesRepository {
   QrLinkedCodesRepositoryImpl({
     required LocalDatabase localDatabase,
     SyncLocalDataSource? syncLocalDataSource,
+    SyncTrigger? syncTrigger,
     Uuid? uuid,
   }) : _localDatabase = localDatabase,
        _syncLocalDataSource = syncLocalDataSource,
+       _syncTrigger = syncTrigger,
        _uuid = uuid ?? const Uuid();
 
   final LocalDatabase _localDatabase;
   final SyncLocalDataSource? _syncLocalDataSource;
+  final SyncTrigger? _syncTrigger;
   final Uuid _uuid;
 
   @override
@@ -78,6 +82,7 @@ INSERT OR IGNORE INTO qr_linked_codes (
         );
 
         if (inserted > 0) {
+          _syncTrigger?.notifyChange();
           final timestamp = DateTime.fromMillisecondsSinceEpoch(now, isUtc: true);
           return QrLinkedCode(
             id: id,
@@ -103,10 +108,8 @@ INSERT OR IGNORE INTO qr_linked_codes (
   Future<void> deleteCode({required String id}) async {
     try {
       await _localDatabase.rawDelete('DELETE FROM qr_linked_codes WHERE id = ?', [id]);
-      await _syncLocalDataSource?.trackDeletion(
-        table: SyncTable.qrLinkedCodes,
-        key: id,
-      );
+      await _syncLocalDataSource?.trackDeletion(table: SyncTable.qrLinkedCodes, key: id);
+      _syncTrigger?.notifyChange();
     } on Object catch (error) {
       throw QrCodeConfigDeleteFailedError(cause: error);
     }
@@ -130,6 +133,7 @@ WHERE id = ?
 ''',
         [normalizedName, DateTime.now().toUtc().millisecondsSinceEpoch, id],
       );
+      _syncTrigger?.notifyChange();
     } on Object catch (error) {
       throw QrCodeConfigRenameFailedError(cause: error);
     }

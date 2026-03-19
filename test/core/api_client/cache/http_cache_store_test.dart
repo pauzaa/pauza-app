@@ -50,7 +50,7 @@ void main() {
     });
 
     test('put overwrites existing entry', () async {
-      await store.put('GET:/api/v1/me', makeEntry(statusCode: 200));
+      await store.put('GET:/api/v1/me', makeEntry());
       await store.put('GET:/api/v1/me', makeEntry(statusCode: 201));
 
       final result = await store.get('GET:/api/v1/me');

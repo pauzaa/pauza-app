@@ -10,6 +10,7 @@ import 'package:pauza/src/features/modes/common/model/schedule.dart';
 import 'package:pauza/src/features/modes/common/model/week_day.dart';
 import 'package:pauza/src/features/sync/common/model/sync_table.dart';
 import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
+import 'package:pauza/src/features/sync/domain/sync_trigger.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:uuid/uuid.dart';
 
@@ -31,7 +32,8 @@ abstract interface class ModesRepository implements Disposable {
   void notifyExternalChange();
 }
 
-String _modeSelectQuery({String? whereClause}) => '''
+String _modeSelectQuery({String? whereClause}) =>
+    '''
 SELECT
   m.id,
   m.title,
@@ -63,15 +65,18 @@ class ModesRepositoryImpl implements ModesRepository {
     required this.platform,
     required AppRestrictionManager restrictions,
     SyncLocalDataSource? syncLocalDataSource,
+    SyncTrigger? syncTrigger,
     Uuid? uuid,
   }) : _localDatabase = localDatabase,
        _restrictions = restrictions,
        _syncLocalDataSource = syncLocalDataSource,
+       _syncTrigger = syncTrigger,
        _uuid = uuid ?? const Uuid();
 
   final LocalDatabase _localDatabase;
   final AppRestrictionManager _restrictions;
   final SyncLocalDataSource? _syncLocalDataSource;
+  final SyncTrigger? _syncTrigger;
   final Uuid _uuid;
   final PauzaPlatform platform;
 
@@ -117,6 +122,7 @@ class ModesRepositoryImpl implements ModesRepository {
 
     await _trackModeDeletion(modeId, previousMode);
     await _notifyListeners();
+    _syncTrigger?.notifyChange();
   }
 
   @override
@@ -176,6 +182,7 @@ INSERT INTO modes (
     }
 
     await _notifyListeners();
+    _syncTrigger?.notifyChange();
   }
 
   @override
@@ -280,12 +287,9 @@ WHERE mode_id = ?
       rethrow;
     }
 
-    await _trackUpdateDeletions(
-      modeId: modeId,
-      previousMode: previousMode,
-      request: request,
-    );
+    await _trackUpdateDeletions(modeId: modeId, previousMode: previousMode, request: request);
     await _notifyListeners();
+    _syncTrigger?.notifyChange();
   }
 
   @override
@@ -316,11 +320,7 @@ WHERE mode_id = ?
     for (final appId in previousMode.blockedAppIds) {
       await sync.trackDeletion(
         table: SyncTable.modeBlockedApps,
-        key: <String, Object?>{
-          'mode_id': modeId,
-          'platform': platform.dbValue,
-          'app_identifier': appId.raw,
-        },
+        key: <String, Object?>{'mode_id': modeId, 'platform': platform.dbValue, 'app_identifier': appId.raw},
       );
     }
   }
@@ -340,11 +340,7 @@ WHERE mode_id = ?
     for (final appId in removedBlocked) {
       await sync.trackDeletion(
         table: SyncTable.modeBlockedApps,
-        key: <String, Object?>{
-          'mode_id': modeId,
-          'platform': platform.dbValue,
-          'app_identifier': appId,
-        },
+        key: <String, Object?>{'mode_id': modeId, 'platform': platform.dbValue, 'app_identifier': appId},
       );
     }
 
@@ -405,7 +401,12 @@ INSERT INTO schedules (
     );
   }
 
-  void _batchInsertBlockedApps(Batch batch, {required String modeId, required Iterable<String> appIds, required int now}) {
+  void _batchInsertBlockedApps(
+    Batch batch, {
+    required String modeId,
+    required Iterable<String> appIds,
+    required int now,
+  }) {
     for (final appId in appIds) {
       batch.rawInsert(
         '''

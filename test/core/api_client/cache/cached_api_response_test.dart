@@ -4,7 +4,7 @@ import 'package:pauza/src/core/api_client/cache/cached_api_response.dart';
 void main() {
   group('CachedApiResponse', () {
     test('isFresh returns true within TTL', () {
-      final cachedAt = DateTime.utc(2024, 1, 1, 12, 0);
+      final cachedAt = DateTime.utc(2024, 1, 1, 12);
       final entry = CachedApiResponse(
         statusCode: 200,
         headers: const {},
@@ -19,7 +19,7 @@ void main() {
     });
 
     test('isFresh returns false past TTL', () {
-      final cachedAt = DateTime.utc(2024, 1, 1, 12, 0);
+      final cachedAt = DateTime.utc(2024, 1, 1, 12);
       final entry = CachedApiResponse(
         statusCode: 200,
         headers: const {},
@@ -34,7 +34,7 @@ void main() {
     });
 
     test('isFresh returns false if cachedAt is in the future', () {
-      final cachedAt = DateTime.utc(2024, 1, 1, 12, 0);
+      final cachedAt = DateTime.utc(2024, 1, 1, 12);
       final entry = CachedApiResponse(
         statusCode: 200,
         headers: const {},
@@ -49,11 +49,11 @@ void main() {
     });
 
     test('fromJson / toJson round-trip preserves all fields', () {
-      final original = CachedApiResponse(
+      const original = CachedApiResponse(
         statusCode: 200,
-        headers: const {'content-type': 'application/json'},
+        headers: {'content-type': 'application/json'},
         contentLength: 42,
-        data: const {'key': 'value'},
+        data: {'key': 'value'},
         cachedAtUtcMs: 1704067200000,
         url: 'https://api.pauza.dev/api/v1/me',
       );

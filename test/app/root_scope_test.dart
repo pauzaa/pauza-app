@@ -6,6 +6,7 @@ import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/features/auth/common/model/session.dart';
 import 'package:pauza/src/features/devices/domain/device_token_coordinator.dart';
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
+import 'package:pauza/src/features/sync/domain/sync_trigger.dart';
 
 import '../helpers/helpers.dart';
 
@@ -80,7 +81,10 @@ final class _TestPauzaDependencies extends PauzaDependencies {
     streaksRepository = MockStreaksRepository();
     statsBlockingRepository = MockStatsBlockingRepository();
     internetHealthGate = MockInternetHealthGate();
+    when(() => internetHealthGate.addListener(any())).thenReturn(null);
+    when(() => internetHealthGate.removeListener(any())).thenReturn(null);
     this.internetRequiredGuard = internetRequiredGuard;
+    syncTrigger = SyncTriggerImpl();
     this.hasNfcSupport = hasNfcSupport;
     aiRepository = MockAiRepository();
     syncLocalDataSource = MockSyncLocalDataSource();

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:pauza/src/core/api_client/api_client.dart';
@@ -78,7 +76,7 @@ void main() {
   setUp(() {
     cacheStore = FakeHttpCacheStore();
     networkCallCount = 0;
-    fakeNow = DateTime.utc(2024, 1, 1, 12, 0);
+    fakeNow = DateTime.utc(2024, 1, 1, 12);
   });
 
   group('ApiClientCacheMiddleware', () {

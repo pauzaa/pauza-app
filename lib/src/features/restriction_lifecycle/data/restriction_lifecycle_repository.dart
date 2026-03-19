@@ -3,6 +3,7 @@ import 'package:pauza/src/features/restriction_lifecycle/model/restriction_lifec
 import 'package:pauza/src/features/restriction_lifecycle/model/restriction_session_log.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_plugin_client.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_session_reducer.dart';
+import 'package:pauza/src/features/sync/domain/sync_trigger.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -18,12 +19,15 @@ final class RestrictionLifecycleRepositoryImpl implements RestrictionLifecycleRe
   RestrictionLifecycleRepositoryImpl({
     required LocalDatabase localDatabase,
     required RestrictionLifecyclePluginClient pluginClient,
+    SyncTrigger? syncTrigger,
   }) : _localDatabase = localDatabase,
        _pluginClient = pluginClient,
+       _syncTrigger = syncTrigger,
        _reducer = const RestrictionSessionReducer();
 
   final LocalDatabase _localDatabase;
   final RestrictionLifecyclePluginClient _pluginClient;
+  final SyncTrigger? _syncTrigger;
   final RestrictionSessionReducer _reducer;
 
   @override
@@ -32,10 +36,12 @@ final class RestrictionLifecycleRepositoryImpl implements RestrictionLifecycleRe
       throw ArgumentError.value(batchSize, 'batchSize', 'batchSize must be > 0');
     }
 
+    var didInsert = false;
+
     while (true) {
       final events = await _pluginClient.getPendingLifecycleEvents(limit: batchSize);
       if (events.isEmpty) {
-        return;
+        break;
       }
 
       await _localDatabase.transaction((transaction) async {
@@ -44,6 +50,8 @@ final class RestrictionLifecycleRepositoryImpl implements RestrictionLifecycleRe
           if (!inserted) {
             continue;
           }
+
+          didInsert = true;
 
           final currentSession = await _getSessionById(transaction: transaction, sessionId: event.sessionId);
 
@@ -54,6 +62,10 @@ final class RestrictionLifecycleRepositoryImpl implements RestrictionLifecycleRe
       });
 
       await _pluginClient.ackLifecycleEvents(throughEventId: events.last.id);
+    }
+
+    if (didInsert) {
+      _syncTrigger?.notifyChange();
     }
   }
 

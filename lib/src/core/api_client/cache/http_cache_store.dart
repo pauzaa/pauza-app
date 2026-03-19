@@ -34,7 +34,7 @@ final class HiveHttpCacheStore implements HttpCacheStore {
 
   @override
   Future<void> deleteByPrefix(String prefix) async {
-    final keysToDelete = _box.keys.whereType<String>().where((key) => key.startsWith('GET:$prefix')).toList();
+    final keysToDelete = _box.keys.whereType<String>().where((key) => key.contains(prefix)).toList();
     if (keysToDelete.isNotEmpty) {
       await _box.deleteAll(keysToDelete);
     }

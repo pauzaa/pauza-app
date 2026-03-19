@@ -265,6 +265,14 @@
   "@errorTitle": {
     "description": "Title shown when an error occurs."
   },
+  "errorSubscriptionRequired": "Premium subscription required",
+  "@errorSubscriptionRequired": {
+    "description": "Error message when a feature requires a premium subscription."
+  },
+  "errorRateLimited": "Too many requests. Please try again later.",
+  "@errorRateLimited": {
+    "description": "Error message when the user is rate-limited by the server."
+  },
   "successTitle": "Success",
   "@successTitle": {
     "description": "Title shown when an action completes successfully."
@@ -1735,14 +1743,6 @@
   "@aiDailyReportCta": {
     "description": "CTA button for AI daily report."
   },
-  "aiErrorSubscriptionRequired": "This feature requires a Premium subscription.",
-  "@aiErrorSubscriptionRequired": {
-    "description": "Error shown when AI feature requires subscription."
-  },
-  "aiErrorRateLimited": "Too many requests. Please try again later.",
-  "@aiErrorRateLimited": {
-    "description": "Error shown when AI rate limit is hit."
-  },
   "aiErrorGeneric": "Something went wrong. Please try again.",
   "@aiErrorGeneric": {
     "description": "Generic error for AI features."
@@ -1750,5 +1750,17 @@
   "aiRetry": "Retry",
   "@aiRetry": {
     "description": "Retry button label for AI features."
+  },
+  "premiumUnlockButton": "Unlock Premium",
+  "@premiumUnlockButton": {
+    "description": "CTA button label to unlock premium features."
+  },
+  "premiumUpgradeButton": "Upgrade",
+  "@premiumUpgradeButton": {
+    "description": "Compact CTA button label to upgrade to premium."
+  },
+  "premiumFriendsDescription": "Add friends and see how they're doing.",
+  "@premiumFriendsDescription": {
+    "description": "Description shown on the friends premium locked view."
   }
 }

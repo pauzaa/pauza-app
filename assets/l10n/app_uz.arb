@@ -125,6 +125,8 @@
   "backButton": "Ortga",
   "loadingLabel": "Yuklanmoqda...",
   "errorTitle": "Xatolik yuz berdi",
+  "errorSubscriptionRequired": "Premium obuna talab qilinadi",
+  "errorRateLimited": "Juda ko'p so'rovlar. Keyinroq urinib ko'ring.",
   "successTitle": "Muvaffaqiyat",
   "searchPlaceholder": "Qidirish",
   "emptyStateMessage": "Ko'rsatish uchun elementlar yo'q",
@@ -382,5 +384,8 @@
   "paywallErrorGeneric": "Xatolik yuz berdi. Qayta urinib ko'ring.",
   "paywallOfflineMessage": "Siz oflayn holatdasiz. Obuna rejalarini ko'rish uchun internetga ulaning.",
   "premiumBadge": "Premium",
-  "premiumLockedMessage": "Bu funksiya Premium obunani talab qiladi."
+  "premiumLockedMessage": "Bu funksiya Premium obunani talab qiladi.",
+  "premiumUnlockButton": "Premiumni ochish",
+  "premiumUpgradeButton": "Yangilash",
+  "premiumFriendsDescription": "Do'stlar qo'shing va ularning holatini kuzating."
 }

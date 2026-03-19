@@ -1,5 +1,5 @@
+import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/features/ai/addiction_check/model/addiction_check_request_dto.dart';
-import 'package:pauza/src/features/ai/common/model/ai_error.dart';
 import 'package:pauza/src/features/ai/daily_report/model/daily_report_request_dto.dart';
 import 'package:pauza/src/features/ai/data/ai_remote_data_source.dart';
 import 'package:pauza/src/features/ai/focus_schedule/model/focus_schedule_request_dto.dart';
@@ -21,10 +21,10 @@ final class AiRepositoryImpl implements AiRepository {
   Future<String> analyzeUsage(UsageAnalysisRequestDto request) async {
     try {
       return await _remoteDataSource.analyzeUsage(request);
-    } on AiError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw AiUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -32,10 +32,10 @@ final class AiRepositoryImpl implements AiRepository {
   Future<String> suggestFocusSchedule(FocusScheduleRequestDto request) async {
     try {
       return await _remoteDataSource.suggestFocusSchedule(request);
-    } on AiError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw AiUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -43,10 +43,10 @@ final class AiRepositoryImpl implements AiRepository {
   Future<String> generateDailyReport(DailyReportRequestDto request) async {
     try {
       return await _remoteDataSource.generateDailyReport(request);
-    } on AiError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw AiUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -54,10 +54,10 @@ final class AiRepositoryImpl implements AiRepository {
   Future<String> checkAddiction(AddictionCheckRequestDto request) async {
     try {
       return await _remoteDataSource.checkAddiction(request);
-    } on AiError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw AiUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 }

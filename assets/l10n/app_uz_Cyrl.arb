@@ -125,6 +125,8 @@
   "backButton": "Ортга",
   "loadingLabel": "Юкланмоқда...",
   "errorTitle": "Хатолик юз берди",
+  "errorSubscriptionRequired": "Премиум обуна талаб қилинади",
+  "errorRateLimited": "Жуда кўп сўровлар. Кейинроқ уриниб кўринг.",
   "successTitle": "Муваффақият",
   "searchPlaceholder": "Қидириш",
   "emptyStateMessage": "Кўрсатиш учун элементлар йўқ",
@@ -382,5 +384,8 @@
   "paywallErrorGeneric": "Хатолик юз берди. Қайта уриниб кўринг.",
   "paywallOfflineMessage": "Сиз офлайн ҳолатдасиз. Обуна режаларини кўриш учун интернетга уланинг.",
   "premiumBadge": "Премиум",
-  "premiumLockedMessage": "Бу функция Премиум обунани талаб қилади."
+  "premiumLockedMessage": "Бу функция Премиум обунани талаб қилади.",
+  "premiumUnlockButton": "Премиумни очиш",
+  "premiumUpgradeButton": "Янгилаш",
+  "premiumFriendsDescription": "Дўстлар қўшинг ва уларнинг ҳолатини кузатинг."
 }

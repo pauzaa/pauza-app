@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pauza/src/features/ai/common/model/ai_error.dart';
+import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/features/ai/common/model/ai_usage_mapper.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/ai/usage_analysis/model/usage_analysis_request_dto.dart';
@@ -33,7 +33,7 @@ class AiUsageAnalysisBloc extends Bloc<AiUsageAnalysisEvent, AiUsageAnalysisStat
       final snapshot = await snapshotFuture;
 
       if (snapshot.isEmpty) {
-        emit(state.copyWith(isLoading: false, error: const AiValidationError()));
+        emit(state.copyWith(isLoading: false, error: const ApiValidationError()));
         return;
       }
 
@@ -55,10 +55,10 @@ class AiUsageAnalysisBloc extends Bloc<AiUsageAnalysisEvent, AiUsageAnalysisStat
 
       final analysis = await _aiRepository.analyzeUsage(request);
       emit(state.copyWith(isLoading: false, analysis: analysis));
-    } on AiError catch (error) {
+    } on ApiError catch (error) {
       emit(state.copyWith(isLoading: false, error: error));
     } on Object catch (error) {
-      emit(state.copyWith(isLoading: false, error: AiUnknownError(error)));
+      emit(state.copyWith(isLoading: false, error: ApiUnknownError(error)));
     }
   }
 }

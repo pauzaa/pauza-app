@@ -1,6 +1,5 @@
 import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/features/ai/addiction_check/model/addiction_check_request_dto.dart';
-import 'package:pauza/src/features/ai/common/model/ai_error.dart';
 import 'package:pauza/src/features/ai/daily_report/model/daily_report_request_dto.dart';
 import 'package:pauza/src/features/ai/focus_schedule/model/focus_schedule_request_dto.dart';
 import 'package:pauza/src/features/ai/usage_analysis/model/usage_analysis_request_dto.dart';
@@ -37,7 +36,7 @@ final class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       final response = await _apiClient.post(path, body: body);
       return response.data!['analysis'] as String;
     } on ApiClientException catch (e) {
-      throw AiError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 }

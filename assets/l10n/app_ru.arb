@@ -125,6 +125,8 @@
   "backButton": "Назад",
   "loadingLabel": "Загрузка...",
   "errorTitle": "Что-то пошло не так",
+  "errorSubscriptionRequired": "Требуется Премиум подписка",
+  "errorRateLimited": "Слишком много запросов. Попробуйте позже.",
   "successTitle": "Успех",
   "searchPlaceholder": "Поиск",
   "emptyStateMessage": "Пока нет данных",
@@ -382,5 +384,8 @@
   "paywallErrorGeneric": "Что-то пошло не так. Попробуйте ещё раз.",
   "paywallOfflineMessage": "Вы офлайн. Подключитесь к интернету, чтобы увидеть планы подписки.",
   "premiumBadge": "Премиум",
-  "premiumLockedMessage": "Эта функция требует подписку Премиум."
+  "premiumLockedMessage": "Эта функция требует подписку Премиум.",
+  "premiumUnlockButton": "Открыть Премиум",
+  "premiumUpgradeButton": "Улучшить",
+  "premiumFriendsDescription": "Добавляйте друзей и следите за их прогрессом."
 }

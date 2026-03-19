@@ -19,6 +19,24 @@ void main() {
 
   group('ProfileEditBloc', () {
     blocTest<ProfileEditBloc, ProfileEditState>(
+      'ProfileEditStarted calls fetchProfile with forceRemote: true',
+      setUp: () {
+        when(
+          () => repository.fetchProfile(forceRemote: true),
+        ).thenAnswer((_) async => makeUserDto(username: 'john', name: 'John'));
+      },
+      build: () => ProfileEditBloc(userProfileRepository: repository, internetRequiredGuard: guard),
+      act: (bloc) => bloc.add(const ProfileEditStarted()),
+      expect: () => <TypeMatcher<ProfileEditState>>[
+        isA<ProfileEditLoading>(),
+        isA<ProfileEditReady>(),
+      ],
+      verify: (_) {
+        verify(() => repository.fetchProfile(forceRemote: true)).called(1);
+      },
+    );
+
+    blocTest<ProfileEditBloc, ProfileEditState>(
       'offline save emits network failure and does not call repository update',
       setUp: () {
         when(

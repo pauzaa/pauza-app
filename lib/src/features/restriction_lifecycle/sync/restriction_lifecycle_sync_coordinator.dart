@@ -1,48 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:flutter/widgets.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
-import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 
-final class RestrictionLifecycleSyncCoordinator with WidgetsBindingObserver {
+final class RestrictionLifecycleSyncCoordinator {
   RestrictionLifecycleSyncCoordinator({
     required RestrictionLifecycleRepository repository,
-    required StreaksRepository streaksRepository,
-  }) : _repository = repository,
-       _streaksRepository = streaksRepository;
+  }) : _repository = repository;
 
   final RestrictionLifecycleRepository _repository;
-  final StreaksRepository _streaksRepository;
 
-  bool _isAttached = false;
   Future<void>? _inFlightSync;
-
-  void attach() {
-    if (_isAttached) {
-      return;
-    }
-
-    WidgetsBinding.instance.addObserver(this);
-    _isAttached = true;
-  }
-
-  void detach() {
-    if (!_isAttached) {
-      return;
-    }
-
-    WidgetsBinding.instance.removeObserver(this);
-    _isAttached = false;
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) {
-      return;
-    }
-
-    unawaited(syncNow().catchError((Object _) {}));
-  }
 
   Future<void> syncNow({int batchSize = 200}) {
     final inFlight = _inFlightSync;
@@ -50,7 +18,7 @@ final class RestrictionLifecycleSyncCoordinator with WidgetsBindingObserver {
       return inFlight;
     }
 
-    final syncFuture = _syncAndRefresh(batchSize: batchSize);
+    final syncFuture = _sync(batchSize: batchSize);
     _inFlightSync = syncFuture;
 
     return syncFuture.whenComplete(() {
@@ -60,8 +28,11 @@ final class RestrictionLifecycleSyncCoordinator with WidgetsBindingObserver {
     });
   }
 
-  Future<void> _syncAndRefresh({required int batchSize}) async {
-    await _repository.syncFromPluginQueue(batchSize: batchSize);
-    await _streaksRepository.refreshAggregates();
+  Future<void> _sync({required int batchSize}) async {
+    try {
+      await _repository.syncFromPluginQueue(batchSize: batchSize);
+    } on Object catch (e, s) {
+      log('syncFromPluginQueue failed', name: 'pauza.sync', error: e, stackTrace: s);
+    }
   }
 }

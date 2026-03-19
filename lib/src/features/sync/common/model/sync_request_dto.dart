@@ -61,11 +61,10 @@ final class SyncTableRequestDto {
   final List<Object> deletions;
 
   Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'cursor': cursor,
-      'upserts': upserts,
-      'deletions': deletions,
-    };
+    final json = <String, Object?>{'cursor': cursor};
+    if (upserts.isNotEmpty) json['upserts'] = upserts;
+    if (deletions.isNotEmpty) json['deletions'] = deletions;
+    return json;
   }
 
   @override

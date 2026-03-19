@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/ai/daily_report/bloc/ai_daily_report_bloc.dart';
+import 'package:pauza/src/features/auth/common/model/session.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
 import 'package:pauza/src/features/home/model/blocking_action_error.dart';
@@ -14,6 +15,7 @@ import 'package:pauza/src/features/home/widget/home_session_button.dart';
 import 'package:pauza/src/features/home/widget/home_stats_pill.dart';
 import 'package:pauza/src/features/modes/common/model/mode.dart';
 import 'package:pauza/src/features/modes/list/bloc/modes_bloc.dart';
+import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_snapshot.dart';
 import 'package:pauza/src/features/streaks/common/model/streak_types.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
@@ -29,6 +31,7 @@ void main() {
     late MockStreaksRepository mockStreaksRepository;
     late MockAiRepository mockAiRepository;
     late MockStatsUsageRepository mockStatsUsageRepository;
+    late CurrentUserBloc currentUserBloc;
 
     setUp(() {
       mockModesRepository = MockModesRepository();
@@ -38,6 +41,13 @@ void main() {
       mockStreaksRepository = MockStreaksRepository();
       mockAiRepository = MockAiRepository();
       mockStatsUsageRepository = MockStatsUsageRepository();
+
+      final mockAuthRepo = MockAuthRepository();
+      final mockProfileRepo = MockUserProfileRepository();
+      when(() => mockAuthRepo.sessionStream).thenAnswer((_) => const Stream<Session>.empty());
+      when(() => mockAuthRepo.currentSession).thenReturn(const Session.empty());
+      when(() => mockProfileRepo.watchProfileChanges()).thenAnswer((_) => const Stream<Never>.empty());
+      currentUserBloc = CurrentUserBloc(authRepository: mockAuthRepo, userProfileRepository: mockProfileRepo);
 
       when(() => mockModesRepository.watchModes()).thenAnswer((_) => const Stream<void>.empty());
       when(() => mockModesRepository.getModes()).thenAnswer((_) async => <Mode>[makeMode()]);
@@ -71,6 +81,7 @@ void main() {
         const HomeContent(),
         surfaceSize: const Size(1200, 3000),
         providers: [
+          BlocProvider<CurrentUserBloc>.value(value: currentUserBloc),
           BlocProvider<ModesListBloc>.value(value: modesBloc),
           BlocProvider<BlockingBloc>.value(value: blockingBloc),
           BlocProvider<HomeStatsBloc>(
@@ -121,6 +132,7 @@ void main() {
         const HomeContent(),
         surfaceSize: const Size(1200, 3000),
         providers: [
+          BlocProvider<CurrentUserBloc>.value(value: currentUserBloc),
           BlocProvider<ModesListBloc>.value(value: modesBloc),
           BlocProvider<BlockingBloc>.value(value: blockingBloc),
           BlocProvider<HomeStatsBloc>(
@@ -163,6 +175,7 @@ void main() {
         const HomeContent(),
         surfaceSize: const Size(1200, 3000),
         providers: [
+          BlocProvider<CurrentUserBloc>.value(value: currentUserBloc),
           BlocProvider<ModesListBloc>.value(value: modesBloc),
           BlocProvider<BlockingBloc>.value(value: blockingBloc),
           BlocProvider<HomeStatsBloc>(
@@ -212,6 +225,7 @@ void main() {
         const HomeContent(),
         surfaceSize: const Size(1200, 3000),
         providers: [
+          BlocProvider<CurrentUserBloc>.value(value: currentUserBloc),
           BlocProvider<ModesListBloc>.value(value: modesBloc),
           BlocProvider<BlockingBloc>.value(value: blockingBloc),
           BlocProvider<HomeStatsBloc>(
@@ -252,6 +266,7 @@ void main() {
         const HomeContent(),
         surfaceSize: const Size(1200, 3000),
         providers: [
+          BlocProvider<CurrentUserBloc>.value(value: currentUserBloc),
           BlocProvider<ModesListBloc>.value(value: modesBloc),
           BlocProvider<BlockingBloc>.value(value: blockingBloc),
           BlocProvider<HomeStatsBloc>(

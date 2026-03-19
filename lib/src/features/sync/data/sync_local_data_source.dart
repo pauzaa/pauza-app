@@ -156,6 +156,15 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
           [table.key],
         );
       }
+
+      // If restriction_sessions were upserted from another device, reset the
+      // streak rollup cursor so refreshAggregates() re-processes all sessions.
+      final sessionData = response.tables[SyncTable.restrictionSessions.key];
+      if (sessionData != null && sessionData.upserts.isNotEmpty) {
+        await txn.rawUpdate(
+          "UPDATE streak_rollup_state SET session_cursor_updated_at = 0, session_cursor_id = '' WHERE id = 1",
+        );
+      }
     });
   }
 
@@ -383,6 +392,7 @@ ON CONFLICT(id) DO UPDATE SET
   icon_token = excluded.icon_token,
   created_at = excluded.created_at,
   updated_at = excluded.updated_at
+WHERE excluded.updated_at > modes.updated_at
 ''',
     SyncTable.modeBlockedApps: '''
 INSERT INTO mode_blocked_apps (mode_id, platform, app_identifier, created_at, updated_at)
@@ -390,6 +400,7 @@ VALUES (?, ?, ?, ?, ?)
 ON CONFLICT(mode_id, platform, app_identifier) DO UPDATE SET
   created_at = excluded.created_at,
   updated_at = excluded.updated_at
+WHERE excluded.updated_at > mode_blocked_apps.updated_at
 ''',
     SyncTable.schedules: '''
 INSERT INTO schedules (id, mode_id, days, start_minute, end_minute, enabled, created_at, updated_at)
@@ -402,6 +413,7 @@ ON CONFLICT(id) DO UPDATE SET
   enabled = excluded.enabled,
   created_at = excluded.created_at,
   updated_at = excluded.updated_at
+WHERE excluded.updated_at > schedules.updated_at
 ''',
     SyncTable.restrictionSessions: '''
 INSERT INTO restriction_sessions (session_id, mode_id, source, started_at, ended_at,
@@ -421,6 +433,7 @@ ON CONFLICT(session_id) DO UPDATE SET
   last_event_id = excluded.last_event_id,
   created_at = excluded.created_at,
   updated_at = excluded.updated_at
+WHERE excluded.updated_at > restriction_sessions.updated_at
 ''',
     SyncTable.restrictionLifecycleEvents: '''
 INSERT INTO restriction_lifecycle_events (id, session_id, mode_id, action, source,
@@ -443,6 +456,7 @@ ON CONFLICT(id) DO UPDATE SET
   name = excluded.name,
   created_at = excluded.created_at,
   updated_at = excluded.updated_at
+WHERE excluded.updated_at > nfc_linked_chips.updated_at
 ''',
     SyncTable.qrLinkedCodes: '''
 INSERT INTO qr_linked_codes (id, scan_value, name, created_at, updated_at)
@@ -452,6 +466,7 @@ ON CONFLICT(id) DO UPDATE SET
   name = excluded.name,
   created_at = excluded.created_at,
   updated_at = excluded.updated_at
+WHERE excluded.updated_at > qr_linked_codes.updated_at
 ''',
     SyncTable.streakSessionDailyRollups: '''
 INSERT INTO streak_session_daily_rollups (session_id, local_day, effective_ms, updated_at)
@@ -459,6 +474,7 @@ VALUES (?, ?, ?, ?)
 ON CONFLICT(session_id, local_day) DO UPDATE SET
   effective_ms = excluded.effective_ms,
   updated_at = excluded.updated_at
+WHERE excluded.updated_at > streak_session_daily_rollups.updated_at
 ''',
     SyncTable.streakDailyAggregates: '''
 INSERT INTO streak_daily_aggregates (local_day, effective_ms, qualified, source_session_count, updated_at)
@@ -468,6 +484,7 @@ ON CONFLICT(local_day) DO UPDATE SET
   qualified = excluded.qualified,
   source_session_count = excluded.source_session_count,
   updated_at = excluded.updated_at
+WHERE excluded.updated_at > streak_daily_aggregates.updated_at
 ''',
   };
 }

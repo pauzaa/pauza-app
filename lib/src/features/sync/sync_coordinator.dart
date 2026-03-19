@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:pauza/src/core/connectivity/domain/internet_health_gate.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
 import 'package:pauza/src/features/sync/data/sync_repository.dart';
@@ -15,12 +17,14 @@ final class SyncCoordinator with WidgetsBindingObserver {
     required AuthRepository authRepository,
     required ModesRepository modesRepository,
     required StreaksRepository streaksRepository,
+    required RestrictionLifecycleRepository restrictionLifecycleRepository,
     required InternetHealthGate internetHealthGate,
   }) : _syncRepository = syncRepository,
        _syncLocalDataSource = syncLocalDataSource,
        _authRepository = authRepository,
        _modesRepository = modesRepository,
        _streaksRepository = streaksRepository,
+       _restrictionLifecycleRepository = restrictionLifecycleRepository,
        _internetHealthGate = internetHealthGate;
 
   final SyncRepository _syncRepository;
@@ -28,10 +32,12 @@ final class SyncCoordinator with WidgetsBindingObserver {
   final AuthRepository _authRepository;
   final ModesRepository _modesRepository;
   final StreaksRepository _streaksRepository;
+  final RestrictionLifecycleRepository _restrictionLifecycleRepository;
   final InternetHealthGate _internetHealthGate;
 
   bool _isAttached = false;
   bool _initialDownloadCompleted = false;
+  bool _pendingSyncRequested = false;
   StreamSubscription<void>? _sessionSubscription;
   Future<void>? _inFlightSync;
 
@@ -59,6 +65,11 @@ final class SyncCoordinator with WidgetsBindingObserver {
     if (!_initialDownloadCompleted) return;
     if (!_internetHealthGate.isHealthy) return;
 
+    if (_inFlightSync != null) {
+      _pendingSyncRequested = true;
+      return;
+    }
+
     unawaited(_runGuarded(() => _deduplicatedSync(_performSync)));
   }
 
@@ -85,6 +96,7 @@ final class SyncCoordinator with WidgetsBindingObserver {
         final hasCursors = await _syncLocalDataSource.hasAnySyncCursor();
         if (hasCursors) {
           await _deduplicatedSync(_performSync);
+          _initialDownloadCompleted = true;
         } else {
           await _deduplicatedSync(_performInitialDownload);
         }
@@ -105,21 +117,27 @@ final class SyncCoordinator with WidgetsBindingObserver {
 
   Future<void> _postSync() async {
     try {
+      await _restrictionLifecycleRepository.syncFromPluginQueue();
+    } on Object catch (e, s) {
+      log('syncFromPluginQueue failed', name: 'pauza.sync', error: e, stackTrace: s);
+    }
+
+    try {
       await _modesRepository.reconcilePlugin();
-    } on Object {
-      // Best-effort plugin reconciliation.
+    } on Object catch (e, s) {
+      log('reconcilePlugin failed', name: 'pauza.sync', error: e, stackTrace: s);
     }
 
     try {
       _modesRepository.notifyExternalChange();
-    } on Object {
-      // Best-effort UI notification.
+    } on Object catch (e, s) {
+      log('notifyExternalChange failed', name: 'pauza.sync', error: e, stackTrace: s);
     }
 
     try {
       await _streaksRepository.refreshAggregates();
-    } on Object {
-      // Best-effort streak refresh.
+    } on Object catch (e, s) {
+      log('refreshAggregates failed', name: 'pauza.sync', error: e, stackTrace: s);
     }
   }
 
@@ -134,14 +152,18 @@ final class SyncCoordinator with WidgetsBindingObserver {
       if (identical(_inFlightSync, syncFuture)) {
         _inFlightSync = null;
       }
+      if (_pendingSyncRequested) {
+        _pendingSyncRequested = false;
+        requestSync();
+      }
     });
   }
 
   Future<void> _runGuarded(Future<void> Function() action) async {
     try {
       await action();
-    } on Object {
-      // Silent failure — retries on next resume or session change.
+    } on Object catch (e, s) {
+      log('sync failed', name: 'pauza.sync', error: e, stackTrace: s);
     }
   }
 }

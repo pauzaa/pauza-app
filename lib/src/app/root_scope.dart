@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
@@ -13,7 +14,6 @@ import 'package:pauza/src/features/nfc_chip_config/data/nfc_linked_chips_reposit
 import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
 import 'package:pauza/src/features/qr_code_config/data/qr_linked_codes_repository.dart';
 import 'package:pauza/src/features/devices/domain/device_token_coordinator.dart';
-import 'package:pauza/src/features/restriction_lifecycle/sync/restriction_lifecycle_sync_coordinator.dart';
 import 'package:pauza/src/features/subscription/domain/subscription_coordinator.dart';
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
@@ -46,7 +46,6 @@ class RootScopeState extends State<RootScope> {
   late final StatsBlockingRepository statsBlockingRepository;
   late final CurrentUserBloc currentUserBloc;
   late final AuthBloc authBloc;
-  late final RestrictionLifecycleSyncCoordinator restrictionLifecycleSyncCoordinator;
   late final SyncCoordinator syncCoordinator;
   late final DeviceTokenCoordinator deviceTokenCoordinator;
   late final SubscriptionCoordinator subscriptionCoordinator;
@@ -104,17 +103,13 @@ class RootScopeState extends State<RootScope> {
       internetRequiredGuard: dependencies.internetRequiredGuard,
     );
 
-    restrictionLifecycleSyncCoordinator = RestrictionLifecycleSyncCoordinator(
-      repository: dependencies.restrictionLifecycleRepository,
-      streaksRepository: dependencies.streaksRepository,
-    )..attach();
-
     syncCoordinator = SyncCoordinator(
       syncRepository: dependencies.syncRepository,
       syncLocalDataSource: dependencies.syncLocalDataSource,
       authRepository: dependencies.authRepository,
       modesRepository: modesRepository,
       streaksRepository: dependencies.streaksRepository,
+      restrictionLifecycleRepository: dependencies.restrictionLifecycleRepository,
       internetHealthGate: dependencies.internetHealthGate,
     )..attach();
 
@@ -142,7 +137,6 @@ class RootScopeState extends State<RootScope> {
     // Root-scoped runtime objects are disposed together with UI scope.
     currentUserBloc.close();
     authBloc.close();
-    restrictionLifecycleSyncCoordinator.detach();
     syncCoordinator.detach();
     _syncTrigger.dispose();
     deviceTokenCoordinator.detach();
@@ -154,7 +148,10 @@ class RootScopeState extends State<RootScope> {
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedRootScope(data: this, child: widget.child);
+    return BlocProvider<CurrentUserBloc>.value(
+      value: currentUserBloc,
+      child: _InheritedRootScope(data: this, child: widget.child),
+    );
   }
 }
 

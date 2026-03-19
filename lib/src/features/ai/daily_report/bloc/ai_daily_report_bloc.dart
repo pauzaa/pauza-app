@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pauza/src/features/ai/common/model/ai_error.dart';
+import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/features/ai/common/model/ai_usage_mapper.dart';
 import 'package:pauza/src/features/ai/daily_report/model/daily_report_request_dto.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
@@ -59,10 +59,10 @@ class AiDailyReportBloc extends Bloc<AiDailyReportEvent, AiDailyReportState> {
 
       final analysis = await _aiRepository.generateDailyReport(request);
       emit(state.copyWith(isLoading: false, analysis: analysis));
-    } on AiError catch (error) {
+    } on ApiError catch (error) {
       emit(state.copyWith(isLoading: false, error: error));
     } on Object catch (error) {
-      emit(state.copyWith(isLoading: false, error: AiUnknownError(error)));
+      emit(state.copyWith(isLoading: false, error: ApiUnknownError(error)));
     }
   }
 }

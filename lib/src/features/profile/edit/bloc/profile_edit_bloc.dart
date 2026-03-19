@@ -29,7 +29,7 @@ final class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
     emit(state.loading());
 
     try {
-      final user = await _userProfileRepository.fetchProfile();
+      final user = await _userProfileRepository.fetchProfile(forceRemote: true);
       emit(state.ready(user));
     } on Object catch (error) {
       emit(state.failure(error));

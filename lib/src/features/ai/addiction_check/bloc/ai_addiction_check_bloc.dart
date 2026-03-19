@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/features/ai/addiction_check/model/addiction_check_request_dto.dart';
 import 'package:pauza/src/features/ai/addiction_check/model/ai_app_usage_history_dto.dart';
 import 'package:pauza/src/features/ai/addiction_check/model/ai_daily_screen_time_dto.dart';
-import 'package:pauza/src/features/ai/common/model/ai_error.dart';
+import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/features/ai/common/model/ai_usage_mapper.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
@@ -45,10 +45,10 @@ class AiAddictionCheckBloc extends Bloc<AiAddictionCheckEvent, AiAddictionCheckS
 
       final analysis = await _aiRepository.checkAddiction(request);
       emit(state.copyWith(isLoading: false, analysis: analysis));
-    } on AiError catch (error) {
+    } on ApiError catch (error) {
       emit(state.copyWith(isLoading: false, error: error));
     } on Object catch (error) {
-      emit(state.copyWith(isLoading: false, error: AiUnknownError(error)));
+      emit(state.copyWith(isLoading: false, error: ApiUnknownError(error)));
     }
   }
 

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauza/src/app/root_scope.dart';
+import 'package:pauza/src/core/localization/l10n.dart';
+import 'package:pauza/src/features/ai/usage_analysis/bloc/ai_usage_analysis_bloc.dart';
 import 'package:pauza/src/features/ai/usage_analysis/widget/ai_usage_analysis_section.dart';
+import 'package:pauza/src/features/subscription/widget/premium_gate.dart';
+import 'package:pauza/src/features/subscription/widget/premium_locked_card.dart';
 import 'package:pauza/src/features/stats/usage_stats/bloc/stats_usage_bloc.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_app_table.dart';
 import 'package:pauza/src/features/stats/usage_stats/widget/stats_usage_category_chart.dart';
@@ -60,7 +65,19 @@ class StatsUsageTabContent extends StatelessWidget {
                 StatsUsageDeviceInsightsSection(snapshot: state.deviceEventSnapshot!),
               ],
               const SizedBox(height: PauzaSpacing.large),
-              const AiUsageAnalysisSection(),
+              PremiumGate(
+                lockedChild: PremiumLockedCard(title: context.l10n.aiUsageAnalysis),
+                child: BlocProvider(
+                  create: (context) {
+                    final rootScope = RootScope.of(context);
+                    return AiUsageAnalysisBloc(
+                      aiRepository: rootScope.aiRepository,
+                      usageRepository: rootScope.statsUsageRepository,
+                    );
+                  },
+                  child: const AiUsageAnalysisSection(),
+                ),
+              ),
             ],
           ],
         );

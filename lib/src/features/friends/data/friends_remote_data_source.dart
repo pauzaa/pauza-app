@@ -5,7 +5,6 @@ import 'package:pauza/src/features/friends/common/model/friend_dto.dart';
 import 'package:pauza/src/features/friends/common/model/friend_mutation_dto.dart';
 import 'package:pauza/src/features/friends/common/model/friend_request_dto.dart';
 import 'package:pauza/src/features/friends/common/model/friend_stats_dto.dart';
-import 'package:pauza/src/features/friends/common/model/friends_error.dart';
 import 'package:pauza/src/features/friends/common/model/pagination_dto.dart';
 
 abstract interface class FriendsRemoteDataSource {
@@ -60,7 +59,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
         pagination: PaginationDto.fromJson(data['pagination'] as Map<String, Object?>? ?? const {}),
       );
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -74,7 +73,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
       );
       return FriendMutationDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -91,7 +90,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
               .toList(growable: false) ??
           const [];
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -108,7 +107,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
               .toList(growable: false) ??
           const [];
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -121,7 +120,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
       );
       return FriendMutationDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -133,7 +132,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
         context: <String, Object?>{ApiClientCacheMiddleware.invalidatePrefixKey: _invalidatePrefix},
       );
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -145,7 +144,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
         context: <String, Object?>{ApiClientCacheMiddleware.invalidatePrefixKey: _invalidatePrefix},
       );
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -157,7 +156,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
         context: <String, Object?>{ApiClientCacheMiddleware.invalidatePrefixKey: _invalidatePrefix},
       );
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -170,7 +169,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
       );
       return FriendStatsDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -184,7 +183,7 @@ final class FriendsRemoteDataSourceImpl implements FriendsRemoteDataSource {
               .toList(growable: false) ??
           const [];
     } on ApiClientException catch (e) {
-      throw FriendsError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 }

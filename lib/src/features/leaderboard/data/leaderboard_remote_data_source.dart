@@ -1,7 +1,6 @@
 import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/core/api_client/cache/cache_mw.dart';
 import 'package:pauza/src/features/leaderboard/common/model/leaderboard_dto.dart';
-import 'package:pauza/src/features/leaderboard/common/model/leaderboard_error.dart';
 
 abstract interface class LeaderboardRemoteDataSource {
   Future<LeaderboardDto> fetchStreakLeaderboard({int page, int limit, bool skipCache});
@@ -24,7 +23,7 @@ final class LeaderboardRemoteDataSourceImpl implements LeaderboardRemoteDataSour
       );
       return LeaderboardDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw LeaderboardError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 
@@ -38,7 +37,7 @@ final class LeaderboardRemoteDataSourceImpl implements LeaderboardRemoteDataSour
       );
       return LeaderboardDto.fromJson(response.data!);
     } on ApiClientException catch (e) {
-      throw LeaderboardError.fromApiException(e);
+      throw ApiError.fromApiException(e);
     }
   }
 }

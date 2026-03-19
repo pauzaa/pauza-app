@@ -5,9 +5,6 @@ import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/common/extensions.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
-import 'package:pauza/src/features/ai/addiction_check/bloc/ai_addiction_check_bloc.dart';
-import 'package:pauza/src/features/ai/focus_schedule/bloc/ai_focus_schedule_bloc.dart';
-import 'package:pauza/src/features/ai/usage_analysis/bloc/ai_usage_analysis_bloc.dart';
 import 'package:pauza/src/features/stats/blocking_stats/bloc/stats_blocking_bloc.dart';
 import 'package:pauza/src/features/stats/blocking_stats/widget/stats_blocking_tab_content.dart';
 import 'package:pauza/src/features/stats/common/model/stats_tab.dart';
@@ -54,24 +51,6 @@ class _StatsScreenState extends State<StatsScreen> {
         BlocProvider<StatsUsageBloc>(
           create: (context) =>
               StatsUsageBloc(repository: RootScope.of(context).statsUsageRepository)..add(const StatsUsageStarted()),
-        ),
-        BlocProvider<AiUsageAnalysisBloc>(
-          create: (context) => AiUsageAnalysisBloc(
-            aiRepository: RootScope.of(context).aiRepository,
-            usageRepository: RootScope.of(context).statsUsageRepository,
-          ),
-        ),
-        BlocProvider<AiAddictionCheckBloc>(
-          create: (context) => AiAddictionCheckBloc(
-            aiRepository: RootScope.of(context).aiRepository,
-            usageRepository: RootScope.of(context).statsUsageRepository,
-          ),
-        ),
-        BlocProvider<AiFocusScheduleBloc>(
-          create: (context) => AiFocusScheduleBloc(
-            aiRepository: RootScope.of(context).aiRepository,
-            usageRepository: RootScope.of(context).statsUsageRepository,
-          ),
         ),
       ],
       child: Scaffold(

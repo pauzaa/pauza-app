@@ -1,5 +1,5 @@
+import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/features/leaderboard/common/model/leaderboard_dto.dart';
-import 'package:pauza/src/features/leaderboard/common/model/leaderboard_error.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_remote_data_source.dart';
 
 abstract interface class LeaderboardRepository {
@@ -18,10 +18,10 @@ final class LeaderboardRepositoryImpl implements LeaderboardRepository {
   Future<LeaderboardDto> fetchStreakLeaderboard({int page = 1, int limit = 20, bool skipCache = false}) async {
     try {
       return await _remoteDataSource.fetchStreakLeaderboard(page: page, limit: limit, skipCache: skipCache);
-    } on LeaderboardError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw LeaderboardUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -29,10 +29,10 @@ final class LeaderboardRepositoryImpl implements LeaderboardRepository {
   Future<LeaderboardDto> fetchFocusTimeLeaderboard({int page = 1, int limit = 20, bool skipCache = false}) async {
     try {
       return await _remoteDataSource.fetchFocusTimeLeaderboard(page: page, limit: limit, skipCache: skipCache);
-    } on LeaderboardError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw LeaderboardUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 }

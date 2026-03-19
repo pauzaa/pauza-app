@@ -1,9 +1,9 @@
+import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/features/friends/common/model/basic_user_dto.dart';
 import 'package:pauza/src/features/friends/common/model/friend_dto.dart';
 import 'package:pauza/src/features/friends/common/model/friend_mutation_dto.dart';
 import 'package:pauza/src/features/friends/common/model/friend_request_dto.dart';
 import 'package:pauza/src/features/friends/common/model/friend_stats_dto.dart';
-import 'package:pauza/src/features/friends/common/model/friends_error.dart';
 import 'package:pauza/src/features/friends/common/model/pagination_dto.dart';
 import 'package:pauza/src/features/friends/data/friends_remote_data_source.dart';
 
@@ -43,10 +43,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   }) async {
     try {
       return await _remoteDataSource.fetchFriends(page: page, limit: limit, skipCache: skipCache);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -54,10 +54,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<FriendMutationDto> sendRequest({required String username}) async {
     try {
       return await _remoteDataSource.sendRequest(username: username);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -65,10 +65,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<List<FriendRequestDto>> fetchIncomingRequests({bool skipCache = false}) async {
     try {
       return await _remoteDataSource.fetchIncomingRequests(skipCache: skipCache);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -76,10 +76,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<List<FriendRequestDto>> fetchOutgoingRequests({bool skipCache = false}) async {
     try {
       return await _remoteDataSource.fetchOutgoingRequests(skipCache: skipCache);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -87,10 +87,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<FriendMutationDto> acceptRequest({required String friendshipId}) async {
     try {
       return await _remoteDataSource.acceptRequest(friendshipId: friendshipId);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -98,10 +98,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<void> declineRequest({required String friendshipId}) async {
     try {
       await _remoteDataSource.declineRequest(friendshipId: friendshipId);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -109,10 +109,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<void> cancelRequest({required String friendshipId}) async {
     try {
       await _remoteDataSource.cancelRequest(friendshipId: friendshipId);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -120,10 +120,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<void> removeFriend({required String friendshipId}) async {
     try {
       await _remoteDataSource.removeFriend(friendshipId: friendshipId);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -131,10 +131,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<FriendStatsDto> fetchFriendStats({required String friendshipId, int days = 30}) async {
     try {
       return await _remoteDataSource.fetchFriendStats(friendshipId: friendshipId, days: days);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 
@@ -142,10 +142,10 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   Future<List<BasicUserDto>> searchUsers({required String query}) async {
     try {
       return await _remoteDataSource.searchUsers(query: query);
-    } on FriendsError {
+    } on ApiError {
       rethrow;
     } on Object catch (e) {
-      throw FriendsUnknownError(e);
+      throw ApiUnknownError(e);
     }
   }
 }

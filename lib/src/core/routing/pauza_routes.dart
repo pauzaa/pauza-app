@@ -10,6 +10,7 @@ import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_screen.dar
 import 'package:pauza/src/features/navigation/widget/dashboard_tabs_shell.dart';
 import 'package:pauza/src/features/nfc_chip_config/widget/nfc_chip_conf_screen.dart';
 import 'package:pauza/src/features/not_found/widget/not_found_screen.dart';
+import 'package:pauza/src/features/onboarding/widget/onboarding_screen.dart';
 import 'package:pauza/src/features/permissions/widget/permissions_screen.dart';
 import 'package:pauza/src/features/profile/edit/widget/profile_edit_screen.dart';
 import 'package:pauza/src/features/profile/view/widget/profile_screen.dart';
@@ -30,6 +31,7 @@ enum PauzaRoutes with Routable {
   modeCreate,
   modeEdit,
 
+  onboarding,
   permissions,
   auth,
   otp,
@@ -51,6 +53,7 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.profileEdit => '/profile/edit',
     PauzaRoutes.modeCreate => '/modes/new',
     PauzaRoutes.modeEdit => '/modes/{midEdit}/edit',
+    PauzaRoutes.onboarding => '/onboarding',
     PauzaRoutes.permissions => '/permissions',
     PauzaRoutes.auth => '/auth',
     PauzaRoutes.otp => '/auth/otp',
@@ -73,6 +76,7 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.profileEdit ||
     PauzaRoutes.modeCreate ||
     PauzaRoutes.modeEdit ||
+    PauzaRoutes.onboarding ||
     PauzaRoutes.permissions ||
     PauzaRoutes.auth ||
     PauzaRoutes.otp ||
@@ -95,6 +99,7 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.profileEdit => const ProfileEditScreen(),
     PauzaRoutes.modeCreate => ModeEditorScreen.create(),
     PauzaRoutes.modeEdit => ModeEditorScreen.edit(modeId: pathParams['midEdit'] ?? ''),
+    PauzaRoutes.onboarding => const OnboardingScreen(),
     PauzaRoutes.permissions => const PermissionsScreen(),
     PauzaRoutes.auth => const AuthScreen(),
     PauzaRoutes.otp => const OtpScreen(),

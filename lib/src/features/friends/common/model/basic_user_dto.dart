@@ -2,12 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 final class BasicUserDto {
-  const BasicUserDto({
-    required this.id,
-    required this.name,
-    required this.username,
-    this.profilePictureUrl,
-  });
+  const BasicUserDto({required this.id, required this.name, required this.username, this.profilePictureUrl});
 
   factory BasicUserDto.fromJson(Map<String, Object?> json) => BasicUserDto(
     id: json['id'] as String? ?? '',

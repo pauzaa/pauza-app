@@ -10,11 +10,9 @@ import 'package:pauza/src/features/devices/data/devices_repository.dart';
 /// Registers the FCM token on sign-in and on token refresh,
 /// and unregisters it on sign-out.
 final class DeviceTokenCoordinator {
-  DeviceTokenCoordinator({
-    required AuthRepository authRepository,
-    required DevicesRepository devicesRepository,
-  })  : _authRepository = authRepository,
-        _devicesRepository = devicesRepository;
+  DeviceTokenCoordinator({required AuthRepository authRepository, required DevicesRepository devicesRepository})
+    : _authRepository = authRepository,
+      _devicesRepository = devicesRepository;
 
   final AuthRepository _authRepository;
   final DevicesRepository _devicesRepository;

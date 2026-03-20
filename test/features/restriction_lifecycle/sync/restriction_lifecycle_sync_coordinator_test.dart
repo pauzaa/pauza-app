@@ -10,9 +10,7 @@ void main() {
   group('RestrictionLifecycleSyncCoordinator', () {
     test('syncNow calls syncFromPluginQueue', () async {
       final lifecycleRepository = FakeRestrictionLifecycleRepository();
-      final coordinator = RestrictionLifecycleSyncCoordinator(
-        repository: lifecycleRepository,
-      );
+      final coordinator = RestrictionLifecycleSyncCoordinator(repository: lifecycleRepository);
 
       await coordinator.syncNow();
 
@@ -21,12 +19,8 @@ void main() {
 
     test('syncNow deduplicates concurrent calls', () async {
       final syncCompleter = Completer<void>();
-      final lifecycleRepository = FakeRestrictionLifecycleRepository(
-        onSyncFromPluginQueue: () => syncCompleter.future,
-      );
-      final coordinator = RestrictionLifecycleSyncCoordinator(
-        repository: lifecycleRepository,
-      );
+      final lifecycleRepository = FakeRestrictionLifecycleRepository(onSyncFromPluginQueue: () => syncCompleter.future);
+      final coordinator = RestrictionLifecycleSyncCoordinator(repository: lifecycleRepository);
 
       final first = coordinator.syncNow();
       final second = coordinator.syncNow();
@@ -45,9 +39,7 @@ void main() {
           throw StateError('sync_failed');
         },
       );
-      final coordinator = RestrictionLifecycleSyncCoordinator(
-        repository: lifecycleRepository,
-      );
+      final coordinator = RestrictionLifecycleSyncCoordinator(repository: lifecycleRepository);
 
       // Should not throw — errors are logged internally.
       await coordinator.syncNow();
@@ -57,9 +49,7 @@ void main() {
 
     test('syncNow allows new call after previous completes', () async {
       final lifecycleRepository = FakeRestrictionLifecycleRepository();
-      final coordinator = RestrictionLifecycleSyncCoordinator(
-        repository: lifecycleRepository,
-      );
+      final coordinator = RestrictionLifecycleSyncCoordinator(repository: lifecycleRepository);
 
       await coordinator.syncNow();
       await coordinator.syncNow();

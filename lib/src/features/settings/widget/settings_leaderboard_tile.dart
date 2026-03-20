@@ -20,15 +20,11 @@ final class SettingsLeaderboardTile extends StatelessWidget {
       trailing: PauzaSwitch(
         value: isVisible,
         onChanged: (value) {
-          context.read<UserPreferencesBloc>().add(
-            UserPreferencesLeaderboardToggled(visible: value),
-          );
+          context.read<UserPreferencesBloc>().add(UserPreferencesLeaderboardToggled(visible: value));
         },
       ),
       onTap: () {
-        context.read<UserPreferencesBloc>().add(
-          UserPreferencesLeaderboardToggled(visible: !isVisible),
-        );
+        context.read<UserPreferencesBloc>().add(UserPreferencesLeaderboardToggled(visible: !isVisible));
       },
     );
   }

@@ -130,10 +130,7 @@ void main() {
         final storage = FakeAuthSessionStorage();
         final repository = AuthRepositoryImpl(remoteDataSource: fakeRemoteDataSource, sessionStorage: storage);
 
-        await expectLater(
-          () => repository.verifyOtp(otp: '111111'),
-          throwsA(isA<AuthOtpChallengeMissingError>()),
-        );
+        await expectLater(() => repository.verifyOtp(otp: '111111'), throwsA(isA<AuthOtpChallengeMissingError>()));
 
         repository.dispose();
       });
@@ -147,10 +144,7 @@ void main() {
         await repository.requestOtp(email: 'john@doe.com');
         await repository.clearPendingOtpChallenge();
 
-        await expectLater(
-          () => repository.verifyOtp(otp: '111111'),
-          throwsA(isA<AuthOtpChallengeMissingError>()),
-        );
+        await expectLater(() => repository.verifyOtp(otp: '111111'), throwsA(isA<AuthOtpChallengeMissingError>()));
 
         repository.dispose();
       });
@@ -211,30 +205,20 @@ final class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
   }
 
   @override
-  Future<AuthVerifyResponse> verify({
-    required String email,
-    required String otp,
-  }) async {
+  Future<AuthVerifyResponse> verify({required String email, required String otp}) async {
     if (otp != '111111') throw const AuthInvalidOtpError();
     return const AuthVerifyResponse(
       accessToken: 'access_token',
       refreshToken: 'refresh_token',
-      userJson: {
-        'name': 'Test',
-        'username': 'testuser',
-        'profile_picture_url': null,
-      },
+      userJson: {'name': 'Test', 'username': 'testuser', 'profile_picture_url': null},
     );
   }
 
   @override
   Future<AuthRefreshResponse> refresh({required String refreshToken}) async {
-    return const AuthRefreshResponse(
-      accessToken: 'new_access',
-      refreshToken: 'new_refresh',
-    );
+    return const AuthRefreshResponse(accessToken: 'new_access', refreshToken: 'new_refresh');
   }
-  
+
   @override
   Future<void> logout() {
     return Future<void>.value();

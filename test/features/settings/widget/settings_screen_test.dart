@@ -39,17 +39,16 @@ void main() {
   group('SettingsNotificationsTile', () {
     testWidgets('switch toggles on tap', (tester) async {
       final userProfileRepository = MockUserProfileRepository();
-      when(() => userProfileRepository.updateNotificationPreferences(pushEnabled: false))
-          .thenAnswer((_) async => false);
+      when(
+        () => userProfileRepository.updateNotificationPreferences(pushEnabled: false),
+      ).thenAnswer((_) async => false);
 
       final bloc = UserPreferencesBloc(userProfileRepository: userProfileRepository);
       addTearDown(bloc.close);
 
       await tester.pumpApp(
         const Scaffold(body: SettingsNotificationsTile(title: 'Notifications')),
-        providers: <Widget>[
-          BlocProvider<UserPreferencesBloc>.value(value: bloc),
-        ],
+        providers: <Widget>[BlocProvider<UserPreferencesBloc>.value(value: bloc)],
       );
 
       expect(find.text('Notifications'), findsOneWidget);

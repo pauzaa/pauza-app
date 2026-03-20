@@ -16,10 +16,7 @@ class ConfirmLogoutDialog extends StatelessWidget {
       title: Text(l10n.logoutDialogTitle),
       content: Text(l10n.logoutDialogBody),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(l10n.cancelButton),
-        ),
+        TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(l10n.cancelButton)),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(true),
           style: FilledButton.styleFrom(

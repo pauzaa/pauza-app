@@ -11,8 +11,8 @@ final class SyncRepositoryImpl implements SyncRepository {
   const SyncRepositoryImpl({
     required SyncLocalDataSource localDataSource,
     required SyncRemoteDataSource remoteDataSource,
-  })  : _localDataSource = localDataSource,
-        _remoteDataSource = remoteDataSource;
+  }) : _localDataSource = localDataSource,
+       _remoteDataSource = remoteDataSource;
 
   final SyncLocalDataSource _localDataSource;
   final SyncRemoteDataSource _remoteDataSource;

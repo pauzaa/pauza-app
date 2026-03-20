@@ -13,10 +13,7 @@ class LeaderboardContent extends StatelessWidget {
     final l10n = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.leaderboardTitle),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text(l10n.leaderboardTitle), centerTitle: true),
       body: BlocBuilder<LeaderboardBloc, LeaderboardState>(
         builder: (context, state) {
           return Column(

@@ -31,9 +31,9 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => UserPreferencesBloc(
-        userProfileRepository: PauzaDependencies.of(context).userProfileRepository,
-      )..add(const UserPreferencesStarted()),
+      create: (_) =>
+          UserPreferencesBloc(userProfileRepository: PauzaDependencies.of(context).userProfileRepository)
+            ..add(const UserPreferencesStarted()),
       child: const _SettingsBody(),
     );
   }

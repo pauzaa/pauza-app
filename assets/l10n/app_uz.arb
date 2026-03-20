@@ -387,5 +387,16 @@
   "premiumLockedMessage": "Bu funksiya Premium obunani talab qiladi.",
   "premiumUnlockButton": "Premiumni ochish",
   "premiumUpgradeButton": "Yangilash",
-  "premiumFriendsDescription": "Do'stlar qo'shing va ularning holatini kuzating."
+  "premiumFriendsDescription": "Do'stlar qo'shing va ularning holatini kuzating.",
+  "onboardingSlide1Title": "Vaqtingizni qaytaring",
+  "onboardingSlide1Body": "Chalg'ituvchi ilovalarni bloklang va sog'lom ekran odatlarini shakllantiring.",
+  "onboardingSlide2Title": "Maxsus bloklash rejimlari",
+  "onboardingSlide2Body": "Ish, o'qish yoki uxlash uchun profillar yarating — to'g'ri vaqtda to'g'ri ilovalarni bloklang.",
+  "onboardingSlide3Title": "Taraqqiyotingizni kuzating",
+  "onboardingSlide3Body": "Seriyalar to'plang, statistikani ko'ring va har kuni qancha vaqt tejayotganingizni bilib boring.",
+  "onboardingSlide4Title": "Javobgar bo'ling",
+  "onboardingSlide4Body": "Do'stlaringiz bilan liderlar jadvalida raqobatlashing. NFC teglar yoki QR kodlar orqali fizik qulfni oching.",
+  "onboardingSkip": "O'tkazib yuborish",
+  "onboardingNext": "Keyingi",
+  "onboardingGetStarted": "Boshlash"
 }

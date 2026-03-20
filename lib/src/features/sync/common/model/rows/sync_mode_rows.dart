@@ -57,8 +57,7 @@ final class SyncModeRow {
   }
 
   @override
-  String toString() =>
-      'SyncModeRow(id: $id, title: $title, updatedAt: $updatedAt)';
+  String toString() => 'SyncModeRow(id: $id, title: $title, updatedAt: $updatedAt)';
 
   @override
   bool operator ==(Object other) =>
@@ -77,17 +76,17 @@ final class SyncModeRow {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        title,
-        textOnScreen,
-        description,
-        allowedPausesCount,
-        minimumDurationMs,
-        endingPausingScenario,
-        iconToken,
-        createdAt,
-        updatedAt,
-      );
+    id,
+    title,
+    textOnScreen,
+    description,
+    allowedPausesCount,
+    minimumDurationMs,
+    endingPausingScenario,
+    iconToken,
+    createdAt,
+    updatedAt,
+  );
 }
 
 @immutable
@@ -142,17 +141,12 @@ final class SyncModeBlockedAppRow {
           other.updatedAt == updatedAt;
 
   @override
-  int get hashCode =>
-      Object.hash(modeId, platform, appIdentifier, createdAt, updatedAt);
+  int get hashCode => Object.hash(modeId, platform, appIdentifier, createdAt, updatedAt);
 }
 
 @immutable
 final class SyncModeBlockedAppKey {
-  const SyncModeBlockedAppKey({
-    required this.modeId,
-    required this.platform,
-    required this.appIdentifier,
-  });
+  const SyncModeBlockedAppKey({required this.modeId, required this.platform, required this.appIdentifier});
 
   final String modeId;
   final String platform;
@@ -167,11 +161,7 @@ final class SyncModeBlockedAppKey {
   }
 
   Map<String, String> toJson() {
-    return <String, String>{
-      'mode_id': modeId,
-      'platform': platform,
-      'app_identifier': appIdentifier,
-    };
+    return <String, String>{'mode_id': modeId, 'platform': platform, 'app_identifier': appIdentifier};
   }
 
   @override
@@ -240,8 +230,7 @@ final class SyncScheduleRow {
   }
 
   @override
-  String toString() =>
-      'SyncScheduleRow(id: $id, modeId: $modeId, days: $days)';
+  String toString() => 'SyncScheduleRow(id: $id, modeId: $modeId, days: $days)';
 
   @override
   bool operator ==(Object other) =>
@@ -257,14 +246,5 @@ final class SyncScheduleRow {
           other.updatedAt == updatedAt;
 
   @override
-  int get hashCode => Object.hash(
-        id,
-        modeId,
-        days,
-        startMinute,
-        endMinute,
-        enabled,
-        createdAt,
-        updatedAt,
-      );
+  int get hashCode => Object.hash(id, modeId, days, startMinute, endMinute, enabled, createdAt, updatedAt);
 }

@@ -2,18 +2,13 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 final class LeaderboardRankDto {
-  const LeaderboardRankDto({
-    required this.rank,
-    this.currentStreakDays,
-    this.totalFocusTimeMs,
-  });
+  const LeaderboardRankDto({required this.rank, this.currentStreakDays, this.totalFocusTimeMs});
 
-  factory LeaderboardRankDto.fromJson(Map<String, Object?> json) =>
-      LeaderboardRankDto(
-        rank: json['rank'] as int? ?? 0,
-        currentStreakDays: json['current_streak_days'] as int?,
-        totalFocusTimeMs: json['total_focus_time_ms'] as int?,
-      );
+  factory LeaderboardRankDto.fromJson(Map<String, Object?> json) => LeaderboardRankDto(
+    rank: json['rank'] as int? ?? 0,
+    currentStreakDays: json['current_streak_days'] as int?,
+    totalFocusTimeMs: json['total_focus_time_ms'] as int?,
+  );
 
   final int rank;
   final int? currentStreakDays;

@@ -69,7 +69,12 @@ void main() {
   testWidgets('rename action dispatches rename event', (tester) async {
     final code = makeQrLinkedCode(id: 'code-1', name: 'Office Entry', createdAt: DateTime.utc(2023, 12, 15));
     when(() => repository.getLinkedCodes()).thenAnswer((_) async => IList<QrLinkedCode>([code]));
-    when(() => repository.renameCode(id: any(named: 'id'), name: any(named: 'name'))).thenAnswer((_) async {});
+    when(
+      () => repository.renameCode(
+        id: any(named: 'id'),
+        name: any(named: 'name'),
+      ),
+    ).thenAnswer((_) async {});
 
     final bloc = await _pumpScreen(
       tester,
@@ -135,9 +140,12 @@ void main() {
     final code = makeQrLinkedCode(id: 'code-1', name: 'Kitchen QR', createdAt: DateTime.utc(2023, 11, 2));
     final renameCompleter = Completer<void>();
     when(() => repository.getLinkedCodes()).thenAnswer((_) async => IList<QrLinkedCode>([code]));
-    when(() => repository.renameCode(id: any(named: 'id'), name: any(named: 'name'))).thenAnswer(
-      (_) => renameCompleter.future,
-    );
+    when(
+      () => repository.renameCode(
+        id: any(named: 'id'),
+        name: any(named: 'name'),
+      ),
+    ).thenAnswer((_) => renameCompleter.future);
 
     final bloc = await _pumpScreen(
       tester,

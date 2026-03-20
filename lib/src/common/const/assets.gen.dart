@@ -12,6 +12,9 @@
 class $ConfigGen {
   const $ConfigGen();
 
+  /// File path: config/AGENTS.md
+  String get agents => 'config/AGENTS.md';
+
   /// File path: config/prod.json
   String get prod => 'config/prod.json';
 
@@ -19,7 +22,7 @@ class $ConfigGen {
   String get test => 'config/test.json';
 
   /// List of all assets
-  List<String> get values => [prod, test];
+  List<String> get values => [agents, prod, test];
 }
 
 class Assets {

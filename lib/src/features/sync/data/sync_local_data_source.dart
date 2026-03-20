@@ -21,8 +21,7 @@ abstract interface class SyncLocalDataSource {
 }
 
 final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
-  const SyncLocalDataSourceImpl({required LocalDatabase database})
-      : _database = database;
+  const SyncLocalDataSourceImpl({required LocalDatabase database}) : _database = database;
 
   final LocalDatabase _database;
 
@@ -32,9 +31,7 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
 
   @override
   Future<bool> hasAnySyncCursor() async {
-    final rows = await _database.rawQuery(
-      'SELECT 1 FROM sync_cursors LIMIT 1',
-    );
+    final rows = await _database.rawQuery('SELECT 1 FROM sync_cursors LIMIT 1');
     return rows.isNotEmpty;
   }
 
@@ -53,11 +50,7 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
       } else {
         final upserts = await _readUnsyncedRows(table, cursor);
         final deletions = await _readTrackedDeletions(table);
-        tables[table.key] = SyncTableRequestDto(
-          cursor: cursor,
-          upserts: upserts,
-          deletions: deletions,
-        );
+        tables[table.key] = SyncTableRequestDto(cursor: cursor, upserts: upserts, deletions: deletions);
       }
     }
 
@@ -65,51 +58,34 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
   }
 
   Future<int> _readCursor(SyncTable table) async {
-    final rows = await _database.rawQuery(
-      'SELECT last_synced_at FROM sync_cursors WHERE table_name = ?',
-      [table.key],
-    );
+    final rows = await _database.rawQuery('SELECT last_synced_at FROM sync_cursors WHERE table_name = ?', [table.key]);
     if (rows.isEmpty) return 0;
     return rows.first['last_synced_at'] as int;
   }
 
-  Future<List<Map<String, Object?>>> _readUnsyncedRows(
-    SyncTable table,
-    int cursor,
-  ) async {
-    final rows = await _database.rawQuery(
-      'SELECT * FROM ${table.key} WHERE ${table.cursorColumn} > ?',
-      [cursor],
-    );
+  Future<List<Map<String, Object?>>> _readUnsyncedRows(SyncTable table, int cursor) async {
+    final rows = await _database.rawQuery('SELECT * FROM ${table.key} WHERE ${table.cursorColumn} > ?', [cursor]);
     return rows.map((row) => _parseAndSerialize(table, row)).toList();
   }
 
-  Map<String, Object?> _parseAndSerialize(
-    SyncTable table,
-    Map<String, Object?> row,
-  ) {
+  Map<String, Object?> _parseAndSerialize(SyncTable table, Map<String, Object?> row) {
     return switch (table) {
       SyncTable.modes => SyncModeRow.fromMap(row).toMap(),
       SyncTable.modeBlockedApps => SyncModeBlockedAppRow.fromMap(row).toMap(),
       SyncTable.schedules => SyncScheduleRow.fromMap(row).toMap(),
-      SyncTable.restrictionSessions =>
-        RestrictionSessionLog.fromDbRow(row).toMap(),
-      SyncTable.restrictionLifecycleEvents =>
-        RestrictionLifecycleEventLog.fromDbRow(row).toMap(),
+      SyncTable.restrictionSessions => RestrictionSessionLog.fromDbRow(row).toMap(),
+      SyncTable.restrictionLifecycleEvents => RestrictionLifecycleEventLog.fromDbRow(row).toMap(),
       SyncTable.nfcLinkedChips => NfcLinkedChip.fromDbRow(row).toMap(),
       SyncTable.qrLinkedCodes => QrLinkedCode.fromDbRow(row).toMap(),
-      SyncTable.streakSessionDailyRollups =>
-        SyncStreakRollupRow.fromMap(row).toMap(),
-      SyncTable.streakDailyAggregates =>
-        SyncStreakAggregateRow.fromMap(row).toMap(),
+      SyncTable.streakSessionDailyRollups => SyncStreakRollupRow.fromMap(row).toMap(),
+      SyncTable.streakDailyAggregates => SyncStreakAggregateRow.fromMap(row).toMap(),
     };
   }
 
   Future<List<Object>> _readTrackedDeletions(SyncTable table) async {
-    final rows = await _database.rawQuery(
-      'SELECT deletion_key FROM sync_deletion_log WHERE table_name = ?',
-      [table.key],
-    );
+    final rows = await _database.rawQuery('SELECT deletion_key FROM sync_deletion_log WHERE table_name = ?', [
+      table.key,
+    ]);
     return rows.map((row) {
       final raw = row['deletion_key'] as String;
       return _decodeDeletionKey(table, raw);
@@ -118,9 +94,7 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
 
   Object _decodeDeletionKey(SyncTable table, String raw) {
     return switch (table) {
-      SyncTable.modeBlockedApps ||
-      SyncTable.streakSessionDailyRollups =>
-        jsonDecode(raw) as Map<String, Object?>,
+      SyncTable.modeBlockedApps || SyncTable.streakSessionDailyRollups => jsonDecode(raw) as Map<String, Object?>,
       _ => raw,
     };
   }
@@ -151,10 +125,7 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
           [table.key, tableData.nextCursor],
         );
 
-        await txn.rawDelete(
-          'DELETE FROM sync_deletion_log WHERE table_name = ?',
-          [table.key],
-        );
+        await txn.rawDelete('DELETE FROM sync_deletion_log WHERE table_name = ?', [table.key]);
       }
 
       // If restriction_sessions were upserted from another device, reset the
@@ -168,11 +139,7 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
     });
   }
 
-  Future<void> _upsertRow(
-    Transaction txn,
-    SyncTable table,
-    Map<String, Object?> row,
-  ) async {
+  Future<void> _upsertRow(Transaction txn, SyncTable table, Map<String, Object?> row) async {
     final sql = _upsertSql[table]!;
     final args = _upsertArgs(table, row);
     await txn.rawInsert(sql, args);
@@ -181,105 +148,91 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
   List<Object?> _upsertArgs(SyncTable table, Map<String, Object?> row) {
     return switch (table) {
       SyncTable.modes => [
-          row['id'],
-          row['title'],
-          row['text_on_screen'],
-          row['description'],
-          row['allowed_pauses_count'],
-          row['minimum_duration_ms'],
-          row['ending_pausing_scenario'],
-          row['icon_token'],
-          row['created_at'],
-          row['updated_at'],
-        ],
+        row['id'],
+        row['title'],
+        row['text_on_screen'],
+        row['description'],
+        row['allowed_pauses_count'],
+        row['minimum_duration_ms'],
+        row['ending_pausing_scenario'],
+        row['icon_token'],
+        row['created_at'],
+        row['updated_at'],
+      ],
       SyncTable.modeBlockedApps => [
-          row['mode_id'],
-          row['platform'],
-          row['app_identifier'],
-          row['created_at'],
-          row['updated_at'],
-        ],
+        row['mode_id'],
+        row['platform'],
+        row['app_identifier'],
+        row['created_at'],
+        row['updated_at'],
+      ],
       SyncTable.schedules => [
-          row['id'],
-          row['mode_id'],
-          row['days'],
-          row['start_minute'],
-          row['end_minute'],
-          row['enabled'],
-          row['created_at'],
-          row['updated_at'],
-        ],
+        row['id'],
+        row['mode_id'],
+        row['days'],
+        row['start_minute'],
+        row['end_minute'],
+        row['enabled'],
+        row['created_at'],
+        row['updated_at'],
+      ],
       SyncTable.restrictionSessions => [
-          row['session_id'],
-          row['mode_id'],
-          row['source'],
-          row['started_at'],
-          row['ended_at'],
-          row['pause_count'],
-          row['total_paused_ms'],
-          row['last_paused_at'],
-          row['integrity_status'],
-          row['last_anomaly_reason'],
-          row['last_event_id'],
-          row['created_at'],
-          row['updated_at'],
-        ],
+        row['session_id'],
+        row['mode_id'],
+        row['source'],
+        row['started_at'],
+        row['ended_at'],
+        row['pause_count'],
+        row['total_paused_ms'],
+        row['last_paused_at'],
+        row['integrity_status'],
+        row['last_anomaly_reason'],
+        row['last_event_id'],
+        row['created_at'],
+        row['updated_at'],
+      ],
       SyncTable.restrictionLifecycleEvents => [
-          row['id'],
-          row['session_id'],
-          row['mode_id'],
-          row['action'],
-          row['source'],
-          row['reason'],
-          row['occurred_at'],
-          row['created_at'],
-        ],
+        row['id'],
+        row['session_id'],
+        row['mode_id'],
+        row['action'],
+        row['source'],
+        row['reason'],
+        row['occurred_at'],
+        row['created_at'],
+      ],
       SyncTable.nfcLinkedChips => [
-          row['id'],
-          row['chip_identifier'],
-          row['name'],
-          row['created_at'],
-          row['updated_at'],
-        ],
-      SyncTable.qrLinkedCodes => [
-          row['id'],
-          row['scan_value'],
-          row['name'],
-          row['created_at'],
-          row['updated_at'],
-        ],
+        row['id'],
+        row['chip_identifier'],
+        row['name'],
+        row['created_at'],
+        row['updated_at'],
+      ],
+      SyncTable.qrLinkedCodes => [row['id'], row['scan_value'], row['name'], row['created_at'], row['updated_at']],
       SyncTable.streakSessionDailyRollups => [
-          row['session_id'],
-          row['local_day'],
-          row['effective_ms'],
-          row['updated_at'],
-        ],
+        row['session_id'],
+        row['local_day'],
+        row['effective_ms'],
+        row['updated_at'],
+      ],
       SyncTable.streakDailyAggregates => [
-          row['local_day'],
-          row['effective_ms'],
-          row['qualified'],
-          row['source_session_count'],
-          row['updated_at'],
-        ],
+        row['local_day'],
+        row['effective_ms'],
+        row['qualified'],
+        row['source_session_count'],
+        row['updated_at'],
+      ],
     };
   }
 
-  Future<void> _deleteRow(
-    Transaction txn,
-    SyncTable table,
-    Object key,
-  ) async {
+  Future<void> _deleteRow(Transaction txn, SyncTable table, Object key) async {
     switch (table) {
       case SyncTable.modeBlockedApps:
         final compositeKey = key as Map<String, Object?>;
         await txn.rawDelete(
           'DELETE FROM mode_blocked_apps '
           'WHERE mode_id = ? AND platform = ? AND app_identifier = ?',
-          [
-            compositeKey['mode_id'],
-            compositeKey['platform'],
-            compositeKey['app_identifier'],
-          ],
+          [compositeKey['mode_id'], compositeKey['platform'], compositeKey['app_identifier']],
         );
       case SyncTable.streakSessionDailyRollups:
         final compositeKey = key as Map<String, Object?>;
@@ -293,30 +246,15 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
       case SyncTable.schedules:
         await txn.rawDelete('DELETE FROM schedules WHERE id = ?', [key]);
       case SyncTable.restrictionSessions:
-        await txn.rawDelete(
-          'DELETE FROM restriction_sessions WHERE session_id = ?',
-          [key],
-        );
+        await txn.rawDelete('DELETE FROM restriction_sessions WHERE session_id = ?', [key]);
       case SyncTable.restrictionLifecycleEvents:
-        await txn.rawDelete(
-          'DELETE FROM restriction_lifecycle_events WHERE id = ?',
-          [key],
-        );
+        await txn.rawDelete('DELETE FROM restriction_lifecycle_events WHERE id = ?', [key]);
       case SyncTable.nfcLinkedChips:
-        await txn.rawDelete(
-          'DELETE FROM nfc_linked_chips WHERE id = ?',
-          [key],
-        );
+        await txn.rawDelete('DELETE FROM nfc_linked_chips WHERE id = ?', [key]);
       case SyncTable.qrLinkedCodes:
-        await txn.rawDelete(
-          'DELETE FROM qr_linked_codes WHERE id = ?',
-          [key],
-        );
+        await txn.rawDelete('DELETE FROM qr_linked_codes WHERE id = ?', [key]);
       case SyncTable.streakDailyAggregates:
-        await txn.rawDelete(
-          'DELETE FROM streak_daily_aggregates WHERE local_day = ?',
-          [key],
-        );
+        await txn.rawDelete('DELETE FROM streak_daily_aggregates WHERE local_day = ?', [key]);
     }
   }
 
@@ -325,10 +263,7 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
   // ---------------------------------------------------------------------------
 
   @override
-  Future<void> trackDeletion({
-    required SyncTable table,
-    required Object key,
-  }) async {
+  Future<void> trackDeletion({required SyncTable table, required Object key}) async {
     final encoded = switch (key) {
       final Map<String, Object?> composite => jsonEncode(composite),
       _ => key as String,

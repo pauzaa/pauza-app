@@ -3,20 +3,10 @@ part of 'leaderboard_bloc.dart';
 enum LeaderboardTab { currentStreak, totalFocus }
 
 final class LeaderboardState extends Equatable {
-  const LeaderboardState({
-    required this.tab,
-    required this.isLoading,
-    required this.entries,
-    this.myRank,
-    this.error,
-  });
+  const LeaderboardState({required this.tab, required this.isLoading, required this.entries, this.myRank, this.error});
 
   const LeaderboardState.initial()
-      : this(
-          tab: LeaderboardTab.currentStreak,
-          isLoading: false,
-          entries: const <LeaderboardEntryDto>[],
-        );
+    : this(tab: LeaderboardTab.currentStreak, isLoading: false, entries: const <LeaderboardEntryDto>[]);
 
   final LeaderboardTab tab;
   final bool isLoading;
@@ -24,11 +14,9 @@ final class LeaderboardState extends Equatable {
   final LeaderboardRankDto? myRank;
   final Object? error;
 
-  List<LeaderboardEntryDto> get podiumEntries =>
-      entries.where((e) => e.rank <= 3).toList(growable: false);
+  List<LeaderboardEntryDto> get podiumEntries => entries.where((e) => e.rank <= 3).toList(growable: false);
 
-  List<LeaderboardEntryDto> get listEntries =>
-      entries.where((e) => e.rank > 3).toList(growable: false);
+  List<LeaderboardEntryDto> get listEntries => entries.where((e) => e.rank > 3).toList(growable: false);
 
   LeaderboardState copyWith({
     LeaderboardTab? tab,

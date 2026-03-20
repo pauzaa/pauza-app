@@ -47,44 +47,31 @@ final class SyncStreakRollupRow {
           other.updatedAt == updatedAt;
 
   @override
-  int get hashCode =>
-      Object.hash(sessionId, localDay, effectiveMs, updatedAt);
+  int get hashCode => Object.hash(sessionId, localDay, effectiveMs, updatedAt);
 }
 
 @immutable
 final class SyncStreakRollupKey {
-  const SyncStreakRollupKey({
-    required this.sessionId,
-    required this.localDay,
-  });
+  const SyncStreakRollupKey({required this.sessionId, required this.localDay});
 
   final String sessionId;
   final String localDay;
 
   factory SyncStreakRollupKey.fromJson(Map<String, Object?> json) {
-    return SyncStreakRollupKey(
-      sessionId: json['session_id'] as String,
-      localDay: json['local_day'] as String,
-    );
+    return SyncStreakRollupKey(sessionId: json['session_id'] as String, localDay: json['local_day'] as String);
   }
 
   Map<String, String> toJson() {
-    return <String, String>{
-      'session_id': sessionId,
-      'local_day': localDay,
-    };
+    return <String, String>{'session_id': sessionId, 'local_day': localDay};
   }
 
   @override
-  String toString() =>
-      'SyncStreakRollupKey(sessionId: $sessionId, localDay: $localDay)';
+  String toString() => 'SyncStreakRollupKey(sessionId: $sessionId, localDay: $localDay)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SyncStreakRollupKey &&
-          other.sessionId == sessionId &&
-          other.localDay == localDay;
+      other is SyncStreakRollupKey && other.sessionId == sessionId && other.localDay == localDay;
 
   @override
   int get hashCode => Object.hash(sessionId, localDay);
@@ -142,6 +129,5 @@ final class SyncStreakAggregateRow {
           other.updatedAt == updatedAt;
 
   @override
-  int get hashCode =>
-      Object.hash(localDay, effectiveMs, qualified, sourceSessionCount, updatedAt);
+  int get hashCode => Object.hash(localDay, effectiveMs, qualified, sourceSessionCount, updatedAt);
 }

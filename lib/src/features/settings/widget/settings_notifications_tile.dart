@@ -20,15 +20,11 @@ final class SettingsNotificationsTile extends StatelessWidget {
       trailing: PauzaSwitch(
         value: isEnabled,
         onChanged: (value) {
-          context.read<UserPreferencesBloc>().add(
-            UserPreferencesPushToggled(enabled: value),
-          );
+          context.read<UserPreferencesBloc>().add(UserPreferencesPushToggled(enabled: value));
         },
       ),
       onTap: () {
-        context.read<UserPreferencesBloc>().add(
-          UserPreferencesPushToggled(enabled: !isEnabled),
-        );
+        context.read<UserPreferencesBloc>().add(UserPreferencesPushToggled(enabled: !isEnabled));
       },
     );
   }

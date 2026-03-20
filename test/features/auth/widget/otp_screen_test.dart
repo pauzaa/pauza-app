@@ -227,9 +227,7 @@ void main() {
       expect(pinField.enabled, isFalse);
 
       // Complete the request to clean up
-      requestCompleter.complete(
-        const AuthOtpRequiredResult(challengeId: 'otp-challenge', email: 'john@doe.com'),
-      );
+      requestCompleter.complete(const AuthOtpRequiredResult(challengeId: 'otp-challenge', email: 'john@doe.com'));
       await tester.pump();
     });
 

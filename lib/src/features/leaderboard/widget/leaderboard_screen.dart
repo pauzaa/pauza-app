@@ -10,9 +10,9 @@ class LeaderboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LeaderboardBloc(
-        leaderboardRepository: RootScope.of(context).leaderboardRepository,
-      )..add(const LeaderboardLoadRequested()),
+      create: (context) =>
+          LeaderboardBloc(leaderboardRepository: RootScope.of(context).leaderboardRepository)
+            ..add(const LeaderboardLoadRequested()),
       child: const LeaderboardContent(),
     );
   }

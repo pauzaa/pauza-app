@@ -6,11 +6,7 @@ import 'package:pauza/src/features/leaderboard/common/model/leaderboard_entry_fo
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class LeaderboardPodium extends StatelessWidget {
-  const LeaderboardPodium({
-    required this.entries,
-    required this.tab,
-    super.key,
-  });
+  const LeaderboardPodium({required this.entries, required this.tab, super.key});
 
   final List<LeaderboardEntryDto> entries;
   final LeaderboardTab tab;
@@ -25,35 +21,34 @@ class LeaderboardPodium extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.all(PauzaSpacing.medium),
-      padding: const EdgeInsets.only(
-        top: PauzaSpacing.large,
-        left: PauzaSpacing.small,
-        right: PauzaSpacing.small,
-      ),
+      padding: const EdgeInsets.only(top: PauzaSpacing.large, left: PauzaSpacing.small, right: PauzaSpacing.small),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(PauzaCornerRadius.xLarge),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: <Color>[
-            context.colorScheme.primary.withValues(alpha: 0.15),
-            context.colorScheme.surface,
-          ],
+          colors: <Color>[context.colorScheme.primary.withValues(alpha: 0.15), context.colorScheme.surface],
         ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           if (rank2 != null)
-            Expanded(child: _PodiumColumn(entry: rank2, tab: tab))
+            Expanded(
+              child: _PodiumColumn(entry: rank2, tab: tab),
+            )
           else
             const Spacer(),
           if (rank1 != null)
-            Expanded(child: _PodiumColumn(entry: rank1, tab: tab))
+            Expanded(
+              child: _PodiumColumn(entry: rank1, tab: tab),
+            )
           else
             const Spacer(),
           if (rank3 != null)
-            Expanded(child: _PodiumColumn(entry: rank3, tab: tab))
+            Expanded(
+              child: _PodiumColumn(entry: rank3, tab: tab),
+            )
           else
             const Spacer(),
         ],
@@ -72,8 +67,7 @@ class _PodiumColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final isFirst = entry.rank == 1;
-    final avatarRadius =
-        isFirst ? PauzaAvatarSizes.xLarge : PauzaAvatarSizes.large;
+    final avatarRadius = isFirst ? PauzaAvatarSizes.xLarge : PauzaAvatarSizes.large;
     final pedestalHeight = switch (entry.rank) {
       1 => 80.0,
       2 => 56.0,
@@ -83,31 +77,19 @@ class _PodiumColumn extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        if (isFirst)
-          Icon(
-            Icons.emoji_events_rounded,
-            color: context.colorScheme.primary,
-            size: PauzaIconSizes.xLarge,
-          ),
+        if (isFirst) Icon(Icons.emoji_events_rounded, color: context.colorScheme.primary, size: PauzaIconSizes.xLarge),
         const SizedBox(height: PauzaSpacing.small),
         Stack(
           alignment: Alignment.bottomCenter,
           clipBehavior: Clip.none,
           children: <Widget>[
-            PauzaUserAvatar(
-              imageUrl: entry.user.profilePictureUrl,
-              radius: avatarRadius,
-              borderWidth: isFirst ? 3 : 2,
-            ),
+            PauzaUserAvatar(imageUrl: entry.user.profilePictureUrl, radius: avatarRadius, borderWidth: isFirst ? 3 : 2),
             Positioned(
               bottom: -8,
               child: Container(
                 width: 24,
                 height: 24,
-                decoration: BoxDecoration(
-                  color: context.colorScheme.primary,
-                  shape: BoxShape.circle,
-                ),
+                decoration: BoxDecoration(color: context.colorScheme.primary, shape: BoxShape.circle),
                 alignment: Alignment.center,
                 child: Text(
                   '${entry.rank}',
@@ -131,9 +113,7 @@ class _PodiumColumn extends StatelessWidget {
         const SizedBox(height: PauzaSpacing.tiny),
         Text(
           entry.formatStat(l10n, tab),
-          style: context.pauzaTextTheme.bodySmall.copyWith(
-            color: context.colorScheme.primary,
-          ),
+          style: context.pauzaTextTheme.bodySmall.copyWith(color: context.colorScheme.primary),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: PauzaSpacing.small),
@@ -141,9 +121,7 @@ class _PodiumColumn extends StatelessWidget {
           height: pedestalHeight,
           decoration: BoxDecoration(
             color: context.colorScheme.primary.withValues(alpha: 0.1),
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(PauzaCornerRadius.medium),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(PauzaCornerRadius.medium)),
           ),
         ),
       ],

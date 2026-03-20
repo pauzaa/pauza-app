@@ -20,6 +20,15 @@ NavigationGuard createPermissionGuard({required bool Function() isAuthenticated,
   };
 }
 
+NavigationGuard createOnboardingGuard({required bool Function() isFirstLaunch, required bool Function() isCompleted}) {
+  return (pages) {
+    if (isFirstLaunch() && !isCompleted()) {
+      return <Page<Object?>>[PauzaRoutes.onboarding.page()];
+    }
+    return _removeRouteAll(pages, PauzaRoutes.onboarding);
+  };
+}
+
 NavigationGuard createAuthGuard({required bool Function() isAuthenticated}) {
   return (pages) {
     final dedupedPages = _dedupeState(pages);
@@ -100,7 +109,7 @@ bool _containsRoute(NavigationState pages, PauzaRoutes route) {
 }
 
 bool _isAuthFlowRoute(PauzaRoutes? route) {
-  return route == PauzaRoutes.auth || route == PauzaRoutes.otp;
+  return route == PauzaRoutes.auth || route == PauzaRoutes.otp || route == PauzaRoutes.onboarding;
 }
 
 PauzaRoutes? _routeOf(Page<Object?> page) {

@@ -5,29 +5,18 @@ import 'package:pauza/src/features/leaderboard/common/model/leaderboard_rank_dto
 
 @immutable
 final class LeaderboardDto {
-  const LeaderboardDto({
-    required this.entries,
-    required this.myRank,
-    required this.pagination,
-  });
+  const LeaderboardDto({required this.entries, required this.myRank, required this.pagination});
 
   factory LeaderboardDto.fromJson(Map<String, Object?> json) {
     final rawEntries = json['entries'] as List<Object?>?;
     return LeaderboardDto(
-      entries: rawEntries
-              ?.map(
-                (e) => LeaderboardEntryDto.fromJson(
-                  e as Map<String, Object?>? ?? const {},
-                ),
-              )
+      entries:
+          rawEntries
+              ?.map((e) => LeaderboardEntryDto.fromJson(e as Map<String, Object?>? ?? const {}))
               .toList(growable: false) ??
           const [],
-      myRank: LeaderboardRankDto.fromJson(
-        json['my_rank'] as Map<String, Object?>? ?? const {},
-      ),
-      pagination: PaginationDto.fromJson(
-        json['pagination'] as Map<String, Object?>? ?? const {},
-      ),
+      myRank: LeaderboardRankDto.fromJson(json['my_rank'] as Map<String, Object?>? ?? const {}),
+      pagination: PaginationDto.fromJson(json['pagination'] as Map<String, Object?>? ?? const {}),
     );
   }
 

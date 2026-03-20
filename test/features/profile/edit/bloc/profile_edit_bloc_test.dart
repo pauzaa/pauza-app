@@ -27,10 +27,7 @@ void main() {
       },
       build: () => ProfileEditBloc(userProfileRepository: repository, internetRequiredGuard: guard),
       act: (bloc) => bloc.add(const ProfileEditStarted()),
-      expect: () => <TypeMatcher<ProfileEditState>>[
-        isA<ProfileEditLoading>(),
-        isA<ProfileEditReady>(),
-      ],
+      expect: () => <TypeMatcher<ProfileEditState>>[isA<ProfileEditLoading>(), isA<ProfileEditReady>()],
       verify: (_) {
         verify(() => repository.fetchProfile(forceRemote: true)).called(1);
       },

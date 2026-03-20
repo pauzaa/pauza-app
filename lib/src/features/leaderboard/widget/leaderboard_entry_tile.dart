@@ -6,11 +6,7 @@ import 'package:pauza/src/features/leaderboard/common/model/leaderboard_entry_fo
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class LeaderboardEntryTile extends StatelessWidget {
-  const LeaderboardEntryTile({
-    required this.entry,
-    required this.tab,
-    super.key,
-  });
+  const LeaderboardEntryTile({required this.entry, required this.tab, super.key});
 
   final LeaderboardEntryDto entry;
   final LeaderboardTab tab;
@@ -24,9 +20,7 @@ class LeaderboardEntryTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.colorScheme.surfaceBright,
         borderRadius: BorderRadius.circular(PauzaCornerRadius.large),
-        border: Border.all(
-          color: context.colorScheme.primary.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: context.colorScheme.primary.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: <Widget>[
@@ -34,18 +28,12 @@ class LeaderboardEntryTile extends StatelessWidget {
             width: 32,
             child: Text(
               '#${entry.rank}',
-              style: context.pauzaTextTheme.titleMedium.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
-              ),
+              style: context.pauzaTextTheme.titleMedium.copyWith(color: context.colorScheme.onSurfaceVariant),
               textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(width: PauzaSpacing.regular),
-          PauzaUserAvatar(
-            imageUrl: entry.user.profilePictureUrl,
-            radius: PauzaAvatarSizes.small,
-            borderWidth: 2,
-          ),
+          PauzaUserAvatar(imageUrl: entry.user.profilePictureUrl, radius: PauzaAvatarSizes.small, borderWidth: 2),
           const SizedBox(width: PauzaSpacing.regular),
           Expanded(
             child: Column(
@@ -59,9 +47,7 @@ class LeaderboardEntryTile extends StatelessWidget {
                 ),
                 Text(
                   '@${entry.user.username}',
-                  style: context.pauzaTextTheme.bodySmall.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
+                  style: context.pauzaTextTheme.bodySmall.copyWith(color: context.colorScheme.onSurfaceVariant),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -71,9 +57,7 @@ class LeaderboardEntryTile extends StatelessWidget {
           const SizedBox(width: PauzaSpacing.small),
           Text(
             entry.formatStat(l10n, tab),
-            style: context.pauzaTextTheme.titleMedium.copyWith(
-              color: context.colorScheme.primary,
-            ),
+            style: context.pauzaTextTheme.titleMedium.copyWith(color: context.colorScheme.primary),
           ),
         ],
       ),

@@ -47,16 +47,15 @@ final class AuthRepositoryImpl implements AuthRepository {
     required AuthRemoteDataSource remoteDataSource,
     required AuthSessionStorage sessionStorage,
     Future<void> Function()? onSignOutCleanup,
-  })  : _remoteDataSource = remoteDataSource,
-        _sessionStorage = sessionStorage,
-        _onSignOutCleanup = onSignOutCleanup;
+  }) : _remoteDataSource = remoteDataSource,
+       _sessionStorage = sessionStorage,
+       _onSignOutCleanup = onSignOutCleanup;
 
   final AuthRemoteDataSource _remoteDataSource;
   final AuthSessionStorage _sessionStorage;
   final Future<void> Function()? _onSignOutCleanup;
 
-  final BehaviorSubject<Session> _sessionController =
-      BehaviorSubject<Session>.seeded(const Session.empty());
+  final BehaviorSubject<Session> _sessionController = BehaviorSubject<Session>.seeded(const Session.empty());
 
   String? _pendingOtpEmail;
 
@@ -108,15 +107,9 @@ final class AuthRepositoryImpl implements AuthRepository {
     }
 
     try {
-      final response = await _remoteDataSource.verify(
-        email: pendingEmail,
-        otp: otp,
-      );
+      final response = await _remoteDataSource.verify(email: pendingEmail, otp: otp);
 
-      final session = Session(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      );
+      final session = Session(accessToken: response.accessToken, refreshToken: response.refreshToken);
       final user = UserDto.fromJson(response.userJson);
 
       await _sessionStorage.writeSession(session);
@@ -132,8 +125,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<String?> refreshSession() =>
-      _pendingRefresh ??= _doRefresh().whenComplete(() => _pendingRefresh = null);
+  Future<String?> refreshSession() => _pendingRefresh ??= _doRefresh().whenComplete(() => _pendingRefresh = null);
 
   @override
   Future<void> signOut() async {
@@ -172,14 +164,9 @@ final class AuthRepositoryImpl implements AuthRepository {
     if (refreshToken.isEmpty) return null;
 
     try {
-      final response = await _remoteDataSource.refresh(
-        refreshToken: refreshToken,
-      );
+      final response = await _remoteDataSource.refresh(refreshToken: refreshToken);
 
-      final newSession = Session(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      );
+      final newSession = Session(accessToken: response.accessToken, refreshToken: response.refreshToken);
 
       await _sessionStorage.writeSession(newSession);
       _emitSession(newSession);

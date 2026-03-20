@@ -31,31 +31,20 @@ class LeaderboardBody extends StatelessWidget {
     return CustomScrollView(
       slivers: <Widget>[
         SliverToBoxAdapter(
-          child: LeaderboardPodium(
-            entries: podiumEntries,
-            tab: state.tab,
-          ),
+          child: LeaderboardPodium(entries: podiumEntries, tab: state.tab),
         ),
         if (listEntries.isNotEmpty)
           SliverPadding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: PauzaSpacing.medium,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium),
             sliver: SliverList.separated(
               itemCount: listEntries.length,
-              separatorBuilder: (_, _) =>
-                  const SizedBox(height: PauzaSpacing.small),
+              separatorBuilder: (_, _) => const SizedBox(height: PauzaSpacing.small),
               itemBuilder: (context, index) {
-                return LeaderboardEntryTile(
-                  entry: listEntries[index],
-                  tab: state.tab,
-                );
+                return LeaderboardEntryTile(entry: listEntries[index], tab: state.tab);
               },
             ),
           ),
-        const SliverPadding(
-          padding: EdgeInsets.only(bottom: PauzaSpacing.xLarge),
-        ),
+        const SliverPadding(padding: EdgeInsets.only(bottom: PauzaSpacing.xLarge)),
       ],
     );
   }
@@ -74,15 +63,10 @@ class _LeaderboardError extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text(
-            l10n.leaderboardErrorTitle,
-            style: context.pauzaTextTheme.titleMedium,
-          ),
+          Text(l10n.leaderboardErrorTitle, style: context.pauzaTextTheme.titleMedium),
           const SizedBox(height: PauzaSpacing.medium),
           FilledButton(
-            onPressed: () => context
-                .read<LeaderboardBloc>()
-                .add(const LeaderboardLoadRequested()),
+            onPressed: () => context.read<LeaderboardBloc>().add(const LeaderboardLoadRequested()),
             child: Text(l10n.leaderboardRetryButton),
           ),
         ],
@@ -101,9 +85,7 @@ class _LeaderboardEmpty extends StatelessWidget {
     return Center(
       child: Text(
         l10n.leaderboardEmptyTitle,
-        style: context.pauzaTextTheme.titleMedium.copyWith(
-          color: context.colorScheme.onSurfaceVariant,
-        ),
+        style: context.pauzaTextTheme.titleMedium.copyWith(color: context.colorScheme.onSurfaceVariant),
       ),
     );
   }

@@ -101,9 +101,7 @@ void main() {
         bloc.add(const AuthOtpRequested(email: 'john@doe.com'));
 
         // Complete the first request
-        requestCompleter.complete(
-          const AuthOtpRequiredResult(challengeId: 'otp-challenge', email: 'john@doe.com'),
-        );
+        requestCompleter.complete(const AuthOtpRequiredResult(challengeId: 'otp-challenge', email: 'john@doe.com'));
         await bloc.stream.firstWhere((s) => s is AuthOtpRequired);
 
         // Allow time for the duplicate to process (it should be silently dropped)
@@ -616,9 +614,7 @@ void main() {
         await bloc.stream.firstWhere((s) => s is AuthResending);
 
         // Complete the resend so the submit can process
-        resendCompleter.complete(
-          const AuthOtpRequiredResult(challengeId: 'otp-challenge', email: 'john@doe.com'),
-        );
+        resendCompleter.complete(const AuthOtpRequiredResult(challengeId: 'otp-challenge', email: 'john@doe.com'));
 
         // The submit event processes after resend completes; since the bloc uses
         // sequential(), it sees AuthOtpRequired and proceeds normally to success.

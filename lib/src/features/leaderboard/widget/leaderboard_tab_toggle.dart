@@ -14,26 +14,18 @@ class LeaderboardTabToggle extends StatelessWidget {
     final l10n = context.l10n;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: PauzaSpacing.medium,
-        vertical: PauzaSpacing.small,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: PauzaSpacing.medium, vertical: PauzaSpacing.small),
       child: SegmentedButton<LeaderboardTab>(
         segments: <ButtonSegment<LeaderboardTab>>[
           ButtonSegment<LeaderboardTab>(
             value: LeaderboardTab.currentStreak,
             label: Text(l10n.leaderboardCurrentStreak),
           ),
-          ButtonSegment<LeaderboardTab>(
-            value: LeaderboardTab.totalFocus,
-            label: Text(l10n.leaderboardTotalFocus),
-          ),
+          ButtonSegment<LeaderboardTab>(value: LeaderboardTab.totalFocus, label: Text(l10n.leaderboardTotalFocus)),
         ],
         selected: <LeaderboardTab>{selected},
         onSelectionChanged: (selection) {
-          context
-              .read<LeaderboardBloc>()
-              .add(LeaderboardTabChanged(selection.first));
+          context.read<LeaderboardBloc>().add(LeaderboardTabChanged(selection.first));
         },
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.resolveWith((states) {

@@ -1762,5 +1762,49 @@
   "premiumFriendsDescription": "Add friends and see how they're doing.",
   "@premiumFriendsDescription": {
     "description": "Description shown on the friends premium locked view."
+  },
+  "onboardingSlide1Title": "Take Back Your Time",
+  "@onboardingSlide1Title": {
+    "description": "Title for the first onboarding slide."
+  },
+  "onboardingSlide1Body": "Block distracting apps and build healthier screen habits.",
+  "@onboardingSlide1Body": {
+    "description": "Body text for the first onboarding slide."
+  },
+  "onboardingSlide2Title": "Custom Blocking Modes",
+  "@onboardingSlide2Title": {
+    "description": "Title for the second onboarding slide."
+  },
+  "onboardingSlide2Body": "Create profiles for work, study, or sleep — block the right apps at the right time.",
+  "@onboardingSlide2Body": {
+    "description": "Body text for the second onboarding slide."
+  },
+  "onboardingSlide3Title": "Track Your Progress",
+  "@onboardingSlide3Title": {
+    "description": "Title for the third onboarding slide."
+  },
+  "onboardingSlide3Body": "Build streaks, view stats, and see how much time you save each day.",
+  "@onboardingSlide3Body": {
+    "description": "Body text for the third onboarding slide."
+  },
+  "onboardingSlide4Title": "Stay Accountable",
+  "@onboardingSlide4Title": {
+    "description": "Title for the fourth onboarding slide."
+  },
+  "onboardingSlide4Body": "Compete with friends on the leaderboard. Use NFC tags or QR codes for physical unlock.",
+  "@onboardingSlide4Body": {
+    "description": "Body text for the fourth onboarding slide."
+  },
+  "onboardingSkip": "Skip",
+  "@onboardingSkip": {
+    "description": "Skip button label on the onboarding screen."
+  },
+  "onboardingNext": "Next",
+  "@onboardingNext": {
+    "description": "Next button label on the onboarding screen."
+  },
+  "onboardingGetStarted": "Get Started",
+  "@onboardingGetStarted": {
+    "description": "Get Started button label on the last onboarding slide."
   }
 }

@@ -4,9 +4,7 @@ import 'dart:developer';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 
 final class RestrictionLifecycleSyncCoordinator {
-  RestrictionLifecycleSyncCoordinator({
-    required RestrictionLifecycleRepository repository,
-  }) : _repository = repository;
+  RestrictionLifecycleSyncCoordinator({required RestrictionLifecycleRepository repository}) : _repository = repository;
 
   final RestrictionLifecycleRepository _repository;
 

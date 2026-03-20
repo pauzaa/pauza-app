@@ -11,41 +11,25 @@ enum AuthErrorContext { start, verify, refresh, logout }
 sealed class AuthError implements Exception, Localizable {
   const AuthError();
 
-  factory AuthError.fromApiException(
-    ApiClientException e, {
-    required AuthErrorContext context,
-  }) {
+  factory AuthError.fromApiException(ApiClientException e, {required AuthErrorContext context}) {
     return switch (e) {
       ApiClientAuthorizationException() =>
         context == AuthErrorContext.refresh
             ? AuthRefreshFailedError(cause: _serverMessage(e.data))
             : const AuthInvalidOtpError(),
-      ApiClientClientException(
-        :final statusCode,
-        :final data,
-        :final responseHeaders,
-      ) =>
-        () {
-          if (statusCode == 422) {
-            final fieldMessage = _firstFieldMessage(data);
-            return AuthValidationError(
-              message: fieldMessage ?? _serverMessage(data),
-            );
-          }
-          if (statusCode == 429) {
-            final retryAfterSeconds = int.tryParse(
-              responseHeaders['retry-after'] ?? '',
-            );
-            return AuthOtpCooldownError(
-              retryAfter: retryAfterSeconds != null
-                  ? Duration(seconds: retryAfterSeconds)
-                  : null,
-            );
-          }
-          return AuthUnknownError(
-            cause: _serverMessage(data) ?? 'HTTP $statusCode',
+      ApiClientClientException(:final statusCode, :final data, :final responseHeaders) => () {
+        if (statusCode == 422) {
+          final fieldMessage = _firstFieldMessage(data);
+          return AuthValidationError(message: fieldMessage ?? _serverMessage(data));
+        }
+        if (statusCode == 429) {
+          final retryAfterSeconds = int.tryParse(responseHeaders['retry-after'] ?? '');
+          return AuthOtpCooldownError(
+            retryAfter: retryAfterSeconds != null ? Duration(seconds: retryAfterSeconds) : null,
           );
-        }(),
+        }
+        return AuthUnknownError(cause: _serverMessage(data) ?? 'HTTP $statusCode');
+      }(),
       ApiClientNetworkException() => AuthNetworkError(cause: e.message),
     };
   }

@@ -9,11 +9,7 @@ import 'package:pauza/src/features/auth/common/model/auth_failure.dart';
 
 @immutable
 final class AuthVerifyResponse {
-  const AuthVerifyResponse({
-    required this.accessToken,
-    required this.refreshToken,
-    required this.userJson,
-  });
+  const AuthVerifyResponse({required this.accessToken, required this.refreshToken, required this.userJson});
 
   final String accessToken;
   final String refreshToken;
@@ -22,23 +18,18 @@ final class AuthVerifyResponse {
   final Map<String, Object?> userJson;
 
   @override
-  String toString() =>
-      'AuthVerifyResponse(accessToken: <redacted>, refreshToken: <redacted>)';
+  String toString() => 'AuthVerifyResponse(accessToken: <redacted>, refreshToken: <redacted>)';
 }
 
 @immutable
 final class AuthRefreshResponse {
-  const AuthRefreshResponse({
-    required this.accessToken,
-    required this.refreshToken,
-  });
+  const AuthRefreshResponse({required this.accessToken, required this.refreshToken});
 
   final String accessToken;
   final String refreshToken;
 
   @override
-  String toString() =>
-      'AuthRefreshResponse(accessToken: <redacted>, refreshToken: <redacted>)';
+  String toString() => 'AuthRefreshResponse(accessToken: <redacted>, refreshToken: <redacted>)';
 }
 
 // ---------------------------------------------------------------------------
@@ -50,10 +41,7 @@ abstract interface class AuthRemoteDataSource {
   Future<void> start({required String email});
 
   /// `POST /auth/verify` -- verifies the OTP and returns tokens + user.
-  Future<AuthVerifyResponse> verify({
-    required String email,
-    required String otp,
-  });
+  Future<AuthVerifyResponse> verify({required String email, required String otp});
 
   /// `POST /auth/refresh` -- exchanges [refreshToken] for a new pair.
   Future<AuthRefreshResponse> refresh({required String refreshToken});
@@ -67,35 +55,25 @@ abstract interface class AuthRemoteDataSource {
 // ---------------------------------------------------------------------------
 
 final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  const AuthRemoteDataSourceImpl({required ApiClient apiClient})
-      : _apiClient = apiClient;
+  const AuthRemoteDataSourceImpl({required ApiClient apiClient}) : _apiClient = apiClient;
 
   final ApiClient _apiClient;
 
-  static const Map<String, Object?> _skipAuthCtx = <String, Object?>{
-    ApiClientAuthMiddleware.skipAuthKey: true,
-  };
+  static const Map<String, Object?> _skipAuthCtx = <String, Object?>{ApiClientAuthMiddleware.skipAuthKey: true};
 
   // ---- public API ---------------------------------------------------------
 
   @override
   Future<void> start({required String email}) async {
     try {
-      await _apiClient.post(
-        '/auth/start',
-        body: <String, Object?>{'email': email},
-        context: _skipAuthCtx,
-      );
+      await _apiClient.post('/auth/start', body: <String, Object?>{'email': email}, context: _skipAuthCtx);
     } on ApiClientException catch (e) {
       throw AuthError.fromApiException(e, context: AuthErrorContext.start);
     }
   }
 
   @override
-  Future<AuthVerifyResponse> verify({
-    required String email,
-    required String otp,
-  }) async {
+  Future<AuthVerifyResponse> verify({required String email, required String otp}) async {
     final ApiClientResponse response;
     try {
       response = await _apiClient.post(
@@ -116,11 +94,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw const AuthUnknownError(cause: 'Incomplete verify response');
     }
 
-    return AuthVerifyResponse(
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      userJson: userJson,
-    );
+    return AuthVerifyResponse(accessToken: accessToken, refreshToken: refreshToken, userJson: userJson);
   }
 
   @override
@@ -144,10 +118,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw const AuthRefreshFailedError(cause: 'Incomplete refresh response');
     }
 
-    return AuthRefreshResponse(
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
-    );
+    return AuthRefreshResponse(accessToken: newAccessToken, refreshToken: newRefreshToken);
   }
 
   @override
@@ -158,5 +129,4 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw AuthError.fromApiException(e, context: AuthErrorContext.logout);
     }
   }
-
 }

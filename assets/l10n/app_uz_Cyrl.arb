@@ -387,5 +387,16 @@
   "premiumLockedMessage": "Бу функция Премиум обунани талаб қилади.",
   "premiumUnlockButton": "Премиумни очиш",
   "premiumUpgradeButton": "Янгилаш",
-  "premiumFriendsDescription": "Дўстлар қўшинг ва уларнинг ҳолатини кузатинг."
+  "premiumFriendsDescription": "Дўстлар қўшинг ва уларнинг ҳолатини кузатинг.",
+  "onboardingSlide1Title": "Вақтингизни қайтаринг",
+  "onboardingSlide1Body": "Чалғитувчи иловаларни блокланг ва соғлом экран одатларини шакллантиринг.",
+  "onboardingSlide2Title": "Махсус блоклаш режимлари",
+  "onboardingSlide2Body": "Иш, ўқиш ёки ухлаш учун профиллар яратинг — тўғри вақтда тўғри иловаларни блокланг.",
+  "onboardingSlide3Title": "Тараққиётингизни кузатинг",
+  "onboardingSlide3Body": "Сериялар тўplanг, статистикани кўринг ва ҳар куни қанча вақт тежаётганингизни билиб боринг.",
+  "onboardingSlide4Title": "Жавобгар бўлинг",
+  "onboardingSlide4Body": "Дўстларингиз билан лидерлар жадвалида рақобатлашинг. NFC теглар ёки QR кодлар орқали физик қулфни очинг.",
+  "onboardingSkip": "Ўтказиб юбориш",
+  "onboardingNext": "Кейинги",
+  "onboardingGetStarted": "Бошлаш"
 }

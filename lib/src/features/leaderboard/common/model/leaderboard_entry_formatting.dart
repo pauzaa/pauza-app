@@ -5,8 +5,7 @@ import 'package:pauza/src/features/leaderboard/common/model/leaderboard_entry_dt
 extension LeaderboardEntryFormatting on LeaderboardEntryDto {
   String formatStat(AppLocalizations l10n, LeaderboardTab tab) {
     return switch (tab) {
-      LeaderboardTab.currentStreak =>
-        l10n.leaderboardDaysCount(currentStreakDays ?? 0),
+      LeaderboardTab.currentStreak => l10n.leaderboardDaysCount(currentStreakDays ?? 0),
       LeaderboardTab.totalFocus => _formatFocusTime(l10n),
     };
   }

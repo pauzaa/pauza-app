@@ -10,10 +10,7 @@ final class SyncResponseDto {
     final tablesJson = json['tables'] as Map<String, Object?>;
     return SyncResponseDto(
       tables: tablesJson.map(
-        (key, value) => MapEntry(
-          key,
-          SyncTableResponseDto.fromJson(value! as Map<String, Object?>),
-        ),
+        (key, value) => MapEntry(key, SyncTableResponseDto.fromJson(value! as Map<String, Object?>)),
       ),
     );
   }
@@ -23,17 +20,12 @@ final class SyncResponseDto {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SyncResponseDto &&
-          _mapsEqual(tables, other.tables);
+      identical(this, other) || other is SyncResponseDto && _mapsEqual(tables, other.tables);
 
   @override
   int get hashCode => tables.hashCode;
 
-  static bool _mapsEqual(
-    Map<String, SyncTableResponseDto> a,
-    Map<String, SyncTableResponseDto> b,
-  ) {
+  static bool _mapsEqual(Map<String, SyncTableResponseDto> a, Map<String, SyncTableResponseDto> b) {
     if (a.length != b.length) return false;
     for (final key in a.keys) {
       if (a[key] != b[key]) return false;
@@ -44,11 +36,7 @@ final class SyncResponseDto {
 
 @immutable
 final class SyncTableResponseDto {
-  const SyncTableResponseDto({
-    required this.nextCursor,
-    this.upserts = const [],
-    this.deletions = const [],
-  });
+  const SyncTableResponseDto({required this.nextCursor, this.upserts = const [], this.deletions = const []});
 
   final int nextCursor;
   final List<Map<String, Object?>> upserts;

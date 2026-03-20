@@ -387,5 +387,16 @@
   "premiumLockedMessage": "Эта функция требует подписку Премиум.",
   "premiumUnlockButton": "Открыть Премиум",
   "premiumUpgradeButton": "Улучшить",
-  "premiumFriendsDescription": "Добавляйте друзей и следите за их прогрессом."
+  "premiumFriendsDescription": "Добавляйте друзей и следите за их прогрессом.",
+  "onboardingSlide1Title": "Верните своё время",
+  "onboardingSlide1Body": "Блокируйте отвлекающие приложения и формируйте здоровые экранные привычки.",
+  "onboardingSlide2Title": "Режимы блокировки",
+  "onboardingSlide2Body": "Создавайте профили для работы, учёбы или сна — блокируйте нужные приложения в нужное время.",
+  "onboardingSlide3Title": "Следите за прогрессом",
+  "onboardingSlide3Body": "Набирайте серии, просматривайте статистику и узнавайте, сколько времени вы экономите каждый день.",
+  "onboardingSlide4Title": "Будьте ответственны",
+  "onboardingSlide4Body": "Соревнуйтесь с друзьями в лидерборде. Используйте NFC-метки или QR-коды для физической разблокировки.",
+  "onboardingSkip": "Пропустить",
+  "onboardingNext": "Далее",
+  "onboardingGetStarted": "Начать"
 }

@@ -57,7 +57,12 @@ void main() {
   testWidgets('rename action dispatches rename event', (tester) async {
     final chip = makeNfcLinkedChip(id: 'chip-1', name: 'Office Entry', createdAt: DateTime.utc(2023, 12, 15));
     when(() => repository.getLinkedChips()).thenAnswer((_) async => IList([chip]));
-    when(() => repository.renameChip(id: any(named: 'id'), name: any(named: 'name'))).thenAnswer((_) async {});
+    when(
+      () => repository.renameChip(
+        id: any(named: 'id'),
+        name: any(named: 'name'),
+      ),
+    ).thenAnswer((_) async {});
 
     final bloc = await _pumpScreen(
       tester,
@@ -108,9 +113,12 @@ void main() {
     final chip = makeNfcLinkedChip(id: 'chip-1', name: 'Kitchen Tag', createdAt: DateTime.utc(2023, 11, 2));
     final renameCompleter = Completer<void>();
     when(() => repository.getLinkedChips()).thenAnswer((_) async => IList([chip]));
-    when(() => repository.renameChip(id: any(named: 'id'), name: any(named: 'name'))).thenAnswer(
-      (_) => renameCompleter.future,
-    );
+    when(
+      () => repository.renameChip(
+        id: any(named: 'id'),
+        name: any(named: 'name'),
+      ),
+    ).thenAnswer((_) => renameCompleter.future);
 
     final bloc = await _pumpScreen(
       tester,
@@ -147,13 +155,11 @@ void main() {
   });
 
   testWidgets('shows already linked toast on duplicate link error', (tester) async {
-    when(() => repository.linkChipIfAbsent(chipIdentifier: any(named: 'chipIdentifier'))).thenAnswer((_) async => false);
+    when(
+      () => repository.linkChipIfAbsent(chipIdentifier: any(named: 'chipIdentifier')),
+    ).thenAnswer((_) async => false);
 
-    final bloc = await _pumpScreen(
-      tester,
-      repository: repository,
-      scanSheetOpener: (_) async => makeNfcCardDto(),
-    );
+    final bloc = await _pumpScreen(tester, repository: repository, scanSheetOpener: (_) async => makeNfcCardDto());
     bloc.add(const NfcChipLoadCardsRequested());
     await tester.pump();
     await tester.pump();

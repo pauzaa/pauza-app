@@ -7,21 +7,14 @@ final class SyncRequestDto {
 
   factory SyncRequestDto.empty() {
     return SyncRequestDto(
-      tables: {
-        for (final table in SyncTable.values)
-          table.key: const SyncTableRequestDto(cursor: 0),
-      },
+      tables: {for (final table in SyncTable.values) table.key: const SyncTableRequestDto(cursor: 0)},
     );
   }
 
   final Map<String, SyncTableRequestDto> tables;
 
   Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'tables': tables.map(
-        (key, table) => MapEntry(key, table.toJson()),
-      ),
-    };
+    return <String, Object?>{'tables': tables.map((key, table) => MapEntry(key, table.toJson()))};
   }
 
   @override
@@ -29,17 +22,12 @@ final class SyncRequestDto {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SyncRequestDto &&
-          _mapsEqual(tables, other.tables);
+      identical(this, other) || other is SyncRequestDto && _mapsEqual(tables, other.tables);
 
   @override
   int get hashCode => tables.hashCode;
 
-  static bool _mapsEqual(
-    Map<String, SyncTableRequestDto> a,
-    Map<String, SyncTableRequestDto> b,
-  ) {
+  static bool _mapsEqual(Map<String, SyncTableRequestDto> a, Map<String, SyncTableRequestDto> b) {
     if (a.length != b.length) return false;
     for (final key in a.keys) {
       if (a[key] != b[key]) return false;
@@ -50,11 +38,7 @@ final class SyncRequestDto {
 
 @immutable
 final class SyncTableRequestDto {
-  const SyncTableRequestDto({
-    required this.cursor,
-    this.upserts = const [],
-    this.deletions = const [],
-  });
+  const SyncTableRequestDto({required this.cursor, this.upserts = const [], this.deletions = const []});
 
   final int cursor;
   final List<Map<String, Object?>> upserts;

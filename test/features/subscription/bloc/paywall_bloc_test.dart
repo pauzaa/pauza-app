@@ -52,10 +52,7 @@ void main() {
     when(() => authRepository.currentSession).thenReturn(const Session.empty());
     when(() => userProfileRepository.watchProfileChanges()).thenAnswer((_) => const Stream<UserDto>.empty());
 
-    currentUserBloc = CurrentUserBloc(
-      authRepository: authRepository,
-      userProfileRepository: userProfileRepository,
-    );
+    currentUserBloc = CurrentUserBloc(authRepository: authRepository, userProfileRepository: userProfileRepository);
   });
 
   tearDown(() async {

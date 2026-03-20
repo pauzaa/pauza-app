@@ -18,8 +18,8 @@ final class UserDto {
   factory UserDto.fromJson(Map<String, Object?> json) {
     DateTime? createdAt;
     final rawCreatedAt = json['created_at'];
-    if (rawCreatedAt is String && rawCreatedAt.isNotEmpty) {
-      createdAt = DateTime.tryParse(rawCreatedAt)?.toUtc();
+    if (rawCreatedAt is int) {
+      createdAt = DateTime.fromMillisecondsSinceEpoch(rawCreatedAt, isUtc: true);
     }
 
     SubscriptionDto? subscription;
@@ -81,7 +81,7 @@ final class UserDto {
     'name': name,
     'push_enabled': pushEnabled,
     'leaderboard_visible': leaderboardVisible,
-    'created_at': createdAt?.toIso8601String(),
+    'created_at': createdAt?.millisecondsSinceEpoch,
     'subscription': subscription?.toJson(),
   };
 

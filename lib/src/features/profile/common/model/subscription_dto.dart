@@ -7,8 +7,8 @@ final class SubscriptionDto {
   factory SubscriptionDto.fromJson(Map<String, Object?> json) {
     DateTime? periodEnd;
     final rawEnd = json['current_period_end'];
-    if (rawEnd is String && rawEnd.isNotEmpty) {
-      periodEnd = DateTime.tryParse(rawEnd)?.toUtc();
+    if (rawEnd is int) {
+      periodEnd = DateTime.fromMillisecondsSinceEpoch(rawEnd, isUtc: true);
     }
 
     return SubscriptionDto(
@@ -25,7 +25,7 @@ final class SubscriptionDto {
   Map<String, Object?> toJson() => <String, Object?>{
     'entitlement': entitlement,
     'is_active': isActive,
-    'current_period_end': currentPeriodEnd?.toIso8601String(),
+    'current_period_end': currentPeriodEnd?.millisecondsSinceEpoch,
   };
 
   @override

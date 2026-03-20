@@ -6,11 +6,13 @@ final class FriendDto {
   const FriendDto({required this.friendshipId, required this.user, required this.since});
 
   factory FriendDto.fromJson(Map<String, Object?> json) {
-    final rawSince = json['since'] as String?;
+    final rawSince = json['since'];
     return FriendDto(
       friendshipId: json['friendship_id'] as String? ?? '',
       user: BasicUserDto.fromJson(json['user'] as Map<String, Object?>? ?? const {}),
-      since: rawSince != null ? DateTime.parse(rawSince).toUtc() : DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+      since: rawSince is int
+          ? DateTime.fromMillisecondsSinceEpoch(rawSince, isUtc: true)
+          : DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
     );
   }
 

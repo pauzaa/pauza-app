@@ -6,12 +6,12 @@ final class FriendRequestDto {
   const FriendRequestDto({required this.friendshipId, required this.user, required this.createdAt});
 
   factory FriendRequestDto.fromJson(Map<String, Object?> json) {
-    final rawCreatedAt = json['created_at'] as String?;
+    final rawCreatedAt = json['created_at'];
     return FriendRequestDto(
       friendshipId: json['friendship_id'] as String? ?? '',
       user: BasicUserDto.fromJson(json['user'] as Map<String, Object?>? ?? const {}),
-      createdAt: rawCreatedAt != null
-          ? DateTime.parse(rawCreatedAt).toUtc()
+      createdAt: rawCreatedAt is int
+          ? DateTime.fromMillisecondsSinceEpoch(rawCreatedAt, isUtc: true)
           : DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
     );
   }

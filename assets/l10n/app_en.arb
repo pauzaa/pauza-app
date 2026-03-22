@@ -1763,37 +1763,53 @@
   "@premiumFriendsDescription": {
     "description": "Description shown on the friends premium locked view."
   },
-  "onboardingSlide1Title": "Take Back Your Time",
+  "onboardingSlide1Title": "Take a Pauza",
   "@onboardingSlide1Title": {
     "description": "Title for the first onboarding slide."
   },
-  "onboardingSlide1Body": "Block distracting apps and build healthier screen habits.",
+  "onboardingSlide1Body": "Pause distracting apps and take control of your screen time — one session at a time.",
   "@onboardingSlide1Body": {
     "description": "Body text for the first onboarding slide."
   },
-  "onboardingSlide2Title": "Custom Blocking Modes",
+  "onboardingSlide2Title": "Your Rules, Your Modes",
   "@onboardingSlide2Title": {
     "description": "Title for the second onboarding slide."
   },
-  "onboardingSlide2Body": "Create profiles for work, study, or sleep — block the right apps at the right time.",
+  "onboardingSlide2Body": "Create blocking modes for work, study, or sleep. Pick the apps, set the schedule, and let Pauza handle the rest.",
   "@onboardingSlide2Body": {
     "description": "Body text for the second onboarding slide."
   },
-  "onboardingSlide3Title": "Track Your Progress",
+  "onboardingSlide3Title": "Watch Your Streak Grow",
   "@onboardingSlide3Title": {
     "description": "Title for the third onboarding slide."
   },
-  "onboardingSlide3Body": "Build streaks, view stats, and see how much time you save each day.",
+  "onboardingSlide3Body": "Every distraction-free day counts. Track your streaks and see your screen time habits improve over time.",
   "@onboardingSlide3Body": {
     "description": "Body text for the third onboarding slide."
   },
-  "onboardingSlide4Title": "Stay Accountable",
+  "onboardingSlide4Title": "Know Your Habits",
   "@onboardingSlide4Title": {
     "description": "Title for the fourth onboarding slide."
   },
-  "onboardingSlide4Body": "Compete with friends on the leaderboard. Use NFC tags or QR codes for physical unlock.",
+  "onboardingSlide4Body": "See detailed stats on your screen time and app usage. Get AI-powered insights and personalized recommendations to stay on track.",
   "@onboardingSlide4Body": {
     "description": "Body text for the fourth onboarding slide."
+  },
+  "onboardingSlide5Title": "Better Together",
+  "@onboardingSlide5Title": {
+    "description": "Title for the fifth onboarding slide."
+  },
+  "onboardingSlide5Body": "Join the leaderboard and see how you stack up. A little friendly competition goes a long way.",
+  "@onboardingSlide5Body": {
+    "description": "Body text for the fifth onboarding slide."
+  },
+  "onboardingSlide6Title": "Unlock with a Tap",
+  "@onboardingSlide6Title": {
+    "description": "Title for the sixth onboarding slide."
+  },
+  "onboardingSlide6Body": "Link an NFC tag or QR code to physically unlock your apps. Out of sight, out of mind.",
+  "@onboardingSlide6Body": {
+    "description": "Body text for the sixth onboarding slide."
   },
   "onboardingSkip": "Skip",
   "@onboardingSkip": {

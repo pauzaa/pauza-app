@@ -12,7 +12,7 @@ flutter pub get
 flutter run
 
 # Run all tests
-flutter test --coverage test/unit_test.dart test/widget_test.dart
+flutter test --coverage
 
 # Run a single test file
 flutter test test/path/to/test_file.dart

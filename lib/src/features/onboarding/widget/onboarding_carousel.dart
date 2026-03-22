@@ -28,13 +28,39 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
     _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
-  List<({IconData icon, String title, String body})> _slides(BuildContext context) {
+  List<({String assetPath, String title, String body})> _slides(BuildContext context) {
     final l10n = context.l10n;
     return [
-      (icon: Icons.pause_circle_filled, title: l10n.onboardingSlide1Title, body: l10n.onboardingSlide1Body),
-      (icon: Icons.tune, title: l10n.onboardingSlide2Title, body: l10n.onboardingSlide2Body),
-      (icon: Icons.local_fire_department, title: l10n.onboardingSlide3Title, body: l10n.onboardingSlide3Body),
-      (icon: Icons.group, title: l10n.onboardingSlide4Title, body: l10n.onboardingSlide4Body),
+      (
+        assetPath: 'assets/images/onboarding/onboarding_focus.svg',
+        title: l10n.onboardingSlide1Title,
+        body: l10n.onboardingSlide1Body,
+      ),
+      (
+        assetPath: 'assets/images/onboarding/onboarding_modes.svg',
+        title: l10n.onboardingSlide2Title,
+        body: l10n.onboardingSlide2Body,
+      ),
+      (
+        assetPath: 'assets/images/onboarding/onboarding_streaks.svg',
+        title: l10n.onboardingSlide3Title,
+        body: l10n.onboardingSlide3Body,
+      ),
+      (
+        assetPath: 'assets/images/onboarding/onboarding_stats.svg',
+        title: l10n.onboardingSlide4Title,
+        body: l10n.onboardingSlide4Body,
+      ),
+      (
+        assetPath: 'assets/images/onboarding/onboarding_social.svg',
+        title: l10n.onboardingSlide5Title,
+        body: l10n.onboardingSlide5Body,
+      ),
+      (
+        assetPath: 'assets/images/onboarding/onboarding_unlock.svg',
+        title: l10n.onboardingSlide6Title,
+        body: l10n.onboardingSlide6Body,
+      ),
     ];
   }
 
@@ -52,7 +78,7 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
               onPageChanged: (index) => _currentPage.value = index,
               itemBuilder: (context, index) {
                 final slide = slides[index];
-                return OnboardingSlidePage(icon: slide.icon, title: slide.title, body: slide.body);
+                return OnboardingSlidePage(assetPath: slide.assetPath, title: slide.title, body: slide.body);
               },
             ),
           ),

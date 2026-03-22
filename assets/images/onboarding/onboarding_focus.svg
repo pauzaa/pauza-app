@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="90" fill="#F2D5DE" opacity="0.5"/>
+  <!-- Phone body -->
+  <rect x="60" y="28" width="80" height="144" rx="14" ry="14" fill="#FFFFFF" stroke="#800020" stroke-width="3"/>
+  <!-- Screen area -->
+  <rect x="68" y="48" width="64" height="104" rx="4" ry="4" fill="#F5F5F5"/>
+  <!-- Top notch -->
+  <rect x="85" y="34" width="30" height="6" rx="3" ry="3" fill="#E6B3C0"/>
+  <!-- Home indicator -->
+  <rect x="85" y="160" width="30" height="4" rx="2" ry="2" fill="#E6B3C0"/>
+  <!-- Shield on screen -->
+  <path d="M100 58 L124 68 C124 92 116 112 100 122 C84 112 76 92 76 68 Z" fill="#800020" opacity="0.15"/>
+  <path d="M100 62 L120 70 C120 90 114 108 100 116 C86 108 80 90 80 70 Z" fill="#800020" opacity="0.9"/>
+  <!-- Pause icon inside shield -->
+  <rect x="93" y="78" width="4" height="24" rx="2" ry="2" fill="#FFFFFF"/>
+  <rect x="103" y="78" width="4" height="24" rx="2" ry="2" fill="#FFFFFF"/>
+  <!-- Decorative dots -->
+  <circle cx="38" cy="52" r="6" fill="#E6B3C0" opacity="0.7"/>
+  <circle cx="162" cy="52" r="4" fill="#B34D6A" opacity="0.5"/>
+  <circle cx="155" cy="148" r="8" fill="#E6B3C0" opacity="0.6"/>
+  <circle cx="42" cy="140" r="5" fill="#B34D6A" opacity="0.4"/>
+  <!-- Blocking rays emanating from phone -->
+  <line x1="48" y1="70" x2="56" y2="80" stroke="#800020" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+  <line x1="44" y1="100" x2="54" y2="100" stroke="#800020" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+  <line x1="152" y1="70" x2="144" y2="80" stroke="#800020" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+  <line x1="156" y1="100" x2="146" y2="100" stroke="#800020" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="90" fill="#F2D5DE" opacity="0.4"/>
+  <!-- Chart background card -->
+  <rect x="24" y="50" width="152" height="110" rx="16" ry="16" fill="#FFFFFF" stroke="#E6B3C0" stroke-width="2"/>
+  <!-- Grid lines -->
+  <line x1="44" y1="80" x2="156" y2="80" stroke="#F5F5F5" stroke-width="1.5"/>
+  <line x1="44" y1="100" x2="156" y2="100" stroke="#F5F5F5" stroke-width="1.5"/>
+  <line x1="44" y1="120" x2="156" y2="120" stroke="#F5F5F5" stroke-width="1.5"/>
+  <line x1="44" y1="140" x2="156" y2="140" stroke="#F5F5F5" stroke-width="1.5"/>
+  <!-- Bar chart -->
+  <rect x="48" y="110" width="14" height="30" rx="3" ry="3" fill="#E6B3C0"/>
+  <rect x="68" y="95" width="14" height="45" rx="3" ry="3" fill="#B34D6A"/>
+  <rect x="88" y="105" width="14" height="35" rx="3" ry="3" fill="#E6B3C0"/>
+  <rect x="108" y="82" width="14" height="58" rx="3" ry="3" fill="#800020"/>
+  <rect x="128" y="90" width="14" height="50" rx="3" ry="3" fill="#B34D6A"/>
+  <rect x="148" y="72" width="14" height="68" rx="3" ry="3" fill="#800020"/>
+  <!-- Trend line overlay -->
+  <path d="M55 108 L75 92 L95 100 L115 78 L135 86 L155 68" stroke="#800020" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Trend line dots -->
+  <circle cx="55" cy="108" r="3" fill="#800020"/>
+  <circle cx="75" cy="92" r="3" fill="#800020"/>
+  <circle cx="95" cy="100" r="3" fill="#800020"/>
+  <circle cx="115" cy="78" r="3" fill="#800020"/>
+  <circle cx="135" cy="86" r="3" fill="#800020"/>
+  <circle cx="155" cy="68" r="3" fill="#800020"/>
+  <!-- AI sparkle element top-right -->
+  <circle cx="158" cy="34" r="18" fill="#800020" opacity="0.12"/>
+  <path d="M158 22 L160 30 L168 32 L160 34 L158 42 L156 34 L148 32 L156 30 Z" fill="#800020"/>
+  <!-- Smaller sparkle -->
+  <path d="M40 36 L41.5 40 L45.5 41.5 L41.5 43 L40 47 L38.5 43 L34.5 41.5 L38.5 40 Z" fill="#B34D6A" opacity="0.6"/>
+  <!-- Another sparkle -->
+  <path d="M130 30 L131 33 L134 34 L131 35 L130 38 L129 35 L126 34 L129 33 Z" fill="#B34D6A" opacity="0.5"/>
+  <!-- Decorative dots -->
+  <circle cx="30" cy="170" r="5" fill="#E6B3C0" opacity="0.5"/>
+  <circle cx="170" cy="170" r="4" fill="#B34D6A" opacity="0.4"/>
+</svg>

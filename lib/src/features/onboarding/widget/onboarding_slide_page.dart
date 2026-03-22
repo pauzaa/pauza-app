@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class OnboardingSlidePage extends StatelessWidget {
-  const OnboardingSlidePage({required this.icon, required this.title, required this.body, super.key});
+  const OnboardingSlidePage({required this.assetPath, required this.title, required this.body, super.key});
 
-  final IconData icon;
+  final String assetPath;
   final String title;
   final String body;
 
@@ -17,10 +18,7 @@ class OnboardingSlidePage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          DecoratedBox(
-            decoration: BoxDecoration(color: colorScheme.primaryContainer, shape: BoxShape.circle),
-            child: SizedBox(width: 120, height: 120, child: Icon(icon, size: 56, color: colorScheme.primary)),
-          ),
+          SvgPicture.asset(assetPath, height: 200),
           const SizedBox(height: 40),
           Text(title, style: context.textTheme.headlineMedium, textAlign: TextAlign.center),
           const SizedBox(height: 16),

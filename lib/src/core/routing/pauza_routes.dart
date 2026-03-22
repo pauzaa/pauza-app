@@ -48,7 +48,7 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.stats => '/stats',
     PauzaRoutes.leaderboard => '/leaderboard',
     PauzaRoutes.friends => '/friends',
-    PauzaRoutes.findAndRequests => '/friends/find',
+    PauzaRoutes.findAndRequests => '/find-and-requests',
     PauzaRoutes.profile => '/profile',
     PauzaRoutes.profileEdit => '/profile/edit',
     PauzaRoutes.modeCreate => '/modes/new',

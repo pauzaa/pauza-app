@@ -14,6 +14,8 @@ abstract interface class SubscriptionRepository {
 
   Future<void> restorePurchases();
 
+  Future<String?> getManagementUrl();
+
   Future<void> logOut();
 
   void dispose();
@@ -88,6 +90,12 @@ final class SubscriptionRepositoryImpl implements SubscriptionRepository {
     } on Object catch (e) {
       throw SubscriptionUnknownError(e);
     }
+  }
+
+  @override
+  Future<String?> getManagementUrl() async {
+    if (!_dataSource.isConfigured) throw const SubscriptionNotConfiguredError();
+    return _dataSource.getManagementUrl();
   }
 
   @override

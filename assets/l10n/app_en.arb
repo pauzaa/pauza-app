@@ -1763,6 +1763,76 @@
   "@premiumFriendsDescription": {
     "description": "Description shown on the friends premium locked view."
   },
+  "subscriptionInfoTitle": "Subscription",
+  "@subscriptionInfoTitle": {
+    "description": "Title for the subscription info screen."
+  },
+  "subscriptionInfoActiveStatus": "Active",
+  "@subscriptionInfoActiveStatus": {
+    "description": "Label indicating the subscription is active."
+  },
+  "subscriptionInfoInactiveStatus": "Inactive",
+  "@subscriptionInfoInactiveStatus": {
+    "description": "Label indicating the subscription is inactive or expired."
+  },
+  "subscriptionInfoExpiringSoonStatus": "Expiring Soon",
+  "@subscriptionInfoExpiringSoonStatus": {
+    "description": "Label indicating the subscription is expiring within 3 days."
+  },
+  "subscriptionInfoPlanLabel": "Plan",
+  "@subscriptionInfoPlanLabel": {
+    "description": "Section header label for the subscription plan."
+  },
+  "subscriptionInfoStatusLabel": "Status",
+  "@subscriptionInfoStatusLabel": {
+    "description": "Label for the subscription status detail."
+  },
+  "subscriptionInfoRenewalDateLabel": "Renewal Date",
+  "@subscriptionInfoRenewalDateLabel": {
+    "description": "Label for the subscription renewal date detail."
+  },
+  "subscriptionInfoExpiryDateLabel": "Expiry Date",
+  "@subscriptionInfoExpiryDateLabel": {
+    "description": "Label for the subscription expiry date detail."
+  },
+  "subscriptionInfoSourceLabel": "Source",
+  "@subscriptionInfoSourceLabel": {
+    "description": "Label for the subscription source detail."
+  },
+  "subscriptionInfoSourceRevenuecat": "App Store",
+  "@subscriptionInfoSourceRevenuecat": {
+    "description": "Display name for subscriptions sourced from RevenueCat (App Store/Play Store)."
+  },
+  "subscriptionInfoSourceAdminOverride": "Granted by Admin",
+  "@subscriptionInfoSourceAdminOverride": {
+    "description": "Display name for subscriptions granted via admin override."
+  },
+  "subscriptionInfoPremiumPlan": "Premium",
+  "@subscriptionInfoPremiumPlan": {
+    "description": "Display name for the premium subscription plan."
+  },
+  "subscriptionInfoNoSubscription": "No active subscription",
+  "@subscriptionInfoNoSubscription": {
+    "description": "Text shown when the user has no subscription."
+  },
+  "subscriptionInfoGetPremium": "Get Premium",
+  "@subscriptionInfoGetPremium": {
+    "description": "Button label to navigate to the paywall screen."
+  },
+  "subscriptionInfoRenewsOn": "Renews on {date}",
+  "@subscriptionInfoRenewsOn": {
+    "description": "Label showing when the subscription renews.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "description": "The formatted renewal date."
+      }
+    }
+  },
+  "subscriptionInfoManageButton": "Manage Subscription",
+  "@subscriptionInfoManageButton": {
+    "description": "Button label to open platform subscription management."
+  },
   "onboardingSlide1Title": "Take a Pauza",
   "@onboardingSlide1Title": {
     "description": "Title for the first onboarding slide."

@@ -9,6 +9,7 @@ import 'package:pauza/src/features/profile/view/widget/profile_action_card.dart'
 import 'package:pauza/src/features/profile/view/widget/profile_header_section.dart';
 import 'package:pauza/src/features/settings/widget/settings_screen.dart';
 import 'package:pauza/src/features/subscription/widget/paywall_screen.dart';
+import 'package:pauza/src/features/subscription/widget/subscription_info_screen.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -52,15 +53,16 @@ class ProfileScreen extends StatelessWidget {
                       username: username,
                     ),
                     const SizedBox(height: PauzaSpacing.xLarge),
-                    if (!isSubscribed)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: PauzaSpacing.medium),
-                        child: ProfileActionCard(
-                          icon: Icons.workspace_premium_rounded,
-                          title: l10n.paywallTitle,
-                          onTap: () => PaywallScreen.show(context),
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: PauzaSpacing.medium),
+                      child: ProfileActionCard(
+                        icon: Icons.workspace_premium_rounded,
+                        title: l10n.paywallTitle,
+                        onTap: () => isSubscribed
+                            ? SubscriptionInfoScreen.show(context)
+                            : PaywallScreen.show(context),
                       ),
+                    ),
                   ],
                 );
               },

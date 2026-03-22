@@ -14,6 +14,8 @@ abstract interface class PurchasesDataSource {
   Future<CustomerInfo> purchasePackage(Package package);
 
   Future<CustomerInfo> restorePurchases();
+
+  Future<String?> getManagementUrl();
 }
 
 final class PurchasesDataSourceImpl implements PurchasesDataSource {
@@ -55,5 +57,11 @@ final class PurchasesDataSourceImpl implements PurchasesDataSource {
   @override
   Future<CustomerInfo> restorePurchases() async {
     return Purchases.restorePurchases();
+  }
+
+  @override
+  Future<String?> getManagementUrl() async {
+    final customerInfo = await Purchases.getCustomerInfo();
+    return customerInfo.managementURL;
   }
 }

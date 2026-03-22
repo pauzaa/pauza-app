@@ -1,8 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:pauza/src/features/profile/common/model/subscription_source.dart';
 
 @immutable
 final class SubscriptionDto {
-  const SubscriptionDto({required this.entitlement, required this.isActive, this.currentPeriodEnd});
+  const SubscriptionDto({
+    required this.entitlement,
+    required this.isActive,
+    this.currentPeriodEnd,
+    this.source,
+  });
 
   factory SubscriptionDto.fromJson(Map<String, Object?> json) {
     DateTime? periodEnd;
@@ -15,17 +21,25 @@ final class SubscriptionDto {
       entitlement: json['entitlement'] as String? ?? '',
       isActive: json['is_active'] as bool? ?? false,
       currentPeriodEnd: periodEnd,
+      source: SubscriptionSource.fromJson(json['source'] as String?),
     );
   }
 
   final String entitlement;
   final bool isActive;
   final DateTime? currentPeriodEnd;
+  final SubscriptionSource? source;
+
+  bool get isExpiringSoon {
+    if (!isActive || currentPeriodEnd == null) return false;
+    return currentPeriodEnd!.difference(DateTime.now()).inDays <= 3;
+  }
 
   Map<String, Object?> toJson() => <String, Object?>{
     'entitlement': entitlement,
     'is_active': isActive,
     'current_period_end': currentPeriodEnd?.millisecondsSinceEpoch,
+    'source': source?.jsonValue,
   };
 
   @override
@@ -34,14 +48,15 @@ final class SubscriptionDto {
     return other is SubscriptionDto &&
         other.entitlement == entitlement &&
         other.isActive == isActive &&
-        other.currentPeriodEnd == currentPeriodEnd;
+        other.currentPeriodEnd == currentPeriodEnd &&
+        other.source == source;
   }
 
   @override
-  int get hashCode => Object.hash(entitlement, isActive, currentPeriodEnd);
+  int get hashCode => Object.hash(entitlement, isActive, currentPeriodEnd, source);
 
   @override
   String toString() =>
       'SubscriptionDto(entitlement: $entitlement, isActive: $isActive, '
-      'currentPeriodEnd: $currentPeriodEnd)';
+      'currentPeriodEnd: $currentPeriodEnd, source: $source)';
 }

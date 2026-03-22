@@ -18,6 +18,7 @@ import 'package:pauza/src/features/qr_code_config/widget/qr_code_conf_screen.dar
 import 'package:pauza/src/features/settings/widget/settings_screen.dart';
 import 'package:pauza/src/features/stats/common/widget/stats_screen.dart';
 import 'package:pauza/src/features/subscription/widget/paywall_screen.dart';
+import 'package:pauza/src/features/subscription/widget/subscription_info_screen.dart';
 
 enum PauzaRoutes with Routable {
   root,
@@ -39,6 +40,7 @@ enum PauzaRoutes with Routable {
   nfcChipConfig,
   qrCodeConfig,
   paywall,
+  subscriptionInfo,
   notFound;
 
   @override
@@ -61,6 +63,7 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.nfcChipConfig => '/settings/nfc-chip-config',
     PauzaRoutes.qrCodeConfig => '/settings/qr-code-config',
     PauzaRoutes.paywall => '/subscription/paywall',
+    PauzaRoutes.subscriptionInfo => '/subscription/info',
     PauzaRoutes.notFound => '/404',
   };
 
@@ -84,6 +87,7 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.nfcChipConfig ||
     PauzaRoutes.qrCodeConfig ||
     PauzaRoutes.paywall ||
+    PauzaRoutes.subscriptionInfo ||
     PauzaRoutes.notFound => PageType.material,
   };
 
@@ -107,6 +111,7 @@ enum PauzaRoutes with Routable {
     PauzaRoutes.nfcChipConfig => const NfcChipConfScreen(),
     PauzaRoutes.qrCodeConfig => const QrCodeConfScreen(),
     PauzaRoutes.paywall => const PaywallScreen(),
+    PauzaRoutes.subscriptionInfo => const SubscriptionInfoScreen(),
     PauzaRoutes.notFound => const NotFoundScreen(),
   };
 }

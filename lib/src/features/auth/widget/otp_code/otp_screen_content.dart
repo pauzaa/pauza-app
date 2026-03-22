@@ -96,6 +96,7 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
           }
 
           if (state case AuthFlowFailure(:final error)) {
+            _otpController.clear();
             final message = switch (error) {
               final Localizable localizable => localizable.localize(context.l10n),
               _ => context.l10n.authFailureUnknown,

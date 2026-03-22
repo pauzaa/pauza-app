@@ -129,7 +129,7 @@ class _PauzaPinCodeFieldState extends State<PauzaPinCodeField> {
   }
 }
 
-class _PinCodeSquares extends StatelessWidget {
+class _PinCodeSquares extends StatefulWidget {
   const _PinCodeSquares({
     required this.controller,
     required this.focusNode,
@@ -143,30 +143,49 @@ class _PinCodeSquares extends StatelessWidget {
   final bool enabled;
 
   @override
-  Widget build(BuildContext context) {
-    final listenable = Listenable.merge(<Listenable>[controller, focusNode]);
+  State<_PinCodeSquares> createState() => _PinCodeSquaresState();
+}
 
+class _PinCodeSquaresState extends State<_PinCodeSquares> {
+  late Listenable _mergedListenable;
+
+  @override
+  void initState() {
+    super.initState();
+    _mergedListenable = Listenable.merge(<Listenable>[widget.controller, widget.focusNode]);
+  }
+
+  @override
+  void didUpdateWidget(covariant _PinCodeSquares oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.controller, widget.controller) || !identical(oldWidget.focusNode, widget.focusNode)) {
+      _mergedListenable = Listenable.merge(<Listenable>[widget.controller, widget.focusNode]);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return ListenableBuilder(
-          listenable: listenable,
+          listenable: _mergedListenable,
           builder: (context, child) {
-            final focusedOffset = controller.selection.baseOffset;
-            final maxSize = math.min(constraints.maxHeight, constraints.maxWidth / (length + 1));
+            final focusedOffset = widget.controller.selection.baseOffset;
+            final maxSize = math.min(constraints.maxHeight, constraints.maxWidth / (widget.length + 1));
 
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(length, (index) {
-                final hasFocus = focusNode.hasFocus && focusedOffset == index;
-                final isFilled = controller.text.length > index;
-                final symbol = isFilled ? controller.text[index] : null;
+              children: List.generate(widget.length, (index) {
+                final hasFocus = widget.focusNode.hasFocus && focusedOffset == index;
+                final isFilled = widget.controller.text.length > index;
+                final symbol = isFilled ? widget.controller.text[index] : null;
 
                 return _PinCodeSquare(
                   key: Key('pauza_pin_code_cell_$index'),
                   maxSize: maxSize,
                   hasFocus: hasFocus,
                   isFilled: isFilled,
-                  enabled: enabled,
+                  enabled: widget.enabled,
                   symbol: symbol,
                 );
               }),

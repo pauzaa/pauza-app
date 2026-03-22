@@ -1,12 +1,7 @@
-import 'dart:async';
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:pauza/src/features/auth/common/model/session.dart';
-import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
-import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/subscription/bloc/paywall_bloc.dart';
 import 'package:pauza/src/features/subscription/model/subscription_failure.dart';
 
@@ -35,29 +30,11 @@ class _FakeOffering extends Fake implements Offering {
 
 void main() {
   late MockSubscriptionRepository subscriptionRepository;
-  late MockAuthRepository authRepository;
-  late MockUserProfileRepository userProfileRepository;
-  late CurrentUserBloc currentUserBloc;
-  late StreamController<Session> sessionController;
 
   setUp(() {
     registerTestFallbackValues();
     registerFallbackValue(_FakePackage());
     subscriptionRepository = MockSubscriptionRepository();
-    authRepository = MockAuthRepository();
-    userProfileRepository = MockUserProfileRepository();
-    sessionController = StreamController<Session>.broadcast();
-
-    when(() => authRepository.sessionStream).thenAnswer((_) => sessionController.stream);
-    when(() => authRepository.currentSession).thenReturn(const Session.empty());
-    when(() => userProfileRepository.watchProfileChanges()).thenAnswer((_) => const Stream<UserDto>.empty());
-
-    currentUserBloc = CurrentUserBloc(authRepository: authRepository, userProfileRepository: userProfileRepository);
-  });
-
-  tearDown(() async {
-    await currentUserBloc.close();
-    await sessionController.close();
   });
 
   group('PaywallBloc', () {
@@ -66,7 +43,7 @@ void main() {
       setUp: () {
         when(() => subscriptionRepository.getOffering()).thenAnswer((_) async => _FakeOffering());
       },
-      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository, currentUserBloc: currentUserBloc),
+      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository),
       act: (bloc) => bloc.add(const PaywallStarted()),
       expect: () => <Object>[
         const PaywallState(isLoadingOfferings: true),
@@ -81,7 +58,7 @@ void main() {
       setUp: () {
         when(() => subscriptionRepository.getOffering()).thenThrow(const SubscriptionNotConfiguredError());
       },
-      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository, currentUserBloc: currentUserBloc),
+      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository),
       act: (bloc) => bloc.add(const PaywallStarted()),
       expect: () => <Object>[
         const PaywallState(isLoadingOfferings: true),
@@ -96,7 +73,7 @@ void main() {
       setUp: () {
         when(() => subscriptionRepository.purchase(any())).thenAnswer((_) async {});
       },
-      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository, currentUserBloc: currentUserBloc),
+      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository),
       act: (bloc) => bloc.add(PaywallPurchaseRequested(package: _FakePackage())),
       expect: () => <PaywallState>[const PaywallState(isPurchasing: true), const PaywallState(purchaseSuccess: true)],
     );
@@ -106,7 +83,7 @@ void main() {
       setUp: () {
         when(() => subscriptionRepository.purchase(any())).thenThrow(const SubscriptionPurchaseCancelledError());
       },
-      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository, currentUserBloc: currentUserBloc),
+      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository),
       act: (bloc) => bloc.add(PaywallPurchaseRequested(package: _FakePackage())),
       expect: () => <PaywallState>[const PaywallState(isPurchasing: true), const PaywallState()],
     );
@@ -116,7 +93,7 @@ void main() {
       setUp: () {
         when(() => subscriptionRepository.restorePurchases()).thenAnswer((_) async {});
       },
-      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository, currentUserBloc: currentUserBloc),
+      build: () => PaywallBloc(subscriptionRepository: subscriptionRepository),
       act: (bloc) => bloc.add(const PaywallRestoreRequested()),
       expect: () => <PaywallState>[const PaywallState(isPurchasing: true), const PaywallState(purchaseSuccess: true)],
     );

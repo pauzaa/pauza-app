@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:pauza/src/features/profile/common/model/subscription_dto.dart';
+import 'package:pauza/src/features/profile/common/model/subscription_source.dart';
 import 'package:pauza/src/features/subscription/data/purchases_data_source.dart';
 import 'package:pauza/src/features/subscription/model/subscription_failure.dart';
 
@@ -13,6 +16,8 @@ abstract interface class SubscriptionRepository {
   Future<void> purchase(Package package);
 
   Future<void> restorePurchases();
+
+  Stream<SubscriptionDto?> watchSubscriptionChanges();
 
   Future<String?> getManagementUrl();
 
@@ -27,8 +32,6 @@ final class SubscriptionRepositoryImpl implements SubscriptionRepository {
       _entitlementId = entitlementId;
 
   final PurchasesDataSource _dataSource;
-  // Reserved for future entitlement checks.
-  // ignore: unused_field
   final String _entitlementId;
 
   @override
@@ -93,6 +96,11 @@ final class SubscriptionRepositoryImpl implements SubscriptionRepository {
   }
 
   @override
+  Stream<SubscriptionDto?> watchSubscriptionChanges() {
+    return _dataSource.customerInfoUpdates.map(_subscriptionFromCustomerInfo);
+  }
+
+  @override
   Future<String?> getManagementUrl() async {
     if (!_dataSource.isConfigured) throw const SubscriptionNotConfiguredError();
     return _dataSource.getManagementUrl();
@@ -110,6 +118,17 @@ final class SubscriptionRepositoryImpl implements SubscriptionRepository {
 
   @override
   void dispose() {
-    // No-op; RevenueCat SDK lifecycle is managed by the coordinator.
+    _dataSource.dispose();
+  }
+
+  SubscriptionDto? _subscriptionFromCustomerInfo(CustomerInfo info) {
+    final entitlement = info.entitlements.all[_entitlementId];
+    if (entitlement == null) return null;
+    return SubscriptionDto(
+      entitlement: _entitlementId,
+      isActive: entitlement.isActive,
+      currentPeriodEnd: entitlement.expirationDate != null ? DateTime.parse(entitlement.expirationDate!) : null,
+      source: SubscriptionSource.revenuecat,
+    );
   }
 }

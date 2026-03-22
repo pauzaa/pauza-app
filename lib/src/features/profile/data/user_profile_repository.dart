@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:pauza/src/features/profile/common/model/subscription_dto.dart';
 import 'package:pauza/src/features/profile/common/model/user_dto.dart';
 import 'package:pauza/src/features/profile/common/model/user_profile_failure.dart';
 import 'package:pauza/src/features/profile/data/user_profile_remote_data_source.dart';
@@ -32,6 +33,8 @@ abstract interface class UserProfileRepository {
   Future<void> confirmAccountDeletion({required String otp});
 
   Stream<UserDto> watchProfileChanges();
+
+  void applyOptimisticSubscription(SubscriptionDto? subscription);
 }
 
 final class UserProfileRepositoryImpl implements UserProfileRepository {
@@ -173,6 +176,27 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   @override
   Stream<UserDto> watchProfileChanges() {
     return _profileChangesController.stream;
+  }
+
+  @override
+  void applyOptimisticSubscription(SubscriptionDto? subscription) {
+    final current = _lastEmittedUser;
+    if (current == null) return;
+    // Cannot use copyWith here because it uses `??`, which prevents setting
+    // subscription to null. Construct a new UserDto directly.
+    _notifyIfChanged(
+      UserDto(
+        id: current.id,
+        email: current.email,
+        profilePicture: current.profilePicture,
+        username: current.username,
+        name: current.name,
+        pushEnabled: current.pushEnabled,
+        leaderboardVisible: current.leaderboardVisible,
+        createdAt: current.createdAt,
+        subscription: subscription,
+      ),
+    );
   }
 
   void _notifyIfChanged(UserDto user) {

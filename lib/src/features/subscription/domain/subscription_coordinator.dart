@@ -25,9 +25,13 @@ final class SubscriptionCoordinator {
   final SubscriptionRepository _subscriptionRepository;
   final String _revenueCatApiKey;
 
+  static const _backendSyncDelay = Duration(seconds: 5);
+
   bool _isAttached = false;
   StreamSubscription<void>? _sessionSubscription;
   StreamSubscription<void>? _profileSubscription;
+  StreamSubscription<void>? _subscriptionChangesSubscription;
+  Timer? _backendSyncTimer;
 
   void attach() {
     if (_isAttached) return;
@@ -42,6 +46,7 @@ final class SubscriptionCoordinator {
     _sessionSubscription?.cancel();
     _sessionSubscription = null;
     _cancelProfileSubscription();
+    _cancelSubscriptionChanges();
     _isAttached = false;
   }
 
@@ -54,6 +59,7 @@ final class SubscriptionCoordinator {
       unawaited(_initializeWithUserId());
     } else {
       _cancelProfileSubscription();
+      _cancelSubscriptionChanges();
       unawaited(_subscriptionRepository.logOut());
     }
   }
@@ -64,11 +70,7 @@ final class SubscriptionCoordinator {
       if (!_isAttached) return;
       if (user.id.isNotEmpty) {
         _cancelProfileSubscription();
-        try {
-          await _subscriptionRepository.initialize(apiKey: _revenueCatApiKey, appUserId: user.id);
-        } on Object catch (e) {
-          log('SubscriptionCoordinator: deferred init failed: $e', name: 'subscription');
-        }
+        await _initializeSdk(user.id);
       }
     });
 
@@ -78,15 +80,58 @@ final class SubscriptionCoordinator {
       if (!_isAttached) return;
       if (user.id.isNotEmpty) {
         _cancelProfileSubscription();
-        await _subscriptionRepository.initialize(apiKey: _revenueCatApiKey, appUserId: user.id);
+        await _initializeSdk(user.id);
       }
     } on Object catch (e) {
       log('SubscriptionCoordinator: profile fetch failed: $e', name: 'subscription');
     }
   }
 
+  Future<void> _initializeSdk(String userId) async {
+    try {
+      await _subscriptionRepository.initialize(apiKey: _revenueCatApiKey, appUserId: userId);
+      if (_subscriptionChangesSubscription != null) return;
+      _listenToSubscriptionChanges();
+    } on Object catch (e) {
+      log('SubscriptionCoordinator: SDK init failed: $e', name: 'subscription');
+    }
+  }
+
+  void _listenToSubscriptionChanges() {
+    _cancelSubscriptionChanges();
+    _subscriptionChangesSubscription = _subscriptionRepository.watchSubscriptionChanges().listen(
+      (subscription) {
+        if (!_isAttached) return;
+        _userProfileRepository.applyOptimisticSubscription(subscription);
+        _scheduleBackendSync();
+      },
+      onError: (Object e) {
+        log('SubscriptionCoordinator: subscription change error: $e', name: 'subscription');
+      },
+    );
+  }
+
+  void _scheduleBackendSync() {
+    _backendSyncTimer?.cancel();
+    _backendSyncTimer = Timer(_backendSyncDelay, () async {
+      if (!_isAttached) return;
+      try {
+        await _userProfileRepository.fetchProfile(forceRemote: true);
+      } on Object catch (e) {
+        log('SubscriptionCoordinator: backend sync failed: $e', name: 'subscription');
+      }
+    });
+  }
+
   void _cancelProfileSubscription() {
     _profileSubscription?.cancel();
     _profileSubscription = null;
+  }
+
+  void _cancelSubscriptionChanges() {
+    _subscriptionChangesSubscription?.cancel();
+    _subscriptionChangesSubscription = null;
+    _backendSyncTimer?.cancel();
+    _backendSyncTimer = null;
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helm/helm.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/connectivity/widget/internet_required_body.dart';
 import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
@@ -37,7 +36,6 @@ class _PaywallScreenState extends State<PaywallScreen> {
     if (_bloc != null) return;
     _bloc = PaywallBloc(
       subscriptionRepository: _dependencies.subscriptionRepository,
-      currentUserBloc: RootScope.of(context).currentUserBloc,
     )..add(const PaywallStarted());
   }
 

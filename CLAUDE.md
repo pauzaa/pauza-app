@@ -52,6 +52,10 @@ Flutter mobile app for modes-based app blocking (behavior intervention). Offline
 
 **Localization:** 4 languages (en, uz, ru, uz-Cyrl). Source ARB: `assets/l10n/app_en.arb`. Access via `context.l10n`.
 
+## Workflow
+
+- Always run `flutter analyze` and fix all lint errors before finishing work on any task
+
 ## Code Style & Formatting
 
 - Always use `package:pauza/...` imports, never relative imports for lib/

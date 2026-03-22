@@ -17,8 +17,8 @@ import 'package:pauza/src/core/connectivity/domain/internet_health_gate_notifier
 import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
 import 'package:pauza/src/core/init/config.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
-import 'package:pauza/src/features/ai/data/ai_remote_data_source.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
+import 'package:pauza/src/features/ai/data/mock_ai_remote_data_source.dart';
 import 'package:pauza/src/features/auth/data/auth_remote_data_source.dart';
 import 'package:pauza/src/features/devices/data/devices_remote_data_source.dart';
 import 'package:pauza/src/features/devices/data/devices_repository.dart';
@@ -28,8 +28,10 @@ import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 import 'package:pauza/src/features/auth/domain/auth_gate.dart';
 import 'package:pauza/src/features/friends/data/friends_remote_data_source.dart';
 import 'package:pauza/src/features/friends/data/friends_repository.dart';
+import 'package:pauza/src/features/friends/data/mock_friends_remote_data_source.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_remote_data_source.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_repository.dart';
+import 'package:pauza/src/features/leaderboard/data/mock_leaderboard_remote_data_source.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
 import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
@@ -198,16 +200,18 @@ class PauzaDependencies with AppFuseInitialization {
       subscriptionRepository = SubscriptionRepositoryImpl(dataSource: purchasesDataSource, entitlementId: 'premium');
     },
     'init friends': (_) async {
-      friendsRemoteDataSource = FriendsRemoteDataSourceImpl(apiClient: apiClient);
+      friendsRemoteDataSource =
+          const MockFriendsRemoteDataSource(); // TODO() revert to FriendsRemoteDataSourceImpl(apiClient: apiClient)
       friendsRepository = FriendsRepositoryImpl(remoteDataSource: friendsRemoteDataSource);
     },
     'init leaderboard': (_) async {
-      leaderboardRemoteDataSource = LeaderboardRemoteDataSourceImpl(apiClient: apiClient);
+      leaderboardRemoteDataSource =
+          const MockLeaderboardRemoteDataSource(); // TODO() revert to LeaderboardRemoteDataSourceImpl(apiClient: apiClient)
       leaderboardRepository = LeaderboardRepositoryImpl(remoteDataSource: leaderboardRemoteDataSource);
     },
     'init ai': (_) async {
-      final aiDataSource = AiRemoteDataSourceImpl(apiClient: apiClient);
-      aiRepository = AiRepositoryImpl(remoteDataSource: aiDataSource);
+      const aiDataSource = MockAiRemoteDataSource(); // TODO() revert to AiRemoteDataSourceImpl(apiClient: apiClient)
+      aiRepository = const AiRepositoryImpl(remoteDataSource: aiDataSource);
     },
     'init managers': (_) async {
       installedAppsManager = InstalledAppsManager();

@@ -31,16 +31,15 @@ final class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final InternetRequiredGuard _internetRequiredGuard;
 
   Future<void> _onOtpRequested(AuthOtpRequested event, Emitter<AuthState> emit) async {
-    // Guard: ignore queued duplicates once an OTP has already been issued.
-    if (state is AuthOtpRequired || state is AuthSubmitting) return;
+    if (state is AuthOtpRequired) return;
+
+    emit(AuthSubmitting(email: event.email));
 
     final canProceed = await _internetRequiredGuard.canProceed();
     if (!canProceed) {
       _emitInternetRequiredFailure(emit, email: event.email);
       return;
     }
-
-    emit(AuthSubmitting(email: event.email));
 
     try {
       final result = await _authRepository.requestOtp(email: event.email);

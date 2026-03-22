@@ -9,10 +9,13 @@ final class PauzaLogoIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(
-      PauzaAssets.logo,
-      width: size,
-      height: size,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(size * 0.2),
+      child: SvgPicture.asset(
+        PauzaAssets.logo,
+        width: size,
+        height: size,
+      ),
     );
   }
 }

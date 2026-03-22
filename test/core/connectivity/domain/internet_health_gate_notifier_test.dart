@@ -52,6 +52,27 @@ void main() {
       }
     });
 
+    test('refresh marks healthy on 5xx responses (server error is not a connectivity issue)', () async {
+      final statuses = <int>[500, 502, 503, 504];
+
+      for (final status in statuses) {
+        final client = FakeHttpClient(onSend: (_) async => _response(statusCode: status));
+        final connectivityController = StreamController<List<ConnectivityResult>>.broadcast();
+
+        final gate = InternetHealthGateNotifier(
+          probeUri: Uri.parse('https://example.com/health'),
+          httpClient: client,
+          checkConnectivity: () async => <ConnectivityResult>[ConnectivityResult.wifi],
+          connectivityChanges: connectivityController.stream,
+        );
+        addTearDown(gate.dispose);
+        addTearDown(connectivityController.close);
+
+        await gate.refresh(force: true);
+        expect(gate.isHealthy, isTrue, reason: 'HTTP $status should be treated as healthy');
+      }
+    });
+
     test('refresh marks unhealthy when connectivity is none and probe is skipped', () async {
       final client = FakeHttpClient(onSend: (_) async => _response(statusCode: 204));
       final connectivityController = StreamController<List<ConnectivityResult>>.broadcast();

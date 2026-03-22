@@ -134,10 +134,10 @@ final class InternetHealthGateNotifier extends ChangeNotifier
     }
 
     try {
-      final response = await _httpClient.get(_probeUri).timeout(_probeTimeout);
+      await _httpClient.get(_probeUri).timeout(_probeTimeout);
       _applyState(
         InternetHealthState(
-          isHealthy: response.statusCode < 500,
+          isHealthy: true,
           checkedAt: checkedAt,
           lastError: null,
           lastConnectivityResult: connectivityResult,

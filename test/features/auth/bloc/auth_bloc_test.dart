@@ -63,6 +63,7 @@ void main() {
         build: () => AuthBloc(authRepository: repository, internetRequiredGuard: internetRequiredGuard),
         act: (bloc) => bloc.add(const AuthOtpRequested(email: 'john@doe.com')),
         expect: () => <Matcher>[
+          isA<AuthSubmitting>(),
           isA<AuthFlowFailure>().having((s) => s.error, 'error', const PauzaInternetUnavailableError()),
         ],
         verify: (_) {

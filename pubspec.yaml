@@ -21,7 +21,6 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   hive_ce: ^2.7.0
   fl_chart: ^1.1.1
-  flutter_launcher_icons: ^0.14.4
   helm: ^0.0.1
   intl: ^0.20.2
   path: ^1.9.1
@@ -64,6 +63,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.11.0
   mocktail: ^1.0.4
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   generate: true
@@ -72,6 +72,7 @@ flutter:
   assets:
     - config/
     - assets/images/onboarding/
+    - assets/images/logo/
 
 flutter_gen:
   output: lib/src/common/const/

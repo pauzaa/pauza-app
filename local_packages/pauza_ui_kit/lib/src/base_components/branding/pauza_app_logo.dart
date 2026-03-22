@@ -3,11 +3,11 @@ import 'package:pauza_ui_kit/src/foundations/spacing.dart';
 import 'package:pauza_ui_kit/src/theme/pauza_theme.dart';
 
 final class PauzaAppLogo extends StatelessWidget {
-  const PauzaAppLogo({this.appName, this.tagline, super.key, this.assetPath});
+  const PauzaAppLogo({this.appName, this.tagline, this.logoWidget, super.key});
 
   final String? appName;
   final String? tagline;
-  final String? assetPath;
+  final Widget? logoWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ final class PauzaAppLogo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       spacing: PauzaSpacing.large,
       children: <Widget>[
-        _LogoMark(assetPath: assetPath),
+        _LogoMark(logoWidget: logoWidget),
         Column(
           spacing: PauzaSpacing.regular,
           mainAxisSize: MainAxisSize.min,
@@ -45,23 +45,13 @@ final class PauzaAppLogo extends StatelessWidget {
 }
 
 final class _LogoMark extends StatelessWidget {
-  const _LogoMark({this.assetPath});
+  const _LogoMark({this.logoWidget});
 
-  final String? assetPath;
+  final Widget? logoWidget;
 
   @override
   Widget build(BuildContext context) {
-    if (assetPath case final logoPath? when logoPath.isNotEmpty) {
-      return Image.asset(
-        logoPath,
-        width: 120,
-        height: 120,
-        fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) => const _FallbackLogoMark(),
-      );
-    }
-
-    return const _FallbackLogoMark();
+    return logoWidget ?? const _FallbackLogoMark();
   }
 }
 

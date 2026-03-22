@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pauza/src/core/common_ui/pauza_assets.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza/src/features/onboarding/widget/onboarding_action_bar.dart';
 import 'package:pauza/src/features/onboarding/widget/onboarding_page_indicator.dart';
@@ -32,32 +33,32 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
     final l10n = context.l10n;
     return [
       (
-        assetPath: 'assets/images/onboarding/onboarding_focus.svg',
+        assetPath: PauzaAssets.onboardingFocus,
         title: l10n.onboardingSlide1Title,
         body: l10n.onboardingSlide1Body,
       ),
       (
-        assetPath: 'assets/images/onboarding/onboarding_modes.svg',
+        assetPath: PauzaAssets.onboardingModes,
         title: l10n.onboardingSlide2Title,
         body: l10n.onboardingSlide2Body,
       ),
       (
-        assetPath: 'assets/images/onboarding/onboarding_streaks.svg',
+        assetPath: PauzaAssets.onboardingStreaks,
         title: l10n.onboardingSlide3Title,
         body: l10n.onboardingSlide3Body,
       ),
       (
-        assetPath: 'assets/images/onboarding/onboarding_stats.svg',
+        assetPath: PauzaAssets.onboardingStats,
         title: l10n.onboardingSlide4Title,
         body: l10n.onboardingSlide4Body,
       ),
       (
-        assetPath: 'assets/images/onboarding/onboarding_social.svg',
+        assetPath: PauzaAssets.onboardingSocial,
         title: l10n.onboardingSlide5Title,
         body: l10n.onboardingSlide5Body,
       ),
       (
-        assetPath: 'assets/images/onboarding/onboarding_unlock.svg',
+        assetPath: PauzaAssets.onboardingUnlock,
         title: l10n.onboardingSlide6Title,
         body: l10n.onboardingSlide6Body,
       ),

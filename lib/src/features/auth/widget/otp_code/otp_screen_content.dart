@@ -65,14 +65,12 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
+        if (!didPop) return;
         _handleBackNavigation();
       },
       child: BlocListener<AuthBloc, AuthState>(
         listenWhen: (previous, current) {
-          if (current is AuthIdle && previous is AuthResetting) return true;
           if (current is AuthFlowFailure) return true;
           if (current case AuthOtpRequired(:final resent) when resent) {
             final previousResent = switch (previous) {
@@ -84,11 +82,6 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
           return false;
         },
         listener: (context, state) {
-          if (state is AuthIdle) {
-            Navigator.of(context).pop();
-            return;
-          }
-
           if (state case AuthOtpRequired(:final resent) when resent) {
             _otpController.clear();
             _startCountdown();
@@ -164,9 +157,6 @@ class _OtpScreenContentState extends State<OtpScreenContent> {
   }
 
   void _handleBackNavigation() {
-    final authState = context.read<AuthBloc>().state;
-    if (authState is AuthResetting) return;
-
     context.read<AuthBloc>().add(const AuthFlowResetRequested());
   }
 }

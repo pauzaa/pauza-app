@@ -106,7 +106,14 @@ class _PauzaPinCodeFieldState extends State<PauzaPinCodeField> {
                   final offset = index.clamp(0, _controller.text.length);
                   _controller.selection = TextSelection.fromPosition(TextPosition(offset: offset));
                 }
-                _internalFocus.requestFocus();
+                if (_internalFocus.hasFocus) {
+                  _internalFocus.unfocus();
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted) _internalFocus.requestFocus();
+                  });
+                } else {
+                  _internalFocus.requestFocus();
+                }
               },
               child: _PinCodeSquares(
                 controller: _controller,

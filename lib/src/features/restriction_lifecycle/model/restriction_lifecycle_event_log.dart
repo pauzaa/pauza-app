@@ -19,7 +19,7 @@ final class RestrictionLifecycleEventLog {
   final String modeId;
   final RestrictionLifecycleAction action;
   final RestrictionLifecycleSource source;
-  final String reason;
+  final RestrictionLifecycleReason reason;
   final DateTime occurredAt;
   final DateTime createdAt;
 
@@ -30,7 +30,7 @@ final class RestrictionLifecycleEventLog {
       modeId: row['mode_id'] as String,
       action: RestrictionLifecycleAction.fromWire(row['action'] as String),
       source: RestrictionLifecycleSource.fromWire(row['source'] as String),
-      reason: row['reason'] as String,
+      reason: RestrictionLifecycleReason.fromWire(row['reason'] as String),
       occurredAt: DateTime.fromMillisecondsSinceEpoch(row['occurred_at'] as int, isUtc: true),
       createdAt: DateTime.fromMillisecondsSinceEpoch(row['created_at'] as int, isUtc: true),
     );
@@ -43,7 +43,7 @@ final class RestrictionLifecycleEventLog {
       'mode_id': modeId,
       'action': action.wireValue,
       'source': source.wireValue,
-      'reason': reason,
+      'reason': reason.wireValue,
       'occurred_at': occurredAt.toUtc().millisecondsSinceEpoch,
       'created_at': createdAt.toUtc().millisecondsSinceEpoch,
     };

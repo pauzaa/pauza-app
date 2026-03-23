@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/modes/select_apps/bloc/installed_apps_bloc.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 
-import '../../../../../helpers/helpers.dart';
+import '../../../../helpers/helpers.dart';
 
 const AppIdentifier _instagramId = AppIdentifier.android('com.instagram.android');
 const AppIdentifier _xId = AppIdentifier.android('com.twitter.android');
@@ -29,8 +29,8 @@ void main() {
       setUp: () {
         when(
           () => repository.getAndroidInstalledApps(
-            includeSystemApps: any(named: 'includeSystemApps'),
-            includeIcons: any(named: 'includeIcons'),
+            includeSystemApps: any<bool>(named: 'includeSystemApps'),
+            includeIcons: any<bool>(named: 'includeIcons'),
           ),
         ).thenAnswer((_) async => _apps);
       },
@@ -48,8 +48,8 @@ void main() {
       setUp: () {
         when(
           () => repository.getAndroidInstalledApps(
-            includeSystemApps: any(named: 'includeSystemApps'),
-            includeIcons: any(named: 'includeIcons'),
+            includeSystemApps: any<bool>(named: 'includeSystemApps'),
+            includeIcons: any<bool>(named: 'includeIcons'),
           ),
         ).thenAnswer((_) async => _apps);
       },
@@ -75,8 +75,8 @@ void main() {
       setUp: () {
         when(
           () => repository.getAndroidInstalledApps(
-            includeSystemApps: any(named: 'includeSystemApps'),
-            includeIcons: any(named: 'includeIcons'),
+            includeSystemApps: any<bool>(named: 'includeSystemApps'),
+            includeIcons: any<bool>(named: 'includeIcons'),
           ),
         ).thenAnswer((_) async => _apps);
       },
@@ -98,8 +98,8 @@ void main() {
       setUp: () {
         when(
           () => repository.getAndroidInstalledApps(
-            includeSystemApps: any(named: 'includeSystemApps'),
-            includeIcons: any(named: 'includeIcons'),
+            includeSystemApps: any<bool>(named: 'includeSystemApps'),
+            includeIcons: any<bool>(named: 'includeIcons'),
           ),
         ).thenThrow(Exception('failed'));
       },

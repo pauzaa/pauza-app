@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/common/pauza_platform.dart';
 import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
+import 'package:pauza/src/features/emergency_stop/data/emergency_stop_repository.dart';
 import 'package:pauza/src/features/auth/bloc/auth_bloc.dart';
 import 'package:pauza/src/features/friends/data/friends_repository.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
@@ -55,6 +56,7 @@ class RootScopeState extends State<RootScope> {
   late final FriendsRepository friendsRepository;
   late final LeaderboardRepository leaderboardRepository;
   late final AiRepository aiRepository;
+  late final EmergencyStopRepository emergencyStopRepository;
   late final SyncTrigger _syncTrigger;
 
   @override
@@ -132,6 +134,7 @@ class RootScopeState extends State<RootScope> {
     friendsRepository = dependencies.friendsRepository;
     leaderboardRepository = dependencies.leaderboardRepository;
     aiRepository = dependencies.aiRepository;
+    emergencyStopRepository = dependencies.emergencyStopRepository;
 
     super.initState();
   }

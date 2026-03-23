@@ -1892,5 +1892,34 @@
   "onboardingGetStarted": "Get Started",
   "@onboardingGetStarted": {
     "description": "Get Started button label on the last onboarding slide."
+  },
+  "emergencyStopButton": "Emergency stop",
+  "@emergencyStopButton": {
+    "description": "Button label for emergency stop on active session screen."
+  },
+  "emergencyStopDialogTitle": "Emergency Stop",
+  "@emergencyStopDialogTitle": {
+    "description": "Title for the emergency stop confirmation dialog."
+  },
+  "emergencyStopDialogBody": "This will use 1 of your {remaining} remaining emergency stops. This action cannot be undone.",
+  "@emergencyStopDialogBody": {
+    "description": "Body text for emergency stop confirmation dialog.",
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "emergencyStopDialogConfirm": "Use Emergency Stop",
+  "@emergencyStopDialogConfirm": {
+    "description": "Confirm button label in the emergency stop dialog."
+  },
+  "emergencyStopInternetRequired": "Internet connection is required to use emergency stop.",
+  "@emergencyStopInternetRequired": {
+    "description": "Error message when user tries emergency stop without internet."
+  },
+  "emergencyStopNoneRemaining": "You have no emergency stops remaining.",
+  "@emergencyStopNoneRemaining": {
+    "description": "Error message when user has used all emergency stops."
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauza/src/app/root_scope.dart';
 import 'package:pauza/src/core/common/extensions.dart';
+import 'package:pauza/src/core/common_ui/pauza_toast.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
+import 'package:pauza/src/features/emergency_stop/widget/confirm_emergency_stop_dialog.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/model/blocking_action_proof.dart';
 import 'package:pauza/src/features/home/widget/home_pause_pill.dart';
@@ -99,6 +102,20 @@ class HomeActiveSession extends StatelessWidget {
             );
           },
         ),
+        BlocSelector<BlockingBloc, BlockingState, bool>(
+          selector: (state) => state.isLoading,
+          builder: (context, isBusy) {
+            return TextButton(
+              onPressed: isBusy ? null : () => _onEmergencyStopPressed(context),
+              child: Text(
+                l10n.emergencyStopButton,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: isBusy ? context.colorScheme.onSurfaceVariant : context.colorScheme.error,
+                ),
+              ),
+            );
+          },
+        ),
       ],
     );
   }
@@ -119,6 +136,31 @@ class HomeActiveSession extends StatelessWidget {
     }
 
     context.read<BlockingBloc>().add(BlockingQuickPauseRequested(duration, proof: proof));
+  }
+
+  Future<void> _onEmergencyStopPressed(BuildContext context) async {
+    final l10n = context.l10n;
+    final emergencyStopRepository = RootScope.of(context).emergencyStopRepository;
+
+    int remaining;
+    try {
+      remaining = await emergencyStopRepository.getRemainingStops();
+    } on Object {
+      if (context.mounted) context.showToast(l10n.emergencyStopInternetRequired);
+      return;
+    }
+
+    if (!context.mounted) return;
+
+    if (remaining <= 0) {
+      context.showToast(l10n.emergencyStopNoneRemaining);
+      return;
+    }
+
+    final confirmed = await ConfirmEmergencyStopDialog.show(context, remainingStops: remaining);
+    if (!context.mounted || confirmed != true) return;
+
+    context.read<BlockingBloc>().add(const BlockingEmergencyStopRequested());
   }
 
   Future<BlockingActionProof?> _resolveProof(BuildContext context) async {

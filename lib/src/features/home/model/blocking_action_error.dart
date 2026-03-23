@@ -96,3 +96,21 @@ final class QrStartConfigurationMissingError extends BlockingActionError {
     return localizations.homeActionStartQrConfigRequired;
   }
 }
+
+final class EmergencyStopInternetRequiredError extends BlockingActionError {
+  const EmergencyStopInternetRequiredError();
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.emergencyStopInternetRequired;
+  }
+}
+
+final class EmergencyStopNoneRemainingError extends BlockingActionError {
+  const EmergencyStopNoneRemainingError();
+
+  @override
+  String localize(AppLocalizations localizations) {
+    return localizations.emergencyStopNoneRemaining;
+  }
+}

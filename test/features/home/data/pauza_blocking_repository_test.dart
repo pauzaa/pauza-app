@@ -37,7 +37,7 @@ void main() {
             modeId: mode.id,
             action: RestrictionLifecycleAction.start,
             source: RestrictionLifecycleSource.manual,
-            reason: 'start',
+            reason: RestrictionLifecycleReason.manual,
             occurredAt: DateTime.now().toUtc().subtract(const Duration(minutes: 10)),
           ),
         ],
@@ -46,7 +46,7 @@ void main() {
       await repository.startBlocking(mode: mode, shield: null);
       await repository.pauseBlocking(const Duration(minutes: 1), mode: mode, restrictionState: restrictionState);
       await repository.resumeBlocking();
-      await repository.stopBlocking(mode: mode, restrictionState: restrictionState);
+      await repository.stopBlocking(mode: mode, restrictionState: restrictionState, reason: RestrictionLifecycleReason.manual);
       await Future<void>.delayed(const Duration(milliseconds: 10));
 
       expect(emittedActions, <RestrictionLifecycleAction>[
@@ -129,7 +129,7 @@ void main() {
       );
 
       await expectLater(
-        () => repository.stopBlocking(mode: mode, restrictionState: restrictionState),
+        () => repository.stopBlocking(mode: mode, restrictionState: restrictionState, reason: RestrictionLifecycleReason.manual),
         throwsA(
           isA<MinimumDurationNotReachedError>().having(
             (error) => error.remaining,
@@ -172,7 +172,7 @@ void main() {
         startedAt: DateTime.now().toUtc().subtract(const Duration(minutes: 11)),
       );
 
-      await repository.stopBlocking(mode: mode, restrictionState: restrictionState);
+      await repository.stopBlocking(mode: mode, restrictionState: restrictionState, reason: RestrictionLifecycleReason.manual);
 
       expect(restrictions.endCalls, 1);
       repository.dispose();
@@ -263,7 +263,7 @@ class FakeAppRestrictionManager extends AppRestrictionManager {
   Future<void> startSession(RestrictionMode mode, {Duration? duration}) async {}
 
   @override
-  Future<void> endSession({Duration? duration}) async {
+  Future<void> endSession({Duration? duration, RestrictionLifecycleReason? reason}) async {
     endCalls += 1;
   }
 
@@ -292,7 +292,7 @@ RestrictionState _restrictionStateWithSession({
       modeId: modeId,
       action: RestrictionLifecycleAction.start,
       source: source,
-      reason: 'start',
+      reason: RestrictionLifecycleReason.manual,
       occurredAt: startedAt,
     ),
   ];
@@ -305,7 +305,7 @@ RestrictionState _restrictionStateWithSession({
         modeId: modeId,
         action: RestrictionLifecycleAction.pause,
         source: source,
-        reason: 'pause',
+        reason: RestrictionLifecycleReason.manual,
         occurredAt: startedAt.add(Duration(minutes: index + 1)),
       ),
     );

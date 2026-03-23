@@ -402,5 +402,11 @@
   "onboardingSlide6Body": "NFC тег ёки QR кодни уланг ва иловаларингизни физик тарзда очинг. Кўздан йироқ — кўнгилдан йироқ.",
   "onboardingSkip": "Ўтказиб юбориш",
   "onboardingNext": "Кейинги",
-  "onboardingGetStarted": "Бошлаш"
+  "onboardingGetStarted": "Бошлаш",
+  "emergencyStopButton": "Фавқулодда тўхтатиш",
+  "emergencyStopDialogTitle": "Фавқулодда тўхтатиш",
+  "emergencyStopDialogBody": "Бу сизнинг {remaining} та қолган фавқулодда тўхтатишларингиздан 1 тасини ишлатади. Бу амални бекор қилиб бўлмайди.",
+  "emergencyStopDialogConfirm": "Фавқулодда тўхтатишни ишлатиш",
+  "emergencyStopInternetRequired": "Фавқулодда тўхтатиш учун интернет алоқаси керак.",
+  "emergencyStopNoneRemaining": "Сизда фавқулодда тўхтатишлар қолмади."
 }

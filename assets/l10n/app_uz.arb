@@ -402,5 +402,11 @@
   "onboardingSlide6Body": "NFC teg yoki QR kodni ulang va ilovalaringizni fizik tarzda oching. Ko'zdan yiroq — ko'ngildan yiroq.",
   "onboardingSkip": "O'tkazib yuborish",
   "onboardingNext": "Keyingi",
-  "onboardingGetStarted": "Boshlash"
+  "onboardingGetStarted": "Boshlash",
+  "emergencyStopButton": "Favqulodda to'xtatish",
+  "emergencyStopDialogTitle": "Favqulodda to'xtatish",
+  "emergencyStopDialogBody": "Bu sizning {remaining} ta qolgan favqulodda to'xtatishlaringizdan 1 tasini ishlatadi. Bu amalni bekor qilib bo'lmaydi.",
+  "emergencyStopDialogConfirm": "Favqulodda to'xtatishni ishlatish",
+  "emergencyStopInternetRequired": "Favqulodda to'xtatish uchun internet aloqasi kerak.",
+  "emergencyStopNoneRemaining": "Sizda favqulodda to'xtatishlar qolmadi."
 }

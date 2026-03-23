@@ -42,3 +42,7 @@ final class BlockingQuickPauseRequested extends BlockingEvent {
 final class BlockingResumeRequested extends BlockingEvent {
   const BlockingResumeRequested();
 }
+
+final class BlockingEmergencyStopRequested extends BlockingEvent {
+  const BlockingEmergencyStopRequested();
+}

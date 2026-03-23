@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helm/helm.dart';
 import 'package:pauza/src/app/root_scope.dart';
+import 'package:pauza/src/core/init/pauza_dependencies.dart';
 import 'package:pauza/src/core/routing/pauza_routes.dart';
 import 'package:pauza/src/features/home/bloc/blocking_bloc.dart';
 import 'package:pauza/src/features/home/bloc/home_stats_bloc.dart';
@@ -30,6 +31,8 @@ class HomeScreen extends StatelessWidget {
             modesRepository: rootScope.modesRepository,
             nfcLinkedChipsRepository: rootScope.nfcLinkedChipsRepository,
             qrLinkedCodesRepository: rootScope.qrLinkedCodesRepository,
+            emergencyStopRepository: rootScope.emergencyStopRepository,
+            internetRequiredGuard: PauzaDependencies.of(context).internetRequiredGuard,
           )..add(const BlockingSyncRequested()),
         ),
         BlocProvider(

@@ -88,7 +88,7 @@ RestrictionLifecycleEvent _event({
     modeId: 'mode-1',
     action: action,
     source: RestrictionLifecycleSource.manual,
-    reason: 'test',
+    reason: RestrictionLifecycleReason.manual,
     occurredAt: DateTime.fromMillisecondsSinceEpoch(occurredAtEpochMs, isUtc: true),
   );
 }

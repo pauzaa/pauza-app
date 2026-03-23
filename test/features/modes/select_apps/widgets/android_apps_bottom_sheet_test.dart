@@ -5,7 +5,7 @@ import 'package:pauza/src/features/modes/select_apps/widgets/android_apps_bottom
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
-import '../../../../../helpers/helpers.dart';
+import '../../../../helpers/helpers.dart';
 
 void main() {
   group('AndroidAppsBottomSheet widgets', () {

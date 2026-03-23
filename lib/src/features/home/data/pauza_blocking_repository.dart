@@ -16,12 +16,15 @@ abstract interface class BlockingRepository implements Disposable {
   Future<void> stopBlocking({
     required Mode? mode,
     required RestrictionState restrictionState,
+    required RestrictionLifecycleReason reason,
     Duration? cooldownDuration,
   });
 
   Future<void> pauseBlocking(Duration duration, {required Mode? mode, required RestrictionState restrictionState});
 
   Future<void> resumeBlocking();
+
+  Future<void> emergencyEndSession();
 
   Future<void> syncRestrictionLifecycleEvents();
 }
@@ -58,10 +61,11 @@ class PauzaBlockingRepository implements BlockingRepository {
   Future<void> stopBlocking({
     required RestrictionState restrictionState,
     required Mode? mode,
+    required RestrictionLifecycleReason reason,
     Duration? cooldownDuration,
   }) async {
     _validateBlockingAction(mode: mode, restrictionState: restrictionState, action: RestrictionLifecycleAction.end);
-    await _restrictions.endSession(duration: cooldownDuration);
+    await _restrictions.endSession(duration: cooldownDuration, reason: reason);
     await syncRestrictionLifecycleEvents();
     _lifecycleActionsController.add(RestrictionLifecycleAction.end);
   }
@@ -83,6 +87,13 @@ class PauzaBlockingRepository implements BlockingRepository {
     await _restrictions.resumeEnforcement();
     await syncRestrictionLifecycleEvents();
     _lifecycleActionsController.add(RestrictionLifecycleAction.resume);
+  }
+
+  @override
+  Future<void> emergencyEndSession() async {
+    await _restrictions.endSession(reason: RestrictionLifecycleReason.emergency);
+    await syncRestrictionLifecycleEvents();
+    _lifecycleActionsController.add(RestrictionLifecycleAction.end);
   }
 
   @override

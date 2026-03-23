@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauza/src/core/api_client/api_client.dart';
+import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart';
+import 'package:pauza/src/features/emergency_stop/data/emergency_stop_repository.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/home/model/blocking_action_error.dart';
 import 'package:pauza/src/features/home/model/blocking_action_proof.dart';
@@ -22,22 +25,29 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     required ModesRepository modesRepository,
     required NfcLinkedChipsRepository nfcLinkedChipsRepository,
     required QrLinkedCodesRepository qrLinkedCodesRepository,
+    required EmergencyStopRepository emergencyStopRepository,
+    required InternetRequiredGuard internetRequiredGuard,
   }) : _blockingRepository = blockingRepository,
        _modesRepository = modesRepository,
        _nfcLinkedChipsRepository = nfcLinkedChipsRepository,
        _qrLinkedCodesRepository = qrLinkedCodesRepository,
+       _emergencyStopRepository = emergencyStopRepository,
+       _internetRequiredGuard = internetRequiredGuard,
        super(const BlockingState.initial()) {
     on<BlockingSyncRequested>(_onSyncRequested);
     on<BlockingStartRequested>(_onStartRequested);
     on<BlockingStopRequested>(_onStopRequested);
     on<BlockingQuickPauseRequested>(_onQuickPauseRequested);
     on<BlockingResumeRequested>(_onResumeRequested);
+    on<BlockingEmergencyStopRequested>(_onEmergencyStopRequested);
   }
 
   final BlockingRepository _blockingRepository;
   final ModesRepository _modesRepository;
   final NfcLinkedChipsRepository _nfcLinkedChipsRepository;
   final QrLinkedCodesRepository _qrLinkedCodesRepository;
+  final EmergencyStopRepository _emergencyStopRepository;
+  final InternetRequiredGuard _internetRequiredGuard;
   Timer? _syncTimer;
 
   @override
@@ -79,7 +89,16 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     try {
       emit(state.loading());
       await _validateScenarioProof(mode: state.activeMode, proof: event.proof);
-      await _blockingRepository.stopBlocking(mode: state.activeMode, restrictionState: state.restrictionState);
+      final reason = switch (state.activeMode?.endingPausingScenario) {
+        ModeEndingPausingScenario.manual || null => RestrictionLifecycleReason.manual,
+        ModeEndingPausingScenario.nfc => RestrictionLifecycleReason.nfc,
+        ModeEndingPausingScenario.qrCode => RestrictionLifecycleReason.qr,
+      };
+      await _blockingRepository.stopBlocking(
+        mode: state.activeMode,
+        restrictionState: state.restrictionState,
+        reason: reason,
+      );
       await _syncSessionState(emit: emit);
     } catch (error) {
       emit(state.setError(error));
@@ -105,6 +124,24 @@ class BlockingBloc extends Bloc<BlockingEvent, BlockingState> {
     try {
       emit(state.loading());
       await _blockingRepository.resumeBlocking();
+      await _syncSessionState(emit: emit);
+    } catch (error) {
+      emit(state.setError(error));
+    }
+  }
+
+  Future<void> _onEmergencyStopRequested(BlockingEmergencyStopRequested event, Emitter<BlockingState> emit) async {
+    try {
+      emit(state.loading());
+      if (!await _internetRequiredGuard.canProceed()) {
+        throw const EmergencyStopInternetRequiredError();
+      }
+      try {
+        await _emergencyStopRepository.useEmergencyStop();
+      } on ApiForbiddenError {
+        throw const EmergencyStopNoneRemainingError();
+      }
+      await _blockingRepository.emergencyEndSession();
       await _syncSessionState(emit: emit);
     } catch (error) {
       emit(state.setError(error));

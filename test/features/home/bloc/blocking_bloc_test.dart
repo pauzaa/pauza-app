@@ -19,6 +19,8 @@ void main() {
   late MockModesRepository modesRepository;
   late MockNfcLinkedChipsRepository nfcRepository;
   late MockQrLinkedCodesRepository qrRepository;
+  late MockEmergencyStopRepository emergencyStopRepository;
+  late MockInternetRequiredGuard internetRequiredGuard;
 
   setUpAll(registerTestFallbackValues);
 
@@ -26,6 +28,8 @@ void main() {
     modesRepository = MockModesRepository();
     nfcRepository = MockNfcLinkedChipsRepository();
     qrRepository = MockQrLinkedCodesRepository();
+    emergencyStopRepository = MockEmergencyStopRepository();
+    internetRequiredGuard = MockInternetRequiredGuard();
 
     // Default stubs for shared mocks.
     when(() => modesRepository.getMode(any())).thenAnswer((_) async => makeMode());
@@ -53,6 +57,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) => bloc.add(const BlockingSyncRequested()),
@@ -73,6 +79,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) => bloc.add(const BlockingSyncRequested()),
@@ -97,6 +105,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -125,6 +135,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -155,6 +167,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -179,6 +193,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -205,6 +221,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) => bloc.add(const BlockingSyncRequested()),
@@ -225,6 +243,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) => bloc.add(BlockingStartRequested(_startModeFor(ModeEndingPausingScenario.nfc))),
@@ -245,6 +265,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) => bloc.add(BlockingStartRequested(_startModeFor(ModeEndingPausingScenario.nfc))),
@@ -266,6 +288,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) => bloc.add(BlockingStartRequested(_startModeFor(ModeEndingPausingScenario.qrCode))),
@@ -286,6 +310,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) => bloc.add(BlockingStartRequested(_startModeFor(ModeEndingPausingScenario.qrCode))),
@@ -308,6 +334,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -335,6 +363,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -366,6 +396,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -397,6 +429,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -424,6 +458,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -450,6 +486,8 @@ void main() {
           modesRepository: modesRepository,
           nfcLinkedChipsRepository: nfcRepository,
           qrLinkedCodesRepository: qrRepository,
+          emergencyStopRepository: emergencyStopRepository,
+          internetRequiredGuard: internetRequiredGuard,
         );
       },
       act: (bloc) async {
@@ -510,6 +548,7 @@ class FakeBlockingRepository implements BlockingRepository {
   Future<void> stopBlocking({
     required Mode? mode,
     required RestrictionState restrictionState,
+    required RestrictionLifecycleReason reason,
     Duration? cooldownDuration,
   }) async {
     final error = stopError;
@@ -525,6 +564,11 @@ class FakeBlockingRepository implements BlockingRepository {
       activeModeId: restrictionState.activeMode?.modeId,
       startedAt: restrictionState.startedAt,
     );
+  }
+
+  @override
+  Future<void> emergencyEndSession() async {
+    restrictionState = _restrictionState(activeModeId: null);
   }
 
   @override
@@ -559,7 +603,7 @@ RestrictionState _restrictionState({required String? activeModeId, DateTime? sta
             modeId: activeModeId,
             action: RestrictionLifecycleAction.start,
             source: RestrictionLifecycleSource.manual,
-            reason: 'manual_start',
+            reason: RestrictionLifecycleReason.manual,
             occurredAt: startedAt,
           ),
         ];

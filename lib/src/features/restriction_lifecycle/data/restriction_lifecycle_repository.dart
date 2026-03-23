@@ -173,7 +173,7 @@ INSERT OR IGNORE INTO restriction_lifecycle_events (
         event.modeId,
         event.action.wireValue,
         event.source.wireValue,
-        event.reason,
+        event.reason.wireValue,
         event.occurredAt.toUtc().millisecondsSinceEpoch,
         now,
       ],

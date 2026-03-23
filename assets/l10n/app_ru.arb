@@ -402,5 +402,11 @@
   "onboardingSlide6Body": "Привяжите NFC-метку или QR-код для физической разблокировки приложений. С глаз долой — из сердца вон.",
   "onboardingSkip": "Пропустить",
   "onboardingNext": "Далее",
-  "onboardingGetStarted": "Начать"
+  "onboardingGetStarted": "Начать",
+  "emergencyStopButton": "Экстренная остановка",
+  "emergencyStopDialogTitle": "Экстренная остановка",
+  "emergencyStopDialogBody": "Это использует 1 из ваших {remaining} оставшихся экстренных остановок. Это действие нельзя отменить.",
+  "emergencyStopDialogConfirm": "Использовать экстренную остановку",
+  "emergencyStopInternetRequired": "Для экстренной остановки требуется интернет-соединение.",
+  "emergencyStopNoneRemaining": "У вас не осталось экстренных остановок."
 }

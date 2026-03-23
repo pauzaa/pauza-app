@@ -19,6 +19,8 @@ import 'package:pauza/src/core/init/config.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/ai/data/ai_remote_data_source.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
+import 'package:pauza/src/features/emergency_stop/data/emergency_stop_remote_data_source.dart';
+import 'package:pauza/src/features/emergency_stop/data/emergency_stop_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_remote_data_source.dart';
 import 'package:pauza/src/features/devices/data/devices_remote_data_source.dart';
 import 'package:pauza/src/features/devices/data/devices_repository.dart';
@@ -91,6 +93,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final SubscriptionRepository subscriptionRepository;
   late final String revenueCatApiKey;
   late final AiRepository aiRepository;
+  late final EmergencyStopRepository emergencyStopRepository;
 
   static PauzaDependencies of(BuildContext context) => AppFuseScope.of(context).init as PauzaDependencies;
 
@@ -208,6 +211,10 @@ class PauzaDependencies with AppFuseInitialization {
     'init ai': (_) async {
       final aiDataSource = AiRemoteDataSourceImpl(apiClient: apiClient);
       aiRepository = AiRepositoryImpl(remoteDataSource: aiDataSource);
+    },
+    'init emergency stop': (_) async {
+      final emergencyStopDataSource = EmergencyStopRemoteDataSourceImpl(apiClient: apiClient);
+      emergencyStopRepository = EmergencyStopRepositoryImpl(remoteDataSource: emergencyStopDataSource);
     },
     'init managers': (_) async {
       installedAppsManager = InstalledAppsManager();

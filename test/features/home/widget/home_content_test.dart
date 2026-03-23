@@ -31,6 +31,8 @@ void main() {
     late MockStreaksRepository mockStreaksRepository;
     late MockAiRepository mockAiRepository;
     late MockStatsUsageRepository mockStatsUsageRepository;
+    late MockEmergencyStopRepository mockEmergencyStopRepository;
+    late MockInternetRequiredGuard mockInternetRequiredGuard;
     late CurrentUserBloc currentUserBloc;
 
     setUp(() {
@@ -41,6 +43,8 @@ void main() {
       mockStreaksRepository = MockStreaksRepository();
       mockAiRepository = MockAiRepository();
       mockStatsUsageRepository = MockStatsUsageRepository();
+      mockEmergencyStopRepository = MockEmergencyStopRepository();
+      mockInternetRequiredGuard = MockInternetRequiredGuard();
 
       final mockAuthRepo = MockAuthRepository();
       final mockProfileRepo = MockUserProfileRepository();
@@ -74,6 +78,8 @@ void main() {
         modesRepository: mockModesRepository,
         nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
         qrLinkedCodesRepository: mockQrLinkedCodesRepository,
+        emergencyStopRepository: mockEmergencyStopRepository,
+        internetRequiredGuard: mockInternetRequiredGuard,
       );
       addTearDown(blockingBloc.close);
 
@@ -115,6 +121,8 @@ void main() {
         modesRepository: mockModesRepository,
         nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
         qrLinkedCodesRepository: mockQrLinkedCodesRepository,
+        emergencyStopRepository: mockEmergencyStopRepository,
+        internetRequiredGuard: mockInternetRequiredGuard,
       );
       addTearDown(blockingBloc.close);
 
@@ -163,6 +171,8 @@ void main() {
         modesRepository: mockModesRepository,
         nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
         qrLinkedCodesRepository: mockQrLinkedCodesRepository,
+        emergencyStopRepository: mockEmergencyStopRepository,
+        internetRequiredGuard: mockInternetRequiredGuard,
       );
       addTearDown(blockingBloc.close);
 
@@ -218,6 +228,8 @@ void main() {
         modesRepository: mockModesRepository,
         nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
         qrLinkedCodesRepository: mockQrLinkedCodesRepository,
+        emergencyStopRepository: mockEmergencyStopRepository,
+        internetRequiredGuard: mockInternetRequiredGuard,
       );
       addTearDown(blockingBloc.close);
 
@@ -259,6 +271,8 @@ void main() {
         modesRepository: mockModesRepository,
         nfcLinkedChipsRepository: mockNfcLinkedChipsRepository,
         qrLinkedCodesRepository: mockQrLinkedCodesRepository,
+        emergencyStopRepository: mockEmergencyStopRepository,
+        internetRequiredGuard: mockInternetRequiredGuard,
       );
       addTearDown(blockingBloc.close);
 
@@ -308,6 +322,8 @@ class _TestBlockingBloc extends BlockingBloc {
     required super.modesRepository,
     required super.nfcLinkedChipsRepository,
     required super.qrLinkedCodesRepository,
+    required super.emergencyStopRepository,
+    required super.internetRequiredGuard,
   });
 
   BlockingEvent? lastEvent;

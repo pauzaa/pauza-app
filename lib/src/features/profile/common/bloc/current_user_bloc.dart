@@ -15,7 +15,7 @@ part 'current_user_event.dart';
 ///
 /// Auth session is the source of truth. This bloc only derives profile UI state
 /// from auth session and profile repository operations.
-final class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
+class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   CurrentUserBloc({required AuthRepository authRepository, required UserProfileRepository userProfileRepository})
     : _authRepository = authRepository,
       _userProfileRepository = userProfileRepository,

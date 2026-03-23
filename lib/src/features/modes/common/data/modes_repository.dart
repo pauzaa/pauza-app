@@ -25,7 +25,7 @@ abstract interface class ModesRepository implements Disposable {
 
   Future<void> deleteMode(String modeId);
 
-  Future<void> reconcilePlugin();
+  Future<void> reconcilePlugin({required bool isPremium});
 
   Stream<void> watchModes();
 
@@ -350,7 +350,9 @@ WHERE mode_id = ?
   }
 
   @override
-  Future<void> reconcilePlugin() async {
+  Future<void> reconcilePlugin({required bool isPremium}) async {
+    await _restrictions.setScheduleEnforcementEnabled(isPremium);
+
     final config = await _restrictions.getModesConfig();
     final pluginModeIds = config.modes.map((m) => m.modeId).toSet();
     final dbModes = await getModes();

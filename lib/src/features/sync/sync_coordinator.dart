@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:pauza/src/core/connectivity/domain/internet_health_gate.dart';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 import 'package:pauza/src/features/restriction_lifecycle/data/restriction_lifecycle_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
@@ -16,6 +17,7 @@ final class SyncCoordinator with WidgetsBindingObserver {
     required SyncLocalDataSource syncLocalDataSource,
     required AuthRepository authRepository,
     required ModesRepository modesRepository,
+    required UserProfileRepository userProfileRepository,
     required StreaksRepository streaksRepository,
     required RestrictionLifecycleRepository restrictionLifecycleRepository,
     required InternetHealthGate internetHealthGate,
@@ -23,6 +25,7 @@ final class SyncCoordinator with WidgetsBindingObserver {
        _syncLocalDataSource = syncLocalDataSource,
        _authRepository = authRepository,
        _modesRepository = modesRepository,
+       _userProfileRepository = userProfileRepository,
        _streaksRepository = streaksRepository,
        _restrictionLifecycleRepository = restrictionLifecycleRepository,
        _internetHealthGate = internetHealthGate;
@@ -31,6 +34,7 @@ final class SyncCoordinator with WidgetsBindingObserver {
   final SyncLocalDataSource _syncLocalDataSource;
   final AuthRepository _authRepository;
   final ModesRepository _modesRepository;
+  final UserProfileRepository _userProfileRepository;
   final StreaksRepository _streaksRepository;
   final RestrictionLifecycleRepository _restrictionLifecycleRepository;
   final InternetHealthGate _internetHealthGate;
@@ -123,7 +127,8 @@ final class SyncCoordinator with WidgetsBindingObserver {
     }
 
     try {
-      await _modesRepository.reconcilePlugin();
+      final isPremium = _resolvePremiumStatus();
+      await _modesRepository.reconcilePlugin(isPremium: isPremium);
     } on Object catch (e, s) {
       log('reconcilePlugin failed', name: 'pauza.sync', error: e, stackTrace: s);
     }
@@ -139,6 +144,10 @@ final class SyncCoordinator with WidgetsBindingObserver {
     } on Object catch (e, s) {
       log('refreshAggregates failed', name: 'pauza.sync', error: e, stackTrace: s);
     }
+  }
+
+  bool _resolvePremiumStatus() {
+    return _userProfileRepository.cachedUser?.subscription?.isActive == true;
   }
 
   Future<void> _deduplicatedSync(Future<void> Function() action) {

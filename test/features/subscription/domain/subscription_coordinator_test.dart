@@ -12,6 +12,7 @@ void main() {
   late MockAuthRepository authRepository;
   late MockUserProfileRepository userProfileRepository;
   late MockSubscriptionRepository subscriptionRepository;
+  late MockAppRestrictionManager restrictions;
   late StreamController<Session> sessionController;
   late StreamController<UserDto> profileChangesController;
 
@@ -20,6 +21,7 @@ void main() {
     authRepository = MockAuthRepository();
     userProfileRepository = MockUserProfileRepository();
     subscriptionRepository = MockSubscriptionRepository();
+    restrictions = MockAppRestrictionManager();
     sessionController = StreamController<Session>.broadcast();
     profileChangesController = StreamController<UserDto>.broadcast();
 
@@ -32,6 +34,8 @@ void main() {
       ),
     ).thenAnswer((_) async {});
     when(() => subscriptionRepository.logOut()).thenAnswer((_) async {});
+    when(() => subscriptionRepository.watchSubscriptionChanges()).thenAnswer((_) => const Stream.empty());
+    when(() => restrictions.setScheduleEnforcementEnabled(any())).thenAnswer((_) async {});
   });
 
   tearDown(() {
@@ -52,6 +56,7 @@ void main() {
         userProfileRepository: userProfileRepository,
         subscriptionRepository: subscriptionRepository,
         revenueCatApiKey: 'test-key',
+        restrictions: restrictions,
       )..attach();
 
       sessionController.add(makeSession());
@@ -74,6 +79,7 @@ void main() {
         userProfileRepository: userProfileRepository,
         subscriptionRepository: subscriptionRepository,
         revenueCatApiKey: 'test-key',
+        restrictions: restrictions,
       )..attach();
 
       sessionController.add(makeSession());
@@ -101,6 +107,7 @@ void main() {
         userProfileRepository: userProfileRepository,
         subscriptionRepository: subscriptionRepository,
         revenueCatApiKey: 'test-key',
+        restrictions: restrictions,
       )..attach();
 
       sessionController.add(const Session.empty());

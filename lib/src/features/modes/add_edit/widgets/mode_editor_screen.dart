@@ -17,6 +17,8 @@ import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_sticky_act
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_upsert_draft_notifier.dart';
 import 'package:pauza/src/features/modes/common/model/mode_upsert.dart';
 import 'package:pauza/src/features/modes/list/widget/confirm_delete_mode_dialog.dart';
+import 'package:pauza/src/features/subscription/widget/premium_gate.dart';
+import 'package:pauza/src/features/subscription/widget/premium_locked_card.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
 class ModeEditorScreen extends StatelessWidget {
@@ -219,12 +221,15 @@ class _ModeEditorMainScreenState extends State<ModeEditorMainScreen> {
                         ],
                       ),
 
-                      ModeEditorSchedulePanel(
-                        title: l10n.modeScheduleTitle,
-                        startTitle: l10n.modeScheduleStartTimeLabel,
-                        endTitle: l10n.modeScheduleEndTimeLabel,
-                        errorText: _errorForField(context, validation[ModeUpsertValidationField.scheduleDays]),
-                        enabled: !isBusy,
+                      PremiumGate(
+                        lockedChild: PremiumLockedCard(title: l10n.modeScheduleTitle),
+                        child: ModeEditorSchedulePanel(
+                          title: l10n.modeScheduleTitle,
+                          startTitle: l10n.modeScheduleStartTimeLabel,
+                          endTitle: l10n.modeScheduleEndTimeLabel,
+                          errorText: _errorForField(context, validation[ModeUpsertValidationField.scheduleDays]),
+                          enabled: !isBusy,
+                        ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,

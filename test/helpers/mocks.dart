@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza/src/core/connectivity/domain/internet_health_gate.dart';
@@ -11,6 +12,8 @@ import 'package:pauza/src/features/friends/data/friends_repository.dart';
 import 'package:pauza/src/features/home/data/pauza_blocking_repository.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_repository.dart';
 import 'package:pauza/src/features/modes/common/data/modes_repository.dart';
+import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
+import 'package:pauza/src/features/profile/common/bloc/current_user_state.dart';
 import 'package:pauza/src/features/modes/select_apps/data/pauza_screen_time_installed_apps_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_system_settings_launcher.dart';
@@ -107,3 +110,5 @@ class MockAiRepository extends Mock implements AiRepository {}
 class MockStatsUsageRepository extends Mock implements StatsUsageRepository {}
 
 class MockEmergencyStopRepository extends Mock implements EmergencyStopRepository {}
+
+class MockCurrentUserBloc extends MockBloc<CurrentUserEvent, CurrentUserState> implements CurrentUserBloc {}

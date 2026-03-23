@@ -32,6 +32,8 @@ abstract interface class UserProfileRepository {
 
   Future<void> confirmAccountDeletion({required String otp});
 
+  UserDto? get cachedUser;
+
   Stream<UserDto> watchProfileChanges();
 
   void applyOptimisticSubscription(SubscriptionDto? subscription);
@@ -48,6 +50,9 @@ final class UserProfileRepositoryImpl implements UserProfileRepository {
   final Future<void> Function()? _onAccountDeleted;
   final StreamController<UserDto> _profileChangesController = StreamController<UserDto>.broadcast();
   UserDto? _lastEmittedUser;
+
+  @override
+  UserDto? get cachedUser => _lastEmittedUser;
 
   @override
   Future<UserDto> fetchProfile({bool forceRemote = false}) async {

@@ -114,6 +114,7 @@ class RootScopeState extends State<RootScope> {
       syncLocalDataSource: dependencies.syncLocalDataSource,
       authRepository: dependencies.authRepository,
       modesRepository: modesRepository,
+      userProfileRepository: dependencies.userProfileRepository,
       streaksRepository: dependencies.streaksRepository,
       restrictionLifecycleRepository: dependencies.restrictionLifecycleRepository,
       internetHealthGate: dependencies.internetHealthGate,
@@ -128,6 +129,7 @@ class RootScopeState extends State<RootScope> {
       userProfileRepository: dependencies.userProfileRepository,
       subscriptionRepository: dependencies.subscriptionRepository,
       revenueCatApiKey: dependencies.revenueCatApiKey,
+      restrictions: dependencies.appRestrictionManager,
     )..attach();
 
     streaksRepository = dependencies.streaksRepository;

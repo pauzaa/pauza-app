@@ -6,14 +6,19 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pauza/src/features/modes/add_edit/bloc/mode_editor_bloc.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_icon_picker.dart';
 import 'package:pauza/src/features/modes/add_edit/widgets/mode_editor_screen.dart';
+import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
+import 'package:pauza/src/features/profile/common/bloc/current_user_state.dart';
 
 import '../../../../helpers/helpers.dart';
 
 void main() {
   late MockModesRepository modesRepository;
+  late MockCurrentUserBloc currentUserBloc;
 
   setUp(() {
     modesRepository = MockModesRepository();
+    currentUserBloc = MockCurrentUserBloc();
+    when(() => currentUserBloc.state).thenReturn(const CurrentUserState.unauthenticated());
     when(() => modesRepository.getModes()).thenAnswer((_) async => []);
     when(() => modesRepository.getMode(any())).thenAnswer(
       (_) async => makeMode(
@@ -40,10 +45,11 @@ void main() {
     final createBloc = ModeEditorBloc(modesRepository: modesRepository, hasNfcSupport: true);
     addTearDown(createBloc.close);
     await tester.pumpApp(
-      BlocProvider<ModeEditorBloc>.value(
-        value: createBloc,
-        child: const ModeEditorMainScreen(modeId: null, hasNfcSupport: true),
-      ),
+      const ModeEditorMainScreen(modeId: null, hasNfcSupport: true),
+      providers: [
+        BlocProvider<CurrentUserBloc>.value(value: currentUserBloc),
+        BlocProvider<ModeEditorBloc>.value(value: createBloc),
+      ],
     );
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -52,10 +58,11 @@ void main() {
     final editBloc = ModeEditorBloc(modesRepository: modesRepository, hasNfcSupport: true);
     addTearDown(editBloc.close);
     await tester.pumpApp(
-      BlocProvider<ModeEditorBloc>.value(
-        value: editBloc,
-        child: const ModeEditorMainScreen(modeId: 'mode-1', hasNfcSupport: true),
-      ),
+      const ModeEditorMainScreen(modeId: 'mode-1', hasNfcSupport: true),
+      providers: [
+        BlocProvider<CurrentUserBloc>.value(value: currentUserBloc),
+        BlocProvider<ModeEditorBloc>.value(value: editBloc),
+      ],
     );
     for (var i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 100));
@@ -74,10 +81,11 @@ void main() {
     final bloc = ModeEditorBloc(modesRepository: modesRepository, hasNfcSupport: true);
     addTearDown(bloc.close);
     await tester.pumpApp(
-      BlocProvider<ModeEditorBloc>.value(
-        value: bloc,
-        child: const ModeEditorMainScreen(modeId: null, hasNfcSupport: true),
-      ),
+      const ModeEditorMainScreen(modeId: null, hasNfcSupport: true),
+      providers: [
+        BlocProvider<CurrentUserBloc>.value(value: currentUserBloc),
+        BlocProvider<ModeEditorBloc>.value(value: bloc),
+      ],
     );
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -91,10 +99,11 @@ void main() {
     final bloc = ModeEditorBloc(modesRepository: modesRepository, hasNfcSupport: true);
     addTearDown(bloc.close);
     await tester.pumpApp(
-      BlocProvider<ModeEditorBloc>.value(
-        value: bloc,
-        child: const ModeEditorMainScreen(modeId: null, hasNfcSupport: true),
-      ),
+      const ModeEditorMainScreen(modeId: null, hasNfcSupport: true),
+      providers: [
+        BlocProvider<CurrentUserBloc>.value(value: currentUserBloc),
+        BlocProvider<ModeEditorBloc>.value(value: bloc),
+      ],
     );
     await tester.pump(const Duration(milliseconds: 300));
 

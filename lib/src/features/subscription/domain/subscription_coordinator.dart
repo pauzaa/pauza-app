@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/profile/data/user_profile_repository.dart';
 import 'package:pauza/src/features/subscription/data/subscription_repository.dart';
+import 'package:pauza_screen_time/pauza_screen_time.dart';
 
 /// Coordinates RevenueCat SDK lifecycle with the auth session.
 ///
@@ -15,15 +16,18 @@ final class SubscriptionCoordinator {
     required UserProfileRepository userProfileRepository,
     required SubscriptionRepository subscriptionRepository,
     required String revenueCatApiKey,
+    required AppRestrictionManager restrictions,
   }) : _authRepository = authRepository,
        _userProfileRepository = userProfileRepository,
        _subscriptionRepository = subscriptionRepository,
-       _revenueCatApiKey = revenueCatApiKey;
+       _revenueCatApiKey = revenueCatApiKey,
+       _restrictions = restrictions;
 
   final AuthRepository _authRepository;
   final UserProfileRepository _userProfileRepository;
   final SubscriptionRepository _subscriptionRepository;
   final String _revenueCatApiKey;
+  final AppRestrictionManager _restrictions;
 
   static const _backendSyncDelay = Duration(seconds: 5);
 
@@ -103,12 +107,21 @@ final class SubscriptionCoordinator {
       (subscription) {
         if (!_isAttached) return;
         _userProfileRepository.applyOptimisticSubscription(subscription);
+        unawaited(_syncScheduleToggle(subscription?.isActive == true));
         _scheduleBackendSync();
       },
       onError: (Object e) {
         log('SubscriptionCoordinator: subscription change error: $e', name: 'subscription');
       },
     );
+  }
+
+  Future<void> _syncScheduleToggle(bool isPremium) async {
+    try {
+      await _restrictions.setScheduleEnforcementEnabled(isPremium);
+    } on Object catch (e) {
+      log('SubscriptionCoordinator: setScheduleEnforcementEnabled failed: $e', name: 'subscription');
+    }
   }
 
   void _scheduleBackendSync() {

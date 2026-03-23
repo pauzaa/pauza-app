@@ -94,6 +94,7 @@ final class _TestPauzaDependencies extends PauzaDependencies {
     leaderboardRepository = MockLeaderboardRepository();
     subscriptionRepository = MockSubscriptionRepository();
     revenueCatApiKey = 'test-key';
+    emergencyStopRepository = MockEmergencyStopRepository();
     deviceTokenCoordinator = DeviceTokenCoordinator(
       authRepository: authRepository,
       devicesRepository: MockDevicesRepository(),

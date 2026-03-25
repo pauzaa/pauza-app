@@ -16,9 +16,7 @@ import 'package:pauza/src/features/profile/common/bloc/current_user_bloc.dart';
 import 'package:pauza/src/features/qr_code_config/data/qr_linked_codes_repository.dart';
 import 'package:pauza/src/features/devices/domain/device_token_coordinator.dart';
 import 'package:pauza/src/features/subscription/domain/subscription_coordinator.dart';
-import 'package:pauza/src/features/stats/blocking_stats/data/mock_stats_blocking_repository.dart';
 import 'package:pauza/src/features/stats/blocking_stats/data/stats_blocking_repository.dart';
-import 'package:pauza/src/features/stats/usage_stats/data/mock_stats_usage_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
 import 'package:pauza/src/features/streaks/data/streaks_repository.dart';
 import 'package:pauza/src/features/sync/domain/sync_trigger.dart';
@@ -80,10 +78,8 @@ class RootScopeState extends State<RootScope> {
     installedAppsRepository = PauzaScreenTimeInstalledAppsRepository(
       installedAppsManager: dependencies.installedAppsManager,
     );
-    statsUsageRepository =
-        const MockStatsUsageRepository(); // TODO() revert to StatsUsageRepositoryImpl(usageStatsManager: dependencies.usageStatsManager)
-    statsBlockingRepository =
-        const MockStatsBlockingRepository(); // TODO() revert to dependencies.statsBlockingRepository
+    statsUsageRepository = StatsUsageRepositoryImpl(usageStatsManager: dependencies.usageStatsManager);
+    statsBlockingRepository = dependencies.statsBlockingRepository;
 
     nfcRepository = dependencies.nfcRepository;
     hasNfcSupport = dependencies.hasNfcSupport;

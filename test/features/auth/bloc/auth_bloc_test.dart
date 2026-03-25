@@ -707,6 +707,12 @@ final class FakeAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<void> forceLocalSignOut() async {
+    _currentSession = const Session.empty();
+    _controller.add(_currentSession);
+  }
+
+  @override
   Future<void> clearPendingOtpChallenge() async {
     clearPendingOtpChallengeCallCount += 1;
     if (clearChallengeError != null) throw clearChallengeError!;
@@ -778,6 +784,9 @@ final class _CompletableAuthRepository implements AuthRepository {
     _currentSession = const Session.empty();
     _controller.add(_currentSession);
   }
+
+  @override
+  Future<void> forceLocalSignOut() => signOut();
 
   @override
   Future<void> clearPendingOtpChallenge() async {
@@ -852,6 +861,9 @@ final class _CompletableOtpRequestRepository implements AuthRepository {
     _currentSession = const Session.empty();
     _controller.add(_currentSession);
   }
+
+  @override
+  Future<void> forceLocalSignOut() => signOut();
 
   @override
   Future<void> clearPendingOtpChallenge() async {

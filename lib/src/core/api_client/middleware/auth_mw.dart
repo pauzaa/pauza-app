@@ -13,6 +13,10 @@ typedef TokenProvider = Future<String?> Function();
 /// It should return the new token, or `null` if refreshing fails.
 typedef TokenRefresher = Future<String?> Function(ApiClientAuthorizationException error);
 
+/// Called when token refresh succeeds but the retried request still returns 401,
+/// indicating an irrecoverable auth failure.
+typedef OnPermanentAuthFailure = Future<void> Function();
+
 /// A function that builds the authorization header map from a given token.
 typedef AuthHeaderBuilder = Map<String, String> Function(String token);
 
@@ -28,15 +32,23 @@ class ApiClientAuthMiddleware implements ApiClientMiddleware {
   ///
   /// - [tokenProvider]: A required function to get the current auth token.
   /// - [tokenRefresher]: An optional function to refresh an expired token.
+  /// - [onPermanentAuthFailure]: Called when retry after refresh also returns 401.
   /// - [headerBuilder]: An optional function to customize the auth header.
-  const ApiClientAuthMiddleware({required this.tokenProvider, this.tokenRefresher, AuthHeaderBuilder? headerBuilder})
-    : _headerBuilder = headerBuilder ?? _defaultHeaderBuilder;
+  const ApiClientAuthMiddleware({
+    required this.tokenProvider,
+    this.tokenRefresher,
+    this.onPermanentAuthFailure,
+    AuthHeaderBuilder? headerBuilder,
+  }) : _headerBuilder = headerBuilder ?? _defaultHeaderBuilder;
 
   /// The function that provides the current access token.
   final TokenProvider tokenProvider;
 
   /// The function that refreshes the access token.
   final TokenRefresher? tokenRefresher;
+
+  /// Called when a refreshed token is also rejected (retry returns 401).
+  final OnPermanentAuthFailure? onPermanentAuthFailure;
 
   /// The function that builds the authorization header.
   final AuthHeaderBuilder _headerBuilder;
@@ -76,7 +88,13 @@ class ApiClientAuthMiddleware implements ApiClientMiddleware {
       // 4. If refresh is successful, retry the request with the new token.
       final newAuthHeaders = _headerBuilder(newToken);
       final retriedRequest = ApiClientRequest(_cloneRequest(authorizedRequest)..headers.addAll(newAuthHeaders));
-      return await innerHandler(retriedRequest, context);
+      try {
+        return await innerHandler(retriedRequest, context);
+      } on ApiClientAuthorizationException {
+        // Retry also rejected — session is irrecoverably invalid.
+        await onPermanentAuthFailure?.call();
+        rethrow;
+      }
     }
   };
 

@@ -1,12 +1,12 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:pauza/src/core/common/model/local_day_key.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/app_usage_detail.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/app_usage_entry.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/category_usage_bucket.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/daily_usage_point.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/device_event_snapshot.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/usage_stats_snapshot.dart';
-import 'package:pauza/src/core/common/model/local_day_key.dart';
 import 'package:pauza_screen_time/pauza_screen_time.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 

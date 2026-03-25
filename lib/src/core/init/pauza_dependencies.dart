@@ -123,6 +123,7 @@ class PauzaDependencies with AppFuseInitialization {
               return token.isEmpty ? null : token;
             },
             tokenRefresher: (_) => authRepository.refreshSession(),
+            onPermanentAuthFailure: () => authRepository.forceLocalSignOut(),
           ),
           ApiClientCacheMiddleware(
             cacheStore: httpCacheStore,
@@ -146,9 +147,22 @@ class PauzaDependencies with AppFuseInitialization {
         remoteDataSource: authRemoteDataSource,
         sessionStorage: authSessionStorage,
         onSignOutCleanup: () async {
-          await deviceTokenCoordinator.unregisterCurrentToken();
-          await syncLocalDataSource.clearAllSyncableTables();
-          await httpCacheStore.clear();
+          // Each step is independent — a failure in one must not block the others.
+          try {
+            await deviceTokenCoordinator.unregisterCurrentToken();
+          } on Object {
+            // Best-effort; session may already be invalid server-side.
+          }
+          try {
+            await syncLocalDataSource.clearAllSyncableTables();
+          } on Object {
+            // Best-effort; database may be closed.
+          }
+          try {
+            await httpCacheStore.clear();
+          } on Object {
+            // Best-effort.
+          }
         },
       );
       await authRepository.initialize();

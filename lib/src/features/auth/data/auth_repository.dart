@@ -39,6 +39,12 @@ abstract interface class AuthRepository {
 
   Future<void> signOut();
 
+  /// Clears the local session without any network calls.
+  ///
+  /// Used when the auth middleware detects an irrecoverable auth failure
+  /// (e.g. retry after token refresh also returns 401).
+  Future<void> forceLocalSignOut();
+
   void dispose();
 }
 
@@ -129,21 +135,47 @@ final class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> signOut() async {
+    // Best-effort remote token revocation -- offline logout must still work.
     try {
-      // Best-effort remote token revocation -- offline logout must still work.
-      try {
-        await _remoteDataSource.logout();
-      } on Object {
-        // Ignored intentionally.
-      }
-      await _onSignOutCleanup?.call();
+      await _remoteDataSource.logout();
+    } on Object {
+      // Ignored intentionally.
+    }
+
+    // Critical path: clear session state first so the user is always
+    // redirected to login, even if cleanup steps throw.
+    try {
       await _sessionStorage.deleteSession();
-      _emitSession(const Session.empty());
-      await clearPendingOtpChallenge();
-    } on AuthError {
-      rethrow;
-    } on Object catch (e) {
-      throw AuthUnknownError(cause: e);
+    } on Object {
+      // Best-effort; stale token on disk will fail refresh on next launch.
+    }
+    _emitSession(const Session.empty());
+    _pendingOtpEmail = null;
+
+    // Best-effort cleanup — must never prevent sign-out.
+    try {
+      await _onSignOutCleanup?.call();
+    } on Object {
+      // Cleanup failure is acceptable; session is already invalidated.
+    }
+  }
+
+  @override
+  Future<void> forceLocalSignOut() async {
+    // No remote calls — safe to call from the auth middleware without
+    // risking circular API requests.
+    try {
+      await _sessionStorage.deleteSession();
+    } on Object {
+      // Best-effort.
+    }
+    _emitSession(const Session.empty());
+    _pendingOtpEmail = null;
+
+    try {
+      await _onSignOutCleanup?.call();
+    } on Object {
+      // Best-effort.
     }
   }
 
@@ -176,13 +208,22 @@ final class AuthRepositoryImpl implements AuthRepository {
       // Local-only cleanup — skip the remote logout call to avoid a deadlock:
       // the logout POST would trigger the auth middleware, which would call
       // refreshSession(), returning _pendingRefresh (this very future).
+      //
+      // Critical path first: clear session state so the auth gate fires and
+      // the router redirects to login, regardless of cleanup outcome.
+      try {
+        await _sessionStorage.deleteSession();
+      } on Object {
+        // Best-effort.
+      }
+      _emitSession(const Session.empty());
+      _pendingOtpEmail = null;
+
+      // Best-effort cleanup — must never prevent session clearing.
       try {
         await _onSignOutCleanup?.call();
-        await _sessionStorage.deleteSession();
-        _emitSession(const Session.empty());
-        await clearPendingOtpChallenge();
       } on Object {
-        // Best-effort cleanup; the session is already invalid.
+        // Cleanup failure is acceptable; session is already invalidated.
       }
       return null;
     }

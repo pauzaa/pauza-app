@@ -112,6 +112,9 @@ final class FakeAuthRepository implements AuthRepository {
   Future<void> signOut() async {}
 
   @override
+  Future<void> forceLocalSignOut() async {}
+
+  @override
   Future<void> clearPendingOtpChallenge() async {}
 
   @override

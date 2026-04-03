@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
 import 'package:pauza_ui_kit/pauza_ui_kit.dart';
 
@@ -60,7 +61,13 @@ class _AiAnalysisCard extends StatelessWidget {
         color: theme.colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(PauzaSpacing.medium),
       ),
-      child: Text(analysis, style: theme.textTheme.bodyMedium),
+      child: MarkdownBody(
+        data: analysis,
+        selectable: true,
+        styleSheet: MarkdownStyleSheet.fromTheme(theme).copyWith(
+          p: theme.textTheme.bodyMedium,
+        ),
+      ),
     );
   }
 }

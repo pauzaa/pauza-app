@@ -219,7 +219,7 @@ void main() {
       expect(database.rawDeleteCalls, 1);
     });
 
-    test('deleteMode plugin failure prevents DB delete', () async {
+    test('deleteMode plugin failure is best-effort after DB delete', () async {
       final database = FakeLocalDatabase()..queryRows = <Map<String, Object?>>[_modeRow()];
       final restrictions = FakeAppRestrictionManager()..throwOnRemove = true;
       final repository = ModesRepositoryImpl(
@@ -228,14 +228,15 @@ void main() {
         restrictions: restrictions,
       );
 
-      await expectLater(repository.deleteMode('mode-1'), throwsA(isA<StateError>()));
+      await repository.deleteMode('mode-1');
 
-      expect(database.rawDeleteCalls, 0);
+      expect(database.rawDeleteCalls, 1);
+      expect(restrictions.removedModeIds, isEmpty);
     });
 
-    test('deleteMode DB failure compensates by re-upserting previous mode', () async {
+    test('deleteMode DB failure propagates without calling plugin', () async {
       final database = FakeLocalDatabase()
-        ..queryRows = <Map<String, Object?>>[_modeRow(blockedApps: 'app.old')]
+        ..queryRows = <Map<String, Object?>>[_modeRow()]
         ..throwOnRawDelete = true;
       final restrictions = FakeAppRestrictionManager();
       final repository = ModesRepositoryImpl(
@@ -246,9 +247,7 @@ void main() {
 
       await expectLater(repository.deleteMode('mode-1'), throwsA(isA<StateError>()));
 
-      expect(restrictions.removedModeIds, <String>['mode-1']);
-      expect(restrictions.upsertedModes, hasLength(1));
-      expect(restrictions.upsertedModes.single.blockedAppIds, <AppIdentifier>[const AppIdentifier('app.old')]);
+      expect(restrictions.removedModeIds, isEmpty);
     });
 
     test('getModes maps invalid icon token to default token', () async {

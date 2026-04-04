@@ -107,17 +107,12 @@ class ModesRepositoryImpl implements ModesRepository {
   @override
   Future<void> deleteMode(String modeId) async {
     final previousMode = await getMode(modeId);
-    await _restrictions.removeMode(modeId);
+    await _localDatabase.rawDelete('DELETE FROM modes WHERE id = ?', [modeId]);
 
     try {
-      await _localDatabase.rawDelete('DELETE FROM modes WHERE id = ?', [modeId]);
+      await _restrictions.removeMode(modeId);
     } on Object {
-      try {
-        await _restrictions.upsertMode(previousMode.toRestrictionMode());
-      } on Object {
-        // Best-effort rollback to reduce plugin/DB drift.
-      }
-      rethrow;
+      // Best-effort. reconcilePlugin on next startup will clean up.
     }
 
     await _trackModeDeletion(modeId, previousMode);
@@ -352,28 +347,10 @@ WHERE mode_id = ?
   @override
   Future<void> reconcilePlugin({required bool isPremium}) async {
     await _restrictions.setScheduleEnforcementEnabled(isPremium);
-
-    final config = await _restrictions.getModesConfig();
-    final pluginModeIds = config.modes.map((m) => m.modeId).toSet();
     final dbModes = await getModes();
-    final dbModeIds = dbModes.map((m) => m.id).toSet();
-
-    final staleIds = pluginModeIds.difference(dbModeIds);
-    for (final id in staleIds) {
-      try {
-        await _restrictions.removeMode(id);
-      } on Object {
-        // Best-effort removal.
-      }
-    }
-
-    for (final mode in dbModes) {
-      try {
-        await _restrictions.upsertMode(mode.toRestrictionMode());
-      } on Object {
-        // Best-effort upsert.
-      }
-    }
+    await _restrictions.replaceAllModes(
+      dbModes.map((m) => m.toRestrictionMode()).toList(),
+    );
   }
 
   void _batchInsertSchedule(Batch batch, {required String modeId, required Schedule schedule, required int now}) {

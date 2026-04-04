@@ -36,6 +36,14 @@ dart fix --apply lib
 flutter gen-l10n
 ```
 
+## Plugin Data Contract
+
+SQLite is the source of truth for mode definitions (modes, schedules, blocked apps). The `pauza_screen_time` plugin's native storage (SharedPreferences / App Groups) owns runtime enforcement state (active session, pause).
+
+- **Definitions flow one-way: SQLite → plugin** via `replaceAllModes`. The app never reads config back from the plugin.
+- **Events flow one-way: plugin → SQLite** via the lifecycle poll-ack pipeline (`syncFromPluginQueue`).
+- **Startup reconciliation:** `reconcilePlugin` pushes all modes from SQLite to the plugin on every app launch and after every sync.
+
 ## Architecture
 
 Flutter mobile app for modes-based app blocking (behavior intervention). Offline-first with SQLite, syncs to pauza-server.

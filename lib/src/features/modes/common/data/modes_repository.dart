@@ -348,9 +348,7 @@ WHERE mode_id = ?
   Future<void> reconcilePlugin({required bool isPremium}) async {
     await _restrictions.setScheduleEnforcementEnabled(isPremium);
     final dbModes = await getModes();
-    await _restrictions.replaceAllModes(
-      dbModes.map((m) => m.toRestrictionMode()).toList(),
-    );
+    await _restrictions.replaceAllModes(dbModes.map((m) => m.toRestrictionMode()).toList());
   }
 
   void _batchInsertSchedule(Batch batch, {required String modeId, required Schedule schedule, required int now}) {

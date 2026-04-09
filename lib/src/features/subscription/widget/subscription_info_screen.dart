@@ -161,17 +161,9 @@ class _SubscriptionStatusBadge extends StatelessWidget {
     if (!subscription.isActive) {
       badge = (color: context.colorScheme.error, icon: Icons.cancel_rounded, text: l10n.subscriptionInfoInactiveStatus);
     } else if (subscription.isExpiringSoon) {
-      badge = (
-        color: pauzaColors.warning,
-        icon: Icons.warning_rounded,
-        text: l10n.subscriptionInfoExpiringSoonStatus,
-      );
+      badge = (color: pauzaColors.warning, icon: Icons.warning_rounded, text: l10n.subscriptionInfoExpiringSoonStatus);
     } else {
-      badge = (
-        color: pauzaColors.success,
-        icon: Icons.check_circle_rounded,
-        text: l10n.subscriptionInfoActiveStatus,
-      );
+      badge = (color: pauzaColors.success, icon: Icons.check_circle_rounded, text: l10n.subscriptionInfoActiveStatus);
     }
 
     return Container(
@@ -231,10 +223,7 @@ class _SubscriptionDetailTile extends StatelessWidget {
             Expanded(
               child: Text(title, style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
             ),
-            Text(
-              trailing,
-              style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onSurfaceVariant),
-            ),
+            Text(trailing, style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onSurfaceVariant)),
           ],
         ),
       ),
@@ -268,10 +257,7 @@ class _SubscriptionEmptyState extends StatelessWidget {
             style: context.textTheme.titleMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
           ),
           const Spacer(),
-          PauzaFilledButton(
-            title: Text(l10n.subscriptionInfoGetPremium),
-            onPressed: () => PaywallScreen.show(context),
-          ),
+          PauzaFilledButton(title: Text(l10n.subscriptionInfoGetPremium), onPressed: () => PaywallScreen.show(context)),
           const SizedBox(height: PauzaSpacing.extraLarge),
         ],
       ),

@@ -1,0 +1,1973 @@
+{
+  "@@locale": "kk",
+  "appName": "Pauza",
+  "@appName": {
+    "description": "The name of the application."
+  },
+  "homeTitle": "Басты бет",
+  "@homeTitle": {
+    "description": "Title for the home screen."
+  },
+  "statsTitle": "Статистика",
+  "@statsTitle": {
+    "description": "Title for the stats screen and navigation destination."
+  },
+  "leaderboardTitle": "Рейтинг",
+  "@leaderboardTitle": {
+    "description": "Title for the leaderboard screen and navigation destination."
+  },
+  "profileTitle": "Профиль",
+  "@profileTitle": {
+    "description": "Title for the profile screen and navigation destination."
+  },
+  "profileDisplayNameFallback": "Белгісіз пайдаланушы",
+  "@profileDisplayNameFallback": {
+    "description": "Fallback display name for profile screen when current user data is unavailable."
+  },
+  "profileUsernameFallback": "пайдаланушы",
+  "@profileUsernameFallback": {
+    "description": "Fallback username for profile screen when current user data is unavailable."
+  },
+  "profileEditInfoNavTitle": "Ақпаратты өңдеу",
+  "@profileEditInfoNavTitle": {
+    "description": "Navigation item title for editing profile details."
+  },
+  "profileEditTitle": "Профильді өңдеу",
+  "@profileEditTitle": {
+    "description": "Title for the edit profile screen."
+  },
+  "profileEditChangePhoto": "СУРЕТТІ ӨЗГЕРТУ",
+  "@profileEditChangePhoto": {
+    "description": "Action label for changing profile photo."
+  },
+  "profileEditUploadingPhoto": "ЖҮКТЕЛУДЕ...",
+  "@profileEditUploadingPhoto": {
+    "description": "Action label shown while a profile photo is uploading."
+  },
+  "profileEditNameLabel": "Аты",
+  "@profileEditNameLabel": {
+    "description": "Label for the name field on edit profile screen."
+  },
+  "profileEditNameHint": "Атыңыз",
+  "@profileEditNameHint": {
+    "description": "Hint for the name field on edit profile screen."
+  },
+  "profileEditUsernameLabel": "Пайдаланушы аты",
+  "@profileEditUsernameLabel": {
+    "description": "Label for the username field on edit profile screen."
+  },
+  "profileEditUsernameHint": "пайдаланушы_аты",
+  "@profileEditUsernameHint": {
+    "description": "Hint for the username field on edit profile screen."
+  },
+  "profileEditSaveButton": "Өзгерістерді сақтау",
+  "@profileEditSaveButton": {
+    "description": "Primary save button label on the edit profile screen."
+  },
+  "profileEditChangePhotoSheetTitle": "Профиль суретін өзгерту",
+  "@profileEditChangePhotoSheetTitle": {
+    "description": "Title for the profile photo action bottom sheet."
+  },
+  "profileEditTakePhotoTitle": "Сурет түсіру",
+  "@profileEditTakePhotoTitle": {
+    "description": "Bottom sheet option title for taking a photo."
+  },
+  "profileEditTakePhotoSubtitle": "Камерамен жаңа сурет түсіріңіз",
+  "@profileEditTakePhotoSubtitle": {
+    "description": "Bottom sheet option subtitle for taking a photo."
+  },
+  "profileEditChooseFromGalleryTitle": "Галереядан таңдау",
+  "@profileEditChooseFromGalleryTitle": {
+    "description": "Bottom sheet option title for selecting from gallery."
+  },
+  "profileEditChooseFromGallerySubtitle": "Телефон кітапханасынан сурет таңдаңыз",
+  "@profileEditChooseFromGallerySubtitle": {
+    "description": "Bottom sheet option subtitle for selecting from gallery."
+  },
+  "profileEditInvalidUsernameError": "3-30 кіші әріп, сан немесе астын сызу белгісін пайдаланыңыз",
+  "@profileEditInvalidUsernameError": {
+    "description": "Validation message for invalid profile username."
+  },
+  "profileEditUsernameTakenError": "Бұл пайдаланушы аты бос емес",
+  "@profileEditUsernameTakenError": {
+    "description": "Validation message when chosen username is not available."
+  },
+  "profileEditValidationError": "Профиль деректерін тексеріңіз",
+  "@profileEditValidationError": {
+    "description": "General validation error for edit profile flow."
+  },
+  "profileEditNetworkError": "Профильді жаңарту мүмкін болмады. Байланысыңызды тексеріңіз",
+  "@profileEditNetworkError": {
+    "description": "Network failure message shown on edit profile flow."
+  },
+  "profileEditOfflineUsernameCheckError": "Пайдаланушы атының қолжетімділігін тексеру үшін интернетке қосылыңыз",
+  "@profileEditOfflineUsernameCheckError": {
+    "description": "Validation message when username availability cannot be checked while offline."
+  },
+  "profileSettingsNavTitle": "Параметрлер",
+  "@profileSettingsNavTitle": {
+    "description": "Navigation item title for profile settings."
+  },
+  "settingsTitle": "Параметрлер",
+  "@settingsTitle": {
+    "description": "Title shown in the settings screen app bar."
+  },
+  "settingsGeneralSectionTitle": "Жалпы",
+  "@settingsGeneralSectionTitle": {
+    "description": "Section title for general settings."
+  },
+  "settingsNotifications": "Хабарландырулар",
+  "@settingsNotifications": {
+    "description": "Label for settings notifications row."
+  },
+  "settingsLeaderboardVisibility": "Рейтингте көріну",
+  "@settingsLeaderboardVisibility": {
+    "description": "Label for leaderboard visibility settings toggle."
+  },
+  "settingsPrivacySectionTitle": "Құпиялылық",
+  "@settingsPrivacySectionTitle": {
+    "description": "Section title for privacy settings."
+  },
+  "settingsLanguage": "Тіл",
+  "@settingsLanguage": {
+    "description": "Label for settings language row."
+  },
+  "settingsLanguagePickerTitle": "Тілді таңдаңыз",
+  "@settingsLanguagePickerTitle": {
+    "description": "Title for language selection dialog in settings."
+  },
+  "settingsSessionEndingConfSectionTitle": "Сеансты аяқтау",
+  "@settingsSessionEndingConfSectionTitle": {
+    "description": "Section title for session ending confirmation settings."
+  },
+  "scanNfcChipTitle": "NFC тегін сканерлеу",
+  "@scanNfcChipTitle": {
+    "description": "Title for the NFC tag scanning screen."
+  },
+  "readyToScanNfcTag": "Сканерлеуге дайын",
+  "@readyToScanNfcTag": {
+    "description": "Title shown when the user is ready to scan an NFC tag."
+  },
+  "scanNfcTagActionLabel": "NFC тегін сканерлеңіз.",
+  "@scanNfcTagActionLabel": {
+    "description": "Action label to scan an NFC tag."
+  },
+  "settingsNfcChipConfiguring": "NFC чипін баптау",
+  "@settingsNfcChipConfiguring": {
+    "description": "Label for NFC chip configuring settings row."
+  },
+  "settingsQrCodeConfiguring": "QR кодын баптау",
+  "@settingsQrCodeConfiguring": {
+    "description": "Label for QR code configuring settings row."
+  },
+  "settingsSignOut": "Шығу",
+  "@settingsSignOut": {
+    "description": "Label for sign out button in settings."
+  },
+  "settingsVersionFallback": "Pauza",
+  "@settingsVersionFallback": {
+    "description": "Fallback label in settings footer when app version is unavailable."
+  },
+  "settingsVersionLabel": "Pauza v{version}",
+  "@settingsVersionLabel": {
+    "description": "Formatted app version label shown in settings footer.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "notFoundTitle": "Бет табылмады",
+  "@notFoundTitle": {
+    "description": "Title shown when a page is not found."
+  },
+  "confirmButton": "Растау",
+  "@confirmButton": {
+    "description": "Label for a confirm action on dialogs or forms."
+  },
+  "cancelButton": "Болдырмау",
+  "@cancelButton": {
+    "description": "Label for canceling an action."
+  },
+  "okButton": "Жарайды",
+  "@okButton": {
+    "description": "Label to acknowledge information."
+  },
+  "yesButton": "Иә",
+  "@yesButton": {
+    "description": "Affirmative action label."
+  },
+  "weekDaysShort": "{key, select, mon {Дс} tue {Сс} wed {Ср} thu {Бс} fri {Жм} sat {Сб} sun {Жс} other {Белг}}",
+  "@weekDaysShort": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "weekDays": "{key, select, mon {Дүйсенбі} tue {Сейсенбі} wed {Сәрсенбі} thu {Бейсенбі} fri {Жұма} sat {Сенбі} sun {Жексенбі} other {Белгісіз}}",
+  "@weekDays": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "noButton": "Жоқ",
+  "@noButton": {
+    "description": "Negative or dismissive action label."
+  },
+  "retryButton": "Қайталау",
+  "@retryButton": {
+    "description": "Label for reattempting a failed action."
+  },
+  "internetRequiredToast": "Интернет байланысы қажет",
+  "@internetRequiredToast": {
+    "description": "Toast shown when a network-required action is blocked while offline."
+  },
+  "leaderboardOfflineTitle": "Рейтинг қолжетімді емес",
+  "@leaderboardOfflineTitle": {
+    "description": "Title for leaderboard offline state."
+  },
+  "leaderboardOfflineMessage": "Рейтинг деректерін көру үшін интернетке қосылыңыз",
+  "@leaderboardOfflineMessage": {
+    "description": "Message for leaderboard offline state."
+  },
+  "leaderboardRetryButton": "Қайта көру",
+  "@leaderboardRetryButton": {
+    "description": "Retry button label for leaderboard offline state."
+  },
+  "closeButton": "Жабу",
+  "@closeButton": {
+    "description": "Label for closing a sheet, dialog, or screen."
+  },
+  "nextButton": "Келесі",
+  "@nextButton": {
+    "description": "Label to move forward in a flow."
+  },
+  "previousButton": "Алдыңғы",
+  "@previousButton": {
+    "description": "Label to move back in a flow."
+  },
+  "submitButton": "Жіберу",
+  "@submitButton": {
+    "description": "Label to submit a form or send data."
+  },
+  "backButton": "Артқа",
+  "@backButton": {
+    "description": "Label to navigate back globally."
+  },
+  "loadingLabel": "Жүктелуде...",
+  "@loadingLabel": {
+    "description": "Text displayed while content is loading."
+  },
+  "errorTitle": "Бірдеңе дұрыс болмады",
+  "@errorTitle": {
+    "description": "Title shown when an error occurs."
+  },
+  "errorSubscriptionRequired": "Премиум жазылым қажет",
+  "@errorSubscriptionRequired": {
+    "description": "Error message when a feature requires a premium subscription."
+  },
+  "errorRateLimited": "Сұраулар тым көп. Кейінірек қайталаңыз.",
+  "@errorRateLimited": {
+    "description": "Error message when the user is rate-limited by the server."
+  },
+  "successTitle": "Сәтті орындалды",
+  "@successTitle": {
+    "description": "Title shown when an action completes successfully."
+  },
+  "searchPlaceholder": "Іздеу",
+  "@searchPlaceholder": {
+    "description": "Placeholder text for search inputs."
+  },
+  "emptyStateMessage": "Көрсетілетін элементтер жоқ",
+  "@emptyStateMessage": {
+    "description": "Message displayed when a list has no content."
+  },
+  "startButton": "Бастау",
+  "@startButton": {
+    "description": "Label to start an action or mode."
+  },
+  "stopButton": "Тоқтату",
+  "@stopButton": {
+    "description": "Label to stop an active action or mode."
+  },
+  "selectModeTitle": "Режимді таңдау",
+  "@selectModeTitle": {
+    "description": "Title for selecting a mode."
+  },
+  "addModeButton": "Жаңа режим қосу",
+  "@addModeButton": {
+    "description": "Button label to add a new mode."
+  },
+  "editModeButton": "Өңдеу",
+  "@editModeButton": {
+    "description": "Button label to edit a mode."
+  },
+  "deleteModeButton": "Жою",
+  "@deleteModeButton": {
+    "description": "Button label to delete a mode."
+  },
+  "deleteModeTitle": "Режимді жою керек пе?",
+  "@deleteModeTitle": {
+    "description": "Title for the delete mode confirmation dialog."
+  },
+  "deleteModeMessage": "Бұл әрекетті кері қайтару мүмкін емес.",
+  "@deleteModeMessage": {
+    "description": "Warning message shown when deleting a mode."
+  },
+  "comingSoonMessage": "Жақында қосылады",
+  "@comingSoonMessage": {
+    "description": "Message displayed for features not yet available."
+  },
+  "noModesEmptyState": "Режимдер жоқ",
+  "@noModesEmptyState": {
+    "description": "Message shown when no modes have been created."
+  },
+  "selectMode": "Режимді таңдаңыз",
+  "@selectMode": {
+    "description": "Toast or hint prompting user to choose a mode before starting."
+  },
+  "alreadyBlocking": "Бұғаттау жалғасуда",
+  "@alreadyBlocking": {
+    "description": "Toast shown when user tries to start a session while blocking is already active."
+  },
+  "permissionUsageAccessTitle": "Пайдалану деректеріне қол жеткізуге рұқсат беру",
+  "@permissionUsageAccessTitle": {
+    "description": "Title for the Usage Access permission request."
+  },
+  "permissionUsageAccessBody": "Pauza қандай қолданбалар белсенді екенін анықтау және бұғаттау ережелерін қолдану үшін пайдалану деректерін пайдаланады. Деректер құрылғыда сақталады.",
+  "@permissionUsageAccessBody": {
+    "description": "Explanation of why Usage Access permission is needed."
+  },
+  "permissionAccessibilityTitle": "Арнайы мүмкіндіктер қызметін қосу",
+  "@permissionAccessibilityTitle": {
+    "description": "Title for the Accessibility Service permission request."
+  },
+  "permissionAccessibilityBody": "Pauza бұғатталған қолданба ашылғанда бірден бұғаттау экранын көрсету үшін арнайы мүмкіндіктерді пайдаланады.",
+  "@permissionAccessibilityBody": {
+    "description": "Explanation of why Accessibility permission is needed."
+  },
+  "permissionExactAlarmTitle": "Дәл дабылдарға рұқсат беру",
+  "@permissionExactAlarmTitle": {
+    "description": "Title for the Exact Alarms permission request."
+  },
+  "permissionExactAlarmBody": "Дәл дабылдар кестелер мен үзіліс таймерлерінің уақытында іске қосылуын қамтамасыз етеді.",
+  "@permissionExactAlarmBody": {
+    "description": "Explanation of why Exact Alarms permission is needed."
+  },
+  "permissionFamilyControlsTitle": "Отбасылық бақылауға (Экран уақыты) рұқсат беру",
+  "@permissionFamilyControlsTitle": {
+    "description": "Title for the Family Controls permission request."
+  },
+  "permissionFamilyControlsBody": "Pauza iOS-та қолданба шектеулерін басқару үшін Отбасылық бақылауды / Экран уақыты авторизациясын пайдаланады.",
+  "@permissionFamilyControlsBody": {
+    "description": "Explanation of why Family Controls permission is needed."
+  },
+  "permissionsRequiredTitle": "Рұқсаттар қажет",
+  "@permissionsRequiredTitle": {
+    "description": "Title for the combined permissions gate screen."
+  },
+  "permissionsRequiredBody": "Назарыңызды шоғырландыруға және алаңдататын қолданбаларды тиімді бұғаттауға көмектесу үшін Pauza төмендегі рұқсаттарды қажет етеді. Деректеріңіз құрылғыда жеке сақталады.",
+  "@permissionsRequiredBody": {
+    "description": "Description for the combined permissions gate screen."
+  },
+  "permissionUsageAccessShortBody": "Пайдалануды бақылау және шектеулерді қолдану",
+  "@permissionUsageAccessShortBody": {
+    "description": "Short description for Usage Access permission row."
+  },
+  "permissionAccessibilityShortBody": "Бұғатталған қолданбаларды анықтау және бұғаттау",
+  "@permissionAccessibilityShortBody": {
+    "description": "Short description for Accessibility permission row."
+  },
+  "permissionExactAlarmShortBody": "Кестелер мен таймерлерді дәл ұстау",
+  "@permissionExactAlarmShortBody": {
+    "description": "Short description for Exact Alarms permission row."
+  },
+  "permissionFamilyControlsShortBody": "iOS-та қолданба шектеулерін басқару",
+  "@permissionFamilyControlsShortBody": {
+    "description": "Short description for Family Controls permission row."
+  },
+  "permissionCurrentStatusLabel": "Ағымдағы күй: {status}",
+  "@permissionCurrentStatusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionStatusGranted": "Берілді",
+  "@permissionStatusGranted": {
+    "description": "Label shown when a permission has been granted."
+  },
+  "permissionStatusDenied": "Қабылданбады",
+  "@permissionStatusDenied": {
+    "description": "Label shown when a permission has been denied."
+  },
+  "permissionStatusRestricted": "Шектелген",
+  "@permissionStatusRestricted": {
+    "description": "Label shown when a permission is restricted."
+  },
+  "permissionStatusNotDetermined": "Анықталмаған",
+  "@permissionStatusNotDetermined": {
+    "description": "Label shown when a permission status is not yet determined."
+  },
+  "permissionOpenSettingsButton": "Параметрлерді ашу",
+  "@permissionOpenSettingsButton": {
+    "description": "Button label to open system settings for permissions."
+  },
+  "permissionAllowAccessButton": "Қол жеткізуге рұқсат беру",
+  "@permissionAllowAccessButton": {
+    "description": "Button label to grant permission access."
+  },
+  "nfcOpenSettingsButton": "Параметрлерді ашу",
+  "@nfcOpenSettingsButton": {
+    "description": "Button label to open NFC-related system settings."
+  },
+  "nfcGuidanceAvailableTitle": "NFC дайын",
+  "@nfcGuidanceAvailableTitle": {
+    "description": "Title shown when NFC is available."
+  },
+  "nfcGuidanceAvailableBody": "Құрылғыңыз NFC тегтерін сканерлеуге дайын.",
+  "@nfcGuidanceAvailableBody": {
+    "description": "Body shown when NFC is available."
+  },
+  "nfcGuidanceDisabledTitle": "NFC-ні қосыңыз",
+  "@nfcGuidanceDisabledTitle": {
+    "description": "Title shown when NFC is supported but disabled."
+  },
+  "nfcGuidanceDisabledBody": "Бұл құрылғыда NFC өшірілген. Жалғастыру үшін жүйе параметрлерінде қосыңыз.",
+  "@nfcGuidanceDisabledBody": {
+    "description": "Body shown when NFC is supported but disabled."
+  },
+  "nfcGuidanceNotSupportedTitle": "NFC қолданылмайды",
+  "@nfcGuidanceNotSupportedTitle": {
+    "description": "Title shown when NFC is not supported on the current device."
+  },
+  "nfcGuidanceNotSupportedBody": "Бұл құрылғы NFC сканерлеуді қолдамайды.",
+  "@nfcGuidanceNotSupportedBody": {
+    "description": "Body shown when NFC is not supported on the current device."
+  },
+  "nfcGuidanceUnknownTitle": "NFC күйі белгісіз",
+  "@nfcGuidanceUnknownTitle": {
+    "description": "Title shown when NFC status cannot be determined."
+  },
+  "nfcGuidanceUnknownBody": "Қазір NFC қолжетімділігін анықтай алмадық. Бір мезетте қайталаңыз.",
+  "@nfcGuidanceUnknownBody": {
+    "description": "Body shown when NFC status cannot be determined."
+  },
+  "nfcChipConfigTitle": "NFC тегін баптау",
+  "@nfcChipConfigTitle": {
+    "description": "Title shown on NFC tag linking screen."
+  },
+  "nfcChipConfigBody": "NFC тегін Pauza-мен байланыстыру үшін сканерлеңіз. Фокус сеанстарын аяқтау үшін осы тег қажет болады.",
+  "@nfcChipConfigBody": {
+    "description": "Body text shown on NFC tag linking screen."
+  },
+  "nfcChipConfigLinkButton": "NFC тегін байланыстыру",
+  "@nfcChipConfigLinkButton": {
+    "description": "Primary action to start linking an NFC tag."
+  },
+  "nfcChipConfigScanningButton": "Сканерлеуде...",
+  "@nfcChipConfigScanningButton": {
+    "description": "Primary action label while NFC scan is in progress."
+  },
+  "nfcChipConfigLinkedSuccess": "NFC тегі сәтті байланыстырылды.",
+  "@nfcChipConfigLinkedSuccess": {
+    "description": "Toast shown when NFC tag has been linked."
+  },
+  "nfcChipConfigAlreadyLinked": "Бұл NFC тегі бұрыннан байланыстырылған.",
+  "@nfcChipConfigAlreadyLinked": {
+    "description": "Toast shown when NFC tag already exists in linked tags table."
+  },
+  "nfcChipHoldCardNearDevice": "Сканерлеу үшін құрылғыны NFC тегіне жақын ұстаңыз",
+  "@nfcChipHoldCardNearDevice": {
+    "description": "Instruction shown when the user should hold the NFC tag near the device to scan."
+  },
+  "nfcChipConfigUidMissingError": "Бұл NFC тегін байланыстыру мүмкін емес, себебі ол идентификатор бермейді.",
+  "@nfcChipConfigUidMissingError": {
+    "description": "Error shown when scanned NFC tag has no stable UID."
+  },
+  "nfcChipConfigScanFailed": "NFC тегін байланыстыру мүмкін болмады. Қайталап көріңіз.",
+  "@nfcChipConfigScanFailed": {
+    "description": "Error shown when NFC scan or linking fails."
+  },
+  "nfcChipConfigTagsTitle": "Сіздің NFC тегтеріңіз",
+  "@nfcChipConfigTagsTitle": {
+    "description": "Title shown on NFC tags management screen."
+  },
+  "nfcChipConfigTagsBody": "Байланыстырылған NFC тегтерін басқарыңыз. Бұл тегтер фокус сеанстарын ашудың физикалық кілттері.",
+  "@nfcChipConfigTagsBody": {
+    "description": "Body text shown on NFC tags management screen."
+  },
+  "nfcChipConfigLinkNewTagButton": "Жаңа тег байланыстыру",
+  "@nfcChipConfigLinkNewTagButton": {
+    "description": "Primary action label to link a new NFC tag from management screen."
+  },
+  "nfcChipConfigLinkedOnDate": "{date} күні байланыстырылды",
+  "@nfcChipConfigLinkedOnDate": {
+    "description": "Subtitle shown under NFC tag name with linked date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "nfcChipConfigRenameAction": "Атын өзгерту",
+  "@nfcChipConfigRenameAction": {
+    "description": "Menu action label to rename a linked NFC tag."
+  },
+  "nfcChipConfigDeleteAction": "Жою",
+  "@nfcChipConfigDeleteAction": {
+    "description": "Menu action label to delete a linked NFC tag."
+  },
+  "nfcChipConfigRenameDialogTitle": "NFC тегінің атын өзгерту",
+  "@nfcChipConfigRenameDialogTitle": {
+    "description": "Title for the rename NFC tag dialog."
+  },
+  "nfcChipConfigRenameFieldLabel": "Тег атауы",
+  "@nfcChipConfigRenameFieldLabel": {
+    "description": "Label for NFC tag rename text field."
+  },
+  "nfcChipConfigRenameFieldHint": "Тег атауын енгізіңіз",
+  "@nfcChipConfigRenameFieldHint": {
+    "description": "Hint text for NFC tag rename input."
+  },
+  "nfcChipConfigRenameSaveButton": "Сақтау",
+  "@nfcChipConfigRenameSaveButton": {
+    "description": "Primary action label on rename NFC tag dialog."
+  },
+  "nfcChipConfigNoTagsTitle": "Байланыстырылған тегтер жоқ",
+  "@nfcChipConfigNoTagsTitle": {
+    "description": "Title for empty state when there are no linked NFC tags."
+  },
+  "nfcChipConfigNoTagsBody": "Фокус сеанстарының ашылуын басқару үшін бірінші NFC тегіңізді байланыстырыңыз.",
+  "@nfcChipConfigNoTagsBody": {
+    "description": "Body for empty state when there are no linked NFC tags."
+  },
+  "qrCodeConfigTagsTitle": "Сіздің QR кодтарыңыз",
+  "@qrCodeConfigTagsTitle": {
+    "description": "Title shown on QR code management screen."
+  },
+  "qrCodeConfigTagsBody": "Байланыстырылған QR кодтарыңызды басқарыңыз. Фокус сеанстарын ашу үшін кез келген кодты ашып алдын ала қараңыз.",
+  "@qrCodeConfigTagsBody": {
+    "description": "Body text shown on QR code management screen."
+  },
+  "qrCodeConfigGenerateNewCodeButton": "Жаңа QR жасау",
+  "@qrCodeConfigGenerateNewCodeButton": {
+    "description": "Primary action label to generate a new QR code."
+  },
+  "qrCodeConfigLinkedOnDate": "{date} күні байланыстырылды",
+  "@qrCodeConfigLinkedOnDate": {
+    "description": "Subtitle shown under QR code name with linked date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "qrCodeConfigRenameAction": "Атын өзгерту",
+  "@qrCodeConfigRenameAction": {
+    "description": "Menu action label to rename a linked QR code."
+  },
+  "qrCodeConfigDeleteAction": "Жою",
+  "@qrCodeConfigDeleteAction": {
+    "description": "Menu action label to delete a linked QR code."
+  },
+  "qrCodeConfigRenameDialogTitle": "QR кодының атын өзгерту",
+  "@qrCodeConfigRenameDialogTitle": {
+    "description": "Title for the rename QR code dialog."
+  },
+  "qrCodeConfigRenameFieldLabel": "QR код атауы",
+  "@qrCodeConfigRenameFieldLabel": {
+    "description": "Label for QR code rename text field."
+  },
+  "qrCodeConfigRenameFieldHint": "QR код атауын енгізіңіз",
+  "@qrCodeConfigRenameFieldHint": {
+    "description": "Hint text for QR code rename input."
+  },
+  "qrCodeConfigRenameSaveButton": "Сақтау",
+  "@qrCodeConfigRenameSaveButton": {
+    "description": "Primary action label on rename QR code dialog."
+  },
+  "qrCodeConfigNoCodesTitle": "Байланыстырылған QR кодтар жоқ",
+  "@qrCodeConfigNoCodesTitle": {
+    "description": "Title for empty state when there are no linked QR codes."
+  },
+  "qrCodeConfigNoCodesBody": "Фокус сеанстарының ашылуын басқару үшін бірінші QR кодыңызды жасаңыз.",
+  "@qrCodeConfigNoCodesBody": {
+    "description": "Body for empty state when there are no linked QR codes."
+  },
+  "qrCodeConfigPreviewDialogTitle": "QR кодын алдын ала қарау",
+  "@qrCodeConfigPreviewDialogTitle": {
+    "description": "Title shown on QR preview dialog."
+  },
+  "qrCodeConfigPreviewDialogBody": "Фокус сеансын ашу қажет болғанда осы QR кодын көрсетіңіз.",
+  "@qrCodeConfigPreviewDialogBody": {
+    "description": "Body text shown on QR preview dialog."
+  },
+  "qrCodeConfigPreviewDialogDownloadButton": "Жүктеу",
+  "@qrCodeConfigPreviewDialogDownloadButton": {
+    "description": "Button label to download or share the QR image from preview dialog."
+  },
+  "qrCodeConfigPreviewDialogDownloadReady": "QR кескінін сақтау орнын таңдаңыз.",
+  "@qrCodeConfigPreviewDialogDownloadReady": {
+    "description": "Toast shown when share sheet opens for saving QR image."
+  },
+  "qrCodeConfigPreviewDialogDownloadFailed": "QR кескінін экспорттау мүмкін болмады. Қайталап көріңіз.",
+  "@qrCodeConfigPreviewDialogDownloadFailed": {
+    "description": "Toast shown when QR image export fails."
+  },
+  "qrCodeConfigActionFailed": "QR код конфигурациясын жаңарту мүмкін болмады. Қайталап көріңіз.",
+  "@qrCodeConfigActionFailed": {
+    "description": "Generic fallback error shown when QR config action fails."
+  },
+  "qrCodeConfigGenerateFailed": "Жаңа QR код жасау мүмкін болмады. Қайталап көріңіз.",
+  "@qrCodeConfigGenerateFailed": {
+    "description": "Error shown when generating a new QR code fails."
+  },
+  "qrCodeConfigRenameFailed": "QR кодының атын өзгерту мүмкін болмады. Қайталап көріңіз.",
+  "@qrCodeConfigRenameFailed": {
+    "description": "Error shown when renaming QR code fails."
+  },
+  "qrCodeConfigDeleteFailed": "QR кодын жою мүмкін болмады. Қайталап көріңіз.",
+  "@qrCodeConfigDeleteFailed": {
+    "description": "Error shown when deleting QR code fails."
+  },
+  "blockedAppsCountLabel": "Бұғатталған қолданбалар: {count}",
+  "@blockedAppsCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createModeTitle": "Режим жасау",
+  "@createModeTitle": {
+    "description": "Title for the create mode screen."
+  },
+  "editModeTitle": "Режимді өңдеу",
+  "@editModeTitle": {
+    "description": "Title for the edit mode screen."
+  },
+  "modeTitleFieldLabel": "Тақырып",
+  "@modeTitleFieldLabel": {
+    "description": "Label for the mode title input field."
+  },
+  "modeTextOnScreenFieldLabel": "Қалқан экранындағы мәтін",
+  "@modeTextOnScreenFieldLabel": {
+    "description": "Label for the text displayed on the block screen."
+  },
+  "modeDescriptionFieldLabel": "Сипаттама",
+  "@modeDescriptionFieldLabel": {
+    "description": "Label for the mode description input field."
+  },
+  "modeIconSectionTitle": "Белгіше",
+  "@modeIconSectionTitle": {
+    "description": "Section title for mode icon selection."
+  },
+  "modeIconChooseButton": "Белгіше таңдау",
+  "@modeIconChooseButton": {
+    "description": "Button label to choose mode icon."
+  },
+  "modeIconPickerTitle": "Белгіше таңдаңыз",
+  "@modeIconPickerTitle": {
+    "description": "Title for the mode icon picker sheet."
+  },
+  "modeIconPickerSubtitle": "Бұл режим үшін бір белгіше таңдаңыз",
+  "@modeIconPickerSubtitle": {
+    "description": "Subtitle shown in mode icon picker."
+  },
+  "modeIconLabelTune": "Реттеу",
+  "@modeIconLabelTune": {
+    "description": "Label for tune mode icon."
+  },
+  "modeIconLabelPsychology": "Ақыл",
+  "@modeIconLabelPsychology": {
+    "description": "Label for psychology mode icon."
+  },
+  "modeIconLabelTimer": "Таймер",
+  "@modeIconLabelTimer": {
+    "description": "Label for timer mode icon."
+  },
+  "modeIconLabelBolt": "Найзағай",
+  "@modeIconLabelBolt": {
+    "description": "Label for bolt mode icon."
+  },
+  "modeIconLabelRocketLaunch": "Ракета",
+  "@modeIconLabelRocketLaunch": {
+    "description": "Label for rocket launch mode icon."
+  },
+  "modeIconLabelSelfImprovement": "Тыныштық",
+  "@modeIconLabelSelfImprovement": {
+    "description": "Label for self improvement mode icon."
+  },
+  "modeIconLabelFitnessCenter": "Дене шынықтыру",
+  "@modeIconLabelFitnessCenter": {
+    "description": "Label for fitness center mode icon."
+  },
+  "modeIconLabelSchool": "Мектеп",
+  "@modeIconLabelSchool": {
+    "description": "Label for school mode icon."
+  },
+  "modeIconLabelWork": "Жұмыс",
+  "@modeIconLabelWork": {
+    "description": "Label for work mode icon."
+  },
+  "modeIconLabelMenuBook": "Оқу",
+  "@modeIconLabelMenuBook": {
+    "description": "Label for menu book mode icon."
+  },
+  "modeIconLabelMusicNote": "Музыка",
+  "@modeIconLabelMusicNote": {
+    "description": "Label for music note mode icon."
+  },
+  "modeIconLabelNightlight": "Түн",
+  "@modeIconLabelNightlight": {
+    "description": "Label for nightlight mode icon."
+  },
+  "modeEnabledLabel": "Қосылған",
+  "@modeEnabledLabel": {
+    "description": "Label for the mode enabled toggle."
+  },
+  "modeBlockedAppsSectionTitle": "Бұғатталған қолданбалар",
+  "@modeBlockedAppsSectionTitle": {
+    "description": "Title for the blocked apps section in mode settings."
+  },
+  "modeBlockedAppsChooseButton": "Қолданбаларды таңдау",
+  "@modeBlockedAppsChooseButton": {
+    "description": "Button label to choose apps to block."
+  },
+  "modeBlockedAppsSubtitle": "Бұғаттауды баптаңыз",
+  "@modeBlockedAppsSubtitle": {
+    "description": "Subtitle for blocked apps selector card."
+  },
+  "modeBlockedAppsSearchLabel": "Қолданбаларды іздеу",
+  "@modeBlockedAppsSearchLabel": {
+    "description": "Label for the app search input."
+  },
+  "modeBlockedAppsRequiredError": "Кем дегенде бір қолданба таңдаңыз",
+  "@modeBlockedAppsRequiredError": {
+    "description": "Error message shown when no apps are selected."
+  },
+  "modeBlockedAppsSelectedCountLabel": "Таңдалған қолданбалар: {count}",
+  "@modeBlockedAppsSelectedCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modeScheduleTitle": "Кесте (Міндетті емес)",
+  "@modeScheduleTitle": {
+    "description": "Title for schedule section on mode editor."
+  },
+  "modeScheduleStartTimeLabel": "Басталу уақыты",
+  "@modeScheduleStartTimeLabel": {
+    "description": "Label for schedule start time picker."
+  },
+  "modeScheduleEndTimeLabel": "Аяқталу уақыты",
+  "@modeScheduleEndTimeLabel": {
+    "description": "Label for schedule end time picker."
+  },
+  "modeScheduleDaysRequiredError": "Кем дегенде бір күн таңдаңыз",
+  "@modeScheduleDaysRequiredError": {
+    "description": "Error shown when schedule is enabled without selected days."
+  },
+  "modeStrictnessTitle": "Қаттылық деңгейі",
+  "@modeStrictnessTitle": {
+    "description": "Section title for strictness controls."
+  },
+  "modeAllowedPausesTitle": "Рұқсат етілген үзілістер",
+  "@modeAllowedPausesTitle": {
+    "description": "Title for allowed pauses control."
+  },
+  "modeAllowedPausesSubtitle": "Сеанс кезіндегі қысқа үзілістер",
+  "@modeAllowedPausesSubtitle": {
+    "description": "Subtitle for allowed pauses control."
+  },
+  "modeMinimumDurationTitle": "Ең аз ұзақтық",
+  "@modeMinimumDurationTitle": {
+    "description": "Title for optional minimum duration control."
+  },
+  "modeMinimumDurationSubtitle": "Міндетті емес. Сеансты осы уақыттан бұрын аяқтауға болмайды.",
+  "@modeMinimumDurationSubtitle": {
+    "description": "Subtitle for minimum duration control."
+  },
+  "modeMinimumDurationSetButton": "Ұзақтықты орнату",
+  "@modeMinimumDurationSetButton": {
+    "description": "Action button label to pick minimum duration."
+  },
+  "modeMinimumDurationClearButton": "Тазалау",
+  "@modeMinimumDurationClearButton": {
+    "description": "Action button label to clear minimum duration."
+  },
+  "modeMinimumDurationNotSet": "Орнатылмаған",
+  "@modeMinimumDurationNotSet": {
+    "description": "Label shown when minimum duration is empty."
+  },
+  "modeMinimumDurationValueMinutes": "{minutes} мин",
+  "@modeMinimumDurationValueMinutes": {
+    "description": "Label showing selected minimum duration in minutes.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "modeEndingPausingScenarioTitle": "Аяқтау / үзіліс сценарийі",
+  "@modeEndingPausingScenarioTitle": {
+    "description": "Title for ending/pausing scenario section."
+  },
+  "modeEndingPausingScenarioSubtitle": "Режимді қалай аяқтауға немесе үзуге болатынын таңдаңыз.",
+  "@modeEndingPausingScenarioSubtitle": {
+    "description": "Subtitle for ending/pausing scenario section."
+  },
+  "modeEndingPausingScenarioNfc": "NFC",
+  "@modeEndingPausingScenarioNfc": {
+    "description": "Scenario option label for NFC."
+  },
+  "modeEndingPausingScenarioQrCode": "QR",
+  "@modeEndingPausingScenarioQrCode": {
+    "description": "Scenario option label for QR code."
+  },
+  "modeEndingPausingScenarioManual": "Қолмен",
+  "@modeEndingPausingScenarioManual": {
+    "description": "Scenario option label for manual action."
+  },
+  "modeEndingPausingScenarioNfcDisabled": "NFC бұл құрылғыда қолданылмайды.",
+  "@modeEndingPausingScenarioNfcDisabled": {
+    "description": "Hint shown when NFC option is disabled."
+  },
+  "modeAllowedPausesOutOfRangeError": "Рұқсат етілген үзілістер {min} мен {max} арасында болуы тиіс",
+  "@modeAllowedPausesOutOfRangeError": {
+    "description": "Error shown when allowed pauses count is out of range.",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "modeDeleteFocusButton": "Фокус режимін жою",
+  "@modeDeleteFocusButton": {
+    "description": "Button label for deleting the edited mode."
+  },
+  "modeSaveButton": "Режимді сақтау",
+  "@modeSaveButton": {
+    "description": "Bottom call to action to save mode changes."
+  },
+  "modeRequiredFieldError": "Бұл өріс міндетті",
+  "@modeRequiredFieldError": {
+    "description": "Error message shown when a required field is empty."
+  },
+  "modeLoadFailedMessage": "Режим деректерін жүктеу мүмкін болмады",
+  "@modeLoadFailedMessage": {
+    "description": "Error message shown when mode data fails to load."
+  },
+  "modeSaveFailedMessage": "Режимді сақтау мүмкін болмады",
+  "@modeSaveFailedMessage": {
+    "description": "Error message shown when saving a mode fails."
+  },
+  "modeDeleteFailedMessage": "Режимді жою мүмкін болмады",
+  "@modeDeleteFailedMessage": {
+    "description": "Error message shown when deleting a mode fails."
+  },
+  "modeAppsLoadFailedMessage": "Қолданбаларды жүктеу мүмкін болмады",
+  "@modeAppsLoadFailedMessage": {
+    "description": "Error message shown when app list fails to load."
+  },
+  "saveButton": "Сақтау",
+  "@saveButton": {
+    "description": "Button label to save changes."
+  },
+  "selectAppsTitle": "Қолданбаларды таңдау",
+  "@selectAppsTitle": {
+    "description": "Title for the app selection sheet."
+  },
+  "selectAppsForPauzaTitle": "Pauza үшін қолданбаларды таңдау",
+  "@selectAppsForPauzaTitle": {
+    "description": "Title for the redesigned Android app selection sheet."
+  },
+  "doneButton": "Дайын",
+  "@doneButton": {
+    "description": "Label for the done button."
+  },
+  "selectButton": "Таңдау",
+  "@selectButton": {
+    "description": "Label for selecting apps and closing the bottom sheet."
+  },
+  "appsSelectedCountLabel": "{count} таңдалды",
+  "@appsSelectedCountLabel": {
+    "description": "Badge label showing how many apps are selected.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allAppsCategory": "Барлық қолданбалар",
+  "@allAppsCategory": {
+    "description": "Filter chip label that shows all app categories."
+  },
+  "selectAllButton": "Барлығын таңдау",
+  "@selectAllButton": {
+    "description": "Action to select every app in a category."
+  },
+  "deselectAllButton": "Барлығын алып тастау",
+  "@deselectAllButton": {
+    "description": "Action to deselect every app in a category."
+  },
+  "otherAppsCategory": "Басқа",
+  "@otherAppsCategory": {
+    "description": "Category label for apps with unknown category."
+  },
+  "homeGreeting": "{hour, select, 0{Қайырлы түн} 1{Қайырлы түн} 2{Қайырлы түн} 3{Қайырлы түн} 4{Қайырлы түн} 5{Қайырлы таң} 6{Қайырлы таң} 7{Қайырлы таң} 8{Қайырлы таң} 9{Қайырлы таң} 10{Қайырлы таң} 11{Қайырлы таң} 12{Қайырлы күн} 13{Қайырлы күн} 14{Қайырлы күн} 15{Қайырлы күн} 16{Қайырлы күн} 17{Қайырлы кеш} 18{Қайырлы кеш} 19{Қайырлы кеш} 20{Қайырлы кеш} 21{Қайырлы кеш} 22{Қайырлы түн} 23{Қайырлы түн} other{Қайырлы түн}}",
+  "@homeGreeting": {
+    "description": "Time-of-day greeting. Hour of day (0-23) in local time.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "homeDashboardTitle": "Pauza бақылау тақтасы",
+  "@homeDashboardTitle": {
+    "description": "Title for the home dashboard screen."
+  },
+  "homePauzaSessionLabel": "Pauza сеансы",
+  "@homePauzaSessionLabel": {
+    "description": "Label indicating an active Pauza session."
+  },
+  "homeSessionDurationLabel": "Сеанс ұзақтығы",
+  "@homeSessionDurationLabel": {
+    "description": "Label for the session duration display."
+  },
+  "homeQuickPauseLabel": "Жылдам үзіліс",
+  "@homeQuickPauseLabel": {
+    "description": "Label for the quick pause feature."
+  },
+  "homePauseBlockedByLimit": "Бұл сеанстағы үзіліс шегіне жетті.",
+  "@homePauseBlockedByLimit": {
+    "description": "Toast shown when pause request is rejected because session pause limit was reached."
+  },
+  "homeActionBlockedByMinimumDuration": "Әрекет қолжетімді емес. {remaining} кейін қайталаңыз.",
+  "@homeActionBlockedByMinimumDuration": {
+    "description": "Toast shown when pause or stop is blocked by minimum duration.",
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "homeActionBlockedModeUnavailable": "Режим деректері қолжетімді емес. Синхрондап, қайталаңыз.",
+  "@homeActionBlockedModeUnavailable": {
+    "description": "Toast shown when active mode configuration cannot be resolved for validation."
+  },
+  "homeActionScenarioProofRequired": "Бұл әрекет үшін сканерлеу қажет.",
+  "@homeActionScenarioProofRequired": {
+    "description": "Toast shown when stop or pause requires NFC or QR proof."
+  },
+  "homeActionNfcMissingIdentifier": "Бұл NFC тегін пайдалану мүмкін емес, себебі онда идентификатор жоқ.",
+  "@homeActionNfcMissingIdentifier": {
+    "description": "Toast shown when scanned NFC tag does not include a stable identifier."
+  },
+  "homeActionNfcNotLinked": "Бұл NFC тегі байланыстырылмаған. Жалғастыру үшін байланыстырылған тегді пайдаланыңыз.",
+  "@homeActionNfcNotLinked": {
+    "description": "Toast shown when scanned NFC tag is not linked in settings."
+  },
+  "homeActionQrInvalid": "Жарамсыз QR код. Байланыстырылған Pauza QR кодын сканерлеп көріңіз.",
+  "@homeActionQrInvalid": {
+    "description": "Toast shown when scanned QR payload is malformed or unsupported."
+  },
+  "homeActionQrNotLinked": "Бұл QR код байланыстырылмаған. Жалғастыру үшін байланыстырылған кодты пайдаланыңыз.",
+  "@homeActionQrNotLinked": {
+    "description": "Toast shown when scanned QR code is valid but not linked in settings."
+  },
+  "homeActionStartNfcConfigRequired": "Бұл сеансты бастау үшін Параметрлерде кем дегенде бір NFC тегін байланыстырыңыз.",
+  "@homeActionStartNfcConfigRequired": {
+    "description": "Toast shown when starting a session that requires NFC scenario but no linked NFC tags are configured."
+  },
+  "homeActionStartQrConfigRequired": "Бұл сеансты бастау үшін Параметрлерде кем дегенде бір QR кодын байланыстырыңыз.",
+  "@homeActionStartQrConfigRequired": {
+    "description": "Toast shown when starting a session that requires QR scenario but no linked QR codes are configured."
+  },
+  "pausedTitle": "Үзіліс",
+  "@pausedTitle": {
+    "description": "Title for the paused session."
+  },
+  "reminaingLabel": "Қалды",
+  "@reminaingLabel": {
+    "description": "Label for the remaining time."
+  },
+  "pausedTakeABreathLabel": "Дем алыңыз",
+  "@pausedTakeABreathLabel": {
+    "description": "Label for the take a breath button."
+  },
+  "pauseDurationMinutes": "{minutes}м",
+  "@pauseDurationMinutes": {
+    "description": "Quick pause duration in minutes with 'm' suffix",
+    "placeholders": {
+      "minutes": {
+        "type": "num"
+      }
+    }
+  },
+  "homeResumeButtonLabel": "Жалғастыру",
+  "@homeResumeButtonLabel": {
+    "description": "Label for the resume button."
+  },
+  "homeCurrentModeLabel": "Ағымдағы режим",
+  "@homeCurrentModeLabel": {
+    "description": "Label indicating the currently active mode."
+  },
+  "homeDayStreakLabel": "{count} күндік серия",
+  "@homeDayStreakLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeDurationHoursMinutesLabel": "{hours}с {minutes}м",
+  "@homeDurationHoursMinutesLabel": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceUsage": "Құрылғы пайдалануы",
+  "@deviceUsage": {
+    "description": "Title for device usage statistics section."
+  },
+  "usageStatsTab": "Пайдалану статистикасы",
+  "@usageStatsTab": {
+    "description": "Tab label for usage statistics."
+  },
+  "blockingStatsTab": "Бұғаттау статистикасы",
+  "@blockingStatsTab": {
+    "description": "Tab label for blocking statistics."
+  },
+  "thisWeek": "Осы апта",
+  "@thisWeek": {
+    "description": "Label for current week time period."
+  },
+  "totalTime": "Жалпы уақыт",
+  "@totalTime": {
+    "description": "Label for total time display."
+  },
+  "usageTrend": "Пайдалану үрдісі",
+  "@usageTrend": {
+    "description": "Label for usage trend indicator."
+  },
+  "statsDailyAverage": "Күнделікті орташа",
+  "@statsDailyAverage": {
+    "description": "Label for daily average usage statistic."
+  },
+  "statsBucketSocial": "Әлеуметтік желі",
+  "@statsBucketSocial": {
+    "description": "Category label for social media apps."
+  },
+  "statsBucketProductivity": "Өнімділік",
+  "@statsBucketProductivity": {
+    "description": "Category label for productivity apps."
+  },
+  "statsBucketOther": "Басқа",
+  "@statsBucketOther": {
+    "description": "Category label for other uncategorized apps."
+  },
+  "statsAppUsage": "Қолданба пайдалануы",
+  "@statsAppUsage": {
+    "description": "Title for app usage statistics section."
+  },
+  "statsUsageTableAppColumn": "Қолданба",
+  "@statsUsageTableAppColumn": {
+    "description": "Column header for app name in usage table."
+  },
+  "statsUsageTableUsageColumn": "Пайдалану",
+  "@statsUsageTableUsageColumn": {
+    "description": "Column header for usage time in usage table."
+  },
+  "statsUsageTableLaunchesColumn": "Іске қосу",
+  "@statsUsageTableLaunchesColumn": {
+    "description": "Column header for app launch count in usage table."
+  },
+  "statsUsageTableLastUsedColumn": "Соңғы пайдалану",
+  "@statsUsageTableLastUsedColumn": {
+    "description": "Column header for last used time in usage table."
+  },
+  "statsDeltaVsLastPeriod": "{value} алдыңғы кезеңге қарағанда",
+  "@statsDeltaVsLastPeriod": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsPermissionRequiredTitle": "Пайдалану рұқсаты қажет",
+  "@statsPermissionRequiredTitle": {
+    "description": "Title for usage permission required dialog."
+  },
+  "statsPermissionRequiredBody": "Android пайдалану статистикасын көру үшін пайдалану деректеріне қол жеткізуге рұқсат беріңіз.",
+  "@statsPermissionRequiredBody": {
+    "description": "Body text for usage permission required dialog."
+  },
+  "statsLoadFailed": "Пайдалану статистикасын жүктеу сәтсіз аяқталды.",
+  "@statsLoadFailed": {
+    "description": "Error message when stats fail to load."
+  },
+  "statsNoUsageData": "Таңдалған кезең үшін пайдалану деректері жоқ.",
+  "@statsNoUsageData": {
+    "description": "Message shown when no usage data is available."
+  },
+  "statsIosScreenTimeReport": "Экран уақыты есебі",
+  "@statsIosScreenTimeReport": {
+    "description": "Section header for the iOS Screen Time report card."
+  },
+  "statsIosReportUnavailableTitle": "iOS есебі қолжетімді емес",
+  "@statsIosReportUnavailableTitle": {
+    "description": "Title for iOS report unavailable message."
+  },
+  "statsIosReportUnavailableBody": "Экран уақыты рұқсаты мен Құрылғы белсенділігі есебі кеңейтімінің баптанғанын тексеріңіз.",
+  "@statsIosReportUnavailableBody": {
+    "description": "Body text for iOS report unavailable message."
+  },
+  "statsDeviceInsights": "Құрылғы деректемелері",
+  "@statsDeviceInsights": {
+    "description": "Title for device interaction insights card."
+  },
+  "statsUnlockCount": "Бекітпені ашу саны",
+  "@statsUnlockCount": {
+    "description": "Metric label for total unlock count."
+  },
+  "statsUnlocksPerDay": "Күніне ашу саны",
+  "@statsUnlocksPerDay": {
+    "description": "Metric label for average unlocks per day."
+  },
+  "statsPickupCount": "Алу саны",
+  "@statsPickupCount": {
+    "description": "Metric label for pickup count."
+  },
+  "statsAvgScreenOnSession": "Орт. экран қосу сеансы",
+  "@statsAvgScreenOnSession": {
+    "description": "Metric label for average screen-on session duration."
+  },
+  "statsScreenOnDuration": "Экран қосулы",
+  "@statsScreenOnDuration": {
+    "description": "Label for total screen-on duration."
+  },
+  "statsUnlockedDuration": "Бекітпесіз",
+  "@statsUnlockedDuration": {
+    "description": "Label for total unlocked duration."
+  },
+  "statsScreenOnVsUnlocked": "Экран қосулы — бекітпесіз",
+  "@statsScreenOnVsUnlocked": {
+    "description": "Label for screen-on versus unlocked comparison bar."
+  },
+  "statsHourlyHeatmap": "Сағаттық жылу картасы",
+  "@statsHourlyHeatmap": {
+    "description": "Title for hourly screen time heatmap card."
+  },
+  "statsHourlyHeatmapSubtitle": "Экран уақытының қарқындылығы сағат бойынша (00-23).",
+  "@statsHourlyHeatmapSubtitle": {
+    "description": "Subtitle explaining the hourly heatmap."
+  },
+  "statsHeatmapLegendLow": "Төмен",
+  "@statsHeatmapLegendLow": {
+    "description": "Low end label for heatmap legend."
+  },
+  "statsHeatmapLegendHigh": "Жоғары",
+  "@statsHeatmapLegendHigh": {
+    "description": "High end label for heatmap legend."
+  },
+  "statsTopEngagementApps": "Ең белсенді қолданбалар",
+  "@statsTopEngagementApps": {
+    "description": "Title for top engagement apps card."
+  },
+  "statsEngagementScore": "Ұпай",
+  "@statsEngagementScore": {
+    "description": "Label for engagement score."
+  },
+  "statsLaunchIntensity": "Іске қосу қарқындылығы",
+  "@statsLaunchIntensity": {
+    "description": "Label for launches per hour."
+  },
+  "statsAvgSession": "Орт. сеанс",
+  "@statsAvgSession": {
+    "description": "Label for average session duration."
+  },
+  "statsNoInsightData": "Таңдалған кезең үшін деректемелер жоқ.",
+  "@statsNoInsightData": {
+    "description": "Message shown when an insight section has no data."
+  },
+  "statsInsightLoadFailed": "Бұл деректемені жүктеу сәтсіз аяқталды.",
+  "@statsInsightLoadFailed": {
+    "description": "Error message when a specific insight section fails."
+  },
+  "statsDurationLessThanMinute": "<1м",
+  "@statsDurationLessThanMinute": {
+    "description": "Duration label for non-zero durations shorter than one minute."
+  },
+  "statsPerDayValue": "{value}/күн",
+  "@statsPerDayValue": {
+    "description": "Formats numeric per-day values.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsLaunchesPerHourValue": "{value}/с",
+  "@statsLaunchesPerHourValue": {
+    "description": "Formats launches-per-hour values.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsPercentValue": "{value}",
+  "@statsPercentValue": {
+    "description": "Formats percentage display values.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsHeatmapHourSemantics": "{hour} сағат, пайдалану {duration}",
+  "@statsHeatmapHourSemantics": {
+    "description": "Accessibility label for one heatmap hour cell.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "statsBlockingLoadFailed": "Бұғаттау статистикасын жүктеу сәтсіз аяқталды.",
+  "@statsBlockingLoadFailed": {
+    "description": "Error message when blocking stats fail to load."
+  },
+  "statsBlockingNoData": "Таңдалған кезең үшін бұғаттау деректері жоқ.",
+  "@statsBlockingNoData": {
+    "description": "Message shown when no blocking data is available."
+  },
+  "statsBlockingKpis": "Бұғаттау KPI",
+  "@statsBlockingKpis": {
+    "description": "Title for blocking KPI section."
+  },
+  "statsBlockingCurrentStreak": "Ағымдағы серия",
+  "@statsBlockingCurrentStreak": {
+    "description": "Metric label for current streak."
+  },
+  "statsBlockingLongestStreak": "Ең ұзақ серия",
+  "@statsBlockingLongestStreak": {
+    "description": "Metric label for longest streak."
+  },
+  "statsBlockingAvgSessionDuration": "Орт. шектеу сеансының ұзақтығы",
+  "@statsBlockingAvgSessionDuration": {
+    "description": "Metric label for average restriction session duration."
+  },
+  "statsBlockingLongestSessionDuration": "Ең ұзақ шектеу сеансы",
+  "@statsBlockingLongestSessionDuration": {
+    "description": "Metric label for longest restriction session duration."
+  },
+  "statsBlockingAvgPausesPerSession": "Сеансқа орт. үзіліс саны",
+  "@statsBlockingAvgPausesPerSession": {
+    "description": "Metric label for average pauses per session."
+  },
+  "statsBlockingAvgPauseDuration": "Орт. үзіліс ұзақтығы",
+  "@statsBlockingAvgPauseDuration": {
+    "description": "Metric label for average pause duration."
+  },
+  "statsBlockingOverview": "Кезең шолуы",
+  "@statsBlockingOverview": {
+    "description": "Title for range overview section."
+  },
+  "statsBlockingCompletedSessions": "Аяқталған сеанстар",
+  "@statsBlockingCompletedSessions": {
+    "description": "Metric label for completed sessions in selected range."
+  },
+  "statsBlockingEffectiveDuration": "Тиімді бұғатталды",
+  "@statsBlockingEffectiveDuration": {
+    "description": "Metric label for total effective blocked duration."
+  },
+  "statsBlockingPausedDuration": "Үзіліс",
+  "@statsBlockingPausedDuration": {
+    "description": "Metric label for total paused duration."
+  },
+  "statsBlockingDailyTrend": "Күнделікті тиімді бұғаттау",
+  "@statsBlockingDailyTrend": {
+    "description": "Title for daily effective blocking trend chart."
+  },
+  "statsBlockingPauseComposition": "Үзіліс құрамы",
+  "@statsBlockingPauseComposition": {
+    "description": "Title for pause composition donut chart."
+  },
+  "statsBlockingPerSessionValue": "{value}/сеанс",
+  "@statsBlockingPerSessionValue": {
+    "description": "Formats average pauses per session values.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsBlockingDaysValue": "{count} күн",
+  "@statsBlockingDaysValue": {
+    "description": "Formats streak values in days.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsBlockingSessionCountValue": "{count} сеанс",
+  "@statsBlockingSessionCountValue": {
+    "description": "Formats completed session count value.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsBlockingBySource": "Көз бойынша",
+  "@statsBlockingBySource": {
+    "description": "Section title for source breakdown chart."
+  },
+  "statsBlockingManualSource": "Қолмен",
+  "@statsBlockingManualSource": {
+    "description": "Legend label for manual session source."
+  },
+  "statsBlockingScheduledSource": "Кесте бойынша",
+  "@statsBlockingScheduledSource": {
+    "description": "Legend label for scheduled session source."
+  },
+  "statsBlockingByMode": "Режим бойынша",
+  "@statsBlockingByMode": {
+    "description": "Section title for mode breakdown section."
+  },
+  "statsEngagementRowSemantics": "{app}: ұпай {score}, іске қосу қарқындылығы {launchIntensity}",
+  "@statsEngagementRowSemantics": {
+    "description": "Accessibility label for one top engagement app row.",
+    "placeholders": {
+      "app": {
+        "type": "String"
+      },
+      "score": {
+        "type": "String"
+      },
+      "launchIntensity": {
+        "type": "String"
+      }
+    }
+  },
+  "authTagline": "Фокус және сауықтыру",
+  "@authTagline": {
+    "description": "Tagline displayed on authentication screens."
+  },
+  "authEmailAddress": "Электрондық пошта мекенжайы",
+  "@authEmailAddress": {
+    "description": "Label for email address input field."
+  },
+  "authEmailHint": "name@example.com",
+  "@authEmailHint": {
+    "description": "Hint text for email input field."
+  },
+  "authSendCode": "Код жіберу",
+  "@authSendCode": {
+    "description": "Button label for sending OTP verification code."
+  },
+  "authOtpTitle": "Электрондық поштаңызды растаңыз",
+  "@authOtpTitle": {
+    "description": "Title for OTP verification screen."
+  },
+  "authOtpSubtitlePrefix": "Электрондық пошта мекенжайыңызға жіберілген 6 санды кодты енгізіңіз ",
+  "@authOtpSubtitlePrefix": {
+    "description": "First part of OTP screen subtitle before email address."
+  },
+  "authOtpSubtitleSuffix": ".",
+  "@authOtpSubtitleSuffix": {
+    "description": "Second part of OTP screen subtitle after email address."
+  },
+  "authOtpVerifyButton": "Растау",
+  "@authOtpVerifyButton": {
+    "description": "Button label for OTP verification."
+  },
+  "authOtpDidNotReceiveCode": "Код келген жоқ па?",
+  "@authOtpDidNotReceiveCode": {
+    "description": "Prompt asking if user didn't receive OTP code."
+  },
+  "authOtpResendCode": "Кодты қайта жіберу",
+  "@authOtpResendCode": {
+    "description": "Button label to resend OTP code."
+  },
+  "authOtpAvailableInLabel": "{minutes}:{seconds} кейін қолжетімді",
+  "@authOtpAvailableInLabel": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "authValidationRequired": "Бұл өріс міндетті",
+  "@authValidationRequired": {
+    "description": "Validation error when required field is empty."
+  },
+  "authValidationInvalidEmail": "Жарамды электрондық пошта мекенжайын енгізіңіз",
+  "@authValidationInvalidEmail": {
+    "description": "Validation error for invalid email format."
+  },
+  "authFailureOtpMaxAttempts": "Тым көп әрекет. Жаңа код сұраңыз.",
+  "@authFailureOtpMaxAttempts": {
+    "description": "Error message when maximum OTP verification attempts are exceeded."
+  },
+  "authFailureCooldown": "Тым көп сұраулар. Бірнеше минуттан кейін қайталаңыз.",
+  "@authFailureCooldown": {
+    "description": "Error message when user is rate-limited and must wait before retrying."
+  },
+  "authFailureInvalidOtp": "Растау коды жарамсыз.",
+  "@authFailureInvalidOtp": {
+    "description": "Error message for invalid OTP code."
+  },
+  "authFailureOtpChallengeMissing": "Растау мерзімі өтіп кетті. Қайталаңыз.",
+  "@authFailureOtpChallengeMissing": {
+    "description": "Error when OTP challenge is missing or expired."
+  },
+  "authFailureStorage": "Қауіпсіз сақтауға қол жеткізу мүмкін болмады. Қайталаңыз.",
+  "@authFailureStorage": {
+    "description": "Error when secure storage is inaccessible."
+  },
+  "authFailureValidation": "Жарамсыз деректер. Тексеріп, қайталаңыз.",
+  "@authFailureValidation": {
+    "description": "Error when server rejects input due to validation (422)."
+  },
+  "authFailureRefreshFailed": "Сеансыңыздың мерзімі өтті. Қайтадан кіріңіз.",
+  "@authFailureRefreshFailed": {
+    "description": "Error when token refresh fails and the user must re-authenticate."
+  },
+  "authFailureNetwork": "Байланыс қатесі. Интернетті тексеріп, қайталаңыз.",
+  "@authFailureNetwork": {
+    "description": "Error for connectivity or server errors during authentication."
+  },
+  "authFailureUnknown": "Кіру мүмкін болмады. Қайталаңыз.",
+  "@authFailureUnknown": {
+    "description": "Generic authentication failure message."
+  },
+  "logoutDialogTitle": "Шығу керек пе?",
+  "@logoutDialogTitle": {
+    "description": "Title of the sign-out confirmation dialog."
+  },
+  "logoutDialogBody": "Синхрондалмаған деректер бұл құрылғыдан өшіріледі. Шықпас бұрын интернетке қосылғаныңызды тексеріңіз.",
+  "@logoutDialogBody": {
+    "description": "Body text of the sign-out confirmation dialog warning about unsynced data."
+  },
+  "logoutDialogConfirm": "Шығу",
+  "@logoutDialogConfirm": {
+    "description": "Destructive confirm button label in the sign-out dialog."
+  },
+  "leaderboardCurrentStreak": "Ағымдағы серия",
+  "@leaderboardCurrentStreak": {
+    "description": "Label for the current streak tab in leaderboard."
+  },
+  "leaderboardTotalFocus": "Жалпы фокус",
+  "@leaderboardTotalFocus": {
+    "description": "Label for the total focus time tab in leaderboard."
+  },
+  "leaderboardDaysCount": "{count} күн",
+  "@leaderboardDaysCount": {
+    "description": "Days count label in leaderboard.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderboardHoursCount": "{count}с",
+  "@leaderboardHoursCount": {
+    "description": "Hours count label in leaderboard.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderboardMinutesCount": "{count}м",
+  "@leaderboardMinutesCount": {
+    "description": "Minutes count label in leaderboard.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderboardEmptyTitle": "Рейтинг деректері жоқ",
+  "@leaderboardEmptyTitle": {
+    "description": "Empty state title for leaderboard."
+  },
+  "leaderboardErrorTitle": "Рейтингті жүктеу сәтсіз аяқталды",
+  "@leaderboardErrorTitle": {
+    "description": "Error state title for leaderboard."
+  },
+
+  "friendsTitle": "Достар",
+  "@friendsTitle": {
+    "description": "Title for the friends screen and navigation destination."
+  },
+  "friendsSearchHint": "Достарды іздеу...",
+  "@friendsSearchHint": {
+    "description": "Hint text for friends search field."
+  },
+  "friendsActiveStreaks": "БЕЛСЕНДІ СЕРИЯЛАР",
+  "@friendsActiveStreaks": {
+    "description": "Section header for active streaks."
+  },
+  "friendsOnlineCount": "{count} дос",
+  "@friendsOnlineCount": {
+    "description": "Count of friends.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsTodayLabel": "БҮГІН",
+  "@friendsTodayLabel": {
+    "description": "Label for today's focus time."
+  },
+  "friendsAllTimeLabel": "БАРЛЫҚ УАҚЫТ",
+  "@friendsAllTimeLabel": {
+    "description": "Label for all-time focus time."
+  },
+  "friendsTrendLabel": "7 КҮНДІК ҮРДІС",
+  "@friendsTrendLabel": {
+    "description": "Label for the 7-day activity trend."
+  },
+  "friendsStreakDays": "{count} күн",
+  "@friendsStreakDays": {
+    "description": "Streak days count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsLongestStreak": "Ең ұзақ: {count} күн",
+  "@friendsLongestStreak": {
+    "description": "Longest streak label.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsOfflineTitle": "Офлайн режимдесіз",
+  "@friendsOfflineTitle": {
+    "description": "Title shown when offline on friends screen."
+  },
+  "friendsOfflineMessage": "Достарыңызды көру үшін интернетке қосылыңыз.",
+  "@friendsOfflineMessage": {
+    "description": "Message shown when offline on friends screen."
+  },
+  "friendsRetryButton": "Қайталау",
+  "@friendsRetryButton": {
+    "description": "Retry button label for friends screen."
+  },
+  "friendsEmptyState": "Достар жоқ. Адамдарды табу үшін + басыңыз!",
+  "@friendsEmptyState": {
+    "description": "Empty state message when user has no friends."
+  },
+  "friendsErrorTitle": "Достарды жүктеу сәтсіз аяқталды",
+  "@friendsErrorTitle": {
+    "description": "Error state title for friends screen."
+  },
+
+  "findAndRequestsTitle": "Табу және өтінімдер",
+  "@findAndRequestsTitle": {
+    "description": "Title for the find and requests screen."
+  },
+  "findAndRequestsSearchHint": "Пайдаланушы атымен іздеу...",
+  "@findAndRequestsSearchHint": {
+    "description": "Hint text for user search field."
+  },
+  "findAndRequestsPendingRequests": "КҮТІЛЕТІН ӨТІНІМДЕР",
+  "@findAndRequestsPendingRequests": {
+    "description": "Section header for pending requests."
+  },
+  "findAndRequestsTotalBadge": "{count}",
+  "@findAndRequestsTotalBadge": {
+    "description": "Badge showing total pending request count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "findAndRequestsAccept": "Қабылдау",
+  "@findAndRequestsAccept": {
+    "description": "Accept friend request button label."
+  },
+  "findAndRequestsDecline": "Бас тарту",
+  "@findAndRequestsDecline": {
+    "description": "Decline friend request button label."
+  },
+  "findAndRequestsCancel": "Болдырмау",
+  "@findAndRequestsCancel": {
+    "description": "Cancel outgoing friend request button label."
+  },
+  "findAndRequestsSentAgo": "{timeAgo} жіберілді",
+  "@findAndRequestsSentAgo": {
+    "description": "Time label for outgoing requests.",
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsReceivedAgo": "{timeAgo} алынды",
+  "@findAndRequestsReceivedAgo": {
+    "description": "Time label for incoming requests.",
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsAddButton": "Қосу",
+  "@findAndRequestsAddButton": {
+    "description": "Add friend button label."
+  },
+  "findAndRequestsNoResults": "Пайдаланушылар табылмады",
+  "@findAndRequestsNoResults": {
+    "description": "Empty state when search returns no results."
+  },
+  "findAndRequestsErrorTitle": "Өтінімдерді жүктеу сәтсіз аяқталды",
+  "@findAndRequestsErrorTitle": {
+    "description": "Error state title for find and requests screen."
+  },
+  "findAndRequestsIncoming": "Кіріс",
+  "@findAndRequestsIncoming": {
+    "description": "Label for incoming requests."
+  },
+  "findAndRequestsOutgoing": "Шығыс",
+  "@findAndRequestsOutgoing": {
+    "description": "Label for outgoing requests."
+  },
+  "paywallTitle": "Премиум",
+  "@paywallTitle": {
+    "description": "Title for the paywall screen."
+  },
+  "paywallDescription": "Барлық мүмкіндіктерді ашып, Pauza-дан максимум пайда алыңыз.",
+  "@paywallDescription": {
+    "description": "Subtitle description on the paywall screen."
+  },
+  "paywallPurchaseButton": "{price} жазылу",
+  "@paywallPurchaseButton": {
+    "description": "Label for the purchase button on the paywall screen.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallRestoreButton": "Сатып алуды қалпына келтіру",
+  "@paywallRestoreButton": {
+    "description": "Label for the restore purchases button."
+  },
+  "paywallPurchasing": "Өңделуде…",
+  "@paywallPurchasing": {
+    "description": "Label shown while a purchase is in progress."
+  },
+  "paywallSuccessTitle": "Енді сіз Премиум пайдаланушысысыз!",
+  "@paywallSuccessTitle": {
+    "description": "Title shown after a successful purchase."
+  },
+  "paywallErrorGeneric": "Бірдеңе дұрыс болмады. Қайталаңыз.",
+  "@paywallErrorGeneric": {
+    "description": "Generic error message on the paywall screen."
+  },
+  "paywallOfflineMessage": "Офлайн режимдесіз. Жазылым жоспарларын көру үшін интернетке қосылыңыз.",
+  "@paywallOfflineMessage": {
+    "description": "Message shown on the paywall screen when the user is offline."
+  },
+  "premiumBadge": "Премиум",
+  "@premiumBadge": {
+    "description": "Badge label for premium users."
+  },
+  "premiumLockedMessage": "Бұл мүмкіндік Премиум жазылымын талап етеді.",
+  "@premiumLockedMessage": {
+    "description": "Message shown when a feature is locked behind premium."
+  },
+  "aiUsageAnalysis": "ЖИ пайдалану талдауы",
+  "@aiUsageAnalysis": {
+    "description": "Title for AI usage analysis section."
+  },
+  "aiUsageAnalysisCta": "Пайдалануымды талдау",
+  "@aiUsageAnalysisCta": {
+    "description": "CTA button for AI usage analysis."
+  },
+  "aiAddictionCheck": "Тәуелділік тексеруі",
+  "@aiAddictionCheck": {
+    "description": "Title for AI addiction check section."
+  },
+  "aiAddictionCheckCta": "Әдеттерімді тексеру",
+  "@aiAddictionCheckCta": {
+    "description": "CTA button for AI addiction check."
+  },
+  "aiFocusSchedule": "Фокус кестесі",
+  "@aiFocusSchedule": {
+    "description": "Title for AI focus schedule section."
+  },
+  "aiFocusScheduleCta": "Кесте ұсынысын алу",
+  "@aiFocusScheduleCta": {
+    "description": "CTA button for AI focus schedule."
+  },
+  "aiDailyReport": "Күнделікті ЖИ есебі",
+  "@aiDailyReport": {
+    "description": "Title for AI daily report section."
+  },
+  "aiDailyReportCta": "Бүгінгі есепті алу",
+  "@aiDailyReportCta": {
+    "description": "CTA button for AI daily report."
+  },
+  "aiErrorGeneric": "Бірдеңе дұрыс болмады. Қайталаңыз.",
+  "@aiErrorGeneric": {
+    "description": "Generic error for AI features."
+  },
+  "aiRetry": "Қайталау",
+  "@aiRetry": {
+    "description": "Retry button label for AI features."
+  },
+  "premiumUnlockButton": "Премиумды ашу",
+  "@premiumUnlockButton": {
+    "description": "CTA button label to unlock premium features."
+  },
+  "premiumUpgradeButton": "Жаңарту",
+  "@premiumUpgradeButton": {
+    "description": "Compact CTA button label to upgrade to premium."
+  },
+  "premiumFriendsDescription": "Дос қосыңыз және олардың жағдайын біліңіз.",
+  "@premiumFriendsDescription": {
+    "description": "Description shown on the friends premium locked view."
+  },
+  "subscriptionInfoTitle": "Жазылым",
+  "@subscriptionInfoTitle": {
+    "description": "Title for the subscription info screen."
+  },
+  "subscriptionInfoActiveStatus": "Белсенді",
+  "@subscriptionInfoActiveStatus": {
+    "description": "Label indicating the subscription is active."
+  },
+  "subscriptionInfoInactiveStatus": "Белсенді емес",
+  "@subscriptionInfoInactiveStatus": {
+    "description": "Label indicating the subscription is inactive or expired."
+  },
+  "subscriptionInfoExpiringSoonStatus": "Жақын арада аяқталады",
+  "@subscriptionInfoExpiringSoonStatus": {
+    "description": "Label indicating the subscription is expiring within 3 days."
+  },
+  "subscriptionInfoPlanLabel": "Жоспар",
+  "@subscriptionInfoPlanLabel": {
+    "description": "Section header label for the subscription plan."
+  },
+  "subscriptionInfoStatusLabel": "Күй",
+  "@subscriptionInfoStatusLabel": {
+    "description": "Label for the subscription status detail."
+  },
+  "subscriptionInfoRenewalDateLabel": "Жаңарту күні",
+  "@subscriptionInfoRenewalDateLabel": {
+    "description": "Label for the subscription renewal date detail."
+  },
+  "subscriptionInfoExpiryDateLabel": "Аяқталу күні",
+  "@subscriptionInfoExpiryDateLabel": {
+    "description": "Label for the subscription expiry date detail."
+  },
+  "subscriptionInfoSourceLabel": "Көз",
+  "@subscriptionInfoSourceLabel": {
+    "description": "Label for the subscription source detail."
+  },
+  "subscriptionInfoSourceRevenuecat": "App Store",
+  "@subscriptionInfoSourceRevenuecat": {
+    "description": "Display name for subscriptions sourced from RevenueCat (App Store/Play Store)."
+  },
+  "subscriptionInfoSourceAdminOverride": "Әкімші берді",
+  "@subscriptionInfoSourceAdminOverride": {
+    "description": "Display name for subscriptions granted via admin override."
+  },
+  "subscriptionInfoPremiumPlan": "Премиум",
+  "@subscriptionInfoPremiumPlan": {
+    "description": "Display name for the premium subscription plan."
+  },
+  "subscriptionInfoNoSubscription": "Белсенді жазылым жоқ",
+  "@subscriptionInfoNoSubscription": {
+    "description": "Text shown when the user has no subscription."
+  },
+  "subscriptionInfoGetPremium": "Премиум алу",
+  "@subscriptionInfoGetPremium": {
+    "description": "Button label to navigate to the paywall screen."
+  },
+  "subscriptionInfoRenewsOn": "{date} күні жаңарады",
+  "@subscriptionInfoRenewsOn": {
+    "description": "Label showing when the subscription renews.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "description": "The formatted renewal date."
+      }
+    }
+  },
+  "subscriptionInfoManageButton": "Жазылымды басқару",
+  "@subscriptionInfoManageButton": {
+    "description": "Button label to open platform subscription management."
+  },
+  "onboardingSlide1Title": "Pauza-ны бастаңыз",
+  "@onboardingSlide1Title": {
+    "description": "Title for the first onboarding slide."
+  },
+  "onboardingSlide1Body": "Алаңдататын қолданбаларды тоқтатып, экран уақытыңызды бақылауға алыңыз — бір сеанс сайын.",
+  "@onboardingSlide1Body": {
+    "description": "Body text for the first onboarding slide."
+  },
+  "onboardingSlide2Title": "Сіздің ережелеріңіз, сіздің режимдеріңіз",
+  "@onboardingSlide2Title": {
+    "description": "Title for the second onboarding slide."
+  },
+  "onboardingSlide2Body": "Жұмыс, оқу немесе ұйқы үшін бұғаттау режимдерін жасаңыз. Қолданбаларды таңдап, кесте орнатып, Pauza-ға қалғанын тапсырыңыз.",
+  "@onboardingSlide2Body": {
+    "description": "Body text for the second onboarding slide."
+  },
+  "onboardingSlide3Title": "Сериянызды өсіріңіз",
+  "@onboardingSlide3Title": {
+    "description": "Title for the third onboarding slide."
+  },
+  "onboardingSlide3Body": "Алаңдатусыз өткен әр күн есептеледі. Серияларыңызды бақылап, экран уақыты әдеттеріңіздің жақсаратынын байқаңыз.",
+  "@onboardingSlide3Body": {
+    "description": "Body text for the third onboarding slide."
+  },
+  "onboardingSlide4Title": "Әдеттеріңізді біліңіз",
+  "@onboardingSlide4Title": {
+    "description": "Title for the fourth onboarding slide."
+  },
+  "onboardingSlide4Body": "Экран уақыты мен қолданба пайдалануы туралы толық статистиканы қараңыз. ЖИ деректемелері мен жекелендірілген ұсыныстар алыңыз.",
+  "@onboardingSlide4Body": {
+    "description": "Body text for the fourth onboarding slide."
+  },
+  "onboardingSlide5Title": "Бірге жақсырақ",
+  "@onboardingSlide5Title": {
+    "description": "Title for the fifth onboarding slide."
+  },
+  "onboardingSlide5Body": "Рейтингке қосылып, өзіңіздің орыныңызды біліңіз. Достық бәсекелестік ынталандырады.",
+  "@onboardingSlide5Body": {
+    "description": "Body text for the fifth onboarding slide."
+  },
+  "onboardingSlide6Title": "Бір жанасумен ашу",
+  "@onboardingSlide6Title": {
+    "description": "Title for the sixth onboarding slide."
+  },
+  "onboardingSlide6Body": "Қолданбаларды физикалық ашу үшін NFC тегін немесе QR кодын байланыстырыңыз. Көзден жасырылса — ойдан кетеді.",
+  "@onboardingSlide6Body": {
+    "description": "Body text for the sixth onboarding slide."
+  },
+  "onboardingSkip": "Өткізіп жіберу",
+  "@onboardingSkip": {
+    "description": "Skip button label on the onboarding screen."
+  },
+  "onboardingNext": "Келесі",
+  "@onboardingNext": {
+    "description": "Next button label on the onboarding screen."
+  },
+  "onboardingGetStarted": "Бастау",
+  "@onboardingGetStarted": {
+    "description": "Get Started button label on the last onboarding slide."
+  },
+  "emergencyStopButton": "Авариялық тоқтату",
+  "@emergencyStopButton": {
+    "description": "Button label for emergency stop on active session screen."
+  },
+  "emergencyStopDialogTitle": "Авариялық тоқтату",
+  "@emergencyStopDialogTitle": {
+    "description": "Title for the emergency stop confirmation dialog."
+  },
+  "emergencyStopDialogBody": "Бұл {remaining} қалған авариялық тоқтатудың 1-ін пайдаланады. Бұл әрекетті кері қайтару мүмкін емес.",
+  "@emergencyStopDialogBody": {
+    "description": "Body text for emergency stop confirmation dialog.",
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "emergencyStopDialogConfirm": "Авариялық тоқтатуды пайдалану",
+  "@emergencyStopDialogConfirm": {
+    "description": "Confirm button label in the emergency stop dialog."
+  },
+  "emergencyStopInternetRequired": "Авариялық тоқтатуды пайдалану үшін интернет байланысы қажет.",
+  "@emergencyStopInternetRequired": {
+    "description": "Error message when user tries emergency stop without internet."
+  },
+  "emergencyStopNoneRemaining": "Авариялық тоқтатулар қалмады.",
+  "@emergencyStopNoneRemaining": {
+    "description": "Error message when user has used all emergency stops."
+  },
+  "timeAgoDays": "{count}к бұрын",
+  "@timeAgoDays": {
+    "description": "Time ago label in days, e.g. '3d ago'.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "timeAgoHours": "{count}с бұрын",
+  "@timeAgoHours": {
+    "description": "Time ago label in hours, e.g. '5h ago'.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "timeAgoMinutes": "{count}м бұрын",
+  "@timeAgoMinutes": {
+    "description": "Time ago label in minutes, e.g. '20m ago'.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "timeAgoJustNow": "дәл қазір",
+  "@timeAgoJustNow": {
+    "description": "Time ago label when the event just happened."
+  },
+  "durationHoursMinutes": "{hours}с {minutes}м",
+  "@durationHoursMinutes": {
+    "description": "Duration formatted as hours and minutes, e.g. '1h 30m'.",
+    "placeholders": {
+      "hours": {"type": "int"},
+      "minutes": {"type": "int"}
+    }
+  },
+  "durationMinutes": "{minutes}м",
+  "@durationMinutes": {
+    "description": "Duration formatted as minutes only, e.g. '45m'.",
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "errorWithDetails": "{title}: {details}",
+  "@errorWithDetails": {
+    "description": "Error message combining a title and detail string.",
+    "placeholders": {
+      "title": {"type": "String"},
+      "details": {"type": "String"}
+    }
+  }
+}

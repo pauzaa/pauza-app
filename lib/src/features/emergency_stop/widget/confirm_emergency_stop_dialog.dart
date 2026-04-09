@@ -21,10 +21,7 @@ class ConfirmEmergencyStopDialog extends StatelessWidget {
       title: Text(l10n.emergencyStopDialogTitle),
       content: Text(l10n.emergencyStopDialogBody(remainingStops)),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(l10n.cancelButton),
-        ),
+        TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(l10n.cancelButton)),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(true),
           style: FilledButton.styleFrom(

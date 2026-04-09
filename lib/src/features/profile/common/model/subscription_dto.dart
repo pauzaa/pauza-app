@@ -3,12 +3,7 @@ import 'package:pauza/src/features/profile/common/model/subscription_source.dart
 
 @immutable
 final class SubscriptionDto {
-  const SubscriptionDto({
-    required this.entitlement,
-    required this.isActive,
-    this.currentPeriodEnd,
-    this.source,
-  });
+  const SubscriptionDto({required this.entitlement, required this.isActive, this.currentPeriodEnd, this.source});
 
   factory SubscriptionDto.fromJson(Map<String, Object?> json) {
     DateTime? periodEnd;

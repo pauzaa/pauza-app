@@ -21,6 +21,7 @@ class PauzaApp extends StatefulWidget {
     const Locale('uz'): 'O\'zbek',
     const Locale.fromSubtags(languageCode: 'uz', scriptCode: 'Cyrl'): 'Ўзбекча',
     const Locale('ru'): 'Русский',
+    const Locale('kk'): 'Қазақша',
   };
 
   @override

@@ -34,9 +34,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
   void _ensureBloc() {
     if (_bloc != null) return;
-    _bloc = PaywallBloc(
-      subscriptionRepository: _dependencies.subscriptionRepository,
-    )..add(const PaywallStarted());
+    _bloc = PaywallBloc(subscriptionRepository: _dependencies.subscriptionRepository)..add(const PaywallStarted());
   }
 
   @override

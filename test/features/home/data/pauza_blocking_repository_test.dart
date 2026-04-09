@@ -46,7 +46,11 @@ void main() {
       await repository.startBlocking(mode: mode, shield: null);
       await repository.pauseBlocking(const Duration(minutes: 1), mode: mode, restrictionState: restrictionState);
       await repository.resumeBlocking();
-      await repository.stopBlocking(mode: mode, restrictionState: restrictionState, reason: RestrictionLifecycleReason.manual);
+      await repository.stopBlocking(
+        mode: mode,
+        restrictionState: restrictionState,
+        reason: RestrictionLifecycleReason.manual,
+      );
       await Future<void>.delayed(const Duration(milliseconds: 10));
 
       expect(emittedActions, <RestrictionLifecycleAction>[
@@ -129,7 +133,11 @@ void main() {
       );
 
       await expectLater(
-        () => repository.stopBlocking(mode: mode, restrictionState: restrictionState, reason: RestrictionLifecycleReason.manual),
+        () => repository.stopBlocking(
+          mode: mode,
+          restrictionState: restrictionState,
+          reason: RestrictionLifecycleReason.manual,
+        ),
         throwsA(
           isA<MinimumDurationNotReachedError>().having(
             (error) => error.remaining,
@@ -172,7 +180,11 @@ void main() {
         startedAt: DateTime.now().toUtc().subtract(const Duration(minutes: 11)),
       );
 
-      await repository.stopBlocking(mode: mode, restrictionState: restrictionState, reason: RestrictionLifecycleReason.manual);
+      await repository.stopBlocking(
+        mode: mode,
+        restrictionState: restrictionState,
+        reason: RestrictionLifecycleReason.manual,
+      );
 
       expect(restrictions.endCalls, 1);
       repository.dispose();

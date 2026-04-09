@@ -32,36 +32,12 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
   List<({String assetPath, String title, String body})> _slides(BuildContext context) {
     final l10n = context.l10n;
     return [
-      (
-        assetPath: PauzaAssets.onboardingFocus,
-        title: l10n.onboardingSlide1Title,
-        body: l10n.onboardingSlide1Body,
-      ),
-      (
-        assetPath: PauzaAssets.onboardingModes,
-        title: l10n.onboardingSlide2Title,
-        body: l10n.onboardingSlide2Body,
-      ),
-      (
-        assetPath: PauzaAssets.onboardingStreaks,
-        title: l10n.onboardingSlide3Title,
-        body: l10n.onboardingSlide3Body,
-      ),
-      (
-        assetPath: PauzaAssets.onboardingStats,
-        title: l10n.onboardingSlide4Title,
-        body: l10n.onboardingSlide4Body,
-      ),
-      (
-        assetPath: PauzaAssets.onboardingSocial,
-        title: l10n.onboardingSlide5Title,
-        body: l10n.onboardingSlide5Body,
-      ),
-      (
-        assetPath: PauzaAssets.onboardingUnlock,
-        title: l10n.onboardingSlide6Title,
-        body: l10n.onboardingSlide6Body,
-      ),
+      (assetPath: PauzaAssets.onboardingFocus, title: l10n.onboardingSlide1Title, body: l10n.onboardingSlide1Body),
+      (assetPath: PauzaAssets.onboardingModes, title: l10n.onboardingSlide2Title, body: l10n.onboardingSlide2Body),
+      (assetPath: PauzaAssets.onboardingStreaks, title: l10n.onboardingSlide3Title, body: l10n.onboardingSlide3Body),
+      (assetPath: PauzaAssets.onboardingStats, title: l10n.onboardingSlide4Title, body: l10n.onboardingSlide4Body),
+      (assetPath: PauzaAssets.onboardingSocial, title: l10n.onboardingSlide5Title, body: l10n.onboardingSlide5Body),
+      (assetPath: PauzaAssets.onboardingUnlock, title: l10n.onboardingSlide6Title, body: l10n.onboardingSlide6Body),
     ];
   }
 

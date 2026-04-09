@@ -84,5 +84,4 @@ class PendingRequestCard extends StatelessWidget {
       ),
     );
   }
-
 }

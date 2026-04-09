@@ -58,9 +58,7 @@ class ProfileScreen extends StatelessWidget {
                       child: ProfileActionCard(
                         icon: Icons.workspace_premium_rounded,
                         title: l10n.paywallTitle,
-                        onTap: () => isSubscribed
-                            ? SubscriptionInfoScreen.show(context)
-                            : PaywallScreen.show(context),
+                        onTap: () => isSubscribed ? SubscriptionInfoScreen.show(context) : PaywallScreen.show(context),
                       ),
                     ),
                   ],

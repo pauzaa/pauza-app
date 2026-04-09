@@ -64,9 +64,7 @@ class _AiAnalysisCard extends StatelessWidget {
       child: MarkdownBody(
         data: analysis,
         selectable: true,
-        styleSheet: MarkdownStyleSheet.fromTheme(theme).copyWith(
-          p: theme.textTheme.bodyMedium,
-        ),
+        styleSheet: MarkdownStyleSheet.fromTheme(theme).copyWith(p: theme.textTheme.bodyMedium),
       ),
     );
   }

@@ -30,10 +30,25 @@
   "settingsTitle": "Sozlamalar",
   "settingsGeneralSectionTitle": "Umumiy",
   "settingsNotifications": "Bildirishnomalar",
+  "settingsLeaderboardVisibility": "Reyting ko'rinishi",
+  "settingsPrivacySectionTitle": "Maxfiylik",
+  "settingsSessionEndingConfSectionTitle": "Sessiyani yakunlash",
+  "scanNfcChipTitle": "NFC tegni skanerlash",
+  "readyToScanNfcTag": "Skanerlashga tayyor",
+  "scanNfcTagActionLabel": "NFC tegingizni skaner qiling.",
   "settingsLanguage": "Til",
   "settingsLanguagePickerTitle": "Tilni tanlang",
   "settingsNfcChipConfiguring": "NFC chipini sozlash",
   "settingsQrCodeConfiguring": "QR kodni sozlash",
+  "nfcChipConfigTitle": "NFC tegni sozlash",
+  "nfcChipConfigBody": "Pauza bilan NFC tegni ulash uchun uni skaner qiling. Fokus sessiyalarini yakunlash uchun ushbu teg kerak bo'ladi.",
+  "nfcChipConfigLinkButton": "NFC tegni ulash",
+  "nfcChipConfigScanningButton": "Skanerlanyapti...",
+  "nfcChipConfigLinkedSuccess": "NFC teg muvaffaqiyatli ulandi.",
+  "nfcChipConfigAlreadyLinked": "Bu NFC teg allaqachon ulangan.",
+  "nfcChipHoldCardNearDevice": "NFC tegni skanerlash uchun qurilmangizni unga yaqin tuting",
+  "nfcChipConfigUidMissingError": "Bu NFC tegni ulab bo'lmaydi, chunki unda identifikator mavjud emas.",
+  "nfcChipConfigScanFailed": "NFC tegni ulab bo'lmadi. Qayta urinib ko'ring.",
   "nfcChipConfigTagsTitle": "NFC teglaringiz",
   "nfcChipConfigTagsBody": "Ulangan NFC teglarni boshqaring. Bu teglar fokus sessiyalarini yakunlash uchun jismoniy kalit hisoblanadi.",
   "nfcChipConfigLinkNewTagButton": "Yangi teg ulash",
@@ -53,6 +68,15 @@
   "nfcChipConfigRenameSaveButton": "Saqlash",
   "nfcChipConfigNoTagsTitle": "Hali ulangan teglar yo'q",
   "nfcChipConfigNoTagsBody": "Fokus sessiyalarini boshqarish uchun birinchi NFC tegni ulang.",
+  "nfcOpenSettingsButton": "Sozlamalarni ochish",
+  "nfcGuidanceAvailableTitle": "NFC tayyor",
+  "nfcGuidanceAvailableBody": "Qurilmangiz NFC teglarni skanerlashga tayyor.",
+  "nfcGuidanceDisabledTitle": "NFC ni yoqing",
+  "nfcGuidanceDisabledBody": "Bu qurilmada NFC o'chirib qo'yilgan. Davom etish uchun tizim sozlamalarida yoqing.",
+  "nfcGuidanceNotSupportedTitle": "NFC qo'llab-quvvatlanmaydi",
+  "nfcGuidanceNotSupportedBody": "Bu qurilma NFC skanerlashni qo'llab-quvvatlamaydi.",
+  "nfcGuidanceUnknownTitle": "NFC holati noma'lum",
+  "nfcGuidanceUnknownBody": "Hozirda NFC mavjudligini aniqlab bo'lmadi. Bir ozdan keyin qayta urinib ko'ring.",
   "qrCodeConfigTagsTitle": "Your QR Codes",
   "qrCodeConfigTagsBody": "Manage your linked QR codes. Open any code to preview and use it for focus session unlocking.",
   "qrCodeConfigGenerateNewCodeButton": "Generate New QR",
@@ -183,6 +207,22 @@
   "modeTitleFieldLabel": "Nomi",
   "modeTextOnScreenFieldLabel": "Bloklash ekranidagi matn",
   "modeDescriptionFieldLabel": "Tavsif",
+  "modeIconSectionTitle": "Belgi",
+  "modeIconChooseButton": "Belgi tanlash",
+  "modeIconPickerTitle": "Belgi tanlang",
+  "modeIconPickerSubtitle": "Bu rejim uchun bitta belgi tanlang",
+  "modeIconLabelTune": "Sozlash",
+  "modeIconLabelPsychology": "Aql",
+  "modeIconLabelTimer": "Taymer",
+  "modeIconLabelBolt": "Chaqmoq",
+  "modeIconLabelRocketLaunch": "Raketa",
+  "modeIconLabelSelfImprovement": "Tinchlik",
+  "modeIconLabelFitnessCenter": "Sport",
+  "modeIconLabelSchool": "Maktab",
+  "modeIconLabelWork": "Ish",
+  "modeIconLabelMenuBook": "O'qish",
+  "modeIconLabelMusicNote": "Musiqa",
+  "modeIconLabelNightlight": "Kecha",
   "modeEnabledLabel": "Yoqilgan",
   "modeBlockedAppsSectionTitle": "Bloklanadigan ilovalar",
   "modeBlockedAppsChooseButton": "Ilovalarni tanlash",
@@ -242,6 +282,8 @@
   "modeDeleteFailedMessage": "Rejimni o'chirib bo'lmadi",
   "modeAppsLoadFailedMessage": "Ilovalarni yuklab bo'lmadi",
   "saveButton": "Saqlash",
+  "selectAppsTitle": "Ilovalarni tanlash",
+  "doneButton": "Tayyor",
   "selectAppsForPauzaTitle": "Pauza uchun ilovalarni tanlang",
   "selectButton": "Tanlash",
   "appsSelectedCountLabel": "{count} ta tanlandi",
@@ -267,6 +309,8 @@
   },
   "homeDashboardTitle": "Pauza Dashboard",
   "homePauzaSessionLabel": "Pauza Session",
+  "homeSessionDurationLabel": "Sessiya davomiyligi",
+  "homeQuickPauseLabel": "Tezkor tanaffus",
   "homeCurrentModeLabel": "Joriy rejim",
   "homeDayStreakLabel": "{count} kunlik seriya",
   "@homeDayStreakLabel": {
@@ -304,6 +348,18 @@
   "homeActionQrNotLinked": "Bu QR kod ulanmagan. Davom etish uchun ulangan koddan foydalaning.",
   "homeActionStartNfcConfigRequired": "Bu sessiyani boshlash uchun Sozlamalarda kamida bitta NFC tegni ulang.",
   "homeActionStartQrConfigRequired": "Bu sessiyani boshlash uchun Sozlamalarda kamida bitta QR kodni ulang.",
+  "pausedTitle": "To'xtatildi",
+  "reminaingLabel": "Qoldi",
+  "pausedTakeABreathLabel": "Nafas oling",
+  "pauseDurationMinutes": "{minutes}d",
+  "@pauseDurationMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "num"
+      }
+    }
+  },
+  "homeResumeButtonLabel": "Davom etish",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",
@@ -331,6 +387,118 @@
   "statsPermissionRequiredBody": "Allow Usage Access to view Android usage statistics.",
   "statsLoadFailed": "Failed to load usage statistics.",
   "statsNoUsageData": "No usage data for the selected period.",
+  "statsIosScreenTimeReport": "Ekran vaqti hisoboti",
+  "statsDeviceInsights": "Qurilma tahlili",
+  "statsUnlockCount": "Qulfdan chiqarish soni",
+  "statsUnlocksPerDay": "Kuniga qulfdan chiqarish",
+  "statsPickupCount": "Ko'tarish soni",
+  "statsAvgScreenOnSession": "O'rtacha ekran sessiyasi",
+  "statsScreenOnDuration": "Ekran yoniq vaqt",
+  "statsUnlockedDuration": "Qulfsiz vaqt",
+  "statsScreenOnVsUnlocked": "Ekran yoniq va qulfsiz",
+  "statsHourlyHeatmap": "Soatlik issiqlik xaritasi",
+  "statsHourlyHeatmapSubtitle": "Soatlar bo'yicha ekran vaqti zichligi (00-23).",
+  "statsHeatmapLegendLow": "Past",
+  "statsHeatmapLegendHigh": "Yuqori",
+  "statsTopEngagementApps": "Eng ko'p ishlatiladigan ilovalar",
+  "statsEngagementScore": "Ball",
+  "statsLaunchIntensity": "Ishga tushirish intensivligi",
+  "statsAvgSession": "O'rtacha sessiya",
+  "statsNoInsightData": "Tanlangan davr uchun tahlil ma'lumotlari yo'q.",
+  "statsInsightLoadFailed": "Bu tahlilni yuklab bo'lmadi.",
+  "statsDurationLessThanMinute": "<1daq",
+  "statsPerDayValue": "{value}/kun",
+  "@statsPerDayValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsLaunchesPerHourValue": "{value}/s",
+  "@statsLaunchesPerHourValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsPercentValue": "{value}",
+  "@statsPercentValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsHeatmapHourSemantics": "{hour}-soat, foydalanish {duration}",
+  "@statsHeatmapHourSemantics": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "statsBlockingLoadFailed": "Bloklash statistikasini yuklab bo'lmadi.",
+  "statsBlockingNoData": "Tanlangan davr uchun bloklash ma'lumotlari yo'q.",
+  "statsBlockingKpis": "Bloklash ko'rsatkichlari",
+  "statsBlockingCurrentStreak": "Joriy seriya",
+  "statsBlockingLongestStreak": "Eng uzun seriya",
+  "statsBlockingAvgSessionDuration": "O'rtacha cheklash sessiyasi davomiyligi",
+  "statsBlockingLongestSessionDuration": "Eng uzun cheklash sessiyasi davomiyligi",
+  "statsBlockingAvgPausesPerSession": "Sessiyaga o'rtacha tanaffuslar",
+  "statsBlockingAvgPauseDuration": "O'rtacha tanaffus davomiyligi",
+  "statsBlockingOverview": "Davr ko'rinishi",
+  "statsBlockingCompletedSessions": "Yakunlangan sessiyalar",
+  "statsBlockingEffectiveDuration": "Samarali bloklash",
+  "statsBlockingPausedDuration": "To'xtatilgan",
+  "statsBlockingDailyTrend": "Kunlik samarali bloklash",
+  "statsBlockingPauseComposition": "Tanaffus tarkibi",
+  "statsBlockingPerSessionValue": "{value}/sessiya",
+  "@statsBlockingPerSessionValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsBlockingDaysValue": "{count} kun",
+  "@statsBlockingDaysValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsBlockingSessionCountValue": "{count} sessiya",
+  "@statsBlockingSessionCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsBlockingBySource": "Manba bo'yicha",
+  "statsBlockingManualSource": "Qo'lda",
+  "statsBlockingScheduledSource": "Jadval bo'yicha",
+  "statsBlockingByMode": "Rejim bo'yicha",
+  "statsEngagementRowSemantics": "{app}: ball {score}, ishga tushirish intensivligi {launchIntensity}",
+  "@statsEngagementRowSemantics": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      },
+      "score": {
+        "type": "String"
+      },
+      "launchIntensity": {
+        "type": "String"
+      }
+    }
+  },
   "statsIosReportUnavailableTitle": "iOS report unavailable",
   "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured.",
   "authTagline": "Diqqat va farovonlik",
@@ -375,6 +543,76 @@
   "leaderboardMinutesCount": "{count}d",
   "leaderboardEmptyTitle": "Reyting ma'lumotlari hali yo'q",
   "leaderboardErrorTitle": "Reytingni yuklab bo'lmadi",
+  "friendsTitle": "Do'stlar",
+  "friendsSearchHint": "Do'stlarni qidirish...",
+  "friendsActiveStreaks": "FAOL SERIYALAR",
+  "friendsOnlineCount": "{count} ta do'st",
+  "@friendsOnlineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsTodayLabel": "BUGUN",
+  "friendsAllTimeLabel": "BARCHA VAQT",
+  "friendsTrendLabel": "7 KUNLIK TREND",
+  "friendsStreakDays": "{count} kun",
+  "@friendsStreakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsLongestStreak": "Eng uzun: {count} kun",
+  "@friendsLongestStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsOfflineTitle": "Siz oflayn holatdasiz",
+  "friendsOfflineMessage": "Do'stlaringizni ko'rish uchun internetga ulaning.",
+  "friendsRetryButton": "Qayta urinish",
+  "friendsEmptyState": "Hali do'stlar yo'q. + tugmasini bosib odamlarni toping!",
+  "friendsErrorTitle": "Do'stlarni yuklab bo'lmadi",
+  "findAndRequestsTitle": "Topish va so'rovlar",
+  "findAndRequestsSearchHint": "Username bo'yicha qidirish...",
+  "findAndRequestsPendingRequests": "KUTILAYOTGAN SO'ROVLAR",
+  "findAndRequestsTotalBadge": "{count}",
+  "@findAndRequestsTotalBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "findAndRequestsAccept": "Qabul qilish",
+  "findAndRequestsDecline": "Rad etish",
+  "findAndRequestsCancel": "Bekor qilish",
+  "findAndRequestsSentAgo": "{timeAgo} oldin yuborilgan",
+  "@findAndRequestsSentAgo": {
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsReceivedAgo": "{timeAgo} oldin qabul qilindi",
+  "@findAndRequestsReceivedAgo": {
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsAddButton": "Qo'shish",
+  "findAndRequestsNoResults": "Foydalanuvchilar topilmadi",
+  "findAndRequestsErrorTitle": "So'rovlarni yuklab bo'lmadi",
+  "findAndRequestsIncoming": "Kiruvchi",
+  "findAndRequestsOutgoing": "Chiquvchi",
   "paywallTitle": "Premium",
   "paywallDescription": "Barcha funksiyalarni oching va Pauza'dan maksimal foydalaning.",
   "paywallPurchaseButton": "{price} ga obuna bo'lish",
@@ -385,9 +623,42 @@
   "paywallOfflineMessage": "Siz oflayn holatdasiz. Obuna rejalarini ko'rish uchun internetga ulaning.",
   "premiumBadge": "Premium",
   "premiumLockedMessage": "Bu funksiya Premium obunani talab qiladi.",
+  "aiUsageAnalysis": "AI foydalanish tahlili",
+  "aiUsageAnalysisCta": "Foydalanishimni tahlil qilish",
+  "aiAddictionCheck": "Qaram bo'lish tekshiruvi",
+  "aiAddictionCheckCta": "Odatlarimni tekshirish",
+  "aiFocusSchedule": "Fokus jadvali",
+  "aiFocusScheduleCta": "Jadval tavsiyasini olish",
+  "aiDailyReport": "Kunlik AI hisoboti",
+  "aiDailyReportCta": "Bugungi hisobotni olish",
+  "aiErrorGeneric": "Nimadir xato ketdi. Qayta urinib ko'ring.",
+  "aiRetry": "Qayta urinish",
   "premiumUnlockButton": "Premiumni ochish",
   "premiumUpgradeButton": "Yangilash",
   "premiumFriendsDescription": "Do'stlar qo'shing va ularning holatini kuzating.",
+  "subscriptionInfoTitle": "Obuna",
+  "subscriptionInfoActiveStatus": "Faol",
+  "subscriptionInfoInactiveStatus": "Faol emas",
+  "subscriptionInfoExpiringSoonStatus": "Tez orada tugaydi",
+  "subscriptionInfoPlanLabel": "Tarif",
+  "subscriptionInfoStatusLabel": "Holat",
+  "subscriptionInfoRenewalDateLabel": "Yangilanish sanasi",
+  "subscriptionInfoExpiryDateLabel": "Tugash sanasi",
+  "subscriptionInfoSourceLabel": "Manba",
+  "subscriptionInfoSourceRevenuecat": "App Store",
+  "subscriptionInfoSourceAdminOverride": "Admin tomonidan berilgan",
+  "subscriptionInfoPremiumPlan": "Premium",
+  "subscriptionInfoNoSubscription": "Faol obuna yo'q",
+  "subscriptionInfoGetPremium": "Premium olish",
+  "subscriptionInfoRenewsOn": "{date} da yangilanadi",
+  "@subscriptionInfoRenewsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionInfoManageButton": "Obunani boshqarish",
   "onboardingSlide1Title": "Pauza oling",
   "onboardingSlide1Body": "Chalg'ituvchi ilovalarni to'xtating va ekran vaqtingizni nazorat qiling — bir seans, bir qadam.",
   "onboardingSlide2Title": "Sizning qoidalaringiz, sizning rejimlaringiz",
@@ -408,5 +679,12 @@
   "emergencyStopDialogBody": "Bu sizning {remaining} ta qolgan favqulodda to'xtatishlaringizdan 1 tasini ishlatadi. Bu amalni bekor qilib bo'lmaydi.",
   "emergencyStopDialogConfirm": "Favqulodda to'xtatishni ishlatish",
   "emergencyStopInternetRequired": "Favqulodda to'xtatish uchun internet aloqasi kerak.",
-  "emergencyStopNoneRemaining": "Sizda favqulodda to'xtatishlar qolmadi."
+  "emergencyStopNoneRemaining": "Sizda favqulodda to'xtatishlar qolmadi.",
+  "timeAgoDays": "{count}k oldin",
+  "timeAgoHours": "{count}s oldin",
+  "timeAgoMinutes": "{count}daq oldin",
+  "timeAgoJustNow": "hozirgina",
+  "durationHoursMinutes": "{hours}s {minutes}daq",
+  "durationMinutes": "{minutes}daq",
+  "errorWithDetails": "{title}: {details}"
 }

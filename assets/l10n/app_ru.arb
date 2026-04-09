@@ -30,10 +30,34 @@
   "settingsTitle": "Настройки",
   "settingsGeneralSectionTitle": "Общие",
   "settingsNotifications": "Уведомления",
+  "settingsLeaderboardVisibility": "Видимость в лидерборде",
+  "settingsPrivacySectionTitle": "Конфиденциальность",
+  "settingsSessionEndingConfSectionTitle": "Завершение сессии",
+  "scanNfcChipTitle": "Сканировать NFC-метку",
+  "readyToScanNfcTag": "Готово к сканированию",
+  "scanNfcTagActionLabel": "Поднесите NFC-метку.",
   "settingsLanguage": "Язык",
   "settingsLanguagePickerTitle": "Выберите язык",
   "settingsNfcChipConfiguring": "Настройка NFC-чипа",
   "settingsQrCodeConfiguring": "Настройка QR-кода",
+  "nfcChipConfigTitle": "Настроить NFC-метку",
+  "nfcChipConfigBody": "Отсканируйте NFC-метку, чтобы привязать её к Pauza. Эта метка понадобится для завершения фокус-сессий.",
+  "nfcChipConfigLinkButton": "Привязать NFC-метку",
+  "nfcChipConfigScanningButton": "Сканирование...",
+  "nfcChipConfigLinkedSuccess": "NFC-метка успешно привязана.",
+  "nfcChipConfigAlreadyLinked": "Эта NFC-метка уже привязана.",
+  "nfcChipHoldCardNearDevice": "Поднесите устройство к NFC-метке для сканирования",
+  "nfcChipConfigUidMissingError": "Эту NFC-метку нельзя привязать, так как она не предоставляет идентификатор.",
+  "nfcChipConfigScanFailed": "Не удалось привязать NFC-метку. Попробуйте ещё раз.",
+  "nfcOpenSettingsButton": "Открыть настройки",
+  "nfcGuidanceAvailableTitle": "NFC готов",
+  "nfcGuidanceAvailableBody": "Ваше устройство готово к сканированию NFC-меток.",
+  "nfcGuidanceDisabledTitle": "Включите NFC",
+  "nfcGuidanceDisabledBody": "NFC отключён на этом устройстве. Включите его в настройках системы, чтобы продолжить.",
+  "nfcGuidanceNotSupportedTitle": "NFC не поддерживается",
+  "nfcGuidanceNotSupportedBody": "Это устройство не поддерживает сканирование NFC.",
+  "nfcGuidanceUnknownTitle": "Статус NFC недоступен",
+  "nfcGuidanceUnknownBody": "В данный момент не удалось определить доступность NFC. Попробуйте ещё раз.",
   "nfcChipConfigTagsTitle": "Ваши NFC-метки",
   "nfcChipConfigTagsBody": "Управляйте привязанными NFC-метками. Эти метки служат физическими ключами для завершения фокус-сессий.",
   "nfcChipConfigLinkNewTagButton": "Привязать новую метку",
@@ -183,6 +207,22 @@
   "modeTitleFieldLabel": "Название",
   "modeTextOnScreenFieldLabel": "Текст на экране блокировки",
   "modeDescriptionFieldLabel": "Описание",
+  "modeIconSectionTitle": "Иконка",
+  "modeIconChooseButton": "Выбрать иконку",
+  "modeIconPickerTitle": "Выбор иконки",
+  "modeIconPickerSubtitle": "Выберите одну иконку для этого режима",
+  "modeIconLabelTune": "Настройка",
+  "modeIconLabelPsychology": "Разум",
+  "modeIconLabelTimer": "Таймер",
+  "modeIconLabelBolt": "Молния",
+  "modeIconLabelRocketLaunch": "Ракета",
+  "modeIconLabelSelfImprovement": "Покой",
+  "modeIconLabelFitnessCenter": "Фитнес",
+  "modeIconLabelSchool": "Учёба",
+  "modeIconLabelWork": "Работа",
+  "modeIconLabelMenuBook": "Чтение",
+  "modeIconLabelMusicNote": "Музыка",
+  "modeIconLabelNightlight": "Ночь",
   "modeEnabledLabel": "Включен",
   "modeBlockedAppsSectionTitle": "Заблокированные приложения",
   "modeBlockedAppsChooseButton": "Выбрать приложения",
@@ -242,6 +282,8 @@
   "modeDeleteFailedMessage": "Не удалось удалить режим",
   "modeAppsLoadFailedMessage": "Не удалось загрузить приложения",
   "saveButton": "Сохранить",
+  "selectAppsTitle": "Выбрать приложения",
+  "doneButton": "Готово",
   "selectAppsForPauzaTitle": "Выберите приложения для Pauza",
   "selectButton": "Выбрать",
   "appsSelectedCountLabel": "{count} выбрано",
@@ -267,6 +309,8 @@
   },
   "homeDashboardTitle": "Pauza Dashboard",
   "homePauzaSessionLabel": "Pauza Session",
+  "homeSessionDurationLabel": "Длительность сессии",
+  "homeQuickPauseLabel": "Быстрая пауза",
   "homeCurrentModeLabel": "Текущий режим",
   "homeDayStreakLabel": "{count} дней подряд",
   "@homeDayStreakLabel": {
@@ -304,6 +348,18 @@
   "homeActionQrNotLinked": "Этот QR-код не привязан. Используйте привязанный код, чтобы продолжить.",
   "homeActionStartNfcConfigRequired": "Чтобы начать эту сессию, привяжите хотя бы одну NFC-метку в настройках.",
   "homeActionStartQrConfigRequired": "Чтобы начать эту сессию, привяжите хотя бы один QR-код в настройках.",
+  "pausedTitle": "На паузе",
+  "reminaingLabel": "Осталось",
+  "pausedTakeABreathLabel": "Переведите дыхание",
+  "pauseDurationMinutes": "{minutes}м",
+  "@pauseDurationMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "num"
+      }
+    }
+  },
+  "homeResumeButtonLabel": "Продолжить",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",
@@ -331,6 +387,118 @@
   "statsPermissionRequiredBody": "Allow Usage Access to view Android usage statistics.",
   "statsLoadFailed": "Failed to load usage statistics.",
   "statsNoUsageData": "No usage data for the selected period.",
+  "statsIosScreenTimeReport": "Отчёт об экранном времени",
+  "statsDeviceInsights": "Аналитика устройства",
+  "statsUnlockCount": "Количество разблокировок",
+  "statsUnlocksPerDay": "Разблокировок в день",
+  "statsPickupCount": "Подъёмов телефона",
+  "statsAvgScreenOnSession": "Средняя сессия с активным экраном",
+  "statsScreenOnDuration": "Экран включён",
+  "statsUnlockedDuration": "Разблокировано",
+  "statsScreenOnVsUnlocked": "Экран включён vs разблокировано",
+  "statsHourlyHeatmap": "Почасовая тепловая карта",
+  "statsHourlyHeatmapSubtitle": "Интенсивность экранного времени по часам (00–23).",
+  "statsHeatmapLegendLow": "Низкая",
+  "statsHeatmapLegendHigh": "Высокая",
+  "statsTopEngagementApps": "Топ приложений по вовлечённости",
+  "statsEngagementScore": "Оценка",
+  "statsLaunchIntensity": "Интенсивность запусков",
+  "statsAvgSession": "Средняя сессия",
+  "statsNoInsightData": "Нет данных аналитики за выбранный период.",
+  "statsInsightLoadFailed": "Не удалось загрузить аналитику.",
+  "statsDurationLessThanMinute": "<1м",
+  "statsPerDayValue": "{value}/день",
+  "@statsPerDayValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsLaunchesPerHourValue": "{value}/ч",
+  "@statsLaunchesPerHourValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsPercentValue": "{value}",
+  "@statsPercentValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsHeatmapHourSemantics": "Час {hour}, использование {duration}",
+  "@statsHeatmapHourSemantics": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "statsBlockingLoadFailed": "Не удалось загрузить статистику блокировок.",
+  "statsBlockingNoData": "Нет данных о блокировках за выбранный период.",
+  "statsBlockingKpis": "Показатели блокировок",
+  "statsBlockingCurrentStreak": "Текущая серия",
+  "statsBlockingLongestStreak": "Наибольшая серия",
+  "statsBlockingAvgSessionDuration": "Средняя длительность сессии ограничений",
+  "statsBlockingLongestSessionDuration": "Наибольшая длительность сессии ограничений",
+  "statsBlockingAvgPausesPerSession": "Среднее количество пауз за сессию",
+  "statsBlockingAvgPauseDuration": "Средняя длительность паузы",
+  "statsBlockingOverview": "Обзор периода",
+  "statsBlockingCompletedSessions": "Завершённые сессии",
+  "statsBlockingEffectiveDuration": "Эффективное время блокировки",
+  "statsBlockingPausedDuration": "На паузе",
+  "statsBlockingDailyTrend": "Ежедневная эффективная блокировка",
+  "statsBlockingPauseComposition": "Состав пауз",
+  "statsBlockingPerSessionValue": "{value}/сессия",
+  "@statsBlockingPerSessionValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsBlockingDaysValue": "{count} дней",
+  "@statsBlockingDaysValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsBlockingSessionCountValue": "{count} сессий",
+  "@statsBlockingSessionCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsBlockingBySource": "По источнику",
+  "statsBlockingManualSource": "Вручную",
+  "statsBlockingScheduledSource": "По расписанию",
+  "statsBlockingByMode": "По режиму",
+  "statsEngagementRowSemantics": "{app}: оценка {score}, интенсивность запусков {launchIntensity}",
+  "@statsEngagementRowSemantics": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      },
+      "score": {
+        "type": "String"
+      },
+      "launchIntensity": {
+        "type": "String"
+      }
+    }
+  },
   "statsIosReportUnavailableTitle": "iOS report unavailable",
   "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured.",
   "authTagline": "Фокус и благополучие",
@@ -375,6 +543,76 @@
   "leaderboardMinutesCount": "{count}м",
   "leaderboardEmptyTitle": "Данных рейтинга пока нет",
   "leaderboardErrorTitle": "Не удалось загрузить рейтинг",
+  "friendsTitle": "Друзья",
+  "friendsSearchHint": "Поиск друзей...",
+  "friendsActiveStreaks": "АКТИВНЫЕ СЕРИИ",
+  "friendsOnlineCount": "{count} друзей",
+  "@friendsOnlineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsTodayLabel": "СЕГОДНЯ",
+  "friendsAllTimeLabel": "ЗА ВСЁ ВРЕМЯ",
+  "friendsTrendLabel": "ТРЕНД ЗА 7 ДНЕЙ",
+  "friendsStreakDays": "{count} дней",
+  "@friendsStreakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsLongestStreak": "Рекорд: {count} дней",
+  "@friendsLongestStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsOfflineTitle": "Вы не в сети",
+  "friendsOfflineMessage": "Подключитесь к интернету, чтобы видеть друзей.",
+  "friendsRetryButton": "Повторить",
+  "friendsEmptyState": "Друзей пока нет. Нажмите +, чтобы найти людей!",
+  "friendsErrorTitle": "Не удалось загрузить друзей",
+  "findAndRequestsTitle": "Поиск и заявки",
+  "findAndRequestsSearchHint": "Поиск по имени пользователя...",
+  "findAndRequestsPendingRequests": "ВХОДЯЩИЕ ЗАЯВКИ",
+  "findAndRequestsTotalBadge": "{count}",
+  "@findAndRequestsTotalBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "findAndRequestsAccept": "Принять",
+  "findAndRequestsDecline": "Отклонить",
+  "findAndRequestsCancel": "Отмена",
+  "findAndRequestsSentAgo": "Отправлено {timeAgo}",
+  "@findAndRequestsSentAgo": {
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsReceivedAgo": "Получено {timeAgo}",
+  "@findAndRequestsReceivedAgo": {
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsAddButton": "Добавить",
+  "findAndRequestsNoResults": "Пользователи не найдены",
+  "findAndRequestsErrorTitle": "Не удалось загрузить заявки",
+  "findAndRequestsIncoming": "Входящие",
+  "findAndRequestsOutgoing": "Исходящие",
   "paywallTitle": "Премиум",
   "paywallDescription": "Разблокируйте все функции и получите максимум от Pauza.",
   "paywallPurchaseButton": "Подписаться за {price}",
@@ -385,9 +623,42 @@
   "paywallOfflineMessage": "Вы офлайн. Подключитесь к интернету, чтобы увидеть планы подписки.",
   "premiumBadge": "Премиум",
   "premiumLockedMessage": "Эта функция требует подписку Премиум.",
+  "aiUsageAnalysis": "ИИ-анализ использования",
+  "aiUsageAnalysisCta": "Анализировать моё использование",
+  "aiAddictionCheck": "Проверка на зависимость",
+  "aiAddictionCheckCta": "Проверить мои привычки",
+  "aiFocusSchedule": "Расписание фокуса",
+  "aiFocusScheduleCta": "Получить рекомендацию расписания",
+  "aiDailyReport": "Ежедневный ИИ-отчёт",
+  "aiDailyReportCta": "Получить отчёт за сегодня",
+  "aiErrorGeneric": "Что-то пошло не так. Попробуйте ещё раз.",
+  "aiRetry": "Повторить",
   "premiumUnlockButton": "Открыть Премиум",
   "premiumUpgradeButton": "Улучшить",
   "premiumFriendsDescription": "Добавляйте друзей и следите за их прогрессом.",
+  "subscriptionInfoTitle": "Подписка",
+  "subscriptionInfoActiveStatus": "Активна",
+  "subscriptionInfoInactiveStatus": "Неактивна",
+  "subscriptionInfoExpiringSoonStatus": "Скоро истекает",
+  "subscriptionInfoPlanLabel": "Тариф",
+  "subscriptionInfoStatusLabel": "Статус",
+  "subscriptionInfoRenewalDateLabel": "Дата продления",
+  "subscriptionInfoExpiryDateLabel": "Дата окончания",
+  "subscriptionInfoSourceLabel": "Источник",
+  "subscriptionInfoSourceRevenuecat": "App Store",
+  "subscriptionInfoSourceAdminOverride": "Выдано администратором",
+  "subscriptionInfoPremiumPlan": "Премиум",
+  "subscriptionInfoNoSubscription": "Нет активной подписки",
+  "subscriptionInfoGetPremium": "Получить Премиум",
+  "subscriptionInfoRenewsOn": "Продлевается {date}",
+  "@subscriptionInfoRenewsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionInfoManageButton": "Управление подпиской",
   "onboardingSlide1Title": "Возьмите паузу",
   "onboardingSlide1Body": "Приостановите отвлекающие приложения и возьмите под контроль своё экранное время — сессия за сессией.",
   "onboardingSlide2Title": "Ваши правила, ваши режимы",
@@ -408,5 +679,12 @@
   "emergencyStopDialogBody": "Это использует 1 из ваших {remaining} оставшихся экстренных остановок. Это действие нельзя отменить.",
   "emergencyStopDialogConfirm": "Использовать экстренную остановку",
   "emergencyStopInternetRequired": "Для экстренной остановки требуется интернет-соединение.",
-  "emergencyStopNoneRemaining": "У вас не осталось экстренных остановок."
+  "emergencyStopNoneRemaining": "У вас не осталось экстренных остановок.",
+  "timeAgoDays": "{count}д назад",
+  "timeAgoHours": "{count}ч назад",
+  "timeAgoMinutes": "{count}мин назад",
+  "timeAgoJustNow": "только что",
+  "durationHoursMinutes": "{hours}ч {minutes}мин",
+  "durationMinutes": "{minutes}мин",
+  "errorWithDetails": "{title}: {details}"
 }

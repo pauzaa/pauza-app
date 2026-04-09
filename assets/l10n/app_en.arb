@@ -1921,5 +1921,53 @@
   "emergencyStopNoneRemaining": "You have no emergency stops remaining.",
   "@emergencyStopNoneRemaining": {
     "description": "Error message when user has used all emergency stops."
+  },
+  "timeAgoDays": "{count}d ago",
+  "@timeAgoDays": {
+    "description": "Time ago label in days, e.g. '3d ago'.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "timeAgoHours": "{count}h ago",
+  "@timeAgoHours": {
+    "description": "Time ago label in hours, e.g. '5h ago'.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "timeAgoMinutes": "{count}m ago",
+  "@timeAgoMinutes": {
+    "description": "Time ago label in minutes, e.g. '20m ago'.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "timeAgoJustNow": "just now",
+  "@timeAgoJustNow": {
+    "description": "Time ago label when the event just happened."
+  },
+  "durationHoursMinutes": "{hours}h {minutes}m",
+  "@durationHoursMinutes": {
+    "description": "Duration formatted as hours and minutes, e.g. '1h 30m'.",
+    "placeholders": {
+      "hours": {"type": "int"},
+      "minutes": {"type": "int"}
+    }
+  },
+  "durationMinutes": "{minutes}m",
+  "@durationMinutes": {
+    "description": "Duration formatted as minutes only, e.g. '45m'.",
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "errorWithDetails": "{title}: {details}",
+  "@errorWithDetails": {
+    "description": "Error message combining a title and detail string.",
+    "placeholders": {
+      "title": {"type": "String"},
+      "details": {"type": "String"}
+    }
   }
 }

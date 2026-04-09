@@ -30,10 +30,34 @@
   "settingsTitle": "Созламалар",
   "settingsGeneralSectionTitle": "Умумий",
   "settingsNotifications": "Билдиришномалар",
+  "settingsLeaderboardVisibility": "Рейтингда кўринарлилик",
+  "settingsPrivacySectionTitle": "Махфийлик",
+  "settingsSessionEndingConfSectionTitle": "Сессияни тугатиш",
+  "scanNfcChipTitle": "NFC тегни сканерлаш",
+  "readyToScanNfcTag": "Сканерлашга тайёр",
+  "scanNfcTagActionLabel": "NFC тегингизни сканерланг.",
   "settingsLanguage": "Тил",
   "settingsLanguagePickerTitle": "Тилни танланг",
   "settingsNfcChipConfiguring": "NFC чипини созлаш",
   "settingsQrCodeConfiguring": "QR кодни созлаш",
+  "nfcChipConfigTitle": "NFC тегни созлаш",
+  "nfcChipConfigBody": "Pauza билан боғлаш учун NFC тегни сканерланг. Фокус сессияларини тугатиш учун ушбу тег талаб қилинади.",
+  "nfcChipConfigLinkButton": "NFC тегни уланг",
+  "nfcChipConfigScanningButton": "Сканерланмоқда...",
+  "nfcChipConfigLinkedSuccess": "NFC тег муваффақиятли уланди.",
+  "nfcChipConfigAlreadyLinked": "Бу NFC тег аллақачон уланган.",
+  "nfcChipHoldCardNearDevice": "Сканерлаш учун қурилмангизни NFC тегга яқин тутинг",
+  "nfcChipConfigUidMissingError": "Бу NFC тегни уланиб бўлмайди, чунки унда идентификатор мавжуд эмас.",
+  "nfcChipConfigScanFailed": "NFC тегни уланиб бўлмади. Қайта уриниб кўринг.",
+  "nfcOpenSettingsButton": "Созламаларни очиш",
+  "nfcGuidanceAvailableTitle": "NFC тайёр",
+  "nfcGuidanceAvailableBody": "Қурилмангиз NFC тегларини сканерлашга тайёр.",
+  "nfcGuidanceDisabledTitle": "NFC ни ёқинг",
+  "nfcGuidanceDisabledBody": "Бу қурилмада NFC ўчирилган. Давом этиш учун тизим созламаларида уни ёқинг.",
+  "nfcGuidanceNotSupportedTitle": "NFC қўлlab-қувватланмайди",
+  "nfcGuidanceNotSupportedBody": "Бу қурилма NFC сканерлашни қўллаб-қувватламайди.",
+  "nfcGuidanceUnknownTitle": "NFC ҳолати аниқланмади",
+  "nfcGuidanceUnknownBody": "Ҳозирда NFC мавжудлигини аниқлаб бўлмади. Бир зумдан кейин қайта уриниб кўринг.",
   "nfcChipConfigTagsTitle": "NFC тегларингиз",
   "nfcChipConfigTagsBody": "Уланган NFC тегларни бошқаринг. Бу теглар фокус сессияларини якунлаш учун жисмоний калит ҳисобланади.",
   "nfcChipConfigLinkNewTagButton": "Янги тег улаш",
@@ -183,6 +207,22 @@
   "modeTitleFieldLabel": "Номи",
   "modeTextOnScreenFieldLabel": "Блоклаш экранидаги матн",
   "modeDescriptionFieldLabel": "Тавсиф",
+  "modeIconSectionTitle": "Белги",
+  "modeIconChooseButton": "Белги танлаш",
+  "modeIconPickerTitle": "Белги танланг",
+  "modeIconPickerSubtitle": "Бу режим учун бир белги танланг",
+  "modeIconLabelTune": "Мослаш",
+  "modeIconLabelPsychology": "Ақл",
+  "modeIconLabelTimer": "Тaймер",
+  "modeIconLabelBolt": "Чақмоқ",
+  "modeIconLabelRocketLaunch": "Ракета",
+  "modeIconLabelSelfImprovement": "Тинчлик",
+  "modeIconLabelFitnessCenter": "Фитнес",
+  "modeIconLabelSchool": "Мактаб",
+  "modeIconLabelWork": "Иш",
+  "modeIconLabelMenuBook": "Ўқиш",
+  "modeIconLabelMusicNote": "Мусиқа",
+  "modeIconLabelNightlight": "Тун",
   "modeEnabledLabel": "Ёқилган",
   "modeBlockedAppsSectionTitle": "Блокланадиган иловалар",
   "modeBlockedAppsChooseButton": "Иловаларни танлаш",
@@ -242,6 +282,8 @@
   "modeDeleteFailedMessage": "Режимни ўчириб бўлмади",
   "modeAppsLoadFailedMessage": "Иловаларни юклаб бўлмади",
   "saveButton": "Сақлаш",
+  "selectAppsTitle": "Иловаларни танлаш",
+  "doneButton": "Тайёр",
   "selectAppsForPauzaTitle": "Pauza учун иловаларни танланг",
   "selectButton": "Танлаш",
   "appsSelectedCountLabel": "{count} та танланди",
@@ -267,6 +309,8 @@
   },
   "homeDashboardTitle": "Pauza Dashboard",
   "homePauzaSessionLabel": "Pauza Session",
+  "homeSessionDurationLabel": "Сессия давомийлиги",
+  "homeQuickPauseLabel": "Тез пауза",
   "homeCurrentModeLabel": "Жорий режим",
   "homeDayStreakLabel": "{count} кунлик серия",
   "@homeDayStreakLabel": {
@@ -304,6 +348,18 @@
   "homeActionQrNotLinked": "Бу QR код уланмаган. Давом этиш учун уланган коддан фойдаланинг.",
   "homeActionStartNfcConfigRequired": "Бу сессияни бошлаш учун Созламаларда камида битта NFC тегни уланг.",
   "homeActionStartQrConfigRequired": "Бу сессияни бошлаш учун Созламаларда камида битта QR кодни уланг.",
+  "pausedTitle": "Тўхтатилди",
+  "reminaingLabel": "Қолди",
+  "pausedTakeABreathLabel": "Нафас олинг",
+  "pauseDurationMinutes": "{minutes}д",
+  "@pauseDurationMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "num"
+      }
+    }
+  },
+  "homeResumeButtonLabel": "Давом этиш",
   "deviceUsage": "Device Usage",
   "usageStatsTab": "Usage Stats",
   "blockingStatsTab": "Blocking Stats",
@@ -331,6 +387,118 @@
   "statsPermissionRequiredBody": "Allow Usage Access to view Android usage statistics.",
   "statsLoadFailed": "Failed to load usage statistics.",
   "statsNoUsageData": "No usage data for the selected period.",
+  "statsIosScreenTimeReport": "Экран вақти ҳисоботи",
+  "statsDeviceInsights": "Қурилма таҳлили",
+  "statsUnlockCount": "Қулфни очиш сони",
+  "statsUnlocksPerDay": "Кунига очишлар",
+  "statsPickupCount": "Қўлга олиш сони",
+  "statsAvgScreenOnSession": "Ўртача экран сессияси",
+  "statsScreenOnDuration": "Экран ёниқ вақти",
+  "statsUnlockedDuration": "Қулфсиз вақт",
+  "statsScreenOnVsUnlocked": "Экран ёниқ ва қулфсиз",
+  "statsHourlyHeatmap": "Соатлик иссиқлик картаси",
+  "statsHourlyHeatmapSubtitle": "Соат бўйича экран вақти интенсивлиги (00-23).",
+  "statsHeatmapLegendLow": "Паст",
+  "statsHeatmapLegendHigh": "Юқори",
+  "statsTopEngagementApps": "Энг кўп фойдаланилган иловалар",
+  "statsEngagementScore": "Балл",
+  "statsLaunchIntensity": "Ишга тушириш интенсивлиги",
+  "statsAvgSession": "Ўртача сессия",
+  "statsNoInsightData": "Танланган давр учун таҳлил маълумотлари йўқ.",
+  "statsInsightLoadFailed": "Бу таҳлилни юклаб бўлмади.",
+  "statsDurationLessThanMinute": "<1д",
+  "statsPerDayValue": "{value}/кун",
+  "@statsPerDayValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsLaunchesPerHourValue": "{value}/с",
+  "@statsLaunchesPerHourValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsPercentValue": "{value}",
+  "@statsPercentValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsHeatmapHourSemantics": "{hour} соат, фойдаланиш {duration}",
+  "@statsHeatmapHourSemantics": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "statsBlockingLoadFailed": "Блоклаш статистикасини юклаб бўлмади.",
+  "statsBlockingNoData": "Танланган давр учун блоклаш маълумотлари йўқ.",
+  "statsBlockingKpis": "Блоклаш кўрсаткичлари",
+  "statsBlockingCurrentStreak": "Жорий серия",
+  "statsBlockingLongestStreak": "Энг узун серия",
+  "statsBlockingAvgSessionDuration": "Ўртача чеклаш сессияси давомийлиги",
+  "statsBlockingLongestSessionDuration": "Энг узун чеклаш сессияси давомийлиги",
+  "statsBlockingAvgPausesPerSession": "Сессияга ўртача танаффуслар",
+  "statsBlockingAvgPauseDuration": "Ўртача танаффус давомийлиги",
+  "statsBlockingOverview": "Давр кўриниши",
+  "statsBlockingCompletedSessions": "Якунланган сессиялар",
+  "statsBlockingEffectiveDuration": "Самарали блоклаш",
+  "statsBlockingPausedDuration": "Тўхтатилди",
+  "statsBlockingDailyTrend": "Кунлик самарали блоклаш",
+  "statsBlockingPauseComposition": "Танаффус таркиби",
+  "statsBlockingPerSessionValue": "{value}/сессия",
+  "@statsBlockingPerSessionValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statsBlockingDaysValue": "{count} кун",
+  "@statsBlockingDaysValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsBlockingSessionCountValue": "{count} сессия",
+  "@statsBlockingSessionCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsBlockingBySource": "Манба бўйича",
+  "statsBlockingManualSource": "Қўлда",
+  "statsBlockingScheduledSource": "Жадвал бўйича",
+  "statsBlockingByMode": "Режим бўйича",
+  "statsEngagementRowSemantics": "{app}: балл {score}, ишга тушириш интенсивлиги {launchIntensity}",
+  "@statsEngagementRowSemantics": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      },
+      "score": {
+        "type": "String"
+      },
+      "launchIntensity": {
+        "type": "String"
+      }
+    }
+  },
   "statsIosReportUnavailableTitle": "iOS report unavailable",
   "statsIosReportUnavailableBody": "Make sure Screen Time permission and Device Activity Report extension are configured.",
   "authTagline": "Диққат ва фаровонлик",
@@ -375,6 +543,76 @@
   "leaderboardMinutesCount": "{count}д",
   "leaderboardEmptyTitle": "Рейтинг маълумотлари ҳали йўқ",
   "leaderboardErrorTitle": "Рейтингни юклаб бўлмади",
+  "friendsTitle": "Дўстлар",
+  "friendsSearchHint": "Дўстларни қидириш...",
+  "friendsActiveStreaks": "ФАОЛ СЕРИЯЛАР",
+  "friendsOnlineCount": "{count} та дўст",
+  "@friendsOnlineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsTodayLabel": "БУГУН",
+  "friendsAllTimeLabel": "БАРЧА ВАҚТ",
+  "friendsTrendLabel": "7 КУНЛИК ТЕНДЕНЦИЯ",
+  "friendsStreakDays": "{count} кун",
+  "@friendsStreakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsLongestStreak": "Энг узун: {count} кун",
+  "@friendsLongestStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsOfflineTitle": "Сиз офлайнсиз",
+  "friendsOfflineMessage": "Дўстларингизни кўриш учун интернетга уланинг.",
+  "friendsRetryButton": "Қайта уриниш",
+  "friendsEmptyState": "Ҳали дўстлар йўқ. Одамларни топиш учун + ни босинг!",
+  "friendsErrorTitle": "Дўстларни юклаб бўлмади",
+  "findAndRequestsTitle": "Топиш ва сўровлар",
+  "findAndRequestsSearchHint": "Username бўйича қидириш...",
+  "findAndRequestsPendingRequests": "КУТИЛАЁТГАН СЎРОВЛАР",
+  "findAndRequestsTotalBadge": "{count}",
+  "@findAndRequestsTotalBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "findAndRequestsAccept": "Қабул қилиш",
+  "findAndRequestsDecline": "Рад этиш",
+  "findAndRequestsCancel": "Бекор қилиш",
+  "findAndRequestsSentAgo": "{timeAgo} аввал юборилган",
+  "@findAndRequestsSentAgo": {
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsReceivedAgo": "{timeAgo} аввал қабул қилинган",
+  "@findAndRequestsReceivedAgo": {
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
+  },
+  "findAndRequestsAddButton": "Қўшиш",
+  "findAndRequestsNoResults": "Фойдаланувчилар топилмади",
+  "findAndRequestsErrorTitle": "Сўровларни юклаб бўлмади",
+  "findAndRequestsIncoming": "Кирувчи",
+  "findAndRequestsOutgoing": "Чиқувчи",
   "paywallTitle": "Премиум",
   "paywallDescription": "Барча функцияларни очинг ва Паузадан максимал фойдаланинг.",
   "paywallPurchaseButton": "{price} га обуна бўлиш",
@@ -385,9 +623,42 @@
   "paywallOfflineMessage": "Сиз офлайн ҳолатдасиз. Обуна режаларини кўриш учун интернетга уланинг.",
   "premiumBadge": "Премиум",
   "premiumLockedMessage": "Бу функция Премиум обунани талаб қилади.",
+  "aiUsageAnalysis": "AI фойдаланиш таҳлили",
+  "aiUsageAnalysisCta": "Фойдаланишимни таҳлил қилиш",
+  "aiAddictionCheck": "Қарамлик текшируви",
+  "aiAddictionCheckCta": "Одатларимни текшириш",
+  "aiFocusSchedule": "Фокус жадвали",
+  "aiFocusScheduleCta": "Жадвал тавсияси олиш",
+  "aiDailyReport": "Кунлик AI ҳисоботи",
+  "aiDailyReportCta": "Бугунги ҳисобот олиш",
+  "aiErrorGeneric": "Хатолик юз берди. Қайта уриниб кўринг.",
+  "aiRetry": "Қайта уриниш",
   "premiumUnlockButton": "Премиумни очиш",
   "premiumUpgradeButton": "Янгилаш",
   "premiumFriendsDescription": "Дўстлар қўшинг ва уларнинг ҳолатини кузатинг.",
+  "subscriptionInfoTitle": "Обуна",
+  "subscriptionInfoActiveStatus": "Фаол",
+  "subscriptionInfoInactiveStatus": "Нофаол",
+  "subscriptionInfoExpiringSoonStatus": "Тез орада тугайди",
+  "subscriptionInfoPlanLabel": "Режа",
+  "subscriptionInfoStatusLabel": "Ҳолат",
+  "subscriptionInfoRenewalDateLabel": "Янгиланиш санаси",
+  "subscriptionInfoExpiryDateLabel": "Тугаш санаси",
+  "subscriptionInfoSourceLabel": "Манба",
+  "subscriptionInfoSourceRevenuecat": "App Store",
+  "subscriptionInfoSourceAdminOverride": "Администратор томонидан берилган",
+  "subscriptionInfoPremiumPlan": "Премиум",
+  "subscriptionInfoNoSubscription": "Фаол обуна йўқ",
+  "subscriptionInfoGetPremium": "Премиум олиш",
+  "subscriptionInfoRenewsOn": "{date} да янгиланади",
+  "@subscriptionInfoRenewsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionInfoManageButton": "Обунани бошқариш",
   "onboardingSlide1Title": "Пауза олинг",
   "onboardingSlide1Body": "Чалғитувчи иловаларни тўхтатинг ва экран вақтингизни назорат қилинг — бир сеанс, бир қадам.",
   "onboardingSlide2Title": "Сизнинг қоидаларингиз, сизнинг режимларингиз",
@@ -408,5 +679,12 @@
   "emergencyStopDialogBody": "Бу сизнинг {remaining} та қолган фавқулодда тўхтатишларингиздан 1 тасини ишлатади. Бу амални бекор қилиб бўлмайди.",
   "emergencyStopDialogConfirm": "Фавқулодда тўхтатишни ишлатиш",
   "emergencyStopInternetRequired": "Фавқулодда тўхтатиш учун интернет алоқаси керак.",
-  "emergencyStopNoneRemaining": "Сизда фавқулодда тўхтатишлар қолмади."
+  "emergencyStopNoneRemaining": "Сизда фавқулодда тўхтатишлар қолмади.",
+  "timeAgoDays": "{count}к олдин",
+  "timeAgoHours": "{count}с олдин",
+  "timeAgoMinutes": "{count}дақ олдин",
+  "timeAgoJustNow": "ҳозиргина",
+  "durationHoursMinutes": "{hours}с {minutes}дақ",
+  "durationMinutes": "{minutes}дақ",
+  "errorWithDetails": "{title}: {details}"
 }

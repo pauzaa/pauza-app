@@ -57,7 +57,7 @@ class PermissionsScreen extends StatelessWidget {
                   }),
                   if (gateState.lastError != null) ...<Widget>[
                     Text(
-                      '${l10n.errorTitle}: ${gateState.lastError}',
+                      l10n.errorWithDetails(l10n.errorTitle, gateState.lastError!.toString()),
                       style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.error),
                     ),
                   ],

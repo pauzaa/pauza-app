@@ -27,7 +27,17 @@ class PendingRequestCard extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final colors = context.pauzaColorScheme;
-    final timeAgo = _formatTimeAgo(request.createdAt);
+    final diff = DateTime.now().toUtc().difference(request.createdAt);
+    final String timeAgo;
+    if (diff.inDays > 0) {
+      timeAgo = l10n.timeAgoDays(diff.inDays);
+    } else if (diff.inHours > 0) {
+      timeAgo = l10n.timeAgoHours(diff.inHours);
+    } else if (diff.inMinutes > 0) {
+      timeAgo = l10n.timeAgoMinutes(diff.inMinutes);
+    } else {
+      timeAgo = l10n.timeAgoJustNow;
+    }
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -75,11 +85,4 @@ class PendingRequestCard extends StatelessWidget {
     );
   }
 
-  static String _formatTimeAgo(DateTime dateTime) {
-    final diff = DateTime.now().toUtc().difference(dateTime);
-    if (diff.inDays > 0) return '${diff.inDays}d ago';
-    if (diff.inHours > 0) return '${diff.inHours}h ago';
-    if (diff.inMinutes > 0) return '${diff.inMinutes}m ago';
-    return 'just now';
-  }
 }

@@ -67,9 +67,9 @@ class FriendCard extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 52),
                 child: Row(
                   children: [
-                    _StatChip(label: l10n.friendsTodayLabel, value: _formatMs(stats!.focusTimeTodayMs)),
+                    _StatChip(label: l10n.friendsTodayLabel, value: _formatMs(context, stats!.focusTimeTodayMs)),
                     const SizedBox(width: 12),
-                    _StatChip(label: l10n.friendsAllTimeLabel, value: _formatMs(stats!.totalFocusTimeMs)),
+                    _StatChip(label: l10n.friendsAllTimeLabel, value: _formatMs(context, stats!.totalFocusTimeMs)),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -94,12 +94,13 @@ class FriendCard extends StatelessWidget {
     );
   }
 
-  static String _formatMs(int ms) {
+  static String _formatMs(BuildContext context, int ms) {
+    final l10n = context.l10n;
     final totalMinutes = ms ~/ 60000;
     final hours = totalMinutes ~/ 60;
     final minutes = totalMinutes % 60;
-    if (hours > 0) return '${hours}h ${minutes}m';
-    return '${minutes}m';
+    if (hours > 0) return l10n.durationHoursMinutes(hours, minutes);
+    return l10n.durationMinutes(minutes);
   }
 }
 

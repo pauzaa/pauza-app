@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:pauza/src/core/api_client/api_client.dart';
 import 'package:pauza/src/features/ai/common/model/ai_usage_mapper.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
@@ -32,10 +33,15 @@ class AiFocusScheduleBloc extends Bloc<AiFocusScheduleEvent, AiFocusScheduleStat
       final window = DateTimeRange(start: now.dayStart.subtract(const Duration(days: 6)), end: now.dayEnd);
       final snapshot = await _usageRepository.getUsageSnapshot(window: window);
 
+      if (snapshot.appUsageEntries.isEmpty) {
+        emit(state.copyWith(isLoading: false, error: const ApiValidationError()));
+        return;
+      }
+
       final request = FocusScheduleRequestDto(
         appUsage: mapAppUsageToAiDtos(snapshot.appUsageEntries),
         preferredFocusHours: _defaultPreferredFocusHours,
-        timezone: now.timeZoneName,
+        timezone: (await FlutterTimezone.getLocalTimezone()).identifier,
       );
 
       final analysis = await _aiRepository.suggestFocusSchedule(request);

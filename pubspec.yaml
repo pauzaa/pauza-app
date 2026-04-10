@@ -53,6 +53,7 @@ dependencies:
   flutter_svg: ^2.0.17
   url_launcher: ^6.3.2
   flutter_markdown_plus: ^1.0.7
+  flutter_timezone: ^5.0.2
 
 workspace:
   - local_packages/pauza_ui_kit

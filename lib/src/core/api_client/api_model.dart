@@ -63,10 +63,13 @@ ApiClientHandler _createHandler(Client internalClient, MiddlewareChain middlewar
       () async {
         assert(request.url.scheme.startsWith('http'), 'Invalid URL: ${request.url}');
 
-        // Send a base request.
+        // Clone the request so retries get a fresh (non-finalized) BaseRequest.
+        final clonedRequest = _cloneBaseRequest(request._request);
+
+        // Send the cloned request.
         final StreamedResponse streamedResponse;
         try {
-          streamedResponse = await internalClient.send(request._request);
+          streamedResponse = await internalClient.send(clonedRequest);
         } on Object catch (error, stackTrace) {
           throwError(
             completer,
@@ -205,4 +208,31 @@ ApiClientHandler _createHandler(Client internalClient, MiddlewareChain middlewar
   }
 
   return middleware(httpHandler);
+}
+
+/// Clones a [BaseRequest] so it can be sent again (e.g. on retry).
+/// A [BaseRequest] can only be finalized once; cloning produces a fresh copy.
+BaseRequest _cloneBaseRequest(BaseRequest original) {
+  if (original is Request) {
+    return Request(original.method, original.url)
+      ..bodyBytes = original.bodyBytes
+      ..encoding = original.encoding
+      ..headers.addAll(original.headers)
+      ..persistentConnection = original.persistentConnection
+      ..followRedirects = original.followRedirects
+      ..maxRedirects = original.maxRedirects;
+  }
+
+  if (original is MultipartRequest) {
+    return MultipartRequest(original.method, original.url)
+      ..fields.addAll(original.fields)
+      ..files.addAll(original.files)
+      ..headers.addAll(original.headers)
+      ..persistentConnection = original.persistentConnection
+      ..followRedirects = original.followRedirects
+      ..maxRedirects = original.maxRedirects;
+  }
+
+  // StreamedRequest cannot be cloned (stream is consumed on first read).
+  return original;
 }

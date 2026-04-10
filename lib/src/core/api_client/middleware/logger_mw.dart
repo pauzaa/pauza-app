@@ -49,7 +49,8 @@ class ApiClientLoggerMiddleware implements ApiClientMiddleware {
     } on ApiClientException catch (error, stackTrace) {
       if (logError) {
         _onError(
-          '[${request.method}] ${request.url.path} -> failed with ${error.statusCode} code | ${stopwatch.elapsedMilliseconds}ms',
+          '[${request.method}] ${request.url.path} -> failed with ${error.statusCode} code | ${stopwatch.elapsedMilliseconds}ms\n'
+          'Response body: ${error.data}',
           error,
           stackTrace,
         );

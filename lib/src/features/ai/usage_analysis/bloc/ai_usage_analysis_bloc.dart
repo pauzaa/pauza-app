@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/api_client/api_client.dart';
-import 'package:pauza/src/features/ai/common/model/ai_usage_mapper.dart';
+import 'package:pauza/src/features/ai/common/model/ai_app_usage_item_dto.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/ai/usage_analysis/model/usage_analysis_request_dto.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
@@ -32,11 +32,6 @@ class AiUsageAnalysisBloc extends Bloc<AiUsageAnalysisEvent, AiUsageAnalysisStat
 
       final snapshot = await snapshotFuture;
 
-      if (snapshot.isEmpty) {
-        emit(state.copyWith(isLoading: false, error: const ApiValidationError()));
-        return;
-      }
-
       int? unlockCount;
       try {
         final deviceEvents = await deviceEventFuture;
@@ -48,7 +43,7 @@ class AiUsageAnalysisBloc extends Bloc<AiUsageAnalysisEvent, AiUsageAnalysisStat
       final windowDays = window.end.difference(window.start).inDays + 1;
       final request = UsageAnalysisRequestDto(
         period: windowDays > 1 ? 'weekly' : 'daily',
-        appUsage: mapAppUsageToAiDtos(snapshot.appUsageEntries),
+        appUsage: AiAppUsageItemDto.fromUsageEntries(snapshot.appUsageEntries),
         totalScreenTimeMs: snapshot.totalScreenTime.inMilliseconds,
         totalUnlocks: unlockCount,
       );

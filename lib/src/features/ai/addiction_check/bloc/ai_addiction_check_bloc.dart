@@ -6,7 +6,7 @@ import 'package:pauza/src/features/ai/addiction_check/model/addiction_check_requ
 import 'package:pauza/src/features/ai/addiction_check/model/ai_app_usage_history_dto.dart';
 import 'package:pauza/src/features/ai/addiction_check/model/ai_daily_screen_time_dto.dart';
 import 'package:pauza/src/core/api_client/api_client.dart';
-import 'package:pauza/src/features/ai/common/model/ai_usage_mapper.dart';
+import 'package:pauza/src/features/ai/common/model/ai_app_usage_item_dto.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
 import 'package:pauza/src/core/common/local_day_extensions.dart';
@@ -66,7 +66,7 @@ class AiAddictionCheckBloc extends Bloc<AiAddictionCheckEvent, AiAddictionCheckS
     }
 
     return (
-      AiAppUsageHistoryDto(date: dateStr, apps: mapAppUsageToAiDtos(snapshot.appUsageEntries)),
+      AiAppUsageHistoryDto(date: dateStr, apps: AiAppUsageItemDto.fromUsageEntries(snapshot.appUsageEntries)),
       AiDailyScreenTimeDto(
         date: dateStr,
         totalScreenTimeMs: snapshot.totalScreenTime.inMilliseconds,

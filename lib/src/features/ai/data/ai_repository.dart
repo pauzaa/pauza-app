@@ -19,6 +19,7 @@ final class AiRepositoryImpl implements AiRepository {
 
   @override
   Future<String> analyzeUsage(UsageAnalysisRequestDto request) async {
+    if (request.appUsage.isEmpty) throw const ApiValidationError();
     try {
       return await _remoteDataSource.analyzeUsage(request);
     } on ApiError {
@@ -30,6 +31,7 @@ final class AiRepositoryImpl implements AiRepository {
 
   @override
   Future<String> suggestFocusSchedule(FocusScheduleRequestDto request) async {
+    if (request.appUsage.isEmpty) throw const ApiValidationError();
     try {
       return await _remoteDataSource.suggestFocusSchedule(request);
     } on ApiError {
@@ -41,6 +43,7 @@ final class AiRepositoryImpl implements AiRepository {
 
   @override
   Future<String> generateDailyReport(DailyReportRequestDto request) async {
+    if (request.appUsage.isEmpty) throw const ApiValidationError();
     try {
       return await _remoteDataSource.generateDailyReport(request);
     } on ApiError {
@@ -52,6 +55,7 @@ final class AiRepositoryImpl implements AiRepository {
 
   @override
   Future<String> checkAddiction(AddictionCheckRequestDto request) async {
+    if (request.appUsageHistory.isEmpty || request.dailyScreenTimeHistory.isEmpty) throw const ApiValidationError();
     try {
       return await _remoteDataSource.checkAddiction(request);
     } on ApiError {

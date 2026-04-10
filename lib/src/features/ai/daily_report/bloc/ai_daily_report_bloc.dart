@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/api_client/api_client.dart';
-import 'package:pauza/src/features/ai/common/model/ai_usage_mapper.dart';
+import 'package:pauza/src/features/ai/common/model/ai_app_usage_item_dto.dart';
 import 'package:pauza/src/features/ai/daily_report/model/daily_report_request_dto.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
@@ -51,7 +51,7 @@ class AiDailyReportBloc extends Bloc<AiDailyReportEvent, AiDailyReportState> {
 
       final request = DailyReportRequestDto(
         date: now.localDayKey,
-        appUsage: mapAppUsageToAiDtos(snapshot.appUsageEntries),
+        appUsage: AiAppUsageItemDto.fromUsageEntries(snapshot.appUsageEntries),
         totalScreenTimeMs: snapshot.totalScreenTime.inMilliseconds,
         totalUnlocks: unlockCount > 0 ? unlockCount : null,
         streakDays: streakSnapshot.currentStreakDays.value > 0 ? streakSnapshot.currentStreakDays.value : null,

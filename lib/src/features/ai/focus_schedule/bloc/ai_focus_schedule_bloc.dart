@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:pauza/src/core/api_client/api_client.dart';
-import 'package:pauza/src/features/ai/common/model/ai_usage_mapper.dart';
+import 'package:pauza/src/features/ai/common/model/ai_app_usage_item_dto.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/ai/focus_schedule/model/focus_schedule_request_dto.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
@@ -33,13 +33,8 @@ class AiFocusScheduleBloc extends Bloc<AiFocusScheduleEvent, AiFocusScheduleStat
       final window = DateTimeRange(start: now.dayStart.subtract(const Duration(days: 6)), end: now.dayEnd);
       final snapshot = await _usageRepository.getUsageSnapshot(window: window);
 
-      if (snapshot.appUsageEntries.isEmpty) {
-        emit(state.copyWith(isLoading: false, error: const ApiValidationError()));
-        return;
-      }
-
       final request = FocusScheduleRequestDto(
-        appUsage: mapAppUsageToAiDtos(snapshot.appUsageEntries),
+        appUsage: AiAppUsageItemDto.fromUsageEntries(snapshot.appUsageEntries),
         preferredFocusHours: _defaultPreferredFocusHours,
         timezone: (await FlutterTimezone.getLocalTimezone()).identifier,
       );

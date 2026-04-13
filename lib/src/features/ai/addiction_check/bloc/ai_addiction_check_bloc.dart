@@ -54,22 +54,26 @@ class AiAddictionCheckBloc extends Bloc<AiAddictionCheckEvent, AiAddictionCheckS
 
   Future<(AiAppUsageHistoryDto, AiDailyScreenTimeDto)> _fetchDayData(DateTime day) async {
     final window = DateTimeRange(start: day.dayStart, end: day.dayEnd);
-    final snapshot = await _usageRepository.getUsageSnapshot(window: window);
     final dateStr = day.localDayKey;
 
+    final snapshot = await _usageRepository.getUsageSnapshot(window: window);
+
+    var screenOnTimeMs = 0;
     var unlockCount = 0;
     try {
       final deviceEvents = await _usageRepository.getDeviceEventSnapshot(window: window);
+      screenOnTimeMs = deviceEvents.totalScreenOnTime.inMilliseconds;
       unlockCount = deviceEvents.unlockCount;
     } on Object catch (_) {
-      // Device events not available on all platforms.
+      // Device events not available on all platforms; fall back to sum-of-apps.
+      screenOnTimeMs = snapshot.totalScreenTime.inMilliseconds;
     }
 
     return (
       AiAppUsageHistoryDto(date: dateStr, apps: AiAppUsageItemDto.fromUsageEntries(snapshot.appUsageEntries)),
       AiDailyScreenTimeDto(
         date: dateStr,
-        totalScreenTimeMs: snapshot.totalScreenTime.inMilliseconds,
+        totalScreenTimeMs: screenOnTimeMs,
         totalUnlocks: unlockCount,
       ),
     );

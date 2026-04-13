@@ -41,18 +41,20 @@ class AiDailyReportBloc extends Bloc<AiDailyReportEvent, AiDailyReportState> {
         _streaksRepository.getGlobalSnapshot(nowLocal: now),
       ).wait;
 
+      var screenOnTimeMs = snapshot.totalScreenTime.inMilliseconds;
       var unlockCount = 0;
       try {
         final deviceEvents = await _usageRepository.getDeviceEventSnapshot(window: window);
+        screenOnTimeMs = deviceEvents.totalScreenOnTime.inMilliseconds;
         unlockCount = deviceEvents.unlockCount;
       } on Object catch (_) {
-        // Device events not available on all platforms.
+        // Device events not available on all platforms; fall back to sum-of-apps.
       }
 
       final request = DailyReportRequestDto(
         date: now.localDayKey,
         appUsage: AiAppUsageItemDto.fromUsageEntries(snapshot.appUsageEntries),
-        totalScreenTimeMs: snapshot.totalScreenTime.inMilliseconds,
+        totalScreenTimeMs: screenOnTimeMs,
         totalUnlocks: unlockCount > 0 ? unlockCount : null,
         streakDays: streakSnapshot.currentStreakDays.value > 0 ? streakSnapshot.currentStreakDays.value : null,
       );

@@ -32,19 +32,21 @@ class AiUsageAnalysisBloc extends Bloc<AiUsageAnalysisEvent, AiUsageAnalysisStat
 
       final snapshot = await snapshotFuture;
 
+      var screenOnTimeMs = snapshot.totalScreenTime.inMilliseconds;
       int? unlockCount;
       try {
         final deviceEvents = await deviceEventFuture;
+        screenOnTimeMs = deviceEvents.totalScreenOnTime.inMilliseconds;
         unlockCount = deviceEvents.unlockCount;
       } on Object catch (_) {
-        // Device events not available on all platforms.
+        // Device events not available on all platforms; fall back to sum-of-apps.
       }
 
       final windowDays = window.end.difference(window.start).inDays + 1;
       final request = UsageAnalysisRequestDto(
         period: windowDays > 1 ? 'weekly' : 'daily',
         appUsage: AiAppUsageItemDto.fromUsageEntries(snapshot.appUsageEntries),
-        totalScreenTimeMs: snapshot.totalScreenTime.inMilliseconds,
+        totalScreenTimeMs: screenOnTimeMs,
         totalUnlocks: unlockCount,
       );
 

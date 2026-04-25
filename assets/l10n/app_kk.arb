@@ -1603,6 +1603,10 @@
   "@findAndRequestsSearchHint": {
     "description": "Hint text for user search field."
   },
+  "findAndRequestsSearchMinLengthHint": "Іздеу үшін кем дегенде 3 таңба енгізіңіз.",
+  "@findAndRequestsSearchMinLengthHint": {
+    "description": "Helper when the user has typed fewer than the minimum characters for friend search."
+  },
   "findAndRequestsPendingRequests": "КҮТІЛЕТІН ӨТІНІМДЕР",
   "@findAndRequestsPendingRequests": {
     "description": "Section header for pending requests."

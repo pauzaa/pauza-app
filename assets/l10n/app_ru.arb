@@ -580,6 +580,7 @@
   "friendsErrorTitle": "Не удалось загрузить друзей",
   "findAndRequestsTitle": "Поиск и заявки",
   "findAndRequestsSearchHint": "Поиск по имени пользователя...",
+  "findAndRequestsSearchMinLengthHint": "Введите не менее 3 символов для поиска.",
   "findAndRequestsPendingRequests": "ВХОДЯЩИЕ ЗАЯВКИ",
   "findAndRequestsTotalBadge": "{count}",
   "@findAndRequestsTotalBadge": {

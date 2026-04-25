@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauza/src/core/localization/l10n.dart';
+import 'package:pauza/src/features/friends/data/friends_repository.dart';
 import 'package:pauza/src/features/friends/find_and_requests/bloc/find_and_requests_bloc.dart';
 import 'package:pauza/src/features/friends/find_and_requests/widget/pending_request_card.dart';
 import 'package:pauza/src/features/friends/find_and_requests/widget/search_result_tile.dart';
@@ -42,6 +43,7 @@ class FindAndRequestsContent extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 child: PauzaTextFormField(
+                  maxLength: FriendsRepository.friendSearchQueryMaxLength,
                   decoration: PauzaInputDecoration(
                     hintText: l10n.findAndRequestsSearchHint,
                     prefixIcon: const Icon(Icons.search_rounded),
@@ -119,30 +121,44 @@ class FindAndRequestsContent extends StatelessWidget {
               ],
               if (state.searchQuery.isNotEmpty) ...[
                 const SizedBox(height: 16),
-                if (state.isSearching)
-                  const Center(
-                    child: Padding(padding: EdgeInsets.all(16), child: CircularProgressIndicator()),
-                  )
-                else if (state.searchResults.isEmpty)
+                if (state.searchQuery.length < FriendsRepository.friendSearchQueryMinLength) ...[
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
-                        l10n.findAndRequestsNoResults,
+                        l10n.findAndRequestsSearchMinLengthHint,
                         style: Theme.of(
                           context,
                         ).textTheme.bodyMedium?.copyWith(color: context.pauzaColorScheme.onSurfaceVariant),
                       ),
                     ),
-                  )
-                else
-                  ...state.searchResults.map(
-                    (user) => SearchResultTile(
-                      user: user,
-                      isActionInProgress: state.actionInProgress.contains(user.username),
-                      onAdd: () => context.read<FindAndRequestsBloc>().add(FindAndRequestsSendRequest(user.username)),
-                    ),
                   ),
+                ] else ...[
+                  if (state.isSearching)
+                    const Center(
+                      child: Padding(padding: EdgeInsets.all(16), child: CircularProgressIndicator()),
+                    )
+                  else if (state.searchResults.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          l10n.findAndRequestsNoResults,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(color: context.pauzaColorScheme.onSurfaceVariant),
+                        ),
+                      ),
+                    )
+                  else
+                    ...state.searchResults.map(
+                      (user) => SearchResultTile(
+                        user: user,
+                        isActionInProgress: state.actionInProgress.contains(user.username),
+                        onAdd: () => context.read<FindAndRequestsBloc>().add(FindAndRequestsSendRequest(user.username)),
+                      ),
+                    ),
+                ],
               ],
             ],
           );

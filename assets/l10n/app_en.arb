@@ -1603,6 +1603,10 @@
   "@findAndRequestsSearchHint": {
     "description": "Hint text for user search field."
   },
+  "findAndRequestsSearchMinLengthHint": "Enter at least 3 characters to search.",
+  "@findAndRequestsSearchMinLengthHint": {
+    "description": "Helper when the user has typed fewer than the minimum characters for friend search."
+  },
   "findAndRequestsPendingRequests": "PENDING REQUESTS",
   "@findAndRequestsPendingRequests": {
     "description": "Section header for pending requests."

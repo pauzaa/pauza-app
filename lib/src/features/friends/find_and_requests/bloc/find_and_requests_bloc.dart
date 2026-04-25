@@ -42,15 +42,15 @@ class FindAndRequestsBloc extends Bloc<FindAndRequestsEvent, FindAndRequestsStat
     emit(state.copyWith(searchQuery: query));
 
     if (query.isEmpty) {
-      emit(state.copyWith(searchResults: const <BasicUserDto>[], isSearching: false));
+      emit(state.copyWith(searchResults: const <BasicUserDto>[], isSearching: false, clearError: true));
       return;
     }
 
-    emit(state.copyWith(isSearching: true));
+    emit(state.copyWith(isSearching: true, clearError: true));
 
     try {
       final results = await _friendsRepository.searchUsers(query: query);
-      emit(state.copyWith(searchResults: results, isSearching: false));
+      emit(state.copyWith(searchResults: results, isSearching: false, clearError: true));
     } on Object catch (error) {
       emit(state.copyWith(isSearching: false, error: error));
     }

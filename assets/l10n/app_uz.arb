@@ -580,6 +580,7 @@
   "friendsErrorTitle": "Do'stlarni yuklab bo'lmadi",
   "findAndRequestsTitle": "Topish va so'rovlar",
   "findAndRequestsSearchHint": "Username bo'yicha qidirish...",
+  "findAndRequestsSearchMinLengthHint": "Qidirish uchun kamida 3 ta belgi kiriting.",
   "findAndRequestsPendingRequests": "KUTILAYOTGAN SO'ROVLAR",
   "findAndRequestsTotalBadge": "{count}",
   "@findAndRequestsTotalBadge": {

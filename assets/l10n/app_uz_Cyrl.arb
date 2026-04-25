@@ -580,6 +580,7 @@
   "friendsErrorTitle": "Дўстларни юклаб бўлмади",
   "findAndRequestsTitle": "Топиш ва сўровлар",
   "findAndRequestsSearchHint": "Username бўйича қидириш...",
+  "findAndRequestsSearchMinLengthHint": "Қидириш учун камида 3 та белги киритинг.",
   "findAndRequestsPendingRequests": "КУТИЛАЁТГАН СЎРОВЛАР",
   "findAndRequestsTotalBadge": "{count}",
   "@findAndRequestsTotalBadge": {

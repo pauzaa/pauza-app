@@ -7,7 +7,12 @@ import 'package:pauza/src/features/friends/common/model/friend_stats_dto.dart';
 import 'package:pauza/src/features/friends/common/model/pagination_dto.dart';
 import 'package:pauza/src/features/friends/data/friends_remote_data_source.dart';
 
+/// GET `/api/v1/friends/search` query `q` — [friendSearchQueryMinLength], [friendSearchQueryMaxLength]
+/// match pauza-server `BACKEND_SPEC.md` and `SocialHandler.SearchUsers`.
 abstract interface class FriendsRepository {
+  static const int friendSearchQueryMinLength = 3;
+  static const int friendSearchQueryMaxLength = 50;
+
   Future<({List<FriendDto> friends, PaginationDto pagination})> fetchFriends({int page, int limit, bool skipCache});
 
   Future<FriendMutationDto> sendRequest({required String username});
@@ -140,8 +145,14 @@ final class FriendsRepositoryImpl implements FriendsRepository {
 
   @override
   Future<List<BasicUserDto>> searchUsers({required String query}) async {
+    final q = query.trim();
+    if (q.isEmpty ||
+        q.length < FriendsRepository.friendSearchQueryMinLength ||
+        q.length > FriendsRepository.friendSearchQueryMaxLength) {
+      return const <BasicUserDto>[];
+    }
     try {
-      return await _remoteDataSource.searchUsers(query: query);
+      return await _remoteDataSource.searchUsers(query: q);
     } on ApiError {
       rethrow;
     } on Object catch (e) {

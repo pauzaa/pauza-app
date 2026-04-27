@@ -131,7 +131,11 @@ class RootScopeState extends State<RootScope> {
     streaksRepository = dependencies.streaksRepository;
     friendsRepository = dependencies.friendsRepository;
     leaderboardRepository = dependencies.leaderboardRepository;
-    aiRepository = dependencies.aiRepository;
+    aiRepository = AiRepositoryImpl(
+      remoteDataSource: dependencies.aiRemoteDataSource,
+      usageRepository: statsUsageRepository,
+      streaksRepository: streaksRepository,
+    );
     emergencyStopRepository = dependencies.emergencyStopRepository;
 
     super.initState();

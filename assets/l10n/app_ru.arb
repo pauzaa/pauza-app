@@ -626,6 +626,7 @@
   "premiumLockedMessage": "Эта функция требует подписку Премиум.",
   "aiUsageAnalysis": "ИИ-анализ использования",
   "aiUsageAnalysisCta": "Анализировать моё использование",
+  "aiUsageAnalysisLast7DaysCta": "Анализировать последние 7 дней",
   "aiAddictionCheck": "Проверка на зависимость",
   "aiAddictionCheckCta": "Проверить мои привычки",
   "aiFocusSchedule": "Расписание фокуса",

@@ -37,6 +37,10 @@ abstract interface class StatsUsageRepository {
   /// Requires Android 9+ (API 28+). On lower API levels the plugin throws
   /// [PauzaUnsupportedError].
   Future<DeviceEventSnapshot> getDeviceEventSnapshot({required DateTimeRange window, UsageStatsInterval intervalType});
+
+  /// Returns device-level event statistics computed from raw usage events clipped
+  /// to the exact requested [window].
+  Future<DeviceEventSnapshot> getExactDeviceEventSnapshot({required DateTimeRange window});
 }
 
 final class StatsUsageRepositoryImpl implements StatsUsageRepository {
@@ -215,6 +219,21 @@ final class StatsUsageRepositoryImpl implements StatsUsageRepository {
     );
   }
 
+  @override
+  Future<DeviceEventSnapshot> getExactDeviceEventSnapshot({required DateTimeRange window}) async {
+    final events = await _usageStatsManager.getUsageEvents(
+      startDate: window.start,
+      endDate: window.end,
+      eventTypes: const <UsageEventType>[
+        UsageEventType.screenInteractive,
+        UsageEventType.screenNonInteractive,
+        UsageEventType.keyguardHidden,
+      ],
+    );
+
+    return _buildExactDeviceEventSnapshot(window: window, events: events);
+  }
+
   // ---------------------------------------------------------------------------
   // Helpers
   // ---------------------------------------------------------------------------
@@ -240,6 +259,76 @@ final class StatsUsageRepositoryImpl implements StatsUsageRepository {
         shareOfTotal: totalMs > 0 ? e.value.durationMs / totalMs : 0,
       );
     }).toIList();
+  }
+
+  DeviceEventSnapshot _buildExactDeviceEventSnapshot({
+    required DateTimeRange window,
+    required List<UsageEvent> events,
+  }) {
+    final sortedEvents = List<UsageEvent>.of(events)..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+    var screenOnCount = 0;
+    var unlockCount = 0;
+    var screenOnMs = 0;
+    DateTime? activeScreenOnStart;
+
+    for (final event in sortedEvents) {
+      final timestamp = _clipInstantToWindow(event.timestamp, window);
+      switch (event.eventType) {
+        case UsageEventType.screenInteractive:
+          screenOnCount += 1;
+          activeScreenOnStart ??= timestamp;
+          break;
+        case UsageEventType.screenNonInteractive:
+          final start = activeScreenOnStart;
+          if (start != null && timestamp.isAfter(start)) {
+            screenOnMs += timestamp.difference(start).inMilliseconds;
+          }
+          activeScreenOnStart = null;
+          break;
+        case UsageEventType.keyguardHidden:
+          if (!event.timestamp.isBefore(window.start) && !event.timestamp.isAfter(window.end)) {
+            unlockCount += 1;
+          }
+          break;
+        case UsageEventType.activityResumed:
+        case UsageEventType.activityPaused:
+        case UsageEventType.activityStopped:
+        case UsageEventType.configurationChange:
+        case UsageEventType.userInteraction:
+        case UsageEventType.shortcutInvocation:
+        case UsageEventType.keyguardShown:
+        case UsageEventType.foregroundServiceStart:
+        case UsageEventType.foregroundServiceStop:
+        case UsageEventType.deviceShutdown:
+        case UsageEventType.deviceStartup:
+        case UsageEventType.standbyBucketChanged:
+        case UsageEventType.unknown:
+          break;
+      }
+    }
+
+    final start = activeScreenOnStart;
+    if (start != null && window.end.isAfter(start)) {
+      screenOnMs += window.end.difference(start).inMilliseconds;
+    }
+
+    return DeviceEventSnapshot(
+      screenOnCount: screenOnCount,
+      totalScreenOnTime: Duration(milliseconds: screenOnMs),
+      unlockCount: unlockCount,
+      eventEntries: const IList<DeviceEventStats>.empty(),
+    );
+  }
+
+  DateTime _clipInstantToWindow(DateTime instant, DateTimeRange window) {
+    if (instant.isBefore(window.start)) {
+      return window.start;
+    }
+    if (instant.isAfter(window.end)) {
+      return window.end;
+    }
+    return instant;
   }
 
   /// Returns the number of calendar days spanned by [window] (inclusive).

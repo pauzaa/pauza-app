@@ -30,6 +30,7 @@ import 'package:pauza/src/features/sync/data/sync_local_data_source.dart';
 import 'package:pauza/src/features/sync/data/sync_remote_data_source.dart';
 import 'package:pauza/src/features/subscription/data/purchases_data_source.dart';
 import 'package:pauza/src/features/subscription/data/subscription_repository.dart';
+import 'package:pauza/src/features/ai/data/ai_remote_data_source.dart';
 import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/emergency_stop/data/emergency_stop_repository.dart';
 import 'package:pauza/src/features/stats/usage_stats/data/stats_usage_repository.dart';
@@ -106,6 +107,8 @@ class MockPurchasesDataSource extends Mock implements PurchasesDataSource {}
 class MockSubscriptionRepository extends Mock implements SubscriptionRepository {}
 
 class MockAiRepository extends Mock implements AiRepository {}
+
+class MockAiRemoteDataSource extends Mock implements AiRemoteDataSource {}
 
 class MockStatsUsageRepository extends Mock implements StatsUsageRepository {}
 

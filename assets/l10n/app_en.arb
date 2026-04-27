@@ -1723,6 +1723,10 @@
   "@aiUsageAnalysisCta": {
     "description": "CTA button for AI usage analysis."
   },
+  "aiUsageAnalysisLast7DaysCta": "Analyze Last 7 Days",
+  "@aiUsageAnalysisLast7DaysCta": {
+    "description": "CTA button for AI usage analysis when the selected stats range is longer than 7 days."
+  },
   "aiAddictionCheck": "Addiction Check",
   "@aiAddictionCheck": {
     "description": "Title for AI addiction check section."

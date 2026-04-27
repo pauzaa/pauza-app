@@ -18,7 +18,6 @@ import 'package:pauza/src/core/connectivity/domain/internet_required_guard.dart'
 import 'package:pauza/src/core/init/config.dart';
 import 'package:pauza/src/core/local_database/local_database.dart';
 import 'package:pauza/src/features/ai/data/ai_remote_data_source.dart';
-import 'package:pauza/src/features/ai/data/ai_repository.dart';
 import 'package:pauza/src/features/emergency_stop/data/emergency_stop_remote_data_source.dart';
 import 'package:pauza/src/features/emergency_stop/data/emergency_stop_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_remote_data_source.dart';
@@ -28,10 +27,10 @@ import 'package:pauza/src/features/devices/domain/device_token_coordinator.dart'
 import 'package:pauza/src/features/auth/data/auth_repository.dart';
 import 'package:pauza/src/features/auth/data/auth_session_storage.dart';
 import 'package:pauza/src/features/auth/domain/auth_gate.dart';
-import 'package:pauza/src/features/friends/data/friends_remote_data_source.dart';
 import 'package:pauza/src/features/friends/data/friends_repository.dart';
-import 'package:pauza/src/features/leaderboard/data/leaderboard_remote_data_source.dart';
+import 'package:pauza/src/features/friends/data/friends_remote_data_source.dart';
 import 'package:pauza/src/features/leaderboard/data/leaderboard_repository.dart';
+import 'package:pauza/src/features/leaderboard/data/leaderboard_remote_data_source.dart';
 import 'package:pauza/src/features/nfc/data/nfc_repository.dart';
 import 'package:pauza/src/features/nfc/data/nfc_util_client.dart';
 import 'package:pauza/src/features/permissions/domain/permission_gate.dart';
@@ -92,7 +91,7 @@ class PauzaDependencies with AppFuseInitialization {
   late final PurchasesDataSource purchasesDataSource;
   late final SubscriptionRepository subscriptionRepository;
   late final String revenueCatApiKey;
-  late final AiRepository aiRepository;
+  late final AiRemoteDataSource aiRemoteDataSource;
   late final EmergencyStopRepository emergencyStopRepository;
 
   static PauzaDependencies of(BuildContext context) => AppFuseScope.of(context).init as PauzaDependencies;
@@ -223,8 +222,7 @@ class PauzaDependencies with AppFuseInitialization {
       leaderboardRepository = LeaderboardRepositoryImpl(remoteDataSource: leaderboardRemoteDataSource);
     },
     'init ai': (_) async {
-      final aiDataSource = AiRemoteDataSourceImpl(apiClient: apiClient);
-      aiRepository = AiRepositoryImpl(remoteDataSource: aiDataSource);
+      aiRemoteDataSource = AiRemoteDataSourceImpl(apiClient: apiClient);
     },
     'init emergency stop': (_) async {
       final emergencyStopDataSource = EmergencyStopRemoteDataSourceImpl(apiClient: apiClient);

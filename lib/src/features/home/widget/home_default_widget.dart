@@ -62,11 +62,7 @@ class HomeDefaultWidget extends StatelessWidget {
           child: BlocProvider(
             create: (context) {
               final rootScope = RootScope.of(context);
-              return AiDailyReportBloc(
-                aiRepository: rootScope.aiRepository,
-                usageRepository: rootScope.statsUsageRepository,
-                streaksRepository: rootScope.streaksRepository,
-              );
+              return AiDailyReportBloc(aiRepository: rootScope.aiRepository);
             },
             child: const AiDailyReportCard(),
           ),

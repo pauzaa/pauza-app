@@ -137,6 +137,10 @@ final class MockStatsUsageRepository implements StatsUsageRepository {
       eventEntries: IListConst(<DeviceEventStats>[]),
     );
   }
+
+  @override
+  Future<DeviceEventSnapshot> getExactDeviceEventSnapshot({required DateTimeRange window}) =>
+      getDeviceEventSnapshot(window: window);
 }
 
 // ---------------------------------------------------------------------------

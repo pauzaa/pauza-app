@@ -80,19 +80,13 @@ class StatsBlockingTabContent extends StatelessWidget {
                     BlocProvider(
                       create: (context) {
                         final rootScope = RootScope.of(context);
-                        return AiAddictionCheckBloc(
-                          aiRepository: rootScope.aiRepository,
-                          usageRepository: rootScope.statsUsageRepository,
-                        );
+                        return AiAddictionCheckBloc(aiRepository: rootScope.aiRepository);
                       },
                     ),
                     BlocProvider(
                       create: (context) {
                         final rootScope = RootScope.of(context);
-                        return AiFocusScheduleBloc(
-                          aiRepository: rootScope.aiRepository,
-                          usageRepository: rootScope.statsUsageRepository,
-                        );
+                        return AiFocusScheduleBloc(aiRepository: rootScope.aiRepository);
                       },
                     ),
                   ],

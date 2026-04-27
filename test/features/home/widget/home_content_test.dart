@@ -30,7 +30,6 @@ void main() {
     late MockQrLinkedCodesRepository mockQrLinkedCodesRepository;
     late MockStreaksRepository mockStreaksRepository;
     late MockAiRepository mockAiRepository;
-    late MockStatsUsageRepository mockStatsUsageRepository;
     late MockEmergencyStopRepository mockEmergencyStopRepository;
     late MockInternetRequiredGuard mockInternetRequiredGuard;
     late CurrentUserBloc currentUserBloc;
@@ -42,7 +41,6 @@ void main() {
       mockQrLinkedCodesRepository = MockQrLinkedCodesRepository();
       mockStreaksRepository = MockStreaksRepository();
       mockAiRepository = MockAiRepository();
-      mockStatsUsageRepository = MockStatsUsageRepository();
       mockEmergencyStopRepository = MockEmergencyStopRepository();
       mockInternetRequiredGuard = MockInternetRequiredGuard();
 
@@ -96,13 +94,7 @@ void main() {
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
           ),
-          BlocProvider<AiDailyReportBloc>(
-            create: (context) => AiDailyReportBloc(
-              aiRepository: mockAiRepository,
-              usageRepository: mockStatsUsageRepository,
-              streaksRepository: mockStreaksRepository,
-            ),
-          ),
+          BlocProvider<AiDailyReportBloc>(create: (context) => AiDailyReportBloc(aiRepository: mockAiRepository)),
         ],
       );
 
@@ -149,13 +141,7 @@ void main() {
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
           ),
-          BlocProvider<AiDailyReportBloc>(
-            create: (context) => AiDailyReportBloc(
-              aiRepository: mockAiRepository,
-              usageRepository: mockStatsUsageRepository,
-              streaksRepository: mockStreaksRepository,
-            ),
-          ),
+          BlocProvider<AiDailyReportBloc>(create: (context) => AiDailyReportBloc(aiRepository: mockAiRepository)),
         ],
       );
 
@@ -194,13 +180,7 @@ void main() {
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
           ),
-          BlocProvider<AiDailyReportBloc>(
-            create: (context) => AiDailyReportBloc(
-              aiRepository: mockAiRepository,
-              usageRepository: mockStatsUsageRepository,
-              streaksRepository: mockStreaksRepository,
-            ),
-          ),
+          BlocProvider<AiDailyReportBloc>(create: (context) => AiDailyReportBloc(aiRepository: mockAiRepository)),
         ],
       );
 
@@ -246,13 +226,7 @@ void main() {
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
           ),
-          BlocProvider<AiDailyReportBloc>(
-            create: (context) => AiDailyReportBloc(
-              aiRepository: mockAiRepository,
-              usageRepository: mockStatsUsageRepository,
-              streaksRepository: mockStreaksRepository,
-            ),
-          ),
+          BlocProvider<AiDailyReportBloc>(create: (context) => AiDailyReportBloc(aiRepository: mockAiRepository)),
         ],
       );
 
@@ -289,13 +263,7 @@ void main() {
               lifecycleActions: const Stream<RestrictionLifecycleAction>.empty(),
             )..add(const HomeStatsLoadRequested()),
           ),
-          BlocProvider<AiDailyReportBloc>(
-            create: (context) => AiDailyReportBloc(
-              aiRepository: mockAiRepository,
-              usageRepository: mockStatsUsageRepository,
-              streaksRepository: mockStreaksRepository,
-            ),
-          ),
+          BlocProvider<AiDailyReportBloc>(create: (context) => AiDailyReportBloc(aiRepository: mockAiRepository)),
         ],
       );
 

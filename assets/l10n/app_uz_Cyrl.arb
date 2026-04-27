@@ -626,6 +626,7 @@
   "premiumLockedMessage": "Бу функция Премиум обунани талаб қилади.",
   "aiUsageAnalysis": "AI фойдаланиш таҳлили",
   "aiUsageAnalysisCta": "Фойдаланишимни таҳлил қилиш",
+  "aiUsageAnalysisLast7DaysCta": "Охирги 7 кунни таҳлил қилиш",
   "aiAddictionCheck": "Қарамлик текшируви",
   "aiAddictionCheckCta": "Одатларимни текшириш",
   "aiFocusSchedule": "Фокус жадвали",

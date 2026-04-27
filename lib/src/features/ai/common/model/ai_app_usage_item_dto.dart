@@ -3,6 +3,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pauza/src/features/stats/usage_stats/model/app_usage_entry.dart';
 
+const maxAiAppUsageItems = 500;
+const maxAiDailyUsageMs = Duration.millisecondsPerDay;
+const maxAiWeeklyUsageMs = Duration.millisecondsPerDay * 7;
+
 @immutable
 final class AiAppUsageItemDto extends Equatable {
   const AiAppUsageItemDto({
@@ -19,13 +23,14 @@ final class AiAppUsageItemDto extends Equatable {
   final int launchCount;
   final String? category;
 
-  static IList<AiAppUsageItemDto> fromUsageEntries(IList<AppUsageEntry> entries) {
+  static IList<AiAppUsageItemDto> fromUsageEntries(IList<AppUsageEntry> entries, {required int maxTotalTimeMs}) {
     return entries
+        .take(maxAiAppUsageItems)
         .map(
           (e) => AiAppUsageItemDto(
             appIdentifier: e.appInfo.packageId.value,
             appName: e.appInfo.name,
-            totalTimeMs: e.totalDuration.inMilliseconds,
+            totalTimeMs: _capUsageMs(e.totalDuration.inMilliseconds, maxTotalTimeMs),
             launchCount: e.launchCount,
             category: e.appInfo.category,
           ),
@@ -50,3 +55,5 @@ final class AiAppUsageItemDto extends Equatable {
       'time: ${totalTimeMs}ms, '
       'launches: $launchCount)';
 }
+
+int _capUsageMs(int value, int maxTotalTimeMs) => value.clamp(0, maxTotalTimeMs).toInt();

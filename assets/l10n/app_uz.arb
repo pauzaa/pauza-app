@@ -626,6 +626,7 @@
   "premiumLockedMessage": "Bu funksiya Premium obunani talab qiladi.",
   "aiUsageAnalysis": "AI foydalanish tahlili",
   "aiUsageAnalysisCta": "Foydalanishimni tahlil qilish",
+  "aiUsageAnalysisLast7DaysCta": "Oxirgi 7 kunni tahlil qilish",
   "aiAddictionCheck": "Qaram bo'lish tekshiruvi",
   "aiAddictionCheckCta": "Odatlarimni tekshirish",
   "aiFocusSchedule": "Fokus jadvali",

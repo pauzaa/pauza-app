@@ -70,10 +70,7 @@ class StatsUsageTabContent extends StatelessWidget {
                 child: BlocProvider(
                   create: (context) {
                     final rootScope = RootScope.of(context);
-                    return AiUsageAnalysisBloc(
-                      aiRepository: rootScope.aiRepository,
-                      usageRepository: rootScope.statsUsageRepository,
-                    );
+                    return AiUsageAnalysisBloc(aiRepository: rootScope.aiRepository);
                   },
                   child: const AiUsageAnalysisSection(),
                 ),
